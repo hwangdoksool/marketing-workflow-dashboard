@@ -1,0 +1,1271 @@
+[
+  {
+    "id": "g01",
+    "type": "group",
+    "title": "Meta 광고 운영",
+    "category": "광고"
+  },
+  {
+    "id": "t101",
+    "group": "Meta 광고 운영",
+    "title": "ASC 캠페인 운영 · 예산 관리",
+    "category": "광고",
+    "priority": "P3",
+    "status": "진행중",
+    "assignee": "형은",
+    "dueDate": null,
+    "createdAt": "2026-02-11",
+    "updatedAt": "2026-03-10",
+    "statusNote": "리드 캠페인 종료, 전환 캠페인만 유지. 좋아요/팔로우 지표 양호",
+    "memo": "ASC 2개 운영 중. ① 전환-메인페이지 일예산 4만원 ② 리드-체험하기 일예산 3만원. 21일간 지출 84.6만원, 구매 37건, CPA ₩22,871. 잘 돌아가는 중.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-10",
+        "summary": "3월 2차 미팅: 리드 캠페인 종료. CTR/CPC보다 좋아요·팔로우 등 지표가 좋은 상태. 잘 잡혀온 알고리즘을 판매 조건 변경으로 포기하기 아까운 상황.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/roomfit/3-2-31e478cb1fa580c0ad0aeb622fb1cb23",
+            "label": "3월 2차 미팅 (3/9)"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-08",
+        "summary": "W10 주간 리포트: 세션 4,943 / 구매 5건, Meta 소재 피로도 신호 확인.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772947149865469",
+            "label": "W10 주간 마케팅 리포트"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-04",
+        "summary": "참고자료 공유: Meta 광고 성과 분석 리포트 (2/25~3/4 픽셀 정상화 이후).",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/roomfit/Meta-2-25-3-4-319478cb1fa5816ca0bcc36940765bfe",
+            "label": "Meta 광고 성과 분석 리포트"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-03",
+        "summary": "5차 미팅: 기제작 영상 광고 소재 추가 예정.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/5-318478cb1fa58065ba58e4596058a075",
+            "label": "5차 미팅 기록"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-02",
+        "summary": "주간 리포트: 광고비 53.2만원/주 (46%↑).",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772424159179749",
+            "label": "독술 주간리포트 3/2"
+          }
+        ]
+      },
+      {
+        "date": "2026-02-11",
+        "summary": "형은님 ASC 캠페인 세팅 완료, 집행 시작.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t102",
+    "group": "Meta 광고 운영",
+    "title": "기제작 영상 광고 소재 추가",
+    "category": "광고",
+    "priority": "P2",
+    "status": "예정",
+    "assignee": "형은",
+    "dueDate": null,
+    "createdAt": "2026-03-03",
+    "updatedAt": "2026-03-03",
+    "statusNote": "5차 미팅 결정, 소재 추가 대기",
+    "memo": "기존 제작 영상들을 ASC 캠페인에 소재로 추가. 추가 후 2~3일 학습 기간.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-03",
+        "summary": "5차 미팅에서 논의.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/5-318478cb1fa58065ba58e4596058a075",
+            "label": "5차 미팅 기록"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t105",
+    "group": "Meta 광고 운영",
+    "title": "전환 캠페인 체험+구매 통합 분석",
+    "category": "광고",
+    "priority": "P2",
+    "status": "완료",
+    "assignee": "AI",
+    "dueDate": null,
+    "createdAt": "2026-03-04",
+    "updatedAt": "2026-03-06",
+    "statusNote": "판매 전환 분석 리포트 완료·공유",
+    "memo": "형은님 요청: 전환 캠페인에서 체험 신청+구매 고객을 함께 봐야 정확. GA4·Meta·네이버 API 직접 조회 → 판매 전환 분석 리포트 작성 완료.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-05",
+        "summary": "판매 전환 분석 완료·슬랙 공유. 본체 5대(₩18.5M), Meta 직접 구매 0건, 전부 검색/Direct. Meta Reach 78% 급감+IG 2/26 이후 공백이 핵심 원인.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772710293569169",
+            "label": "판매 전환 분석 리포트"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-05",
+        "summary": "데이터 확인 중. Meta 픽셀 리드 4건 확인, 아임웹 데이터 교차 검증 필요.",
+        "refs": []
+      },
+      {
+        "date": "2026-03-04",
+        "summary": "형은님이 전환 캠페인 리드 데이터 통합 분석 요청.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772634189462769",
+            "label": "형은님 분석 요청"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t106",
+    "group": "Meta 광고 운영",
+    "title": "메타 광고 전체 성과 추이 분석",
+    "category": "광고",
+    "priority": "P2",
+    "status": "예정",
+    "assignee": "AI",
+    "dueDate": null,
+    "createdAt": "2026-03-10",
+    "updatedAt": "2026-03-10",
+    "statusNote": "시작 이래 전체 추이 + 효율 하락 원인 진단",
+    "memo": "3/9 미팅 안건: ① 메타 광고 시작 이래 전체 성과 추이 분석 ② 금액 상승의 부작용 여부 (소재 변경? 타겟 세팅?) ③ 메타 외 추가 채널 검토 (유튜브? 구글 검색?). 효율이 상대적으로 떨어진 것 자체가 맞는지 확인 필요.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-10",
+        "summary": "3월 2차 미팅: 메타 광고 전체 추이 분석 + 효율 하락 진단 + 추가 채널 검토 요청.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/roomfit/3-2-31e478cb1fa580c0ad0aeb622fb1cb23",
+            "label": "3월 2차 미팅 (3/9)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t103",
+    "group": "Meta 광고 운영",
+    "title": "UTM 설정 수정",
+    "category": "광고",
+    "priority": "P3",
+    "status": "완료",
+    "assignee": "AI",
+    "dueDate": null,
+    "createdAt": "2026-02-24",
+    "updatedAt": "2026-03-03",
+    "statusNote": "완료",
+    "memo": "ASC 캠페인 UTM 파라미터 정상화 완료.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-03",
+        "summary": "완료 확인.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t104",
+    "group": "Meta 광고 운영",
+    "title": "픽셀 정상화",
+    "category": "광고",
+    "priority": "P3",
+    "status": "완료",
+    "assignee": "AI",
+    "dueDate": null,
+    "createdAt": "2026-02-14",
+    "updatedAt": "2026-02-25",
+    "statusNote": "Purchase 정상 발화 확인",
+    "memo": "Purchase 정상 발화 확인.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-02-25",
+        "summary": "완료 확인.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "g02",
+    "type": "group",
+    "title": "네이버 검색광고",
+    "category": "광고"
+  },
+  {
+    "id": "t201",
+    "group": "네이버 검색광고",
+    "title": "브랜드 키워드 상시 운영 결정",
+    "category": "광고",
+    "priority": "P2",
+    "status": "피드백대기",
+    "assignee": "성우",
+    "dueDate": null,
+    "createdAt": "2026-02-20",
+    "updatedAt": "2026-03-03",
+    "statusNote": "상시 운영 여부 대표님 결정 대기",
+    "memo": "파워링크 끊김 확인. 브랜드·스마트홈짐 키워드 상시 운영 제안. 가구 '룸핏' 검색 겹침.",
+    "blocker": "상시 운영 여부 미결정",
+    "history": [
+      {
+        "date": "2026-03-03",
+        "summary": "5차 미팅: 네이버 노출은 잘 되고 있지만 가구 룸핏과 겹침.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/5-318478cb1fa58065ba58e4596058a075",
+            "label": "5차 미팅 기록"
+          }
+        ]
+      },
+      {
+        "date": "2026-02-20",
+        "summary": "형은님 파워링크 끊김 확인, 상시 운영 제안.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "g03",
+    "type": "group",
+    "title": "블로그 정기 발행",
+    "category": "콘텐츠"
+  },
+  {
+    "id": "t301",
+    "group": "블로그 정기 발행",
+    "title": "3/4 블로그 초안",
+    "category": "콘텐츠",
+    "priority": "P2",
+    "status": "완료",
+    "assignee": "형은",
+    "dueDate": null,
+    "createdAt": "2026-03-04",
+    "updatedAt": "2026-03-07",
+    "statusNote": "대표님 피드백 반영 후 네이버 블로그 업로드 완료",
+    "memo": "3/4 초안에 구조 피드백 반영 완료. 3/6 최종 업로드까지 마무리.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-07",
+        "summary": "3/4 초안 수정 완료 후 대표님 확인(특이사항 없음). 네이버 블로그 업로드 완료.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772634628333419",
+            "label": "3/4 블로그 초안 스레드"
+          },
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772804053131679",
+            "label": "3/6 블로그 초안/업로드 스레드"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-04",
+        "summary": "대표님 '디테일이 아닌 전체적인 구조가 많이 헷갈려서' 노션 코멘트 남김. 형은님 수정 대기.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772634628333419",
+            "label": "3/4 블로그 초안 스레드"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-04",
+        "summary": "형은님 3/4 블로그 초안 전달.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t302",
+    "group": "블로그 정기 발행",
+    "title": "3/2 블로그 발행",
+    "category": "콘텐츠",
+    "priority": "P3",
+    "status": "완료",
+    "assignee": "형은",
+    "dueDate": null,
+    "createdAt": "2026-03-02",
+    "updatedAt": "2026-03-02",
+    "statusNote": "발행 완료",
+    "memo": "",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-02",
+        "summary": "발행 완료.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "g04",
+    "type": "group",
+    "title": "인스타/유튜브 숏폼",
+    "category": "콘텐츠"
+  },
+  {
+    "id": "t401",
+    "group": "인스타/유튜브 숏폼",
+    "title": "홈짐계의 테슬라 영상",
+    "category": "콘텐츠",
+    "priority": "P2",
+    "status": "완료",
+    "assignee": "형은",
+    "dueDate": "2026-03-05",
+    "createdAt": "2026-02-23",
+    "updatedAt": "2026-03-06",
+    "statusNote": "3/5 인스타·유튜브 업로드 완료",
+    "memo": "캡컷 제작 → 피드백 → 3/5 인스타·유튜브 업로드 완료.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-05",
+        "summary": "인스타·유튜브 업로드 완료.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772630063464939",
+            "label": "3/5 업로드 스레드"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-04",
+        "summary": "3/5 인스타·유튜브 업로드 예정.",
+        "refs": []
+      },
+      {
+        "date": "2026-02-26",
+        "summary": "캡컷 업로드 완료, 피드백 요청. 미디어 분실 이슈.",
+        "refs": []
+      },
+      {
+        "date": "2026-02-23",
+        "summary": "영상 초안 제작 완료.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t403",
+    "group": "인스타/유튜브 숏폼",
+    "title": "앱 데모 비디오 기획",
+    "category": "콘텐츠",
+    "priority": "P3",
+    "status": "피드백대기",
+    "assignee": "형은",
+    "dueDate": null,
+    "createdAt": "2026-02-26",
+    "updatedAt": "2026-02-26",
+    "statusNote": "방향 제안 후 피드백 대기중",
+    "memo": "앱→제품 사용까지 하나의 플로우 영상. 아마존 파워랙 레퍼런스.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-02-26",
+        "summary": "형은님 방향 제안, 피드백 요청.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t405",
+    "group": "인스타/유튜브 숏폼",
+    "title": "캡컷 계정 공유 · Pro 업그레이드",
+    "category": "콘텐츠",
+    "priority": "P2",
+    "status": "진행중",
+    "assignee": "성우",
+    "dueDate": null,
+    "createdAt": "2026-02-20",
+    "updatedAt": "2026-02-26",
+    "statusNote": "계정 공유 가능 여부 확인 필요",
+    "memo": "형은님 Pro 업그레이드 + 계정 공유 요청. 매번 다운로드 번거로움.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-02-26",
+        "summary": "캡컷 계정 공유 가능 여부 문의.",
+        "refs": []
+      },
+      {
+        "date": "2026-02-20",
+        "summary": "형은님 Pro 업그레이드 요청.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t404",
+    "group": "인스타/유튜브 숏폼",
+    "title": "3/2 인스타·유튜브 업로드",
+    "category": "콘텐츠",
+    "priority": "P3",
+    "status": "완료",
+    "assignee": "형은",
+    "dueDate": null,
+    "createdAt": "2026-02-23",
+    "updatedAt": "2026-03-02",
+    "statusNote": "업로드 완료",
+    "memo": "",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-02",
+        "summary": "업로드 완료.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t407",
+    "group": "인스타/유튜브 숏폼",
+    "title": "3/9 인스타·유튜브 업로드",
+    "category": "콘텐츠",
+    "priority": "P2",
+    "status": "완료",
+    "assignee": "형은",
+    "dueDate": "2026-03-09",
+    "createdAt": "2026-03-07",
+    "updatedAt": "2026-03-10",
+    "statusNote": "업로드 완료",
+    "memo": "3/9 업로드 콘텐츠 예약 진행. YouTube는 17시 테스트 반영, Instagram은 기존 18시 설정으로 발행.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-10",
+        "summary": "3/9 미팅에서 블로그·숏폼 게시 완료 확인.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/roomfit/3-2-31e478cb1fa580c0ad0aeb622fb1cb23",
+            "label": "3월 2차 미팅 (3/9)"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-07",
+        "summary": "형은님 업로드 예약 공유. 대표님이 시간 실험 제안 후 유튜브 17시로 조정.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772885139764389",
+            "label": "3/9 인스타·유튜브 업로드 스레드"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t408",
+    "group": "인스타/유튜브 숏폼",
+    "title": "인스타 팔로우 기대 충족 콘텐츠 기획",
+    "category": "콘텐츠",
+    "priority": "P2",
+    "status": "예정",
+    "assignee": "형은",
+    "dueDate": null,
+    "createdAt": "2026-03-10",
+    "updatedAt": "2026-03-10",
+    "statusNote": "광고→팔로우한 사람의 기대를 충족시킬 콘텐츠 필요",
+    "memo": "3/9 미팅 논의: 인스타 광고 보고 팔로우하는 사람들의 의미 → 기대를 충족시킬 콘텐츠가 필요하다는 결론. 3월 인스타 콘텐츠 기획과 연동.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-10",
+        "summary": "3월 2차 미팅: 광고→팔로우 전환 사용자를 위한 콘텐츠 기획 필요성 논의.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/roomfit/3-2-31e478cb1fa580c0ad0aeb622fb1cb23",
+            "label": "3월 2차 미팅 (3/9)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "g05",
+    "type": "group",
+    "title": "스포엑스 2026",
+    "category": "이벤트"
+  },
+  {
+    "id": "t501",
+    "group": "스포엑스 2026",
+    "title": "스포엑스 기획",
+    "category": "이벤트",
+    "priority": "P1",
+    "status": "진행중",
+    "assignee": "성우",
+    "dueDate": "2026-03-26",
+    "createdAt": "2026-02-27",
+    "updatedAt": "2026-03-10",
+    "statusNote": "체험 이벤트 2트랙(묠니르+AI-VBT) 확정, 현장 결제 프로모션 A/B 설계 완료, 결제 방식(ver.1/ver.2) 미확정",
+    "memo": "3/9 미팅에서 대폭 구체화. 부스: 기기 1~2대 + 대형 모니터 + 영상 루프 + 리플렛/명함(QR). 체험: ① 묠니르 챌린지(이목끌기+바이럴) → ② AI-VBT 체험(구매전환+B2B리드) 2트랙. 동선: 120kg 도전 → VBT 체험 → 리드 수집 → 현장 결제 유도. 프로모션A(B2C): 그립패키지 무료+무료배송+타워할인, 3/31까지. 프로모션B(B2B): 2대 이상 특별단가+직원교육+A/S 우선. 결제 방식: ver.1(계약금 50만→취소불가) vs ver.2(전액QR→취소시 50만 차감) 미결정. 자금 확보 이슈 남음.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-10",
+        "summary": "3월 2차 미팅: 체험 2트랙(묠니르+AI-VBT) 확정, 동선 설계, 프로모션 A(B2C)/B(B2B) 구체화. 결제 방식 ver.1/ver.2 미결정 (자금확보 이슈).",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/roomfit/3-2-31e478cb1fa580c0ad0aeb622fb1cb23",
+            "label": "3월 2차 미팅 (3/9)"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-05",
+        "summary": "대표님 운영 기획 초안 공유 (spoex-2026-plan.pages.dev). 묠니르+AI-VBT 체험 2트랙, QR 퍼널, 기기 2대 등 구체화. 기존 소재 차용+정보 최신화, 현장 결제 프로모션·체험 이벤트 범위 3/9 미팅에서 확정.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772675074975949",
+            "label": "3/5 주요 현황 점검 스레드"
+          }
+        ]
+      },
+      {
+        "date": "2026-02-27",
+        "summary": "부스 위치 공유. 재작년 위치와 비슷.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "g06",
+    "type": "group",
+    "title": "웹/랜딩페이지",
+    "category": "웹"
+  },
+  {
+    "id": "t601",
+    "group": "웹/랜딩페이지",
+    "title": "상품 상세페이지 리뉴얼 (/buy)",
+    "category": "웹",
+    "priority": "P2",
+    "status": "진행중",
+    "assignee": "성우+AI",
+    "dueDate": null,
+    "createdAt": "2026-02-18",
+    "updatedAt": "2026-03-10",
+    "statusNote": "게시 완료, 세부 지속 개선 예정",
+    "memo": "/buy/embed 후기 페이지 완성 → 형은님 컨펌 완료. 일반 고객 리뷰 작성 일관성 논의 진행 중.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-10",
+        "summary": "3월 2차 미팅: 홈페이지 상세페이지 상단 부분 연동·이미지 추가 건 → 황성우 담당으로 확인.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/roomfit/3-2-31e478cb1fa580c0ad0aeb622fb1cb23",
+            "label": "3월 2차 미팅 (3/9)"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-05",
+        "summary": "형은님 '/buy/embed 훨씬 나은 것 같다' 컨펌. 리뷰 시스템 일관성 관련 논의.",
+        "refs": []
+      },
+      {
+        "date": "2026-03-04",
+        "summary": "크롤링한 실제 후기 2건 embed에 반영. 총 9개 후기 구성.",
+        "refs": []
+      },
+      {
+        "date": "2026-02-27",
+        "summary": "형은님 피드백 요청.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t602",
+    "group": "웹/랜딩페이지",
+    "title": "체험 신청 폼 개선",
+    "category": "웹",
+    "priority": "P2",
+    "status": "완료",
+    "assignee": "AI",
+    "dueDate": null,
+    "createdAt": "2026-02-19",
+    "updatedAt": "2026-03-05",
+    "statusNote": "Supabase+슬랙 연동 운영중",
+    "memo": "Supabase feel_bookings 연동 + 슬랙 알림 + 컨펌/조정/취소 프로세스 정상 운영중.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-05",
+        "summary": "대표님 확인: 현재 프로세스 정상 운영중. 완료 처리.",
+        "refs": []
+      },
+      {
+        "date": "2026-02-19",
+        "summary": "형은님 개선 요청.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t605",
+    "group": "웹/랜딩페이지",
+    "title": "인스타 링크 페이지 (리틀리 대체)",
+    "category": "웹",
+    "priority": "P1",
+    "status": "완료",
+    "assignee": "성우+AI",
+    "dueDate": null,
+    "createdAt": "2026-03-03",
+    "updatedAt": "2026-03-05",
+    "statusNote": "Instagram 등록 완료, UTM 버튼별 적용",
+    "memo": "리틀리를 자체 개발 페이지(roomfit.kr/link)로 대체. 버튼별 강조 색상 + UTM 적용. 인스타 등록 시 오류 발생 → 오늘 재시도 예정.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-05",
+        "summary": "대표님: 페이지 자체는 완성, 인스타 등록이 자꾸 오류. 오늘 다시 시도.",
+        "refs": []
+      },
+      {
+        "date": "2026-03-05",
+        "summary": "UTM은 페이지 자체가 아니라 각 버튼에 적용하는 방식으로 결정. 인스타 인앱브라우저가 UTM 리다이렉트를 차단하는 것으로 확인.",
+        "refs": []
+      },
+      {
+        "date": "2026-03-04",
+        "summary": "roomfit.kr/link 리다이렉트 슬래시 이슈 해결 (Page Rule 수정). 인스타 인앱 브라우저에서 여전히 문제 → 여러 번 시도로 인스타 링크 등록 차단됨.",
+        "refs": []
+      },
+      {
+        "date": "2026-03-03",
+        "summary": "리틀리 버튼 개별 색상 불가 → 자체 개발 결정. roomfit.kr/link 배포 완료. 카카오 제거, 무료체험 초록 / 더 알아보기 파란 강조. link.roomfit.kr 서브도메인도 설정.",
+        "refs": []
+      },
+      {
+        "date": "2026-03-03",
+        "summary": "5차 미팅: 인스타 링크트리 반영 확인 필요 논의.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/5-318478cb1fa58065ba58e4596058a075",
+            "label": "5차 미팅 기록"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-05",
+        "summary": "Instagram 링크 등록 완료 (24시간 제한 해제). roomfit.kr/link 정상 작동. 각 버튼에 UTM 개별 적용 완료.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t606",
+    "group": "웹/랜딩페이지",
+    "title": "체험 신청 시스템 개편 (Supabase 정본 + 대시보드)",
+    "category": "웹",
+    "priority": "P1",
+    "status": "진행중",
+    "assignee": "AI",
+    "dueDate": null,
+    "createdAt": "2026-03-08",
+    "updatedAt": "2026-03-08",
+    "statusNote": "대표님 지시로 신규 착수 (2026 신청서 우선, 과거 데이터 단순 이관)",
+    "memo": "노션 기반 관리에서 Supabase 정본 + 대시보드 운영 구조로 전환. 2026년 신청서부터 관리하고, 과거 데이터는 별도 단순 마이그레이션.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-08",
+        "summary": "대표님이 개편 방향 지시: 수파베이스 정본 + 대시보드 관리, 노션 탈피.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772936987468959",
+            "label": "체험 신청/관리 시스템 개편"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t603",
+    "group": "웹/랜딩페이지",
+    "title": "GA4 이벤트 트래킹 설정",
+    "category": "웹",
+    "priority": "P3",
+    "status": "완료",
+    "assignee": "AI",
+    "dueDate": null,
+    "createdAt": "2026-02-19",
+    "updatedAt": "2026-02-19",
+    "statusNote": "19개 이벤트 설정 완료",
+    "memo": "완료.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-02-19",
+        "summary": "완료.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t604",
+    "group": "웹/랜딩페이지",
+    "title": "모바일 렌더링 이슈",
+    "category": "웹",
+    "priority": "P3",
+    "status": "완료",
+    "assignee": "성우+AI",
+    "dueDate": null,
+    "createdAt": "2026-02-25",
+    "updatedAt": "2026-03-05",
+    "statusNote": "PC 문제로 확인, 해결됨",
+    "memo": "모바일에서 일부 콘텐츠 안 뜨는 현상.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-02-25",
+        "summary": "형은님 이슈 보고.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "g07",
+    "type": "group",
+    "title": "전략/프로모션",
+    "category": "전략"
+  },
+  {
+    "id": "t701",
+    "group": "전략/프로모션",
+    "title": "프리오더 구조 설계",
+    "category": "전략",
+    "priority": "P1",
+    "status": "진행중",
+    "assignee": "성우",
+    "dueDate": null,
+    "createdAt": "2026-03-04",
+    "updatedAt": "2026-03-10",
+    "statusNote": "방안2 확정: 결제 오픈 상태 유지, 1~2개월 대기 명시, 특별할인 없음. 구현 진행 필요",
+    "memo": "3/9 미팅 결론: 일단 결제 가능하게 열어놓되, 재고 상황에 따라 1~2개월 이상 대기 가능성 명시. 특별할인 없이 진행. (방안1 '재입고 알림만' 검토 후 방안2로 결정)",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-10",
+        "summary": "3월 2차 미팅: 방안2 확정 (결제 오픈 유지, 1~2개월 대기 명시, 특별할인 없음). 방안1(재입고 알림만)은 기각.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/roomfit/3-2-31e478cb1fa580c0ad0aeb622fb1cb23",
+            "label": "3월 2차 미팅 (3/9)"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-05",
+        "summary": "3/9(월) 16시 미팅 확정 (프리오더+스포엑스+B2B 통합 논의). 슬랙 스레드 69건+ 활발 논의 진행 중.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772675074975949",
+            "label": "3/5 주요 현황 점검 스레드"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-04",
+        "summary": "형은님: 혜택을 안전한 선에서 먼저 정하고, 알림 전환율 + 실구매 보면서 제작 수량 확정 제안. 마진 대비 할인율 정리 필요.",
+        "refs": []
+      },
+      {
+        "date": "2026-03-04",
+        "summary": "대표님 타임라인 정리: 알림 2~3주 → 스포엑스 직전 결제 오픈 → 출고까지 ~10주(5월 중순).",
+        "refs": []
+      },
+      {
+        "date": "2026-03-04",
+        "summary": "프리오더 구조 설계 논의 시작.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772591097.779859",
+            "label": "프리오더 설계 스레드"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t702",
+    "group": "전략/프로모션",
+    "title": "카카오 채널 가격노출 이슈",
+    "category": "전략",
+    "priority": "P3",
+    "status": "완료",
+    "assignee": "성우",
+    "dueDate": null,
+    "createdAt": "2026-03-03",
+    "updatedAt": "2026-03-05",
+    "statusNote": "자체 링크 페이지로 해결",
+    "memo": "카카오 제거 결정 → 자체 링크 페이지에서 카카오 버튼 빠짐. 인스타 링크 페이지(t605)로 이관.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-03",
+        "summary": "카카오 제거 방향으로 결정. 자체 링크 페이지 개발로 해결.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t703",
+    "group": "전략/프로모션",
+    "title": "인스타 프로필 리틀리 링크 수정",
+    "category": "전략",
+    "priority": "P3",
+    "status": "완료",
+    "assignee": "성우+AI",
+    "dueDate": null,
+    "createdAt": "2026-02-24",
+    "updatedAt": "2026-03-05",
+    "statusNote": "자체 페이지로 대체 완료",
+    "memo": "리틀리 자체를 자체 개발 페이지로 대체 결정 → t605로 이관.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-03",
+        "summary": "리틀리 대체 자체 페이지 개발로 해결. t605 참조.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t704",
+    "group": "전략/프로모션",
+    "title": "이벤트 기획 (페이백/앱인증)",
+    "category": "전략",
+    "priority": "P3",
+    "status": "예정",
+    "assignee": "성우",
+    "dueDate": null,
+    "createdAt": "2026-02-25",
+    "updatedAt": "2026-02-25",
+    "statusNote": "아이디어 단계, 미착수",
+    "memo": "여름까지 몸 만들기 동기부여. 앱 인증 추첨, 50% 페이백.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-02-25",
+        "summary": "4차 미팅: 아이디어 논의.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t705",
+    "group": "전략/프로모션",
+    "title": "체험→계약 전환 추적 DB 구축",
+    "category": "전략",
+    "priority": "P2",
+    "status": "진행중",
+    "assignee": "성우+AI",
+    "dueDate": null,
+    "createdAt": "2026-03-03",
+    "updatedAt": "2026-03-08",
+    "statusNote": "체험 신청 시스템 개편 지시와 연동해 전환 추적 DB 재설계 착수",
+    "memo": "체험 신청→실구매 전환율 추적 필요. 사전체험 구매전환 분석 리포트 공유됨 (데이터 불완전, 보완 필요).",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-08",
+        "summary": "대표님 지시: 수파베이스 정본 + 대시보드 관리 구조로 개편, 2026 신청서부터 우선 관리.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772936987468959",
+            "label": "체험 신청/관리 시스템 개편"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-04",
+        "summary": "대표님 사전체험 구매전환 분석 리포트 공유. 데이터 집계 누락/불필요 데이터 이슈 있어 보완 필요.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/roomfit/2023-12-2026-03-319478cb1fa581c08f43fea5bf39f532",
+            "label": "사전체험 구매전환 분석 리포트"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-03",
+        "summary": "5차 미팅: 전환 추적 DB 필요성 논의.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t706",
+    "group": "전략/프로모션",
+    "title": "슬랙 구매 알림 봇",
+    "category": "전략",
+    "priority": "P3",
+    "status": "완료",
+    "assignee": "AI",
+    "dueDate": null,
+    "createdAt": "2026-03-03",
+    "updatedAt": "2026-03-06",
+    "statusNote": "launchd 5분 간격 정상 운영중",
+    "memo": "체험 알림과 동일 구조로 구매 알림 추가. launchd 5분 간격 정상 운영중.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-06",
+        "summary": "정상 운영 확인. 완료 처리.",
+        "refs": []
+      },
+      {
+        "date": "2026-03-03",
+        "summary": "5차 미팅 논의.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "g08",
+    "type": "group",
+    "title": "도구/인프라",
+    "category": "전략"
+  },
+  {
+    "id": "t801",
+    "group": "도구/인프라",
+    "title": "형은님 맥북 오픈클로 설치",
+    "category": "전략",
+    "priority": "P3",
+    "status": "진행중",
+    "assignee": "성우",
+    "dueDate": null,
+    "createdAt": "2026-03-03",
+    "updatedAt": "2026-03-05",
+    "statusNote": "설치 완료, 형은님 적응 중",
+    "memo": "",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-03",
+        "summary": "설치 착수.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t802",
+    "group": "도구/인프라",
+    "title": "마케팅 계정 공유/권한 부여",
+    "category": "전략",
+    "priority": "P3",
+    "status": "완료",
+    "assignee": "성우",
+    "dueDate": null,
+    "createdAt": "2026-02-10",
+    "updatedAt": "2026-03-05",
+    "statusNote": "완료",
+    "memo": "형은님에게 필요한 마케팅 툴 계정 공유.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-02-10",
+        "summary": "3차 미팅 논의.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "g09",
+    "type": "group",
+    "title": "주간 마케팅 리포트",
+    "category": "광고"
+  },
+  {
+    "id": "t707",
+    "group": "전략/프로모션",
+    "title": "카카오 문의 경로 조사",
+    "category": "전략",
+    "priority": "P3",
+    "status": "완료",
+    "assignee": "AI",
+    "dueDate": null,
+    "createdAt": "2026-03-05",
+    "updatedAt": "2026-03-06",
+    "statusNote": "조사 완료, 경로 파악됨",
+    "memo": "홈페이지 모르는 채로 카카오 문의하는 고객 경로 조사. 대표님 요청.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-05",
+        "summary": "대표님 요청으로 카카오 문의 유입 경로 조사 완료.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772715919814299",
+            "label": "카카오 문의 경로 조사 스레드"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t406",
+    "group": "인스타/유튜브 숏폼",
+    "title": "AI-VBT 분석/진단 화면 소재 활용",
+    "category": "콘텐츠",
+    "priority": "P2",
+    "status": "예정",
+    "assignee": "성우+형은",
+    "dueDate": null,
+    "createdAt": "2026-03-06",
+    "updatedAt": "2026-03-06",
+    "statusNote": "B2B/B2C 소재 제작 활용 예정",
+    "memo": "AI-VBT 분석/진단 화면 예시 (roomfit-vbt-showcase.pages.dev) 대표님 공유. B2B용 또는 B2C 소재 제작 시 활용 가능. 실제 개발 중인 화면.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-06",
+        "summary": "대표님 AI-VBT 분석/진단 화면 쇼케이스 공유. B2B/B2C 소재 활용 방안 논의 예정.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772759782713649",
+            "label": "AI-VBT Showcase 공유"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t708",
+    "group": "전략/프로모션",
+    "title": "B2B 실험 타임라인 확정",
+    "category": "전략",
+    "priority": "P1",
+    "status": "진행중",
+    "assignee": "성우",
+    "dueDate": null,
+    "createdAt": "2026-03-05",
+    "updatedAt": "2026-03-10",
+    "statusNote": "3/9 미팅 논의 완료, 스포엑스 프로모션B에 반영",
+    "memo": "B2B 실험 계획 (타겟, 방식, 지표) 확정 필요. 3/20까지 인사이트 도출 → 스포엑스 반영 마감(3/21~23) 역산. 3/9 미팅에서 논의.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-10",
+        "summary": "3월 2차 미팅: B2B 프로모션 구체화 (스포엑스 프로모션B로 통합). 2대 이상 특별단가+직원교육+A/S 우선.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/roomfit/3-2-31e478cb1fa580c0ad0aeb622fb1cb23",
+            "label": "3월 2차 미팅 (3/9)"
+          }
+        ]
+      },
+      {
+        "date": "2026-03-05",
+        "summary": "3대 시급 과제 중 하나로 대표님 지정. 3/9 미팅에서 확정 예정.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772675074975949",
+            "label": "3/5 주요 현황 점검 스레드"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t709",
+    "group": "전략/프로모션",
+    "title": "체험 노쇼/캔슬 방지 대책 (사전결제→환급)",
+    "category": "전략",
+    "priority": "P2",
+    "status": "예정",
+    "assignee": "성우",
+    "dueDate": null,
+    "createdAt": "2026-03-10",
+    "updatedAt": "2026-03-10",
+    "statusNote": "3만원 사전결제→방문 시 환급 방향 논의, 카카오 알림톡 연동도 검토",
+    "memo": "3/9 미팅 논의: 체험 노쇼·당일 캔슬 방지를 위해 3만원 정도 사전 결제 후 방문 시 즉시 환급 방안. 카카오 알림을 위한 친구 추가 시스템도 검토했으나 허들 이슈 있음.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-10",
+        "summary": "3월 2차 미팅: 노쇼 방지 방안 논의. 3만원 사전결제→방문 환급 방향. 카카오 친구추가 연동은 허들 있어 추가 검토 필요.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/roomfit/3-2-31e478cb1fa580c0ad0aeb622fb1cb23",
+            "label": "3월 2차 미팅 (3/9)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t710",
+    "group": "전략/프로모션",
+    "title": "구매 시나리오 설계 · 타게팅 전략",
+    "category": "전략",
+    "priority": "P2",
+    "status": "예정",
+    "assignee": "성우+형은",
+    "dueDate": null,
+    "createdAt": "2026-03-10",
+    "updatedAt": "2026-03-10",
+    "statusNote": "마케팅 리포트 기반 구매 시나리오 설계 필요",
+    "memo": "3/9 미팅 안건: 마케팅 리포트(3-1주차 & 과거 전체) 분석 기반으로 룸핏 구매 시나리오 설계 및 공략 타게팅 전략 수립. 최근 구매자 케이스 집중 공략: ① 육아 부부의 남편 ② 이미 간단한 홈짐 있는데 갈아탄 사람.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-10",
+        "summary": "3월 2차 미팅: 구매 시나리오 설계 착수 필요. 핵심 타겟: 육아 부부 남편 / 기존 홈짐 업그레이드 수요.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/roomfit/3-2-31e478cb1fa580c0ad0aeb622fb1cb23",
+            "label": "3월 2차 미팅 (3/9)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t711",
+    "group": "전략/프로모션",
+    "title": "황성우 담당/서포트 업무 정리 (by 형은)",
+    "category": "전략",
+    "priority": "P2",
+    "status": "예정",
+    "assignee": "형은",
+    "dueDate": null,
+    "createdAt": "2026-03-10",
+    "updatedAt": "2026-03-10",
+    "statusNote": "형은님이 황성우 담당 업무 목록 정리 후 공유 예정",
+    "memo": "3/9 미팅 할 일: 황성우가 담당/서포트할 업무들을 형은님이 정리해서 공유하기.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-10",
+        "summary": "3월 2차 미팅: 형은→성우 담당 업무 정리·공유 할 일 배정.",
+        "refs": [
+          {
+            "type": "notion",
+            "url": "https://www.notion.so/roomfit/3-2-31e478cb1fa580c0ad0aeb622fb1cb23",
+            "label": "3월 2차 미팅 (3/9)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t901",
+    "group": "주간 마케팅 리포트",
+    "title": "3월 1주차 리포트",
+    "category": "광고",
+    "priority": "P3",
+    "status": "완료",
+    "assignee": "AI",
+    "dueDate": null,
+    "createdAt": "2026-03-02",
+    "updatedAt": "2026-03-02",
+    "statusNote": "광고비 53.2만원/주 (▲46%)",
+    "memo": "광고비 53.2만원 (▲46%).",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-02",
+        "summary": "자동 발행.",
+        "refs": []
+      }
+    ]
+  },
+  {
+    "id": "t902",
+    "group": "주간 마케팅 리포트",
+    "title": "3월 2주차 리포트 (3/2~3/8)",
+    "category": "리포트",
+    "priority": "P2",
+    "status": "완료",
+    "assignee": "AI",
+    "dueDate": null,
+    "createdAt": "2026-03-08",
+    "updatedAt": "2026-03-08",
+    "statusNote": "세션 4,943 · 구매 5건 · Organic Social +10.8x",
+    "memo": "W10 주간 리포트 발행 완료. Meta 소재 피로도, 네이버SA CTR 개선, 오가닉 급증 포인트 반영.",
+    "blocker": null,
+    "history": [
+      {
+        "date": "2026-03-08",
+        "summary": "주간 리포트 게시 및 공유 완료.",
+        "refs": [
+          {
+            "type": "slack",
+            "url": "https://wespion.slack.com/archives/C0AA41A91HS/p1772947149865469",
+            "label": "W10 주간 마케팅 리포트"
+          }
+        ]
+      }
+    ]
+  }
+]
