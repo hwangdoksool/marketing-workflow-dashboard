@@ -1,0 +1,198 @@
+{
+  "period": "2026-02-03 ~ 2026-03-30 (W6~W13)",
+  "validations": [
+    {
+      "name": "GA4 purchase vs 아임웹 실매출 건수",
+      "weekly": {
+        "W6": {
+          "ga4_purchases": null,
+          "imweb_units": null,
+          "match": null,
+          "note": null
+        },
+        "W7": {
+          "ga4_purchases": null,
+          "imweb_units": null,
+          "match": null,
+          "note": null
+        },
+        "W8": {
+          "ga4_purchases": null,
+          "imweb_units": null,
+          "match": null,
+          "note": null
+        },
+        "W9": {
+          "ga4_purchases": 3,
+          "imweb_units": null,
+          "match": null,
+          "note": null
+        },
+        "W10": {
+          "ga4_purchases": 5,
+          "imweb_units": 1,
+          "match": false,
+          "note": "GA4(5)≠아임웹(1): GA4는 이벤트 기반(결제 시도 포함), 아임웹은 실결제 건수. 취소/중복 이벤트 가능"
+        },
+        "W11": {
+          "ga4_purchases": 10,
+          "imweb_units": 2,
+          "match": false,
+          "note": "GA4(10)≠아임웹(2): GA4는 이벤트 기반(결제 시도 포함), 아임웹은 실결제 건수. 취소/중복 이벤트 가능"
+        },
+        "W12": {
+          "ga4_purchases": 9,
+          "imweb_units": 2,
+          "match": false,
+          "note": "GA4(9)≠아임웹(2): GA4는 이벤트 기반(결제 시도 포함), 아임웹은 실결제 건수. 취소/중복 이벤트 가능"
+        },
+        "W13": {
+          "ga4_purchases": 6,
+          "imweb_units": 3,
+          "match": false,
+          "note": "GA4(6)≠아임웹(3): GA4는 이벤트 기반(결제 시도 포함), 아임웹은 실결제 건수. 취소/중복 이벤트 가능"
+        }
+      }
+    },
+    {
+      "name": "Meta clicks vs GA4 paid social sessions",
+      "weekly": {
+        "W6": {
+          "meta_clicks": 0,
+          "ga4_paid_sessions": 25,
+          "ratio": null,
+          "note": null
+        },
+        "W7": {
+          "meta_clicks": 2383,
+          "ga4_paid_sessions": 2053,
+          "ratio": 0.86,
+          "note": null
+        },
+        "W8": {
+          "meta_clicks": 3265,
+          "ga4_paid_sessions": 2467,
+          "ratio": 0.76,
+          "note": null
+        },
+        "W9": {
+          "meta_clicks": 4194,
+          "ga4_paid_sessions": 3223,
+          "ratio": 0.77,
+          "note": null
+        },
+        "W10": {
+          "meta_clicks": 4022,
+          "ga4_paid_sessions": 3273,
+          "ratio": 0.81,
+          "note": null
+        },
+        "W11": {
+          "meta_clicks": 5502,
+          "ga4_paid_sessions": 4752,
+          "ratio": 0.86,
+          "note": null
+        },
+        "W12": {
+          "meta_clicks": 10388,
+          "ga4_paid_sessions": 8290,
+          "ratio": 0.8,
+          "note": null
+        },
+        "W13": {
+          "meta_clicks": 5663,
+          "ga4_paid_sessions": 4144,
+          "ratio": 0.73,
+          "note": null
+        }
+      }
+    },
+    {
+      "name": "GA4 revenue vs 아임웹 revenue",
+      "weekly": {
+        "W10": {
+          "ga4_revenue": 11639999,
+          "imweb_revenue": 3880000,
+          "match": false,
+          "diff_pct": 200.0,
+          "note": "차이 ₩7,759,999: GA4 이벤트 기반 vs 아임웹 PG 확정 금액. 환불/취소/이벤트 중복 발화 가능"
+        },
+        "W11": {
+          "ga4_revenue": 18190000,
+          "imweb_revenue": 7710000,
+          "match": false,
+          "diff_pct": 135.9,
+          "note": "차이 ₩10,480,000: GA4 이벤트 기반 vs 아임웹 PG 확정 금액. 환불/취소/이벤트 중복 발화 가능"
+        },
+        "W12": {
+          "ga4_revenue": 8060000,
+          "imweb_revenue": 7960000,
+          "match": false,
+          "diff_pct": 1.3,
+          "note": "차이 ₩100,000: GA4 이벤트 기반 vs 아임웹 PG 확정 금액. 환불/취소/이벤트 중복 발화 가능"
+        },
+        "W13": {
+          "ga4_revenue": 10790000,
+          "imweb_revenue": 10790000,
+          "match": true,
+          "diff_pct": 0.0,
+          "note": null
+        }
+      }
+    },
+    {
+      "name": "네이버 SA clicks vs GA4 Paid Search sessions",
+      "weekly": {
+        "W6": {
+          "naver_clicks": 70,
+          "ga4_paid_search_sessions": 54,
+          "ratio": 0.77
+        },
+        "W7": {
+          "naver_clicks": 50,
+          "ga4_paid_search_sessions": 50,
+          "ratio": 1.0
+        },
+        "W8": {
+          "naver_clicks": 77,
+          "ga4_paid_search_sessions": 63,
+          "ratio": 0.82
+        },
+        "W9": {
+          "naver_clicks": 180,
+          "ga4_paid_search_sessions": 151,
+          "ratio": 0.84
+        },
+        "W10": {
+          "naver_clicks": 199,
+          "ga4_paid_search_sessions": 188,
+          "ratio": 0.94
+        },
+        "W11": {
+          "naver_clicks": 251,
+          "ga4_paid_search_sessions": 218,
+          "ratio": 0.87
+        },
+        "W12": {
+          "naver_clicks": 339,
+          "ga4_paid_search_sessions": 351,
+          "ratio": 1.04
+        },
+        "W13": {
+          "naver_clicks": 245,
+          "ga4_paid_search_sessions": 250,
+          "ratio": 1.02
+        }
+      }
+    }
+  ],
+  "summary": {
+    "data_reliability": "중간",
+    "key_findings": [
+      "GA4 purchase 건수는 아임웹 실구매보다 많음 — GA4는 이벤트 기반으로 결제 시도/중복 발화 포함",
+      "GA4 revenue와 아임웹 revenue 차이 존재 — W11에서 GA4가 ₩18.19M vs 아임웹 ₩7.71M (약 2.4배), 이벤트 중복 또는 테스트 주문 의심",
+      "Meta clicks→GA4 sessions 비율은 주차별 변동 있으나 Display 채널이 주 수신처",
+      "W6~W8 아임웹 매출 데이터 없음 — 교차검증 불가 구간"
+    ]
+  }
+}

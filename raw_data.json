@@ -1,0 +1,2006 @@
+{
+  "period": "2026-02-03 ~ 2026-03-30",
+  "weeks": {
+    "W6": [
+      "20260203",
+      "20260209"
+    ],
+    "W7": [
+      "20260210",
+      "20260216"
+    ],
+    "W8": [
+      "20260217",
+      "20260223"
+    ],
+    "W9": [
+      "20260223",
+      "20260301"
+    ],
+    "W10": [
+      "20260302",
+      "20260308"
+    ],
+    "W11": [
+      "20260309",
+      "20260315"
+    ],
+    "W12": [
+      "20260316",
+      "20260322"
+    ],
+    "W13": [
+      "20260323",
+      "20260330"
+    ]
+  },
+  "ga4_weekly": {
+    "W6": {
+      "sessions": 1178,
+      "users": 1092,
+      "new_users": 934,
+      "pageviews": 2707,
+      "bounce_rate": 0.3016,
+      "avg_duration": 108.44,
+      "days": 7
+    },
+    "W7": {
+      "sessions": 2838,
+      "users": 2665,
+      "new_users": 2154,
+      "pageviews": 6953,
+      "bounce_rate": 0.5022,
+      "avg_duration": 142.77,
+      "days": 7
+    },
+    "W8": {
+      "sessions": 3768,
+      "users": 3552,
+      "new_users": 2869,
+      "pageviews": 7670,
+      "bounce_rate": 0.9876,
+      "avg_duration": 363.29,
+      "days": 7
+    },
+    "W9": {
+      "sessions": 4973,
+      "users": 4713,
+      "new_users": 4027,
+      "pageviews": 9239,
+      "bounce_rate": 0.9884,
+      "avg_duration": 136.38,
+      "days": 7
+    },
+    "W10": {
+      "sessions": 5445,
+      "users": 5118,
+      "new_users": 4273,
+      "pageviews": 9436,
+      "bounce_rate": 0.9898,
+      "avg_duration": 230.29,
+      "days": 7
+    },
+    "W11": {
+      "sessions": 7110,
+      "users": 6745,
+      "new_users": 5705,
+      "pageviews": 11140,
+      "bounce_rate": 0.9886,
+      "avg_duration": 115.72,
+      "days": 7
+    },
+    "W12": {
+      "sessions": 12147,
+      "users": 11618,
+      "new_users": 9842,
+      "pageviews": 19203,
+      "bounce_rate": 0.9928,
+      "avg_duration": 96.8,
+      "days": 7
+    },
+    "W13": {
+      "sessions": 6474,
+      "users": 6117,
+      "new_users": 4700,
+      "pageviews": 11136,
+      "bounce_rate": 0.9835,
+      "avg_duration": 271.98,
+      "days": 7
+    }
+  },
+  "ga4_channels_weekly": {
+    "W6": {
+      "Organic Social": {
+        "sessions": 731,
+        "users": 724,
+        "bounce_rate": 0.2274
+      },
+      "Direct": {
+        "sessions": 202,
+        "users": 185,
+        "bounce_rate": 0.5888
+      },
+      "Organic Search": {
+        "sessions": 128,
+        "users": 106,
+        "bounce_rate": 0.2308
+      },
+      "Paid Search": {
+        "sessions": 54,
+        "users": 49,
+        "bounce_rate": 0.184
+      },
+      "Paid Social": {
+        "sessions": 8,
+        "users": 8,
+        "bounce_rate": 0.3333
+      },
+      "Referral": {
+        "sessions": 36,
+        "users": 21,
+        "bounce_rate": 0.3764
+      },
+      "Display": {
+        "sessions": 17,
+        "users": 7,
+        "bounce_rate": 0.8452
+      },
+      "Organic Shopping": {
+        "sessions": 1,
+        "users": 1,
+        "bounce_rate": 0.0
+      },
+      "Unassigned": {
+        "sessions": 1,
+        "users": 1,
+        "bounce_rate": 0.0
+      }
+    },
+    "W7": {
+      "Organic Social": {
+        "sessions": 115,
+        "users": 112,
+        "bounce_rate": 0.5446
+      },
+      "Direct": {
+        "sessions": 352,
+        "users": 331,
+        "bounce_rate": 0.659
+      },
+      "Organic Search": {
+        "sessions": 167,
+        "users": 127,
+        "bounce_rate": 0.41
+      },
+      "Display": {
+        "sessions": 2047,
+        "users": 1995,
+        "bounce_rate": 0.5132
+      },
+      "Paid Search": {
+        "sessions": 50,
+        "users": 46,
+        "bounce_rate": 0.1528
+      },
+      "Referral": {
+        "sessions": 68,
+        "users": 32,
+        "bounce_rate": 0.479
+      },
+      "Paid Social": {
+        "sessions": 5,
+        "users": 5,
+        "bounce_rate": 0.1667
+      },
+      "Unassigned": {
+        "sessions": 566,
+        "users": 551,
+        "bounce_rate": 1.0
+      },
+      "Organic Shopping": {
+        "sessions": 1,
+        "users": 1,
+        "bounce_rate": 0.0
+      },
+      "Cross-network": {
+        "sessions": 1,
+        "users": 1,
+        "bounce_rate": 1.0
+      }
+    },
+    "W8": {
+      "Display": {
+        "sessions": 2437,
+        "users": 2360,
+        "bounce_rate": 0.9921
+      },
+      "Unassigned": {
+        "sessions": 1861,
+        "users": 1769,
+        "bounce_rate": 1.0
+      },
+      "Direct": {
+        "sessions": 757,
+        "users": 719,
+        "bounce_rate": 0.9808
+      },
+      "Organic Search": {
+        "sessions": 176,
+        "users": 156,
+        "bounce_rate": 0.9701
+      },
+      "Referral": {
+        "sessions": 63,
+        "users": 36,
+        "bounce_rate": 0.9125
+      },
+      "Paid Social": {
+        "sessions": 26,
+        "users": 26,
+        "bounce_rate": 1.0
+      },
+      "Organic Social": {
+        "sessions": 27,
+        "users": 22,
+        "bounce_rate": 1.0
+      },
+      "Paid Search": {
+        "sessions": 63,
+        "users": 58,
+        "bounce_rate": 0.9881
+      },
+      "Organic Shopping": {
+        "sessions": 6,
+        "users": 4,
+        "bounce_rate": 1.0
+      },
+      "Cross-network": {
+        "sessions": 4,
+        "users": 4,
+        "bounce_rate": 1.0
+      },
+      "Organic Video": {
+        "sessions": 2,
+        "users": 2,
+        "bounce_rate": 1.0
+      }
+    },
+    "W9": {
+      "Display": {
+        "sessions": 3219,
+        "users": 3116,
+        "bounce_rate": 0.9933
+      },
+      "Unassigned": {
+        "sessions": 2478,
+        "users": 2379,
+        "bounce_rate": 1.0
+      },
+      "Direct": {
+        "sessions": 1024,
+        "users": 988,
+        "bounce_rate": 0.989
+      },
+      "Organic Search": {
+        "sessions": 195,
+        "users": 170,
+        "bounce_rate": 0.9283
+      },
+      "Paid Search": {
+        "sessions": 151,
+        "users": 132,
+        "bounce_rate": 0.9544
+      },
+      "Organic Social": {
+        "sessions": 34,
+        "users": 23,
+        "bounce_rate": 0.9714
+      },
+      "Referral": {
+        "sessions": 37,
+        "users": 30,
+        "bounce_rate": 0.9762
+      },
+      "Cross-network": {
+        "sessions": 4,
+        "users": 4,
+        "bounce_rate": 1.0
+      },
+      "Organic Shopping": {
+        "sessions": 4,
+        "users": 3,
+        "bounce_rate": 1.0
+      },
+      "Organic Video": {
+        "sessions": 3,
+        "users": 3,
+        "bounce_rate": 1.0
+      }
+    },
+    "W10": {
+      "Display": {
+        "sessions": 3263,
+        "users": 3139,
+        "bounce_rate": 0.993
+      },
+      "Unassigned": {
+        "sessions": 2951,
+        "users": 2827,
+        "bounce_rate": 1.0
+      },
+      "Direct": {
+        "sessions": 932,
+        "users": 904,
+        "bounce_rate": 0.9947
+      },
+      "Organic Search": {
+        "sessions": 234,
+        "users": 192,
+        "bounce_rate": 0.9546
+      },
+      "Paid Search": {
+        "sessions": 188,
+        "users": 167,
+        "bounce_rate": 0.9556
+      },
+      "Organic Social": {
+        "sessions": 432,
+        "users": 386,
+        "bounce_rate": 0.9509
+      },
+      "Organic Video": {
+        "sessions": 15,
+        "users": 14,
+        "bounce_rate": 0.963
+      },
+      "Referral": {
+        "sessions": 38,
+        "users": 33,
+        "bounce_rate": 0.9796
+      },
+      "Cross-network": {
+        "sessions": 9,
+        "users": 9,
+        "bounce_rate": 1.0
+      },
+      "Paid Social": {
+        "sessions": 1,
+        "users": 1,
+        "bounce_rate": 1.0
+      },
+      "Organic Shopping": {
+        "sessions": 1,
+        "users": 1,
+        "bounce_rate": 1.0
+      }
+    },
+    "W11": {
+      "Display": {
+        "sessions": 4669,
+        "users": 4506,
+        "bounce_rate": 0.9909
+      },
+      "Unassigned": {
+        "sessions": 3909,
+        "users": 3797,
+        "bounce_rate": 1.0
+      },
+      "Direct": {
+        "sessions": 1152,
+        "users": 1123,
+        "bounce_rate": 0.9933
+      },
+      "Paid Search": {
+        "sessions": 218,
+        "users": 202,
+        "bounce_rate": 0.9512
+      },
+      "Organic Search": {
+        "sessions": 192,
+        "users": 162,
+        "bounce_rate": 0.935
+      },
+      "Organic Social": {
+        "sessions": 287,
+        "users": 263,
+        "bounce_rate": 0.9828
+      },
+      "Referral": {
+        "sessions": 67,
+        "users": 49,
+        "bounce_rate": 0.9762
+      },
+      "Organic Shopping": {
+        "sessions": 3,
+        "users": 3,
+        "bounce_rate": 1.0
+      },
+      "Organic Video": {
+        "sessions": 3,
+        "users": 2,
+        "bounce_rate": 1.0
+      },
+      "Cross-network": {
+        "sessions": 5,
+        "users": 5,
+        "bounce_rate": 1.0
+      },
+      "Paid Social": {
+        "sessions": 78,
+        "users": 70,
+        "bounce_rate": 0.964
+      }
+    },
+    "W12": {
+      "Display": {
+        "sessions": 8191,
+        "users": 7929,
+        "bounce_rate": 0.9947
+      },
+      "Unassigned": {
+        "sessions": 7239,
+        "users": 7063,
+        "bounce_rate": 0.9997
+      },
+      "Direct": {
+        "sessions": 1839,
+        "users": 1816,
+        "bounce_rate": 0.992
+      },
+      "Organic Social": {
+        "sessions": 503,
+        "users": 486,
+        "bounce_rate": 0.9909
+      },
+      "Paid Search": {
+        "sessions": 351,
+        "users": 315,
+        "bounce_rate": 0.9744
+      },
+      "Organic Search": {
+        "sessions": 275,
+        "users": 237,
+        "bounce_rate": 0.9718
+      },
+      "Referral": {
+        "sessions": 73,
+        "users": 53,
+        "bounce_rate": 1.0
+      },
+      "Organic Shopping": {
+        "sessions": 8,
+        "users": 7,
+        "bounce_rate": 1.0
+      },
+      "Paid Social": {
+        "sessions": 85,
+        "users": 66,
+        "bounce_rate": 0.9708
+      },
+      "Cross-network": {
+        "sessions": 14,
+        "users": 14,
+        "bounce_rate": 1.0
+      },
+      "Organic Video": {
+        "sessions": 2,
+        "users": 2,
+        "bounce_rate": 1.0
+      }
+    },
+    "W13": {
+      "Display": {
+        "sessions": 2830,
+        "users": 2718,
+        "bounce_rate": 0.9975
+      },
+      "Unassigned": {
+        "sessions": 3863,
+        "users": 3741,
+        "bounce_rate": 0.9985
+      },
+      "Direct": {
+        "sessions": 951,
+        "users": 928,
+        "bounce_rate": 0.988
+      },
+      "Organic Social": {
+        "sessions": 378,
+        "users": 352,
+        "bounce_rate": 0.9756
+      },
+      "Paid Search": {
+        "sessions": 250,
+        "users": 219,
+        "bounce_rate": 0.9732
+      },
+      "Organic Search": {
+        "sessions": 189,
+        "users": 170,
+        "bounce_rate": 0.9418
+      },
+      "Paid Social": {
+        "sessions": 1300,
+        "users": 1262,
+        "bounce_rate": 0.9826
+      },
+      "Referral": {
+        "sessions": 81,
+        "users": 59,
+        "bounce_rate": 0.9521
+      },
+      "Cross-network": {
+        "sessions": 14,
+        "users": 14,
+        "bounce_rate": 1.0
+      },
+      "Organic Shopping": {
+        "sessions": 10,
+        "users": 7,
+        "bounce_rate": 1.0
+      },
+      "Organic Video": {
+        "sessions": 3,
+        "users": 3,
+        "bounce_rate": 1.0
+      }
+    }
+  },
+  "meta_weekly": {
+    "W6": {
+      "spend": 0,
+      "impressions": 0,
+      "clicks": 0,
+      "ctr": 0,
+      "cpc": 0,
+      "purchases": 0,
+      "days": 5
+    },
+    "W7": {
+      "spend": 268660,
+      "impressions": 34026,
+      "clicks": 2383,
+      "ctr": 7.0,
+      "cpc": 113,
+      "purchases": 13,
+      "days": 6
+    },
+    "W8": {
+      "spend": 337566,
+      "impressions": 51107,
+      "clicks": 3265,
+      "ctr": 6.39,
+      "cpc": 103,
+      "purchases": 20,
+      "days": 7
+    },
+    "W9": {
+      "spend": 490469,
+      "impressions": 71741,
+      "clicks": 4194,
+      "ctr": 5.85,
+      "cpc": 117,
+      "purchases": 3,
+      "days": 7
+    },
+    "W10": {
+      "spend": 615055,
+      "impressions": 73288,
+      "clicks": 4022,
+      "ctr": 5.49,
+      "cpc": 153,
+      "purchases": 3,
+      "days": 7
+    },
+    "W11": {
+      "spend": 891728,
+      "impressions": 106984,
+      "clicks": 5502,
+      "ctr": 5.14,
+      "cpc": 162,
+      "purchases": 3,
+      "days": 7
+    },
+    "W12": {
+      "spend": 1344922,
+      "impressions": 152940,
+      "clicks": 10388,
+      "ctr": 6.79,
+      "cpc": 129,
+      "purchases": 0,
+      "days": 7
+    },
+    "W13": {
+      "spend": 1033405,
+      "impressions": 95097,
+      "clicks": 5663,
+      "ctr": 5.95,
+      "cpc": 182,
+      "purchases": 1,
+      "days": 7
+    }
+  },
+  "meta_campaigns_weekly": {
+    "W6": {},
+    "W7": {
+      "[전환]메인페이지 랜딩_ASC_260211": {
+        "impressions": 34026,
+        "clicks": 2383,
+        "spend": 268660,
+        "ctr": 7.0,
+        "cpc": 113
+      }
+    },
+    "W8": {
+      "[전환]메인페이지 랜딩_ASC_260211": {
+        "impressions": 36890,
+        "clicks": 2287,
+        "spend": 263242,
+        "ctr": 6.2,
+        "cpc": 115
+      },
+      "[리드]체험하기_피트니스_260220": {
+        "impressions": 14217,
+        "clicks": 978,
+        "spend": 74324,
+        "ctr": 6.88,
+        "cpc": 76
+      }
+    },
+    "W9": {
+      "[전환]메인페이지 랜딩_ASC_260211": {
+        "impressions": 40500,
+        "clicks": 2333,
+        "spend": 278259,
+        "ctr": 5.76,
+        "cpc": 119
+      },
+      "[리드]체험하기_피트니스_260220": {
+        "impressions": 31241,
+        "clicks": 1861,
+        "spend": 212210,
+        "ctr": 5.96,
+        "cpc": 114
+      }
+    },
+    "W10": {
+      "[전환]메인페이지 랜딩_ASC_260211": {
+        "impressions": 57312,
+        "clicks": 3102,
+        "spend": 464722,
+        "ctr": 5.41,
+        "cpc": 150
+      },
+      "[리드]체험하기_피트니스_260220": {
+        "impressions": 15976,
+        "clicks": 920,
+        "spend": 150333,
+        "ctr": 5.76,
+        "cpc": 163
+      }
+    },
+    "W11": {
+      "[전환]메인페이지 랜딩_ASC_260211": {
+        "impressions": 106984,
+        "clicks": 5502,
+        "spend": 891728,
+        "ctr": 5.14,
+        "cpc": 162
+      }
+    },
+    "W12": {
+      "[전환]메인페이지 랜딩_ASC_260211": {
+        "impressions": 145931,
+        "clicks": 10231,
+        "spend": 1185175,
+        "ctr": 7.01,
+        "cpc": 116
+      },
+      "[잠재고객]B2B 상담 메타 양식": {
+        "impressions": 7009,
+        "clicks": 157,
+        "spend": 159747,
+        "ctr": 2.24,
+        "cpc": 1017
+      }
+    },
+    "W13": {
+      "[전환]메인페이지 랜딩_ASC_260211": {
+        "impressions": 56245,
+        "clicks": 3634,
+        "spend": 476172,
+        "ctr": 6.46,
+        "cpc": 131
+      },
+      "[잠재고객]B2B 상담 메타 양식": {
+        "impressions": 13513,
+        "clicks": 384,
+        "spend": 310105,
+        "ctr": 2.84,
+        "cpc": 808
+      },
+      "[전환]메인페이지 랜딩_2555남성_260326": {
+        "impressions": 25339,
+        "clicks": 1645,
+        "spend": 247128,
+        "ctr": 6.49,
+        "cpc": 150
+      }
+    }
+  },
+  "naver_weekly": {
+    "W6": {
+      "impressions": 1760,
+      "clicks": 70,
+      "ctr": 3.98,
+      "cpc": 85,
+      "spend": 5929,
+      "days": 28
+    },
+    "W7": {
+      "impressions": 1308,
+      "clicks": 50,
+      "ctr": 3.82,
+      "cpc": 86,
+      "spend": 4290,
+      "days": 36
+    },
+    "W8": {
+      "impressions": 1000,
+      "clicks": 77,
+      "ctr": 7.7,
+      "cpc": 71,
+      "spend": 5467,
+      "days": 28
+    },
+    "W9": {
+      "impressions": 1884,
+      "clicks": 180,
+      "ctr": 9.55,
+      "cpc": 69,
+      "spend": 12441,
+      "days": 28
+    },
+    "W10": {
+      "impressions": 1865,
+      "clicks": 199,
+      "ctr": 10.67,
+      "cpc": 74,
+      "spend": 14674,
+      "days": 28
+    },
+    "W11": {
+      "impressions": 2199,
+      "clicks": 251,
+      "ctr": 11.41,
+      "cpc": 87,
+      "spend": 21868,
+      "days": 28
+    },
+    "W12": {
+      "impressions": 2069,
+      "clicks": 339,
+      "ctr": 16.38,
+      "cpc": 88,
+      "spend": 29689,
+      "days": 28
+    },
+    "W13": {
+      "impressions": 1744,
+      "clicks": 245,
+      "ctr": 14.05,
+      "cpc": 84,
+      "spend": 20559,
+      "days": 28
+    }
+  },
+  "instagram_weekly": {
+    "W6": null,
+    "W7": {
+      "followers": 2781,
+      "period_posts": 0,
+      "total_likes": 0,
+      "total_comments": 0,
+      "total_reach": 0
+    },
+    "W8": {
+      "followers": 2786,
+      "period_posts": 0,
+      "total_likes": 0,
+      "total_comments": 0,
+      "total_reach": 0
+    },
+    "W9": {
+      "followers": 2799,
+      "period_posts": 2,
+      "total_likes": 17,
+      "total_comments": 1,
+      "total_reach": 0
+    },
+    "W10": {
+      "followers": 2822,
+      "period_posts": 2,
+      "total_likes": 43,
+      "total_comments": 0,
+      "total_reach": 0
+    },
+    "W11": null,
+    "W12": null,
+    "W13": {
+      "followers": 2888,
+      "period_posts": 4,
+      "total_likes": 35,
+      "total_comments": 1,
+      "total_reach": 1331
+    }
+  },
+  "imweb_weekly": {
+    "W6": null,
+    "W7": null,
+    "W8": null,
+    "W9": null,
+    "W10": {
+      "revenue": 3880000,
+      "units": 1,
+      "note": "본체 1대"
+    },
+    "W11": {
+      "revenue": 7710000,
+      "units": 2,
+      "note": "본체 2대"
+    },
+    "W12": {
+      "revenue": 7960000,
+      "units": 2,
+      "note": "본체 2대"
+    },
+    "W13": {
+      "revenue": 10790000,
+      "units": 3,
+      "note": "본체 3대+액세서리 1건"
+    }
+  },
+  "reports_kpi": {
+    "W13": {
+      "sessions": {
+        "value": 6532,
+        "prev": 12473
+      },
+      "users": {
+        "value": 5909,
+        "prev": 11317
+      },
+      "newUsers": {
+        "value": 5094,
+        "prev": 10591
+      },
+      "adSpend": {
+        "value": 1058507,
+        "prev": 1375409,
+        "unit": "₩"
+      },
+      "adSpend_meta": {
+        "value": 1037959,
+        "prev": 1345720,
+        "unit": "₩",
+        "note": "Meta"
+      },
+      "adSpend_naver": {
+        "value": 20548,
+        "prev": 29689,
+        "unit": "₩",
+        "note": "네이버"
+      },
+      "impressions": {
+        "value": 97799,
+        "prev": 155104,
+        "note": "Meta 96,092 + 네이버 1,707"
+      },
+      "clicks": {
+        "value": 5912,
+        "prev": 10733,
+        "note": "Meta 5,670 + 네이버 242"
+      },
+      "purchases_ga4": {
+        "value": 6,
+        "prev": 9,
+        "note": "본체 3대+액세서리 1건"
+      },
+      "units_sold": {
+        "value": 3,
+        "prev": 2,
+        "note": "본체 3대+액세서리 1건"
+      },
+      "imweb_revenue": {
+        "value": 10790000,
+        "prev": 7960000,
+        "unit": "₩",
+        "note": "아임웹 실매출"
+      },
+      "ga4_revenue": {
+        "value": 10790000,
+        "prev": 8060000,
+        "unit": "₩",
+        "note": "GA4 참고치"
+      },
+      "roas": {
+        "value": 1019.4,
+        "prev": 578.7,
+        "unit": "%",
+        "note": "아임웹 매출 기준"
+      },
+      "cpc": {
+        "value": 179,
+        "prev": 128,
+        "unit": "₩"
+      },
+      "cpm": {
+        "value": 10823,
+        "prev": 8868,
+        "unit": "₩"
+      },
+      "ctr": {
+        "value": 6.05,
+        "prev": 6.92,
+        "unit": "%"
+      },
+      "cpa": {
+        "value": 176418,
+        "prev": 152825,
+        "unit": "₩",
+        "note": "광고비/구매건수"
+      },
+      "convRate": {
+        "value": 0.092,
+        "prev": 0.072,
+        "unit": "%",
+        "note": "구매/세션"
+      },
+      "meta_cpc": {
+        "value": 183,
+        "prev": 129,
+        "unit": "₩",
+        "note": "Meta"
+      },
+      "meta_ctr": {
+        "value": 5.9,
+        "prev": 6.79,
+        "unit": "%",
+        "note": "Meta"
+      },
+      "meta_cpm": {
+        "value": 10802,
+        "prev": 8794,
+        "unit": "₩",
+        "note": "Meta"
+      },
+      "bounceRate": {
+        "value": 51.3,
+        "prev": 55.0
+      },
+      "avgDuration": {
+        "value": 78,
+        "prev": 67
+      }
+    },
+    "W12": {
+      "sessions": {
+        "value": 12473,
+        "prev": 7154
+      },
+      "users": {
+        "value": 11317,
+        "prev": 6556
+      },
+      "newUsers": {
+        "value": 10591,
+        "prev": 6113
+      },
+      "adSpend": {
+        "value": 1375409,
+        "prev": 914415,
+        "unit": "₩"
+      },
+      "adSpend_meta": {
+        "value": 1345720,
+        "prev": 892547,
+        "unit": "₩",
+        "note": "Meta"
+      },
+      "adSpend_naver": {
+        "value": 29689,
+        "prev": 21868,
+        "unit": "₩",
+        "note": "네이버"
+      },
+      "impressions": {
+        "value": 155104,
+        "prev": 109308,
+        "note": "Meta 153,035 + 네이버 2,069"
+      },
+      "clicks": {
+        "value": 10733,
+        "prev": 5760,
+        "note": "Meta 10,394 + 네이버 339"
+      },
+      "purchases_ga4": {
+        "value": 9,
+        "prev": 10,
+        "note": "실제 본체 2대"
+      },
+      "bounceRate": {
+        "value": 55.0,
+        "prev": 58.1
+      },
+      "avgDuration": {
+        "value": 67,
+        "prev": 73
+      },
+      "ga4_revenue": {
+        "value": 8060000,
+        "unit": "₩",
+        "note": "GA4 참고치",
+        "prev": 18190000
+      },
+      "roas": {
+        "value": 578.7,
+        "unit": "%",
+        "note": "아임웹 매출 기준",
+        "prev": 843.2
+      },
+      "cpc": {
+        "value": 128,
+        "unit": "₩",
+        "prev": 159
+      },
+      "cpm": {
+        "value": 8868,
+        "unit": "₩",
+        "prev": 8365
+      },
+      "ctr": {
+        "value": 6.92,
+        "unit": "%",
+        "prev": 5.27
+      },
+      "cpa": {
+        "value": 152825,
+        "unit": "₩",
+        "note": "광고비/구매건수",
+        "prev": 91442
+      },
+      "convRate": {
+        "value": 0.072,
+        "unit": "%",
+        "note": "구매/세션",
+        "prev": 0.14
+      },
+      "meta_cpc": {
+        "value": 129,
+        "unit": "₩",
+        "note": "Meta",
+        "prev": 162
+      },
+      "meta_ctr": {
+        "value": 6.79,
+        "unit": "%",
+        "note": "Meta",
+        "prev": 5.14
+      },
+      "meta_cpm": {
+        "value": 8794,
+        "unit": "₩",
+        "note": "Meta",
+        "prev": 8333
+      },
+      "units_sold": {
+        "value": 2,
+        "note": "본체 2대 ₩796만",
+        "prev": 2
+      },
+      "imweb_revenue": {
+        "value": 7960000,
+        "unit": "₩",
+        "note": "아임웹 실매출",
+        "prev": 7710000
+      }
+    },
+    "W11": {
+      "sessions": {
+        "value": 7154,
+        "prev": 5758
+      },
+      "users": {
+        "value": 6556,
+        "prev": 5140
+      },
+      "newUsers": {
+        "value": 6113,
+        "prev": 4764
+      },
+      "adSpend": {
+        "value": 914415,
+        "prev": 667801,
+        "unit": "₩"
+      },
+      "adSpend_meta": {
+        "value": 892547,
+        "prev": 652456,
+        "unit": "₩",
+        "note": "Meta"
+      },
+      "adSpend_naver": {
+        "value": 21868,
+        "prev": 15345,
+        "unit": "₩",
+        "note": "네이버"
+      },
+      "impressions": {
+        "value": 109308,
+        "prev": 79430,
+        "note": "Meta 107,109 + 네이버 2,199"
+      },
+      "clicks": {
+        "value": 5760,
+        "prev": 4451,
+        "note": "Meta 5,509 + 네이버 251"
+      },
+      "purchases_ga4": {
+        "value": 10,
+        "prev": 5,
+        "note": "실제 본체 2대"
+      },
+      "bounceRate": {
+        "value": 58.1,
+        "prev": 54.3
+      },
+      "avgDuration": {
+        "value": 73,
+        "prev": 94
+      },
+      "ga4_revenue": {
+        "value": 18190000,
+        "unit": "₩",
+        "note": "GA4 참고치",
+        "prev": 11639999
+      },
+      "roas": {
+        "value": 843.2,
+        "unit": "%",
+        "note": "아임웹 매출 기준",
+        "prev": 581.0
+      },
+      "cpc": {
+        "value": 159,
+        "unit": "₩",
+        "prev": 150
+      },
+      "cpm": {
+        "value": 8365,
+        "unit": "₩",
+        "prev": 8379
+      },
+      "ctr": {
+        "value": 5.27,
+        "unit": "%",
+        "prev": 5.57
+      },
+      "cpa": {
+        "value": 91442,
+        "unit": "₩",
+        "note": "광고비/구매건수",
+        "prev": 113874
+      },
+      "convRate": {
+        "value": 0.14,
+        "unit": "%",
+        "note": "구매/세션",
+        "prev": 0.091
+      },
+      "meta_cpc": {
+        "value": 162,
+        "unit": "₩",
+        "note": "Meta",
+        "prev": 154
+      },
+      "meta_ctr": {
+        "value": 5.14,
+        "unit": "%",
+        "note": "Meta",
+        "prev": 5.44
+      },
+      "meta_cpm": {
+        "value": 8333,
+        "unit": "₩",
+        "note": "Meta",
+        "prev": 8384
+      },
+      "units_sold": {
+        "value": 2,
+        "note": "본체 2대 ₩771만",
+        "prev": 1
+      },
+      "imweb_revenue": {
+        "value": 7710000,
+        "unit": "₩",
+        "note": "아임웹 실매출",
+        "prev": 3880000
+      }
+    },
+    "W10": {
+      "sessions": {
+        "value": 5758,
+        "prev": 5328,
+        "unit": ""
+      },
+      "users": {
+        "value": 5140,
+        "prev": 4788,
+        "unit": ""
+      },
+      "newUsers": {
+        "value": 4764,
+        "prev": 4406,
+        "unit": ""
+      },
+      "adSpend": {
+        "value": 667801,
+        "prev": 531636,
+        "unit": "₩"
+      },
+      "adSpend_meta": {
+        "value": 652456,
+        "prev": 518909,
+        "unit": "₩",
+        "note": "Meta"
+      },
+      "adSpend_naver": {
+        "value": 15345,
+        "prev": 12727,
+        "unit": "₩",
+        "note": "네이버"
+      },
+      "impressions": {
+        "value": 79430,
+        "prev": 76602,
+        "unit": "",
+        "note": "Meta 77,434 + 네이버 1,996"
+      },
+      "clicks": {
+        "value": 4451,
+        "prev": 4528,
+        "unit": "",
+        "note": "Meta 4,243 + 네이버 208"
+      },
+      "purchases_ga4": {
+        "value": 5,
+        "prev": 14,
+        "note": "실제 본체 1대"
+      },
+      "bounceRate": {
+        "value": 54.3,
+        "prev": 56.2,
+        "unit": "%"
+      },
+      "avgDuration": {
+        "value": 94,
+        "prev": 72,
+        "unit": "s"
+      },
+      "total_ad_cpa": {
+        "value": 133560,
+        "unit": "₩",
+        "note": "총 광고비/GA4 구매 5건"
+      },
+      "ga4_revenue": {
+        "value": 11639999,
+        "unit": "₩",
+        "note": "GA4 참고치"
+      },
+      "roas": {
+        "value": 581.0,
+        "unit": "%",
+        "note": "아임웹 매출 기준"
+      },
+      "cpc": {
+        "value": 150,
+        "unit": "₩"
+      },
+      "cpm": {
+        "value": 8379,
+        "unit": "₩"
+      },
+      "ctr": {
+        "value": 5.57,
+        "unit": "%"
+      },
+      "cpa": {
+        "value": 113874,
+        "unit": "₩",
+        "note": "광고비/구매건수"
+      },
+      "convRate": {
+        "value": 0.091,
+        "unit": "%",
+        "note": "구매/세션"
+      },
+      "meta_cpc": {
+        "value": 154,
+        "unit": "₩",
+        "note": "Meta"
+      },
+      "meta_ctr": {
+        "value": 5.44,
+        "unit": "%",
+        "note": "Meta"
+      },
+      "meta_cpm": {
+        "value": 8384,
+        "unit": "₩",
+        "note": "Meta"
+      },
+      "units_sold": {
+        "value": 1,
+        "note": "본체 1대 ₩388만"
+      },
+      "imweb_revenue": {
+        "value": 3880000,
+        "unit": "₩",
+        "note": "아임웹 실매출"
+      }
+    }
+  },
+  "ga4_funnel": {
+    "W9": {
+      "overview": {
+        "sessions": 5215,
+        "total_users": 4671,
+        "new_users": 4303,
+        "page_views": 9849,
+        "avg_session_duration": 70.56413219041227,
+        "bounce_rate": 0.5534036433365292,
+        "engaged_sessions": 2329
+      },
+      "funnel": {
+        "view_item": {
+          "count": 4626,
+          "users": 1979
+        },
+        "begin_checkout": {
+          "count": 72,
+          "users": 32
+        },
+        "add_payment_info": {
+          "count": 12,
+          "users": 8
+        },
+        "purchase": {
+          "count": 3,
+          "users": 2
+        }
+      },
+      "traffic_sources": [
+        {
+          "channel": "Display",
+          "sessions": 3524,
+          "users": 3318,
+          "engaged_sessions": 1620,
+          "bounce_rate": 0.5402951191827469
+        },
+        {
+          "channel": "Direct",
+          "sessions": 1146,
+          "users": 1078,
+          "engaged_sessions": 370,
+          "bounce_rate": 0.6771378708551483
+        },
+        {
+          "channel": "Organic Search",
+          "sessions": 214,
+          "users": 170,
+          "engaged_sessions": 148,
+          "bounce_rate": 0.308411214953271
+        },
+        {
+          "channel": "Paid Search",
+          "sessions": 167,
+          "users": 129,
+          "engaged_sessions": 134,
+          "bounce_rate": 0.19760479041916168
+        },
+        {
+          "channel": "Referral",
+          "sessions": 40,
+          "users": 20,
+          "engaged_sessions": 23,
+          "bounce_rate": 0.425
+        },
+        {
+          "channel": "Organic Social",
+          "sessions": 37,
+          "users": 20,
+          "engaged_sessions": 24,
+          "bounce_rate": 0.35135135135135137
+        },
+        {
+          "channel": "Unassigned",
+          "sessions": 12,
+          "users": 12,
+          "engaged_sessions": 5,
+          "bounce_rate": 0.5833333333333334
+        },
+        {
+          "channel": "Organic Shopping",
+          "sessions": 4,
+          "users": 3,
+          "engaged_sessions": 3,
+          "bounce_rate": 0.25
+        },
+        {
+          "channel": "Organic Video",
+          "sessions": 4,
+          "users": 4,
+          "engaged_sessions": 4,
+          "bounce_rate": 0.0
+        }
+      ]
+    },
+    "W10": {
+      "overview": {
+        "sessions": 5516,
+        "total_users": 4950,
+        "new_users": 4603,
+        "page_views": 10116,
+        "avg_session_duration": 89.45752268817984,
+        "bounce_rate": 0.5232052211747643,
+        "engaged_sessions": 2630
+      },
+      "funnel": {
+        "view_item": {
+          "count": 4790,
+          "users": 2099,
+          "revenue": 0
+        },
+        "begin_checkout": {
+          "count": 46,
+          "users": 28,
+          "revenue": 0
+        },
+        "add_payment_info": {
+          "count": 7,
+          "users": 5,
+          "revenue": 0
+        },
+        "purchase": {
+          "count": 5,
+          "users": 5,
+          "revenue": 11639999.999664
+        }
+      },
+      "traffic_sources": [
+        {
+          "channel": "Display",
+          "sessions": 3552,
+          "users": 3293,
+          "engaged_sessions": 1673,
+          "bounce_rate": 0.5289977477477478
+        },
+        {
+          "channel": "Direct",
+          "sessions": 1001,
+          "users": 949,
+          "engaged_sessions": 296,
+          "bounce_rate": 0.7042957042957043
+        },
+        {
+          "channel": "Organic Social",
+          "sessions": 456,
+          "users": 374,
+          "engaged_sessions": 306,
+          "bounce_rate": 0.32894736842105265
+        },
+        {
+          "channel": "Organic Search",
+          "sessions": 248,
+          "users": 185,
+          "engaged_sessions": 173,
+          "bounce_rate": 0.3024193548387097
+        },
+        {
+          "channel": "Paid Search",
+          "sessions": 206,
+          "users": 166,
+          "engaged_sessions": 137,
+          "bounce_rate": 0.33495145631067963
+        },
+        {
+          "channel": "Referral",
+          "sessions": 43,
+          "users": 28,
+          "engaged_sessions": 27,
+          "bounce_rate": 0.37209302325581395
+        },
+        {
+          "channel": "Organic Video",
+          "sessions": 15,
+          "users": 13,
+          "engaged_sessions": 12,
+          "bounce_rate": 0.2
+        },
+        {
+          "channel": "Unassigned",
+          "sessions": 13,
+          "users": 12,
+          "engaged_sessions": 7,
+          "bounce_rate": 0.46153846153846156
+        },
+        {
+          "channel": "Organic Shopping",
+          "sessions": 2,
+          "users": 2,
+          "engaged_sessions": 2,
+          "bounce_rate": 0.0
+        },
+        {
+          "channel": "Paid Social",
+          "sessions": 1,
+          "users": 1,
+          "engaged_sessions": 0,
+          "bounce_rate": 1.0
+        }
+      ]
+    },
+    "W11": {
+      "overview": {
+        "sessions": 7154,
+        "total_users": 6556,
+        "new_users": 6113,
+        "page_views": 11930,
+        "avg_session_duration": 73.3852685610847,
+        "bounce_rate": 0.5814928711210512,
+        "engaged_sessions": 2994
+      },
+      "funnel": {
+        "view_item": {
+          "count": 5547,
+          "users": 2458,
+          "revenue": 0
+        },
+        "begin_checkout": {
+          "count": 104,
+          "users": 42,
+          "revenue": 0
+        },
+        "add_payment_info": {
+          "count": 22,
+          "users": 16,
+          "revenue": 0
+        },
+        "purchase": {
+          "count": 10,
+          "users": 6,
+          "revenue": 18190000.000665
+        }
+      },
+      "traffic_sources": [
+        {
+          "channel": "Display",
+          "sessions": 4985,
+          "users": 4714,
+          "engaged_sessions": 2084,
+          "bounce_rate": 0.5819458375125376
+        },
+        {
+          "channel": "Direct",
+          "sessions": 1246,
+          "users": 1188,
+          "engaged_sessions": 350,
+          "bounce_rate": 0.7191011235955056
+        },
+        {
+          "channel": "Organic Social",
+          "sessions": 317,
+          "users": 269,
+          "engaged_sessions": 216,
+          "bounce_rate": 0.3186119873817035
+        },
+        {
+          "channel": "Paid Search",
+          "sessions": 235,
+          "users": 190,
+          "engaged_sessions": 157,
+          "bounce_rate": 0.33191489361702126
+        },
+        {
+          "channel": "Organic Search",
+          "sessions": 200,
+          "users": 152,
+          "engaged_sessions": 144,
+          "bounce_rate": 0.28
+        },
+        {
+          "channel": "Paid Social",
+          "sessions": 80,
+          "users": 71,
+          "engaged_sessions": 32,
+          "bounce_rate": 0.6
+        },
+        {
+          "channel": "Referral",
+          "sessions": 73,
+          "users": 30,
+          "engaged_sessions": 36,
+          "bounce_rate": 0.5068493150684932
+        },
+        {
+          "channel": "Unassigned",
+          "sessions": 11,
+          "users": 11,
+          "engaged_sessions": 2,
+          "bounce_rate": 0.8181818181818182
+        },
+        {
+          "channel": "Organic Shopping",
+          "sessions": 4,
+          "users": 4,
+          "engaged_sessions": 3,
+          "bounce_rate": 0.25
+        },
+        {
+          "channel": "Organic Video",
+          "sessions": 3,
+          "users": 2,
+          "engaged_sessions": 2,
+          "bounce_rate": 0.3333333333333333
+        }
+      ]
+    },
+    "W12": {
+      "overview": {
+        "sessions": 12473,
+        "total_users": 11317,
+        "new_users": 10591,
+        "page_views": 20639,
+        "avg_session_duration": 66.58793307640504,
+        "bounce_rate": 0.5502284935460595,
+        "engaged_sessions": 5610
+      },
+      "funnel": {
+        "view_item": {
+          "count": 10037,
+          "users": 4638,
+          "revenue": 0
+        },
+        "begin_checkout": {
+          "count": 83,
+          "users": 49,
+          "revenue": 0
+        },
+        "add_payment_info": {
+          "count": 15,
+          "users": 9,
+          "revenue": 0
+        },
+        "purchase": {
+          "count": 9,
+          "users": 7,
+          "revenue": 8060000.001518
+        }
+      },
+      "traffic_sources": [
+        {
+          "channel": "Display",
+          "sessions": 8967,
+          "users": 8318,
+          "engaged_sessions": 4154,
+          "bounce_rate": 0.5367458458793354
+        },
+        {
+          "channel": "Direct",
+          "sessions": 1984,
+          "users": 1932,
+          "engaged_sessions": 512,
+          "bounce_rate": 0.7419354838709677
+        },
+        {
+          "channel": "Organic Social",
+          "sessions": 547,
+          "users": 512,
+          "engaged_sessions": 359,
+          "bounce_rate": 0.3436928702010969
+        },
+        {
+          "channel": "Paid Search",
+          "sessions": 372,
+          "users": 307,
+          "engaged_sessions": 229,
+          "bounce_rate": 0.3844086021505376
+        },
+        {
+          "channel": "Organic Search",
+          "sessions": 295,
+          "users": 232,
+          "engaged_sessions": 221,
+          "bounce_rate": 0.25084745762711863
+        },
+        {
+          "channel": "Paid Social",
+          "sessions": 93,
+          "users": 57,
+          "engaged_sessions": 40,
+          "bounce_rate": 0.5698924731182796
+        },
+        {
+          "channel": "Referral",
+          "sessions": 76,
+          "users": 38,
+          "engaged_sessions": 44,
+          "bounce_rate": 0.42105263157894735
+        },
+        {
+          "channel": "Unassigned",
+          "sessions": 27,
+          "users": 18,
+          "engaged_sessions": 10,
+          "bounce_rate": 0.6296296296296297
+        },
+        {
+          "channel": "Organic Shopping",
+          "sessions": 8,
+          "users": 6,
+          "engaged_sessions": 4,
+          "bounce_rate": 0.5
+        },
+        {
+          "channel": "Organic Video",
+          "sessions": 2,
+          "users": 2,
+          "engaged_sessions": 2,
+          "bounce_rate": 0.0
+        }
+      ]
+    },
+    "W13": {
+      "overview": {
+        "sessions": 6532,
+        "total_users": 5909,
+        "new_users": 5094,
+        "page_views": 11843,
+        "avg_session_duration": 77.78593894580527,
+        "bounce_rate": 0.5125535823637477,
+        "engaged_sessions": 3184
+      },
+      "funnel": {
+        "view_item": {
+          "count": 5606,
+          "users": 2498,
+          "revenue": 0
+        },
+        "begin_checkout": {
+          "count": 137,
+          "users": 51,
+          "revenue": 0
+        },
+        "add_payment_info": {
+          "count": 24,
+          "users": 10,
+          "revenue": 0
+        },
+        "purchase": {
+          "count": 6,
+          "users": 4,
+          "revenue": 10790000.001169
+        }
+      },
+      "traffic_sources": [
+        {
+          "channel": "Display",
+          "sessions": 3175,
+          "users": 2923,
+          "engaged_sessions": 1455,
+          "bounce_rate": 0.5417322834645669
+        },
+        {
+          "channel": "Paid Social",
+          "sessions": 1351,
+          "users": 1246,
+          "engaged_sessions": 770,
+          "bounce_rate": 0.43005181347150256
+        },
+        {
+          "channel": "Direct",
+          "sessions": 1061,
+          "users": 1021,
+          "engaged_sessions": 285,
+          "bounce_rate": 0.7313854853911405
+        },
+        {
+          "channel": "Organic Social",
+          "sessions": 444,
+          "users": 383,
+          "engaged_sessions": 279,
+          "bounce_rate": 0.3716216216216216
+        },
+        {
+          "channel": "Paid Search",
+          "sessions": 257,
+          "users": 210,
+          "engaged_sessions": 181,
+          "bounce_rate": 0.29571984435797666
+        },
+        {
+          "channel": "Organic Search",
+          "sessions": 192,
+          "users": 158,
+          "engaged_sessions": 125,
+          "bounce_rate": 0.3489583333333333
+        },
+        {
+          "channel": "Referral",
+          "sessions": 81,
+          "users": 51,
+          "engaged_sessions": 48,
+          "bounce_rate": 0.4074074074074074
+        },
+        {
+          "channel": "Unassigned",
+          "sessions": 53,
+          "users": 33,
+          "engaged_sessions": 19,
+          "bounce_rate": 0.6415094339622641
+        },
+        {
+          "channel": "Organic Shopping",
+          "sessions": 8,
+          "users": 5,
+          "engaged_sessions": 6,
+          "bounce_rate": 0.25
+        },
+        {
+          "channel": "Organic Video",
+          "sessions": 3,
+          "users": 3,
+          "engaged_sessions": 3,
+          "bounce_rate": 0.0
+        }
+      ]
+    }
+  },
+  "meta_campaign_details": {
+    "W9": {
+      "campaigns": [
+        {
+          "name": "[전환]메인페이지 랜딩_ASC_260211",
+          "impressions": 40537,
+          "clicks": 2336,
+          "spend": 278640.0,
+          "ctr": 5.762637,
+          "cpc": 119.280822
+        },
+        {
+          "name": "[리드]체험하기_피트니스_260220",
+          "impressions": 31266,
+          "clicks": 1863,
+          "spend": 212416.0,
+          "ctr": 5.958549,
+          "cpc": 114.01825
+        }
+      ],
+      "summary": {
+        "total_spend": 491056.0,
+        "total_impressions": 71803,
+        "total_clicks": 4199,
+        "avg_ctr": 5.847945071932928,
+        "avg_cpc": 116.945939509407
+      }
+    },
+    "W10": {
+      "campaigns": [
+        {
+          "name": "[전환]메인페이지 랜딩_ASC_260211",
+          "impressions": 50357,
+          "clicks": 2689,
+          "spend": 405762.0,
+          "ctr": 5.339873,
+          "cpc": 150.896988
+        },
+        {
+          "name": "[리드]체험하기_피트니스_260220",
+          "impressions": 15985,
+          "clicks": 920,
+          "spend": 150452.0,
+          "ctr": 5.755396,
+          "cpc": 163.534783
+        }
+      ],
+      "summary": {
+        "total_spend": 556214.0,
+        "total_impressions": 66342,
+        "total_clicks": 3609,
+        "avg_ctr": 5.439992764764403,
+        "avg_cpc": 154.11859240786922
+      }
+    },
+    "W11": {
+      "campaigns": [
+        {
+          "name": "[전환]메인페이지 랜딩_ASC_260211",
+          "impressions": 107111,
+          "clicks": 5509,
+          "spend": 892552.0,
+          "ctr": 5.143263,
+          "cpc": 162.017063
+        }
+      ],
+      "summary": {
+        "total_spend": 892552.0,
+        "total_impressions": 107111,
+        "total_clicks": 5509,
+        "avg_ctr": 5.143262596745432,
+        "avg_cpc": 162.01706298783807
+      }
+    },
+    "W12": {
+      "campaigns": [
+        {
+          "name": "[전환]메인페이지 랜딩_ASC_260211",
+          "impressions": 146020,
+          "clicks": 10237,
+          "spend": 1185866.0,
+          "ctr": 7.010683,
+          "cpc": 115.841164
+        },
+        {
+          "name": "[잠재고객]B2B 상담 메타 양식",
+          "impressions": 7017,
+          "clicks": 157,
+          "spend": 159869.0,
+          "ctr": 2.237423,
+          "cpc": 1018.273885
+        }
+      ],
+      "summary": {
+        "total_spend": 1345735.0,
+        "total_impressions": 153037,
+        "total_clicks": 10394,
+        "avg_ctr": 6.791821585629619,
+        "avg_cpc": 129.4722917067539
+      }
+    },
+    "W13": {
+      "campaigns": [
+        {
+          "name": "[전환]메인페이지 랜딩_ASC_260211",
+          "impressions": 60130,
+          "clicks": 3855,
+          "spend": 513913.0,
+          "ctr": 6.411109,
+          "cpc": 133.310765
+        },
+        {
+          "name": "[잠재고객]B2B 상담 메타 양식",
+          "impressions": 12589,
+          "clicks": 350,
+          "spend": 303583.0,
+          "ctr": 2.780205,
+          "cpc": 867.38
+        },
+        {
+          "name": "[전환]메인페이지 랜딩_2555남성_260326",
+          "impressions": 23373,
+          "clicks": 1465,
+          "spend": 220463.0,
+          "ctr": 6.267916,
+          "cpc": 150.486689
+        }
+      ],
+      "summary": {
+        "total_spend": 1037959.0,
+        "total_impressions": 96092,
+        "total_clicks": 5670,
+        "avg_ctr": 5.90059526287308,
+        "avg_cpc": 183.0615520282187
+      }
+    }
+  }
+}
