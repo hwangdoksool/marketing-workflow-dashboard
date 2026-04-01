@@ -178,6 +178,25 @@ select.form-input{cursor:pointer;}
   .funnel-step .step-name{min-width:100px;font-size:.7rem;}
 }
 
+/* ── Guide modal ── */
+.guide-modal .modal{max-width:720px;}
+.guide-modal h3{font-size:.92rem;font-weight:700;margin:18px 0 8px;color:var(--ac2);}
+.guide-modal h3:first-of-type{margin-top:4px;}
+.guide-modal p,.guide-modal li{font-size:.82rem;line-height:1.7;color:var(--t);}
+.guide-modal ul,.guide-modal ol{padding-left:18px;margin:6px 0;}
+.guide-modal .guide-table{width:100%;border-collapse:collapse;font-size:.78rem;margin:8px 0 12px;}
+.guide-modal .guide-table th,.guide-modal .guide-table td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--b);}
+.guide-modal .guide-table th{color:var(--t2);font-weight:600;font-size:.7rem;text-transform:uppercase;background:var(--s2);}
+.guide-modal .guide-table tr:last-child td{border-bottom:none;}
+.guide-flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0 14px;}
+.guide-flow .gf-step{padding:5px 12px;border-radius:8px;font-size:.75rem;font-weight:600;}
+.guide-flow .gf-arrow{color:var(--t2);font-size:.8rem;}
+.guide-tip{background:var(--s2);border-left:3px solid var(--ac);padding:8px 12px;border-radius:0 8px 8px 0;font-size:.78rem;margin:8px 0;line-height:1.6;}
+.guide-warn{background:rgba(225,112,85,.1);border-left:3px solid var(--r);padding:8px 12px;border-radius:0 8px 8px 0;font-size:.78rem;margin:8px 0;line-height:1.6;}
+.guide-checklist{list-style:none;padding:0;margin:8px 0;}
+.guide-checklist li{padding:4px 0;font-size:.8rem;}
+.guide-checklist li::before{content:'☐ ';color:var(--ac);}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar{width:6px;height:6px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
@@ -201,6 +220,7 @@ select.form-input{cursor:pointer;}
   <header class="hdr">
     <h1>마케팅 워크플로우 <span>Marketing Ops Dashboard v2</span></h1>
     <div class="hdr-r">
+      <button class="btn" onclick="openGuide()">❓ 사용 가이드</button>
       <button class="btn" onclick="toggleTheme()" id="themeBtn">라이트 모드</button>
     </div>
   </header>
@@ -386,6 +406,116 @@ select.form-input{cursor:pointer;}
   <div class="modal">
     <button class="close" onclick="closeBriefDetail()">&times;</button>
     <div id="briefDetailContent"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 사용 가이드 모달 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="modal-bg guide-modal" id="guideModal">
+  <div class="modal">
+    <button class="close" onclick="closeGuide()">&times;</button>
+    <h2>사용 가이드</h2>
+
+    <h3>이 대시보드는?</h3>
+    <p><strong>가설 → 실험 → 검증 → 학습</strong> 사이클을 구조적으로 돌리기 위한 도구입니다.<br>
+    핵심은 <strong>Creative Brief</strong>입니다. Brief 없이는 소재를 만들 이유가 없고, Brief가 있으면 결과를 검증할 수 있습니다.</p>
+
+    <h3>화면 구성</h3>
+    <table class="guide-table">
+      <thead><tr><th>탭</th><th>용도</th></tr></thead>
+      <tbody>
+        <tr><td>📊 주간 리뷰</td><td>이번 주 성과 (KPI, 퍼널, 구매자, 인사이트)</td></tr>
+        <tr><td>🔍 구매자 역추적</td><td>구매 건별 유입경로 → 전환 타임라인 (준비 중)</td></tr>
+        <tr><td>📋 <strong>Brief 관리</strong></td><td>⭐ 핵심. Brief 작성 / 상태 관리 / 검증 기록</td></tr>
+        <tr><td>📈 종합 분석</td><td>8주 회고, 장기 트렌드</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Brief 작성법</h3>
+    <ol>
+      <li><strong>📋 Brief 관리</strong> 탭 → <strong>+ 새 Brief</strong> 클릭</li>
+      <li>양식 작성 (모든 항목 필수)</li>
+      <li>저장 → Draft 상태로 등록</li>
+    </ol>
+    <table class="guide-table">
+      <thead><tr><th>필드</th><th>설명</th><th>예시</th></tr></thead>
+      <tbody>
+        <tr><td>제목</td><td>캠페인/소재 이름</td><td>4월 1주차 릴스 — 홈트 시연</td></tr>
+        <tr><td>페르소나</td><td>타겟</td><td>PS1 바쁜직장인</td></tr>
+        <tr><td>JTBD</td><td>고객이 해결할 일</td><td>JT5 시간효율</td></tr>
+        <tr><td>VP</td><td>전달할 가치</td><td>VP1 자유해방</td></tr>
+        <tr><td>소재 구성</td><td>영상/이미지 형식</td><td>문제→솔루션</td></tr>
+        <tr><td>채널</td><td>게시/집행 채널</td><td>Meta전환, 인스타릴스</td></tr>
+        <tr><td><strong>가설</strong></td><td>기대 결과 (구체적!)</td><td>PS1+VP1로 CTR 5% 이상</td></tr>
+        <tr><td><strong>검증 기준</strong></td><td>판단 기준과 시점</td><td>7일 후 CTR 5% 이상이면 유효</td></tr>
+      </tbody>
+    </table>
+    <div class="guide-warn">⚠️ "효과 있을 것이다" → 너무 모호!<br>"CTR 5% 이상, 7일 후 판단" → 이래야 검증 가능</div>
+
+    <h3>Brief 상태 흐름</h3>
+    <div class="guide-flow">
+      <span class="gf-step badge-draft" style="padding:5px 12px;border-radius:8px;">Draft</span>
+      <span class="gf-arrow">→</span>
+      <span class="gf-step badge-live" style="padding:5px 12px;border-radius:8px;">Live</span>
+      <span class="gf-arrow">→</span>
+      <span class="gf-step badge-verified-valid" style="padding:5px 12px;border-radius:8px;">✅ 유효</span>
+      <span class="gf-step badge-verified-invalid" style="padding:5px 12px;border-radius:8px;">❌ 기각</span>
+      <span class="gf-step badge-verified-pending" style="padding:5px 12px;border-radius:8px;">⏳ 미확정</span>
+    </div>
+    <table class="guide-table">
+      <thead><tr><th>상태</th><th>색상</th><th>언제 바꾸나</th></tr></thead>
+      <tbody>
+        <tr><td>Draft</td><td>🔘 회색</td><td>Brief 처음 작성 시</td></tr>
+        <tr><td>Live</td><td>🔵 파랑</td><td>소재가 실제로 게시/집행되면</td></tr>
+        <tr><td>✅ 유효</td><td>🟢 초록</td><td>검증 기준 충족 시</td></tr>
+        <tr><td>❌ 기각</td><td>🔴 빨강</td><td>검증 기준 미달 시</td></tr>
+        <tr><td>⏳ 미확정</td><td>🟡 노랑</td><td>데이터 부족 / 기간 미도래</td></tr>
+      </tbody>
+    </table>
+
+    <h3>상태 변경 & 검증 결과 기록</h3>
+    <ol>
+      <li>Brief 카드 클릭 → 상세 모달</li>
+      <li>상단 <strong>드롭다운</strong>에서 새 상태 선택 → 즉시 반영</li>
+      <li>Verified 상태로 바꾸면 <strong>검증 결과 기록</strong> 입력란 등장</li>
+      <li>왜 유효/기각인지 기록 → <strong>결과 저장</strong></li>
+    </ol>
+    <div class="guide-tip">💡 검증 결과를 남겨야 다음 Brief 작성 시 참고할 수 있습니다.</div>
+
+    <h3>검색 & 필터</h3>
+    <p><strong>검색창</strong>: 제목, 페르소나, JTBD, 가설에서 키워드 검색<br>
+    <strong>필터 버튼</strong>: 전체 / Draft / Live / Verified 상태별 필터링</p>
+
+    <h3>JSON 내보내기 / 가져오기</h3>
+    <p>Brief 데이터는 <strong>브라우저 로컬 저장소</strong>에 저장됩니다.</p>
+    <table class="guide-table">
+      <thead><tr><th>버튼</th><th>기능</th></tr></thead>
+      <tbody>
+        <tr><td>JSON 내보내기</td><td>모든 Brief를 .json 파일로 다운로드 (백업)</td></tr>
+        <tr><td>JSON 가져오기</td><td>.json 파일 선택하여 Brief 일괄 불러오기</td></tr>
+      </tbody>
+    </table>
+    <div class="guide-warn">⚠️ 가져오기 시 기존 데이터가 덮어쓰기됩니다! 먼저 내보내기로 백업하세요.</div>
+
+    <h3>주간 리뷰 탭 보는 법</h3>
+    <ol>
+      <li><strong>주차 선택</strong> — 상단 버튼으로 이동</li>
+      <li><strong>KPI 카드</strong> — 🟢 개선 / 🔴 악화 (CPC 등 비용은 반대)</li>
+      <li><strong>섹션별 상세</strong> — 채널 성과, 퍼널, 구매자, 인사이트</li>
+    </ol>
+    <div class="guide-tip">💡 데이터는 자동 업데이트됩니다. 마케터가 직접 할 일은 없습니다.</div>
+
+    <h3>새 소재 기획 시 체크리스트</h3>
+    <ul class="guide-checklist">
+      <li>Brief 작성 (모든 필수 필드)</li>
+      <li>리더와 Brief 협의 (방향 확정)</li>
+      <li>소재 제작</li>
+      <li>상태를 Live로 변경</li>
+      <li>검증 기준 기간 도래 시 데이터 확인</li>
+      <li>상태를 Verified로 변경 + 검증 결과 기록</li>
+      <li>다음 Brief에 학습 반영</li>
+    </ul>
   </div>
 </div>
 
@@ -1082,6 +1212,12 @@ function renderReview(){
 /* ═══════════════════════════════════════════════════
    Utilities
    ═══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════
+   Guide Modal
+   ═══════════════════════════════════════════════════ */
+function openGuide(){ document.getElementById('guideModal').classList.add('open'); }
+function closeGuide(){ document.getElementById('guideModal').classList.remove('open'); }
+
 function escHtml(s){
   if(!s) return '';
   const d = document.createElement('div');
