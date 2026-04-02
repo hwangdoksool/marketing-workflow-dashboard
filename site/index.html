@@ -317,9 +317,9 @@ select.form-input{cursor:pointer;}
             <tr><td>0</td><td style="font-weight:700;color:var(--y);">Signal</td><td>누구든 (마케터/리더/AI)</td><td>데이터/현장/레퍼런스에서 기회·위협 신호 포착</td><td>시그널 카드</td></tr>
             <tr><td>1</td><td style="font-weight:700;color:var(--ac2);">Brief</td><td>누구든 (시그널 발견자 or 협의)</td><td>가설 설계 + 방향 협의 (여기서 끝)</td><td>Creative Brief</td></tr>
             <tr><td>2</td><td style="font-weight:700;color:var(--t2);">Make</td><td>마케터 or 리더</td><td>실행 (Brief 범위 내, 리더 개입 최소화)</td><td>소재/변경사항</td></tr>
-            <tr><td>3</td><td style="font-weight:700;color:var(--bl);">Live</td><td>마케터</td><td>게시/적용 + 메타데이터 기록</td><td>라이브 기록</td></tr>
-            <tr><td>4</td><td style="font-weight:700;color:var(--g);">Review</td><td>마케터 + 리더 + AI</td><td>자동 리포트 + 가설 vs 결과 검증</td><td>주간 리뷰</td></tr>
-            <tr><td>5</td><td style="font-weight:700;color:var(--r);">Learn</td><td>전원</td><td>인사이트 확정 + 다음 Signal로 연결</td><td>학습 카드</td></tr>
+            <tr><td>3</td><td style="font-weight:700;color:var(--bl);">Live</td><td>누구든 (실행한 사람)</td><td>게시/적용 + 메타데이터 기록</td><td>라이브 기록</td></tr>
+            <tr><td>4</td><td style="font-weight:700;color:var(--g);">Review</td><td>누구든 + AI</td><td>자동 리포트 + 가설 vs 결과 검증</td><td>주간 리뷰</td></tr>
+            <tr><td>5</td><td style="font-weight:700;color:var(--r);">Learn</td><td>누구든</td><td>인사이트 확정 + 다음 Signal로 연결</td><td>학습 카드</td></tr>
           </tbody>
         </table>
       </div>
@@ -408,15 +408,16 @@ select.form-input{cursor:pointer;}
     <div class="section-card">
       <div class="sec-title">단계별 역할</div>
       <div class="sec-body">
+        <div class="abstract">모든 단계에서 <strong>누가 하느냐는 고정이 아니다.</strong> 고정된 건 프로세스 자체 — 빈칸을 채워야 다음 단계로 넘어간다.</div>
         <table class="data-table">
-          <thead><tr><th>단계</th><th>마케터</th><th>리더</th><th>AI</th></tr></thead>
+          <thead><tr><th>단계</th><th>누구든 하는 것</th><th>AI 보조</th></tr></thead>
           <tbody>
-            <tr><td style="font-weight:600;">Signal</td><td>포착+등록</td><td>포착+등록</td><td>자동 감지 보조</td></tr>
-            <tr><td style="font-weight:600;">Brief</td><td>작성 가능</td><td>작성 가능</td><td>—</td></tr>
-            <tr><td style="font-weight:600;">Make</td><td>제작 (광고/콘텐츠)</td><td>제작 (웹구조/퍼널 등)</td><td>—</td></tr>
-            <tr><td style="font-weight:600;">Live</td><td>상태 전환+메타데이터</td><td>—</td><td>데이터 수집 시작</td></tr>
-            <tr><td style="font-weight:600;">Review</td><td>데이터 해석+판정</td><td>판정+방향</td><td>리포트 자동 생성</td></tr>
-            <tr><td style="font-weight:600;">Learn</td><td>학습 기록</td><td>확정</td><td>패턴 분석 보조</td></tr>
+            <tr><td style="font-weight:600;">Signal</td><td>데이터/현장/경쟁사에서 신호 포착 → 시그널 카드 등록</td><td>이상치/추세 자동 감지</td></tr>
+            <tr><td style="font-weight:600;">Brief</td><td>가설+검증기준 명문화 → 상대방과 협의</td><td>—</td></tr>
+            <tr><td style="font-weight:600;">Make</td><td>Brief 범위 내 실행 (소재/웹변경/퍼널 등)</td><td>—</td></tr>
+            <tr><td style="font-weight:600;">Live</td><td>게시/적용 → 상태 전환 + 메타데이터 기록</td><td>데이터 수집 시작</td></tr>
+            <tr><td style="font-weight:600;">Review</td><td>데이터 해석 → 가설 vs 결과 판정</td><td>리포트 자동 생성</td></tr>
+            <tr><td style="font-weight:600;">Learn</td><td>인사이트 기록 → 다음 Signal/Brief로 연결</td><td>패턴 분석 보조</td></tr>
           </tbody>
         </table>
       </div>
@@ -465,7 +466,7 @@ select.form-input{cursor:pointer;}
             <tr><td>4/2</td><td>Signal/Review에서 마케터 = 주체</td><td>마케터가 담당자. AI는 보조 도구일 뿐</td></tr>
             <tr><td>4/2</td><td>Make에서 리더 전담 가능 (개입 최소화, 금지 아님)</td><td>웹 구조/퍼널 등은 리더가 직접 실행하는 경우 있음</td></tr>
             <tr><td>4/2</td><td>설계 배경을 대시보드 안에 포함</td><td>md 파일 가독성 문제 + 도구 사용자가 "왜 이렇게 만들었는지" 바로 볼 수 있어야</td></tr>
-            <tr><td>4/2</td><td>Signal/Brief = 누구든 작성 가능</td><td>리더가 캐치한 시그널이면 리더가 Brief까지 쓰는 게 자연스러움. "누가 하느냐"가 아니라 "루프를 거치느냐"가 핵심</td></tr>
+            <tr><td>4/2</td><td>전 단계 "누구든" — 사람이 아니라 프로세스가 강제</td><td>실제 2개월 이력에서 리더가 Signal→Brief→Make→Live까지 전담한 케이스 다수. 역할 고정은 의미 없고, 루프를 거치는지가 핵심</td></tr>
           </tbody>
         </table>
         <p style="font-size:.72rem;color:var(--t2);margin-top:10px;">※ 주요 변경마다 이 로그에 추가됩니다.</p>
