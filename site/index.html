@@ -229,7 +229,7 @@ select.form-input{cursor:pointer;}
   <nav class="main-tabs">
     <button class="main-tab active" data-tab="weekly">📊 주간 리뷰</button>
     <button class="main-tab" data-tab="buyer">🔍 구매자 역추적</button>
-    <button class="main-tab" data-tab="briefs">📋 Brief 관리</button>
+    <button class="main-tab" data-tab="briefs">📋 실험 관리</button>
     <button class="main-tab" data-tab="review">📈 종합 분석</button>
     <button class="main-tab" data-tab="design">📐 설계 배경</button>
   </nav>
@@ -263,18 +263,20 @@ select.form-input{cursor:pointer;}
       <input type="text" class="search-input" id="briefSearch" placeholder="Brief 검색...">
       <div class="filter-pills" id="briefFilters">
         <button class="filter-pill active" data-filter="all">전체</button>
-        <button class="filter-pill" data-filter="draft">Draft</button>
+        <button class="filter-pill" data-filter="intent">의도</button>
+        <button class="filter-pill" data-filter="design">설계완료</button>
+        <button class="filter-pill" data-filter="making">제작중</button>
         <button class="filter-pill" data-filter="live">Live</button>
-        <button class="filter-pill" data-filter="verified">Verified</button>
+        <button class="filter-pill" data-filter="verified">검증완료</button>
       </div>
       <div class="spacer"></div>
       <button class="btn" onclick="importBriefs()">JSON 가져오기</button>
       <button class="btn" onclick="exportBriefs()">JSON 내보내기</button>
-      <button class="btn primary" onclick="openBriefForm()">+ 새 Brief</button>
+      <button class="btn primary" onclick="openBriefForm()">+ 새 실험</button>
     </div>
     <div class="brief-grid" id="briefGrid"></div>
     <div class="empty-state" id="briefEmpty" style="display:none;">
-      <p>아직 등록된 Brief가 없습니다.<br>새 Brief를 작성하여 가설 기반 워크플로우를 시작하세요.</p>
+      <p>아직 등록된 실험이 없습니다.<br>시그널을 포착하고 실험 설계서를 작성하여 가설 기반 워크플로우를 시작하세요.</p>
     </div>
     <input type="file" id="importFile" accept=".json" style="display:none;" onchange="handleImport(event)">
   </div>
@@ -295,31 +297,37 @@ select.form-input{cursor:pointer;}
     <div class="section-card">
       <div class="sec-title">워크플로우 전체 구조</div>
       <div class="sec-body">
-        <div class="card-title">6단계 루프</div>
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 18px;font-size:.82rem;font-weight:600;">
-          <span style="padding:6px 14px;border-radius:8px;background:rgba(253,203,110,.2);color:var(--y);">Signal</span>
+        <div class="card-title">실험 워크플로우</div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:12px 0 18px;font-size:.78rem;font-weight:600;">
+          <span style="padding:5px 12px;border-radius:8px;background:rgba(253,203,110,.2);color:var(--y);">시그널 포착</span>
           <span style="color:var(--t2);">→</span>
-          <span style="padding:6px 14px;border-radius:8px;background:rgba(108,92,231,.2);color:var(--ac2);">Brief</span>
+          <span style="padding:5px 12px;border-radius:8px;background:rgba(253,203,110,.15);color:var(--y);">실험 의도<br><small style="font-weight:400;font-size:.65rem;">간단 논의</small></span>
           <span style="color:var(--t2);">→</span>
-          <span style="padding:6px 14px;border-radius:8px;background:rgba(139,144,160,.2);color:var(--t2);">Make</span>
+          <span style="padding:5px 12px;border-radius:8px;background:rgba(108,92,231,.2);color:var(--ac2);">설계서 작성</span>
           <span style="color:var(--t2);">→</span>
-          <span style="padding:6px 14px;border-radius:8px;background:rgba(116,185,255,.2);color:var(--bl);">Live</span>
+          <span style="padding:5px 12px;border-radius:8px;background:rgba(108,92,231,.15);color:var(--ac2);">정식 협의<br><small style="font-weight:400;font-size:.65rem;">설계서 기반</small></span>
           <span style="color:var(--t2);">→</span>
-          <span style="padding:6px 14px;border-radius:8px;background:rgba(0,184,148,.2);color:var(--g);">Review</span>
+          <span style="padding:5px 12px;border-radius:8px;background:rgba(139,144,160,.2);color:var(--t2);">제작</span>
           <span style="color:var(--t2);">→</span>
-          <span style="padding:6px 14px;border-radius:8px;background:rgba(225,112,85,.2);color:var(--r);">Learn</span>
-          <span style="color:var(--t2);">→ 다시 Signal</span>
+          <span style="padding:5px 12px;border-radius:8px;background:rgba(139,144,160,.15);color:var(--t2);">오류 점검<br><small style="font-weight:400;font-size:.65rem;">정합성만</small></span>
+          <span style="color:var(--t2);">→</span>
+          <span style="padding:5px 12px;border-radius:8px;background:rgba(116,185,255,.2);color:var(--bl);">Live</span>
+          <span style="color:var(--t2);">→</span>
+          <span style="padding:5px 12px;border-radius:8px;background:rgba(0,184,148,.2);color:var(--g);">Review</span>
+          <span style="color:var(--t2);">→</span>
+          <span style="padding:5px 12px;border-radius:8px;background:rgba(225,112,85,.2);color:var(--r);">Learn</span>
+          <span style="color:var(--t2);">→ 다시 시그널</span>
         </div>
 
         <table class="data-table">
           <thead><tr><th>#</th><th>단계</th><th>누가</th><th>뭘 하나</th><th>산출물</th></tr></thead>
           <tbody>
-            <tr><td>0</td><td style="font-weight:700;color:var(--y);">Signal</td><td>누구든 (마케터/리더/AI)</td><td>데이터/현장/레퍼런스에서 기회·위협 신호 포착</td><td>시그널 카드</td></tr>
-            <tr><td>1</td><td style="font-weight:700;color:var(--ac2);">Brief</td><td>누구든 (시그널 발견자 or 협의)</td><td>가설 설계 + 방향 협의 (여기서 끝)</td><td>Creative Brief</td></tr>
-            <tr><td>2</td><td style="font-weight:700;color:var(--t2);">Make</td><td>마케터 or 리더</td><td>실행 (Brief 범위 내, 리더 개입 최소화)</td><td>소재/변경사항</td></tr>
-            <tr><td>3</td><td style="font-weight:700;color:var(--bl);">Live</td><td>누구든 (실행한 사람)</td><td>게시/적용 + 메타데이터 기록</td><td>라이브 기록</td></tr>
-            <tr><td>4</td><td style="font-weight:700;color:var(--g);">Review</td><td>누구든 + AI</td><td>자동 리포트 + 가설 vs 결과 검증</td><td>주간 리뷰</td></tr>
-            <tr><td>5</td><td style="font-weight:700;color:var(--r);">Learn</td><td>누구든</td><td>인사이트 확정 + 다음 Signal로 연결</td><td>학습 카드</td></tr>
+            <tr><td>1</td><td style="font-weight:700;color:var(--y);">시그널 포착 + 실험 의도</td><td>누구든</td><td>신호 포착 → 등록 → 간단 논의 (방향만)</td><td>시그널 카드</td></tr>
+            <tr><td>2</td><td style="font-weight:700;color:var(--ac2);">실험 설계서 + 정식 협의</td><td>누구든</td><td>구체적 설계(가설/검증기준) → 설계서 기반 협의</td><td>실험 설계서</td></tr>
+            <tr><td>3</td><td style="font-weight:700;color:var(--t2);">제작 + 오류 점검</td><td>누구든</td><td>설계서 범위 내 실행 → 설계서 대비 정합성만 확인</td><td>완성물</td></tr>
+            <tr><td>4</td><td style="font-weight:700;color:var(--bl);">Live</td><td>누구든</td><td>게시/적용 → 데이터 수집 시작</td><td>라이브 기록</td></tr>
+            <tr><td>5</td><td style="font-weight:700;color:var(--g);">Review</td><td>누구든 + AI</td><td>자동 리포트 + 가설 vs 결과 판정</td><td>검증 결과</td></tr>
+            <tr><td>6</td><td style="font-weight:700;color:var(--r);">Learn</td><td>누구든</td><td>인사이트 기록 + 다음 시그널로 연결</td><td>학습 기록</td></tr>
           </tbody>
         </table>
       </div>
@@ -492,12 +500,40 @@ select.form-input{cursor:pointer;}
 <div class="modal-bg" id="briefFormModal">
   <div class="modal">
     <button class="close" onclick="closeBriefForm()">&times;</button>
-    <h2 id="briefFormTitle">새 Brief 작성</h2>
+    <h2 id="briefFormTitle">새 실험 설계서</h2>
     <form id="briefForm" onsubmit="saveBrief(event)">
       <input type="hidden" id="bf-id">
       <div class="form-group">
-        <label>제목 <span class="req">*</span></label>
-        <input type="text" class="form-input" id="bf-title" placeholder="캠페인/소재명" required>
+        <label>실험 제목 <span class="req">*</span></label>
+        <input type="text" class="form-input" id="bf-title" placeholder="실험 제목 (예: 커뮤니티 구매확신 장치 테스트)" required>
+      </div>
+      <div class="form-group">
+        <label>시그널/배경 <span class="req">*</span></label>
+        <textarea class="form-input" id="bf-signal" placeholder="왜 지금 이걸 하는가? 어떤 신호를 포착했는가?" required></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>액션 유형 <span class="req">*</span></label>
+          <select class="form-input" id="bf-actiontype" required>
+            <option value="">선택하세요</option>
+            <option value="광고 소재">광고 소재</option>
+            <option value="숏폼/오가닉">숏폼/오가닉</option>
+            <option value="웹 변경">웹 변경</option>
+            <option value="퍼널 실험">퍼널 실험</option>
+            <option value="기타">기타</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>시그널 성격</label>
+          <select class="form-input" id="bf-signaltype">
+            <option value="">선택 (선택사항)</option>
+            <option value="위협">🔴 위협</option>
+            <option value="기회">🟢 기회</option>
+            <option value="외부">🔵 외부</option>
+            <option value="학습파생">🟡 학습 파생</option>
+            <option value="현장관찰">👁️ 현장 관찰</option>
+          </select>
+        </div>
       </div>
       <div class="form-row">
         <div class="form-group">
@@ -618,8 +654,8 @@ select.form-input{cursor:pointer;}
     <h2>사용 가이드</h2>
 
     <h3>이 대시보드는?</h3>
-    <p><strong>가설 → 실험 → 검증 → 학습</strong> 사이클을 구조적으로 돌리기 위한 도구입니다.<br>
-    핵심은 <strong>Creative Brief</strong>입니다. Brief 없이는 소재를 만들 이유가 없고, Brief가 있으면 결과를 검증할 수 있습니다.</p>
+    <p><strong>시그널 → 실험 설계 → 제작 → 검증 → 학습</strong> 사이클을 구조적으로 돌리기 위한 도구입니다.<br>
+    핵심은 <strong>실험 설계서</strong>입니다. 설계서 없이는 실행할 이유가 없고, 설계서가 있으면 결과를 검증할 수 있습니다.</p>
 
     <h3>화면 구성</h3>
     <table class="guide-table">
@@ -653,24 +689,30 @@ select.form-input{cursor:pointer;}
     </table>
     <div class="guide-warn">⚠️ "효과 있을 것이다" → 너무 모호!<br>"CTR 5% 이상, 7일 후 판단" → 이래야 검증 가능</div>
 
-    <h3>Brief 상태 흐름</h3>
+    <h3>실험 상태 흐름</h3>
     <div class="guide-flow">
-      <span class="gf-step badge-draft" style="padding:5px 12px;border-radius:8px;">Draft</span>
+      <span class="gf-step badge-draft" style="padding:5px 12px;border-radius:8px;">💡 의도</span>
       <span class="gf-arrow">→</span>
-      <span class="gf-step badge-live" style="padding:5px 12px;border-radius:8px;">Live</span>
+      <span class="gf-step badge-verified-pending" style="padding:5px 12px;border-radius:8px;">📐 설계완료</span>
+      <span class="gf-arrow">→</span>
+      <span class="gf-step badge-draft" style="padding:5px 12px;border-radius:8px;">🔨 제작중</span>
+      <span class="gf-arrow">→</span>
+      <span class="gf-step badge-live" style="padding:5px 12px;border-radius:8px;">🔵 Live</span>
       <span class="gf-arrow">→</span>
       <span class="gf-step badge-verified-valid" style="padding:5px 12px;border-radius:8px;">✅ 유효</span>
       <span class="gf-step badge-verified-invalid" style="padding:5px 12px;border-radius:8px;">❌ 기각</span>
       <span class="gf-step badge-verified-pending" style="padding:5px 12px;border-radius:8px;">⏳ 미확정</span>
     </div>
     <table class="guide-table">
-      <thead><tr><th>상태</th><th>색상</th><th>언제 바꾸나</th></tr></thead>
+      <thead><tr><th>상태</th><th>언제 바꾸나</th></tr></thead>
       <tbody>
-        <tr><td>Draft</td><td>🔘 회색</td><td>Brief 처음 작성 시</td></tr>
-        <tr><td>Live</td><td>🔵 파랑</td><td>소재가 실제로 게시/집행되면</td></tr>
-        <tr><td>✅ 유효</td><td>🟢 초록</td><td>검증 기준 충족 시</td></tr>
-        <tr><td>❌ 기각</td><td>🔴 빨강</td><td>검증 기준 미달 시</td></tr>
-        <tr><td>⏳ 미확정</td><td>🟡 노랑</td><td>데이터 부족 / 기간 미도래</td></tr>
+        <tr><td>💡 의도</td><td>시그널 잡고 실험 등록할 때 (자동)</td></tr>
+        <tr><td>📐 설계완료</td><td>설계서 작성 완료 시</td></tr>
+        <tr><td>🔨 제작중</td><td>정식 협의 통과, 제작 시작 시</td></tr>
+        <tr><td>🔵 Live</td><td>실제로 게시/적용되면</td></tr>
+        <tr><td>✅ 유효</td><td>검증 기준 충족 시</td></tr>
+        <tr><td>❌ 기각</td><td>검증 기준 미달 시</td></tr>
+        <tr><td>⏳ 미확정</td><td>데이터 부족 / 기간 미도래</td></tr>
       </tbody>
     </table>
 
@@ -964,7 +1006,7 @@ function renderBriefs(){
   const all = getBriefs();
   let filtered = all;
   if(briefFilter !== 'all'){
-    filtered = filtered.filter(b => b.status === briefFilter || (briefFilter === 'verified' && b.status.startsWith('verified')));
+    filtered = filtered.filter(b => b.status === briefFilter || (briefFilter === 'verified' && b.status.startsWith('verified')) || (briefFilter === 'draft' && b.status === 'draft'));
   }
   if(briefSearchTerm){
     const q = briefSearchTerm.toLowerCase();
@@ -993,8 +1035,8 @@ function renderBriefs(){
           <span class="badge ${badgeCls}">${badgeText}</span>
         </div>
         <div class="bf-meta">
+          ${b.actionType ? `<span class="schema-tag" style="background:rgba(0,184,148,.12);color:var(--g);">${escHtml(b.actionType)}</span>` : ''}
           <span class="schema-tag">${escHtml(b.persona)}</span>
-          <span class="schema-tag">${escHtml(b.jtbd)}</span>
           <span class="schema-tag">${escHtml(b.vp)}</span>
           <span class="schema-tag">${escHtml(b.channel)}</span>
         </div>
@@ -1006,19 +1048,25 @@ function renderBriefs(){
 }
 
 function getBadgeClass(status){
-  if(status === 'draft') return 'badge-draft';
+  if(status === 'intent') return 'badge-draft';
+  if(status === 'design') return 'badge-verified-pending';
+  if(status === 'making') return 'badge-draft';
   if(status === 'live') return 'badge-live';
   if(status === 'verified-valid') return 'badge-verified-valid';
   if(status === 'verified-invalid') return 'badge-verified-invalid';
   if(status === 'verified-pending') return 'badge-verified-pending';
+  if(status === 'draft') return 'badge-draft';
   return 'badge-draft';
 }
 function getStatusLabel(status){
-  if(status === 'draft') return 'Draft';
-  if(status === 'live') return 'Live';
+  if(status === 'intent') return '💡 의도';
+  if(status === 'design') return '📐 설계완료';
+  if(status === 'making') return '🔨 제작중';
+  if(status === 'live') return '🔵 Live';
   if(status === 'verified-valid') return '✅ 유효';
   if(status === 'verified-invalid') return '❌ 기각';
   if(status === 'verified-pending') return '⏳ 미확정';
+  if(status === 'draft') return 'Draft';
   return status;
 }
 
@@ -1049,6 +1097,9 @@ function openBriefForm(id){
     if(b){
       document.getElementById('bf-id').value = b.id;
       document.getElementById('bf-title').value = b.title;
+      document.getElementById('bf-signal').value = b.signal || '';
+      document.getElementById('bf-actiontype').value = b.actionType || '';
+      document.getElementById('bf-signaltype').value = b.signalType || '';
       document.getElementById('bf-persona').value = b.persona;
       document.getElementById('bf-jtbd').value = b.jtbd;
       document.getElementById('bf-vp').value = b.vp;
@@ -1057,9 +1108,9 @@ function openBriefForm(id){
       document.getElementById('bf-hypothesis').value = b.hypothesis;
       document.getElementById('bf-criteria').value = b.criteria;
     }
-    document.getElementById('briefFormTitle').textContent = 'Brief 수정';
+    document.getElementById('briefFormTitle').textContent = '실험 설계서 수정';
   } else {
-    document.getElementById('briefFormTitle').textContent = '새 Brief 작성';
+    document.getElementById('briefFormTitle').textContent = '새 실험 설계서';
   }
   document.getElementById('briefFormModal').classList.add('open');
 }
@@ -1071,6 +1122,9 @@ function closeBriefForm(){
 function saveBrief(e){
   e.preventDefault();
   const title = document.getElementById('bf-title').value.trim();
+  const signal = document.getElementById('bf-signal').value.trim();
+  const actionType = document.getElementById('bf-actiontype').value;
+  const signalType = document.getElementById('bf-signaltype').value;
   const persona = document.getElementById('bf-persona').value;
   const jtbd = document.getElementById('bf-jtbd').value;
   const vp = document.getElementById('bf-vp').value;
@@ -1079,8 +1133,8 @@ function saveBrief(e){
   const hypothesis = document.getElementById('bf-hypothesis').value.trim();
   const criteria = document.getElementById('bf-criteria').value.trim();
 
-  if(!title || !persona || !jtbd || !vp || !structure || !channel || !hypothesis || !criteria){
-    alert('모든 필수 필드를 입력해주세요. 가설과 검증기준은 반드시 작성해야 합니다.');
+  if(!title || !signal || !actionType || !persona || !jtbd || !vp || !structure || !channel || !hypothesis || !criteria){
+    alert('모든 필수 필드를 입력해주세요.');
     return;
   }
 
@@ -1088,13 +1142,13 @@ function saveBrief(e){
   if(editingBriefId){
     const idx = briefs.findIndex(b => b.id === editingBriefId);
     if(idx >= 0){
-      briefs[idx] = {...briefs[idx], title, persona, jtbd, vp, structure, channel, hypothesis, criteria, updatedAt: new Date().toISOString()};
+      briefs[idx] = {...briefs[idx], title, signal, actionType, signalType, persona, jtbd, vp, structure, channel, hypothesis, criteria, updatedAt: new Date().toISOString()};
     }
   } else {
     briefs.unshift({
       id: 'bf-' + Date.now(),
-      title, persona, jtbd, vp, structure, channel, hypothesis, criteria,
-      status: 'draft',
+      title, signal, actionType, signalType, persona, jtbd, vp, structure, channel, hypothesis, criteria,
+      status: 'intent',
       verificationResult: '',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -1116,8 +1170,10 @@ function openBriefDetail(id){
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
       <span class="badge ${getBadgeClass(b.status)}">${getStatusLabel(b.status)}</span>
       <select class="status-select" onchange="changeBriefStatus('${b.id}', this.value)">
-        <option value="draft"${b.status==='draft'?' selected':''}>Draft</option>
-        <option value="live"${b.status==='live'?' selected':''}>Live</option>
+        <option value="intent"${b.status==='intent'?' selected':''}>💡 의도</option>
+        <option value="design"${b.status==='design'?' selected':''}>📐 설계완료</option>
+        <option value="making"${b.status==='making'?' selected':''}>🔨 제작중</option>
+        <option value="live"${b.status==='live'?' selected':''}>🔵 Live</option>
         <option value="verified-valid"${b.status==='verified-valid'?' selected':''}>✅ 유효</option>
         <option value="verified-invalid"${b.status==='verified-invalid'?' selected':''}>❌ 기각</option>
         <option value="verified-pending"${b.status==='verified-pending'?' selected':''}>⏳ 미확정</option>
@@ -1125,6 +1181,8 @@ function openBriefDetail(id){
       <span style="font-size:.7rem;color:var(--t2);">생성: ${new Date(b.createdAt).toLocaleDateString('ko-KR')}</span>
     </div>
 
+    ${b.signal ? `<div class="card" style="margin-bottom:12px;"><div class="card-title">시그널/배경</div><div style="font-size:.82rem;line-height:1.7;white-space:pre-wrap;">${escHtml(b.signal)}</div></div>` : ''}
+    <div class="detail-row"><span class="detail-label">액션 유형</span><span class="detail-value"><span class="schema-tag" style="background:rgba(0,184,148,.12);color:var(--g);">${escHtml(b.actionType||'-')}</span>${b.signalType?` <span class="schema-tag">${escHtml(b.signalType)}</span>`:''}</span></div>
     <div class="detail-row"><span class="detail-label">페르소나</span><span class="detail-value"><span class="schema-tag">${escHtml(b.persona)}</span></span></div>
     <div class="detail-row"><span class="detail-label">JTBD</span><span class="detail-value"><span class="schema-tag">${escHtml(b.jtbd)}</span></span></div>
     <div class="detail-row"><span class="detail-label">VP</span><span class="detail-value"><span class="schema-tag">${escHtml(b.vp)}</span></span></div>
@@ -1148,7 +1206,7 @@ function openBriefDetail(id){
     </div>` : ''}
 
     <div class="brief-actions">
-      <button class="btn" onclick="openBriefForm('${b.id}');closeBriefDetail();">수정</button>
+      <button class="btn" onclick="openBriefForm('${b.id}');closeBriefDetail();">설계서 수정</button>
       <button class="btn danger" onclick="deleteBrief('${b.id}')">삭제</button>
     </div>
   `;
