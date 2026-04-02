@@ -267,7 +267,7 @@ select.form-input{cursor:pointer;}
         <button class="filter-pill" data-filter="design">설계완료</button>
         <button class="filter-pill" data-filter="making">제작중</button>
         <button class="filter-pill" data-filter="live">Live</button>
-        <button class="filter-pill" data-filter="verified">검증완료</button>
+        <button class="filter-pill" data-filter="complete">완료</button>
       </div>
       <div class="spacer"></div>
       <button class="btn" onclick="importBriefs()">JSON 가져오기</button>
@@ -333,18 +333,74 @@ select.form-input{cursor:pointer;}
       </div>
     </div>
 
-    <!-- 왜 이런 구조인가 -->
+    <!-- 두 블록 구조 -->
     <div class="section-card">
-      <div class="sec-title">왜 이런 구조인가</div>
+      <div class="sec-title">운영 구조: 두 블록</div>
       <div class="sec-body">
-        <div class="card-title">궁극적 목적</div>
-        <div class="abstract">가설→실험→검증→학습 루프 기반의 과학적 마케팅 워크플로우 도입.<br>시스템이 레일이 되어, 플로우를 따르기만 하면 자연스럽게 사이클이 돌아가는 구조.</div>
+        <div class="card-title">블록 1: 주간 미팅 (정기, 매주)</div>
+        <div class="insight-item"><strong>1-a. 리포트 발행</strong> — AI 자동, 매주 월요일 10시</div>
+        <div class="insight-item"><strong>1-b. 리포트 중심 리뷰</strong> — 미팅에서 데이터 기반 논의</div>
+        <div class="insight-item"><strong>1-c. 가설 수립 + 차주 액션 선정</strong> — 데이터 + 경험 + 직관, 시그널 판단</div>
 
-        <div class="card-title" style="margin-top:16px;">4가지 설계 원칙</div>
-        <div class="insight-item"><strong>① 자동 리포트</strong> — 데이터 기반 인사이트 도출을 위해 상세 리포트가 최대한 자동화되어야 한다</div>
-        <div class="insight-item"><strong>② 전 과정 명문화</strong> — 의도 설계 → 제작 → 결과 분석 → 인사이트까지 전부 데이터로 남긴다</div>
-        <div class="insight-item"><strong>③ 레거시 축적</strong> — 단편적으로 끝나지 않고, 연속성 있게 쌓여가야 한다</div>
-        <div class="insight-item"><strong>④ Brief = 소통 효율</strong> — Creative Brief 단계에서 논의를 끝내고, 이후 반복을 최소화한다</div>
+        <div class="card-title" style="margin-top:16px;">블록 2: 실험 실행 (수시, 미팅 후~다음 미팅 전)</div>
+        <div class="insight-item"><strong>2-a. 실험 설계서 작성</strong> — 선정된 가설 구체화</div>
+        <div class="insight-item"><strong>2-b. 설계서 논의 및 고도화</strong> — 슬랙 스레드</div>
+        <div class="insight-item"><strong>2-c. 제작 + 라이브</strong> — 실행, 오류 점검은 설계서 대비 정합성만</div>
+
+        <div class="abstract" style="margin-top:14px;">다음 주 미팅에서 2-c 결과가 다시 1-a 리포트에 반영 → 루프.</div>
+      </div>
+    </div>
+
+    <!-- 리포트 구조 -->
+    <div class="section-card">
+      <div class="sec-title">주간 리포트 구조</div>
+      <div class="sec-body">
+        <div class="abstract"><strong>리포트 = AI 자동 발행 (월 10시).</strong> 리뷰 = 미팅에서 사람이. 가설 수립은 리포트가 아니라 리뷰의 영역.</div>
+        <div class="card-title">Part 1: 지표 현황 (팩트)</div>
+        <div class="insight-item"><strong>표준 지표</strong> — 세션/유저/광고비/매출/ROAS/퍼널전환율, 캠페인별+소재별 성과</div>
+        <div class="insight-item"><strong>비표준 지표</strong> — 카카오 문의, CS 커뮤니티, IG/유튜브/Meta 댓글, DM, 리뷰, 체험 신청</div>
+        <div class="insight-item"><strong>전환 건별 상세</strong> — 구매/체험/문의 전환 전량 추적 (유입경로, 소재, 기기, 터치포인트, CS이력)</div>
+        <div class="insight-item" style="font-size:.72rem;color:var(--t2);">각 항목에 AI 코멘트 인라인</div>
+
+        <div class="card-title" style="margin-top:14px;">Part 2: 관계 분석 (팩트 기반 매칭)</div>
+        <div class="insight-item"><strong>액션→결과 매칭</strong> — 이번 주 + 최근 2~3주 Live 설계서 vs 지표 변화</div>
+        <div class="insight-item"><strong>결과→액션 역추적</strong> — 변화는 있는데 매칭 액션 없는 경우</div>
+        <div class="insight-item"><strong>전환 건별↔액션 매칭</strong> — 구매/체험 건을 어떤 설계서와 연결</div>
+        <div class="insight-item"><strong>시차 매칭</strong> — 2~3주 전 액션의 지연 효과</div>
+        <div class="insight-item" style="font-size:.72rem;color:var(--t2);">AI가 전량 매칭 시도 + 사람이 판단(맞다/아니다/추가)</div>
+      </div>
+    </div>
+
+    <!-- Review & Learn -->
+    <div class="section-card">
+      <div class="sec-title">Review & Learn 구조</div>
+      <div class="sec-body">
+        <div class="card-title">Review = 2축 분석</div>
+        <table class="data-table" style="max-width:500px;">
+          <thead><tr><th></th><th>성과 좋음</th><th>성과 나쁨</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:700;">의도대로</td><td style="color:var(--g);">가설 정확 → 스케일업</td><td style="color:var(--y);">실행 점검 필요</td></tr>
+            <tr><td style="font-weight:700;">의도와 다름</td><td style="color:var(--bl);">뜻밖의 발견 → 새 시그널</td><td style="color:var(--r);">가설 재검토 → 스키마 보정</td></tr>
+          </tbody>
+        </table>
+
+        <div class="card-title" style="margin-top:16px;">Learn = 의도 스키마 vs 결과 스키마의 gap</div>
+        <div class="insight-item"><strong>의도 스키마</strong> — 설계 시 의도한 축 조합 (타겟, VP, 구매여정 등)</div>
+        <div class="insight-item"><strong>결과 스키마</strong> — Review 시 실제로 작동한 축 조합</div>
+        <div class="insight-item"><strong>gap 분석</strong> — 뭐가 달랐는지 → 왜 달랐는지 → 다음에 뭘 바꿀지</div>
+        <div class="abstract" style="margin-top:10px;">이 gap이 쌓이면 AI가 "이 의도 스키마로 설계하면, 과거 경험상 실제론 이 결과 스키마로 나올 가능성이 높습니다" 추천 가능</div>
+      </div>
+    </div>
+
+    <!-- 설계 원칙 -->
+    <div class="section-card">
+      <div class="sec-title">설계 원칙</div>
+      <div class="sec-body">
+        <div class="insight-item"><strong>① 자동 리포트</strong> — 데이터 수집/정리는 AI가 전부. 범위 제한 없음. 리포트는 뷰일 뿐, 데이터는 항상 전량 존재</div>
+        <div class="insight-item"><strong>② 전 과정 명문화</strong> — 의도(설계서) → 실행 → 결과 → 인사이트까지 전부 기록</div>
+        <div class="insight-item"><strong>③ 레거시 축적</strong> — 의도 스키마 vs 결과 스키마 gap이 Learn으로 쌓임 → 누적될수록 AI 추천 정밀도 상승</div>
+        <div class="insight-item"><strong>④ 설계서 = 소통 효율</strong> — 설계서 단계에서 논의 종결, 이후 오류 점검만</div>
+        <div class="insight-item"><strong>⑤ 피드백 프로토콜</strong> — 의견 갈리면 가능한 실험으로 해소. 근거 명시 + AI 비교 정리. 의사결정 기록(양쪽 논거+선택+이유)</div>
       </div>
     </div>
 
@@ -384,31 +440,29 @@ select.form-input{cursor:pointer;}
       </div>
     </div>
 
-    <!-- Brief 양식 -->
+    <!-- 실험 설계서 축 -->
     <div class="section-card">
-      <div class="sec-title">Brief 양식 설계</div>
+      <div class="sec-title">실험 설계서 축 (= 크리에이티브 스키마 통합)</div>
       <div class="sec-body">
+        <div class="abstract">크리에이티브 스키마 v1의 8축이 실험 설계서의 축으로 통합. 설계 시 의도 스키마, Review 시 결과 스키마가 각각 기록됨.</div>
         <table class="data-table">
-          <thead><tr><th>필드</th><th>설명</th><th>필수</th><th>비고</th></tr></thead>
+          <thead><tr><th>축</th><th>설명</th><th>필수</th><th>성격</th></tr></thead>
           <tbody>
-            <tr><td style="font-weight:600;">배경/시그널</td><td>왜 지금 이걸 하는가</td><td>✅</td><td>시그널 카드 참조</td></tr>
-            <tr><td>페르소나</td><td>누구에게</td><td>✅</td><td>스키마 ⑤</td></tr>
-            <tr><td>JTBD</td><td>어떤 문제를</td><td>✅</td><td>스키마 ①</td></tr>
-            <tr><td>VP</td><td>어떤 가치를</td><td>✅</td><td>스키마 ⑦</td></tr>
-            <tr><td>소재 구성</td><td>어떤 형태로</td><td>✅</td><td>스키마 ⑧</td></tr>
-            <tr><td>채널/유형</td><td>어디에, 어떤 유형</td><td>✅</td><td>광고/숏폼/웹변경/퍼널/기타</td></tr>
-            <tr><td style="font-weight:600;">가설</td><td>기대 효과</td><td>✅</td><td>"~할 것이다"</td></tr>
-            <tr><td style="font-weight:600;">검증 기준</td><td>언제, 무슨 지표로</td><td>✅</td><td>구체적 숫자+시점</td></tr>
-            <tr><td>참조 Brief</td><td>이전 유사 실험</td><td></td><td>레거시 연결</td></tr>
-            <tr><td>리더 코멘트</td><td>협의 결과</td><td></td><td>합의 기록</td></tr>
+            <tr><td style="font-weight:600;">제목</td><td>실험 식별</td><td>✅</td><td>관리</td></tr>
+            <tr><td style="font-weight:600;">시그널/배경</td><td>왜 지금 이걸 하는가</td><td>✅</td><td>관리</td></tr>
+            <tr><td style="font-weight:600;">가설</td><td>이렇게 하면 이런 결과가</td><td>✅</td><td>검증의 본질</td></tr>
+            <tr><td style="font-weight:600;">검증 기준</td><td>뭘 보고 판단하는지</td><td>✅</td><td>검증의 본질</td></tr>
+            <tr><td>타겟 (페르소나)</td><td>누구를 대상으로</td><td></td><td rowspan="5" style="color:var(--ac2);">실험의 본질<br><small style="color:var(--t2);">구체적일수록 좋은 실험</small></td></tr>
+            <tr><td>문제/니즈 (JTBD)</td><td>그 사람이 뭘 겪고 있는지</td><td></td></tr>
+            <tr><td>VP</td><td>어떤 가치를 전달하는지</td><td></td></tr>
+            <tr><td>USP</td><td>왜 우리 제품이어야 하는지</td><td></td></tr>
+            <tr><td>구매여정 단계</td><td>인지/관심/비교/결제허들/구매후</td><td></td></tr>
+            <tr><td>액션 유형</td><td>광고/숏폼/웹/퍼널/기타</td><td></td><td rowspan="3">실행 상세</td></tr>
+            <tr><td>소재 구성/포맷</td><td>어떤 형태로</td><td></td></tr>
+            <tr><td>채널</td><td>어디서 실행</td><td></td></tr>
           </tbody>
         </table>
-
-        <div class="card-title" style="margin-top:16px;">피드백 프로토콜</div>
-        <div class="insight-item"><strong>Brief 단계</strong> — 자유 수정. 모든 전략 논의는 여기서 종결</div>
-        <div class="insight-item"><strong>제작 중</strong> — Brief 범위 내 실행자 자율. 리더 개입 최소화 (유형에 따라 리더 전담 가능)</div>
-        <div class="insight-item"><strong>완성 후</strong> — Brief 대비 정합성만 확인</div>
-        <div class="insight-item"><strong>라이브 후</strong> — 가설 검증 + 학습 기록</div>
+        <div class="abstract" style="margin-top:10px;">필수 4개 외에는 강제 아님. 대신 비어있으면 AI가 "이거 채우면 실험 정밀도 올라갑니다" 제안. 완성도 %로 표시.</div>
       </div>
     </div>
 
@@ -475,6 +529,14 @@ select.form-input{cursor:pointer;}
             <tr><td>4/2</td><td>Make에서 리더 전담 가능 (개입 최소화, 금지 아님)</td><td>웹 구조/퍼널 등은 리더가 직접 실행하는 경우 있음</td></tr>
             <tr><td>4/2</td><td>설계 배경을 대시보드 안에 포함</td><td>md 파일 가독성 문제 + 도구 사용자가 "왜 이렇게 만들었는지" 바로 볼 수 있어야</td></tr>
             <tr><td>4/2</td><td>전 단계 "누구든" — 사람이 아니라 프로세스가 강제</td><td>실제 2개월 이력에서 리더가 Signal→Brief→Make→Live까지 전담한 케이스 다수. 역할 고정은 의미 없고, 루프를 거치는지가 핵심</td></tr>
+            <tr><td>4/2</td><td>Brief → 실험 설계서 명칭 변경</td><td>모든 유형(광고/웹/퍼널)에 중립적 + "실험이다, 결과를 본다"는 마인드셋 강제</td></tr>
+            <tr><td>4/2</td><td>3단계 게이트: 실험 의도(간단 논의) → 설계서(정식 협의) → 오류 점검</td><td>기획 논의가 제작 후까지 끌리는 문제 해소</td></tr>
+            <tr><td>4/2</td><td>리포트 ≠ 워크플로우 분리</td><td>리포트는 팩트+AI인사이트 자동 발행, 시그널 포착→실험은 사람 판단/액션. 뭉뚱그리면 안 됨</td></tr>
+            <tr><td>4/2</td><td>리포트 2파트 (지표 현황 + 관계 분석)</td><td>가설 수립은 리포트가 아니라 리뷰(미팅)의 영역</td></tr>
+            <tr><td>4/2</td><td>유효/기각/미확정 폐기 → 2축 분석(성과×학습)</td><td>판정이 아니라 인사이트 도출. 기각도 학습</td></tr>
+            <tr><td>4/2</td><td>Learn = 의도 스키마 vs 결과 스키마 gap</td><td>기대한 것과 실제가 어떻게 다른지 = 학습의 핵심</td></tr>
+            <tr><td>4/2</td><td>크리에이티브 스키마 ↔ 실험 설계서 축 통합</td><td>같은 루프. 이중 구조 방지. gap 누적→AI 추천 정밀도 상승</td></tr>
+            <tr><td>4/2</td><td>설계서 필수 4개만, 나머지 강력 권장(완성도%)</td><td>사전 정형화 불가한 영역 있음. 강제보다 AI 보조로 유도</td></tr>
           </tbody>
         </table>
         <p style="font-size:.72rem;color:var(--t2);margin-top:10px;">※ 주요 변경마다 이 로그에 추가됩니다.</p>
@@ -537,8 +599,8 @@ select.form-input{cursor:pointer;}
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>페르소나 <span class="req">*</span></label>
-          <select class="form-input" id="bf-persona" required>
+          <label>타겟 (페르소나)</label>
+          <select class="form-input" id="bf-persona">
             <option value="">선택하세요</option>
             <option value="PS1 바쁜직장인">PS1 바쁜직장인</option>
             <option value="PS2 육아부모">PS2 육아부모</option>
@@ -550,8 +612,8 @@ select.form-input{cursor:pointer;}
           </select>
         </div>
         <div class="form-group">
-          <label>JTBD <span class="req">*</span></label>
-          <select class="form-input" id="bf-jtbd" required>
+          <label>문제/니즈 (JTBD)</label>
+          <select class="form-input" id="bf-jtbd">
             <option value="">선택하세요</option>
             <option value="JT1 체형개선">JT1 체형개선</option>
             <option value="JT2 건강유지">JT2 건강유지</option>
@@ -576,8 +638,8 @@ select.form-input{cursor:pointer;}
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>VP (가치 제안) <span class="req">*</span></label>
-          <select class="form-input" id="bf-vp" required>
+          <label>VP (가치 제안)</label>
+          <select class="form-input" id="bf-vp">
             <option value="">선택하세요</option>
             <option value="VP1 자유해방">VP1 자유해방</option>
             <option value="VP2 안심안전">VP2 안심안전</option>
@@ -592,8 +654,8 @@ select.form-input{cursor:pointer;}
           </select>
         </div>
         <div class="form-group">
-          <label>소재 구성 <span class="req">*</span></label>
-          <select class="form-input" id="bf-structure" required>
+          <label>소재 구성/포맷</label>
+          <select class="form-input" id="bf-structure">
             <option value="">선택하세요</option>
             <option value="문제→솔루션">문제→솔루션</option>
             <option value="시연나열">시연나열</option>
@@ -606,8 +668,8 @@ select.form-input{cursor:pointer;}
         </div>
       </div>
       <div class="form-group">
-        <label>채널 <span class="req">*</span></label>
-        <select class="form-input" id="bf-channel" required>
+        <label>채널</label>
+        <select class="form-input" id="bf-channel">
           <option value="">선택하세요</option>
           <option value="Meta전환">Meta전환</option>
           <option value="Meta리드">Meta리드</option>
@@ -618,6 +680,23 @@ select.form-input{cursor:pointer;}
           <option value="유튜브">유튜브</option>
           <option value="블로그">블로그</option>
         </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>구매여정 단계</label>
+          <select class="form-input" id="bf-stage">
+            <option value="">선택 (선택사항)</option>
+            <option value="인지">인지 — 이런 제품이 있다</option>
+            <option value="관심">관심 — 나한테 맞을 수도</option>
+            <option value="비교검토">비교/검토 — 이게 더 낫다</option>
+            <option value="결제허들">결제 허들 — 지금 사도 괜찮다</option>
+            <option value="구매후">구매 후 — 후기/추천/재구매</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>USP (차별점)</label>
+          <input type="text" class="form-input" id="bf-usp" placeholder="왜 룸핏이어야 하는가?">
+        </div>
       </div>
       <div class="form-group">
         <label>가설 <span class="req">*</span></label>
@@ -699,9 +778,7 @@ select.form-input{cursor:pointer;}
       <span class="gf-arrow">→</span>
       <span class="gf-step badge-live" style="padding:5px 12px;border-radius:8px;">🔵 Live</span>
       <span class="gf-arrow">→</span>
-      <span class="gf-step badge-verified-valid" style="padding:5px 12px;border-radius:8px;">✅ 유효</span>
-      <span class="gf-step badge-verified-invalid" style="padding:5px 12px;border-radius:8px;">❌ 기각</span>
-      <span class="gf-step badge-verified-pending" style="padding:5px 12px;border-radius:8px;">⏳ 미확정</span>
+      <span class="gf-step badge-verified-valid" style="padding:5px 12px;border-radius:8px;">📝 완료</span>
     </div>
     <table class="guide-table">
       <thead><tr><th>상태</th><th>언제 바꾸나</th></tr></thead>
@@ -710,11 +787,10 @@ select.form-input{cursor:pointer;}
         <tr><td>📐 설계완료</td><td>설계서 작성 완료 시</td></tr>
         <tr><td>🔨 제작중</td><td>정식 협의 통과, 제작 시작 시</td></tr>
         <tr><td>🔵 Live</td><td>실제로 게시/적용되면</td></tr>
-        <tr><td>✅ 유효</td><td>검증 기준 충족 시</td></tr>
-        <tr><td>❌ 기각</td><td>검증 기준 미달 시</td></tr>
-        <tr><td>⏳ 미확정</td><td>데이터 부족 / 기간 미도래</td></tr>
+        <tr><td>📝 완료</td><td>인사이트 도출 완료 시 (성과 분석 + 학습 기록)</td></tr>
       </tbody>
     </table>
+    <div class="guide-tip">💡 "완료"는 합격/불합격이 아닙니다. 성과가 좋든 나쁘든, 의도대로 됐든 아니든, 모두 학습입니다.</div>
 
     <h3>상태 변경 & 검증 결과 기록</h3>
     <ol>
@@ -1006,7 +1082,7 @@ function renderBriefs(){
   const all = getBriefs();
   let filtered = all;
   if(briefFilter !== 'all'){
-    filtered = filtered.filter(b => b.status === briefFilter || (briefFilter === 'verified' && b.status.startsWith('verified')) || (briefFilter === 'draft' && b.status === 'draft'));
+    filtered = filtered.filter(b => b.status === briefFilter || (briefFilter === 'complete' && (b.status === 'complete' || b.status.startsWith('verified'))) || (briefFilter === 'draft' && b.status === 'draft'));
   }
   if(briefSearchTerm){
     const q = briefSearchTerm.toLowerCase();
@@ -1036,12 +1112,16 @@ function renderBriefs(){
         </div>
         <div class="bf-meta">
           ${b.actionType ? `<span class="schema-tag" style="background:rgba(0,184,148,.12);color:var(--g);">${escHtml(b.actionType)}</span>` : ''}
-          <span class="schema-tag">${escHtml(b.persona)}</span>
-          <span class="schema-tag">${escHtml(b.vp)}</span>
-          <span class="schema-tag">${escHtml(b.channel)}</span>
+          ${b.stage ? `<span class="schema-tag" style="background:rgba(116,185,255,.12);color:var(--bl);">${escHtml(b.stage)}</span>` : ''}
+          ${b.persona ? `<span class="schema-tag">${escHtml(b.persona)}</span>` : ''}
+          ${b.vp ? `<span class="schema-tag">${escHtml(b.vp)}</span>` : ''}
+          ${b.channel ? `<span class="schema-tag">${escHtml(b.channel)}</span>` : ''}
         </div>
         <div class="bf-hypo">${escHtml(b.hypothesis)}</div>
-        <div style="font-size:.65rem;color:var(--t2);margin-top:6px;">${new Date(b.createdAt).toLocaleDateString('ko-KR')}</div>
+        <div style="font-size:.65rem;color:var(--t2);margin-top:6px;display:flex;justify-content:space-between;">
+          <span>${new Date(b.createdAt).toLocaleDateString('ko-KR')}</span>
+          ${b.completeness != null ? `<span style="color:${b.completeness >= 80 ? 'var(--g)' : b.completeness >= 50 ? 'var(--y)' : 'var(--r)'};">완성도 ${b.completeness}%</span>` : ''}
+        </div>
       </div>`;
     }).join('');
   }
@@ -1052,9 +1132,11 @@ function getBadgeClass(status){
   if(status === 'design') return 'badge-verified-pending';
   if(status === 'making') return 'badge-draft';
   if(status === 'live') return 'badge-live';
+  if(status === 'complete') return 'badge-verified-valid';
+  // legacy compat
   if(status === 'verified-valid') return 'badge-verified-valid';
-  if(status === 'verified-invalid') return 'badge-verified-invalid';
-  if(status === 'verified-pending') return 'badge-verified-pending';
+  if(status === 'verified-invalid') return 'badge-verified-valid';
+  if(status === 'verified-pending') return 'badge-verified-valid';
   if(status === 'draft') return 'badge-draft';
   return 'badge-draft';
 }
@@ -1063,9 +1145,11 @@ function getStatusLabel(status){
   if(status === 'design') return '📐 설계완료';
   if(status === 'making') return '🔨 제작중';
   if(status === 'live') return '🔵 Live';
-  if(status === 'verified-valid') return '✅ 유효';
-  if(status === 'verified-invalid') return '❌ 기각';
-  if(status === 'verified-pending') return '⏳ 미확정';
+  if(status === 'complete') return '📝 완료';
+  // legacy compat
+  if(status === 'verified-valid') return '📝 완료';
+  if(status === 'verified-invalid') return '📝 완료';
+  if(status === 'verified-pending') return '📝 완료';
   if(status === 'draft') return 'Draft';
   return status;
 }
@@ -1105,6 +1189,8 @@ function openBriefForm(id){
       document.getElementById('bf-vp').value = b.vp;
       document.getElementById('bf-structure').value = b.structure;
       document.getElementById('bf-channel').value = b.channel;
+      document.getElementById('bf-stage').value = b.stage || '';
+      document.getElementById('bf-usp').value = b.usp || '';
       document.getElementById('bf-hypothesis').value = b.hypothesis;
       document.getElementById('bf-criteria').value = b.criteria;
     }
@@ -1133,23 +1219,32 @@ function saveBrief(e){
   const hypothesis = document.getElementById('bf-hypothesis').value.trim();
   const criteria = document.getElementById('bf-criteria').value.trim();
 
-  if(!title || !signal || !actionType || !persona || !jtbd || !vp || !structure || !channel || !hypothesis || !criteria){
-    alert('모든 필수 필드를 입력해주세요.');
+  const stage = document.getElementById('bf-stage').value;
+  const usp = document.getElementById('bf-usp').value.trim();
+
+  if(!title || !signal || !hypothesis || !criteria){
+    alert('필수 필드를 입력해주세요 (제목, 시그널/배경, 가설, 검증 기준).');
     return;
   }
+
+  // completeness score
+  const optionalFilled = [actionType, persona, jtbd, vp, structure, channel, stage, usp].filter(v => v).length;
+  const completeness = Math.round(((4 + optionalFilled) / 12) * 100);
 
   const briefs = getBriefs();
   if(editingBriefId){
     const idx = briefs.findIndex(b => b.id === editingBriefId);
     if(idx >= 0){
-      briefs[idx] = {...briefs[idx], title, signal, actionType, signalType, persona, jtbd, vp, structure, channel, hypothesis, criteria, updatedAt: new Date().toISOString()};
+      briefs[idx] = {...briefs[idx], title, signal, actionType, signalType, persona, jtbd, vp, structure, channel, stage, usp, hypothesis, criteria, completeness, updatedAt: new Date().toISOString()};
     }
   } else {
     briefs.unshift({
       id: 'bf-' + Date.now(),
-      title, signal, actionType, signalType, persona, jtbd, vp, structure, channel, hypothesis, criteria,
+      title, signal, actionType, signalType, persona, jtbd, vp, structure, channel, stage, usp, hypothesis, criteria,
+      completeness,
       status: 'intent',
       verificationResult: '',
+      learningResult: '',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     });
@@ -1174,9 +1269,7 @@ function openBriefDetail(id){
         <option value="design"${b.status==='design'?' selected':''}>📐 설계완료</option>
         <option value="making"${b.status==='making'?' selected':''}>🔨 제작중</option>
         <option value="live"${b.status==='live'?' selected':''}>🔵 Live</option>
-        <option value="verified-valid"${b.status==='verified-valid'?' selected':''}>✅ 유효</option>
-        <option value="verified-invalid"${b.status==='verified-invalid'?' selected':''}>❌ 기각</option>
-        <option value="verified-pending"${b.status==='verified-pending'?' selected':''}>⏳ 미확정</option>
+        <option value="complete"${b.status==='complete'||b.status.startsWith('verified')?' selected':''}>📝 완료</option>
       </select>
       <span style="font-size:.7rem;color:var(--t2);">생성: ${new Date(b.createdAt).toLocaleDateString('ko-KR')}</span>
     </div>
@@ -1186,8 +1279,10 @@ function openBriefDetail(id){
     <div class="detail-row"><span class="detail-label">페르소나</span><span class="detail-value"><span class="schema-tag">${escHtml(b.persona)}</span></span></div>
     <div class="detail-row"><span class="detail-label">JTBD</span><span class="detail-value"><span class="schema-tag">${escHtml(b.jtbd)}</span></span></div>
     <div class="detail-row"><span class="detail-label">VP</span><span class="detail-value"><span class="schema-tag">${escHtml(b.vp)}</span></span></div>
-    <div class="detail-row"><span class="detail-label">소재구성</span><span class="detail-value"><span class="schema-tag">${escHtml(b.structure)}</span></span></div>
-    <div class="detail-row"><span class="detail-label">채널</span><span class="detail-value"><span class="schema-tag">${escHtml(b.channel)}</span></span></div>
+    <div class="detail-row"><span class="detail-label">소재구성</span><span class="detail-value">${b.structure ? `<span class="schema-tag">${escHtml(b.structure)}</span>` : '<span style="color:var(--t2);font-size:.75rem;">미입력</span>'}</span></div>
+    <div class="detail-row"><span class="detail-label">채널</span><span class="detail-value">${b.channel ? `<span class="schema-tag">${escHtml(b.channel)}</span>` : '<span style="color:var(--t2);font-size:.75rem;">미입력</span>'}</span></div>
+    <div class="detail-row"><span class="detail-label">구매여정</span><span class="detail-value">${b.stage ? `<span class="schema-tag" style="background:rgba(116,185,255,.12);color:var(--bl);">${escHtml(b.stage)}</span>` : '<span style="color:var(--t2);font-size:.75rem;">미입력</span>'}</span></div>
+    <div class="detail-row"><span class="detail-label">USP</span><span class="detail-value">${b.usp ? escHtml(b.usp) : '<span style="color:var(--t2);font-size:.75rem;">미입력</span>'}</span></div>
 
     <div class="card" style="margin-top:14px;">
       <div class="card-title">가설</div>
@@ -1198,11 +1293,13 @@ function openBriefDetail(id){
       <div style="font-size:.82rem;line-height:1.7;white-space:pre-wrap;">${escHtml(b.criteria)}</div>
     </div>
 
-    ${isVerified || b.status.startsWith('verified') ? `
+    ${(b.status==='complete'||b.status==='live'||b.status.startsWith('verified')) ? `
     <div class="verification-box">
-      <h4>검증 결과 기록</h4>
-      <textarea class="form-input" id="verifyResult" placeholder="검증 결과를 기록하세요..." style="min-height:80px;">${escHtml(b.verificationResult || '')}</textarea>
-      <button class="btn primary" style="margin-top:8px;" onclick="saveVerification('${b.id}')">결과 저장</button>
+      <h4>📊 성과 분석 (결과가 좋았나?)</h4>
+      <textarea class="form-input" id="verifyResult" placeholder="실제 성과 수치, 전환 결과 등..." style="min-height:60px;">${escHtml(b.verificationResult || '')}</textarea>
+      <h4 style="margin-top:10px;">🔬 학습 (의도대로 됐는가? gap은?)</h4>
+      <textarea class="form-input" id="learningResult" placeholder="의도 스키마 vs 결과 스키마 차이, 왜 달랐는지, 다음에 뭘 바꿀지..." style="min-height:60px;">${escHtml(b.learningResult || '')}</textarea>
+      <button class="btn primary" style="margin-top:8px;" onclick="saveVerification('${b.id}')">인사이트 저장</button>
     </div>` : ''}
 
     <div class="brief-actions">
@@ -1230,10 +1327,12 @@ function changeBriefStatus(id, status){
 
 function saveVerification(id){
   const result = document.getElementById('verifyResult').value;
+  const learning = document.getElementById('learningResult') ? document.getElementById('learningResult').value : '';
   const briefs = getBriefs();
   const idx = briefs.findIndex(b => b.id === id);
   if(idx >= 0){
     briefs[idx].verificationResult = result;
+    briefs[idx].learningResult = learning;
     briefs[idx].updatedAt = new Date().toISOString();
     saveBriefs(briefs);
   }
