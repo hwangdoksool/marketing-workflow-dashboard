@@ -231,6 +231,7 @@ select.form-input{cursor:pointer;}
     <button class="main-tab" data-tab="buyer">🔍 구매자 역추적</button>
     <button class="main-tab" data-tab="briefs">📋 Brief 관리</button>
     <button class="main-tab" data-tab="review">📈 종합 분석</button>
+    <button class="main-tab" data-tab="design">📐 설계 배경</button>
   </nav>
 
   <!-- ═══════════════════════════════════════════ -->
@@ -283,6 +284,203 @@ select.form-input{cursor:pointer;}
   <!-- ═══════════════════════════════════════════ -->
   <div class="tab-content" id="tab-review">
     <div id="reviewContent"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB 5: 설계 배경 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-design">
+
+    <!-- 워크플로우 전략 -->
+    <div class="section-card">
+      <div class="sec-title">워크플로우 전체 구조</div>
+      <div class="sec-body">
+        <div class="card-title">6단계 루프</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 18px;font-size:.82rem;font-weight:600;">
+          <span style="padding:6px 14px;border-radius:8px;background:rgba(253,203,110,.2);color:var(--y);">Signal</span>
+          <span style="color:var(--t2);">→</span>
+          <span style="padding:6px 14px;border-radius:8px;background:rgba(108,92,231,.2);color:var(--ac2);">Brief</span>
+          <span style="color:var(--t2);">→</span>
+          <span style="padding:6px 14px;border-radius:8px;background:rgba(139,144,160,.2);color:var(--t2);">Make</span>
+          <span style="color:var(--t2);">→</span>
+          <span style="padding:6px 14px;border-radius:8px;background:rgba(116,185,255,.2);color:var(--bl);">Live</span>
+          <span style="color:var(--t2);">→</span>
+          <span style="padding:6px 14px;border-radius:8px;background:rgba(0,184,148,.2);color:var(--g);">Review</span>
+          <span style="color:var(--t2);">→</span>
+          <span style="padding:6px 14px;border-radius:8px;background:rgba(225,112,85,.2);color:var(--r);">Learn</span>
+          <span style="color:var(--t2);">→ 다시 Signal</span>
+        </div>
+
+        <table class="data-table">
+          <thead><tr><th>#</th><th>단계</th><th>누가</th><th>뭘 하나</th><th>산출물</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td style="font-weight:700;color:var(--y);">Signal</td><td>마케터 + AI 보조</td><td>데이터/현장/레퍼런스에서 기회·위협 신호 포착</td><td>시그널 카드</td></tr>
+            <tr><td>1</td><td style="font-weight:700;color:var(--ac2);">Brief</td><td>마케터 + 리더</td><td>가설 설계 + 방향 협의 (여기서 끝)</td><td>Creative Brief</td></tr>
+            <tr><td>2</td><td style="font-weight:700;color:var(--t2);">Make</td><td>마케터 or 리더</td><td>실행 (Brief 범위 내, 리더 개입 최소화)</td><td>소재/변경사항</td></tr>
+            <tr><td>3</td><td style="font-weight:700;color:var(--bl);">Live</td><td>마케터</td><td>게시/적용 + 메타데이터 기록</td><td>라이브 기록</td></tr>
+            <tr><td>4</td><td style="font-weight:700;color:var(--g);">Review</td><td>마케터 + 리더 + AI</td><td>자동 리포트 + 가설 vs 결과 검증</td><td>주간 리뷰</td></tr>
+            <tr><td>5</td><td style="font-weight:700;color:var(--r);">Learn</td><td>전원</td><td>인사이트 확정 + 다음 Signal로 연결</td><td>학습 카드</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 왜 이런 구조인가 -->
+    <div class="section-card">
+      <div class="sec-title">왜 이런 구조인가</div>
+      <div class="sec-body">
+        <div class="card-title">궁극적 목적</div>
+        <div class="abstract">가설→실험→검증→학습 루프 기반의 과학적 마케팅 워크플로우 도입.<br>시스템이 레일이 되어, 플로우를 따르기만 하면 자연스럽게 사이클이 돌아가는 구조.</div>
+
+        <div class="card-title" style="margin-top:16px;">4가지 설계 원칙</div>
+        <div class="insight-item"><strong>① 자동 리포트</strong> — 데이터 기반 인사이트 도출을 위해 상세 리포트가 최대한 자동화되어야 한다</div>
+        <div class="insight-item"><strong>② 전 과정 명문화</strong> — 의도 설계 → 제작 → 결과 분석 → 인사이트까지 전부 데이터로 남긴다</div>
+        <div class="insight-item"><strong>③ 레거시 축적</strong> — 단편적으로 끝나지 않고, 연속성 있게 쌓여가야 한다</div>
+        <div class="insight-item"><strong>④ Brief = 소통 효율</strong> — Creative Brief 단계에서 논의를 끝내고, 이후 반복을 최소화한다</div>
+      </div>
+    </div>
+
+    <!-- 액션 유형 -->
+    <div class="section-card">
+      <div class="sec-title">Brief 대상 = "소재"가 아니라 모든 마케팅 액션</div>
+      <div class="sec-body">
+        <div class="abstract">광고 소재만이 아니라 홈페이지 구조 수정, 커뮤니티 게시글, 랜딩 섹션 변경, 퍼널 실험 등 모든 마케팅 행동이 이 루프 안에서 돌아간다.</div>
+        <table class="data-table">
+          <thead><tr><th>유형</th><th>예시</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:600;">광고 소재</td><td>Meta 캠페인, 네이버 SA, 릴스</td></tr>
+            <tr><td style="font-weight:600;">숏폼/오가닉</td><td>인스타 릴스, 유튜브, 블로그</td></tr>
+            <tr><td style="font-weight:600;">웹 변경</td><td>랜딩 섹션 수정, CTA 변경, 비교표 추가, 커뮤니티 장치</td></tr>
+            <tr><td style="font-weight:600;">퍼널 실험</td><td>결제 UX 변경, 팝업 CTA, 분할결제</td></tr>
+            <tr><td style="font-weight:600;">기타</td><td>오프라인 소재, B2B 제안서, 사전 정의 안 된 실험</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Signal 유형 -->
+    <div class="section-card">
+      <div class="sec-title">Signal 유형</div>
+      <div class="sec-body">
+        <div class="abstract">마케터가 주체적으로 신호를 포착하고 등록한다. AI는 자동 감지 보조.</div>
+        <table class="data-table">
+          <thead><tr><th>유형</th><th>색상</th><th>예시</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:600;">🔴 위협</td><td>빨강</td><td>소재 피로도 상승, 퍼널 병목 악화, 이탈률 급등</td></tr>
+            <tr><td style="font-weight:600;">🟢 기회</td><td>초록</td><td>특정 타겟/VP 반응 좋음, 오가닉 신호</td></tr>
+            <tr><td style="font-weight:600;">🔵 외부</td><td>파랑</td><td>시즌/이벤트, 경쟁사, 레퍼런스</td></tr>
+            <tr><td style="font-weight:600;">🟡 학습 파생</td><td>노랑</td><td>이전 Brief 검증에서 나온 후속 실험 아이디어</td></tr>
+            <tr><td style="font-weight:600;">👁️ 현장 관찰</td><td>보라</td><td>체험 인터뷰, 전시회 현장, 고객 피드백</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Brief 양식 -->
+    <div class="section-card">
+      <div class="sec-title">Brief 양식 설계</div>
+      <div class="sec-body">
+        <table class="data-table">
+          <thead><tr><th>필드</th><th>설명</th><th>필수</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:600;">배경/시그널</td><td>왜 지금 이걸 하는가</td><td>✅</td><td>시그널 카드 참조</td></tr>
+            <tr><td>페르소나</td><td>누구에게</td><td>✅</td><td>스키마 ⑤</td></tr>
+            <tr><td>JTBD</td><td>어떤 문제를</td><td>✅</td><td>스키마 ①</td></tr>
+            <tr><td>VP</td><td>어떤 가치를</td><td>✅</td><td>스키마 ⑦</td></tr>
+            <tr><td>소재 구성</td><td>어떤 형태로</td><td>✅</td><td>스키마 ⑧</td></tr>
+            <tr><td>채널/유형</td><td>어디에, 어떤 유형</td><td>✅</td><td>광고/숏폼/웹변경/퍼널/기타</td></tr>
+            <tr><td style="font-weight:600;">가설</td><td>기대 효과</td><td>✅</td><td>"~할 것이다"</td></tr>
+            <tr><td style="font-weight:600;">검증 기준</td><td>언제, 무슨 지표로</td><td>✅</td><td>구체적 숫자+시점</td></tr>
+            <tr><td>참조 Brief</td><td>이전 유사 실험</td><td></td><td>레거시 연결</td></tr>
+            <tr><td>리더 코멘트</td><td>협의 결과</td><td></td><td>합의 기록</td></tr>
+          </tbody>
+        </table>
+
+        <div class="card-title" style="margin-top:16px;">피드백 프로토콜</div>
+        <div class="insight-item"><strong>Brief 단계</strong> — 자유 수정. 모든 전략 논의는 여기서 종결</div>
+        <div class="insight-item"><strong>제작 중</strong> — Brief 범위 내 실행자 자율. 리더 개입 최소화 (유형에 따라 리더 전담 가능)</div>
+        <div class="insight-item"><strong>완성 후</strong> — Brief 대비 정합성만 확인</div>
+        <div class="insight-item"><strong>라이브 후</strong> — 가설 검증 + 학습 기록</div>
+      </div>
+    </div>
+
+    <!-- 역할 분담 -->
+    <div class="section-card">
+      <div class="sec-title">단계별 역할</div>
+      <div class="sec-body">
+        <table class="data-table">
+          <thead><tr><th>단계</th><th>마케터</th><th>리더</th><th>AI</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:600;">Signal</td><td>주체적으로 포착+등록</td><td>방향 제시</td><td>자동 감지 보조</td></tr>
+            <tr><td style="font-weight:600;">Brief</td><td>작성</td><td>협의+코멘트</td><td>—</td></tr>
+            <tr><td style="font-weight:600;">Make</td><td>제작 (광고/콘텐츠)</td><td>제작 (웹구조/퍼널 등)</td><td>—</td></tr>
+            <tr><td style="font-weight:600;">Live</td><td>상태 전환+메타데이터</td><td>—</td><td>데이터 수집 시작</td></tr>
+            <tr><td style="font-weight:600;">Review</td><td>데이터 해석+판정</td><td>판정+방향</td><td>리포트 자동 생성</td></tr>
+            <tr><td style="font-weight:600;">Learn</td><td>학습 기록</td><td>확정</td><td>패턴 분석 보조</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2개월 이력 리뷰 -->
+    <div class="section-card">
+      <div class="sec-title">2개월 이력 리뷰 (2/13~4/1)</div>
+      <div class="sec-body">
+        <div class="card-title">실제 마케팅 액션 유형 분포</div>
+        <div class="abstract">광고 소재는 전체 마케팅 액션의 7%에 불과. 나머지 93%가 웹 구조/퍼널/인프라/콘텐츠.</div>
+        <table class="data-table">
+          <thead><tr><th>유형</th><th>건수</th><th>비중</th><th>예시</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:600;">웹 구조 변경</td><td>~12</td><td style="font-weight:700;">30%</td><td>CTA 강화, 비교표, 결제허들, 섹션 재배치</td></tr>
+            <tr><td style="font-weight:600;">퍼널/시스템</td><td>~8</td><td>20%</td><td>체험 프로세스, 전환 분리, 결제 흐름</td></tr>
+            <tr><td style="font-weight:600;">인프라/리포트</td><td>~10</td><td>25%</td><td>데이터 파이프라인, 대시보드, 인텔리전스</td></tr>
+            <tr><td style="font-weight:600;">오프라인 소재</td><td>~3</td><td>8%</td><td>리플렛, DP화면, 제안서</td></tr>
+            <tr><td style="font-weight:600;">웹 콘텐츠</td><td>~4</td><td>10%</td><td>블로그, 운동 가이드, 시작가이드</td></tr>
+            <tr><td style="font-weight:600;">광고 소재</td><td>~3</td><td style="color:var(--r);">7%</td><td>UTM 수정, 소재 피로도 대응</td></tr>
+          </tbody>
+        </table>
+
+        <div class="card-title" style="margin-top:18px;">핵심 교훈 7가지</div>
+        <div class="insight-item"><strong>1. Brief 대상 확장</strong> — "소재"가 아니라 모든 마케팅 액션이 루프 대상. 실제 2개월간 광고 소재보다 웹 구조 변경이 4배 많았음.</div>
+        <div class="insight-item"><strong>2. Signal = 마케터 핵심 역할</strong> — 2개월간 데이터 기반 문제 발견(픽셀 오발화, UTM 미설정, 전환율 병목, 소재 피로도)이 전부 리더 측에서 나옴. 워크플로우가 마케터에게 이 행위를 구조적으로 요구해야.</div>
+        <div class="insight-item"><strong>3. 리더 직접 실행도 루프 안에</strong> — 상세페이지 비교표, 결제허들, CTA 등 리더가 기획+실행하는 액션도 Brief→검증 루프에 포함.</div>
+        <div class="insight-item"><strong>4. Brief 협의 = 반복 비용 절감</strong> — 블로그 초안 5회, 리플렛 4회 반복 사례. Brief 단계 투자가 Make 단계 반복을 줄임.</div>
+        <div class="insight-item"><strong>5. 비데이터 신호도 Signal</strong> — 스포엑스 현장(묠니르 120kg 구경꾼 ≠ 380만원 타겟), 체험 노쇼(프로세스 구멍), 아마존 레퍼런스 등 데이터 밖 인사이트.</div>
+        <div class="insight-item"><strong>6. 레거시 축적 부재</strong> — 왜 비교표를 넣었는지, CTA를 바꿨는지 기록 없음. 담당자가 바뀌면 히스토리 증발. 모든 액션의 "왜"가 Brief에, 결과가 Learn에 남아야.</div>
+        <div class="insight-item"><strong>7. 리포트→액션 연결</strong> — 리포트 자체는 계속 발전했지만 리포트→다음 Brief 연결이 약했음. Review에서 다음 Brief로 흐르는 구조 강제 필요.</div>
+      </div>
+    </div>
+
+    <!-- 의사결정 로그 -->
+    <div class="section-card">
+      <div class="sec-title">의사결정 로그</div>
+      <div class="sec-body">
+        <table class="data-table">
+          <thead><tr><th>날짜</th><th>결정</th><th>근거</th></tr></thead>
+          <tbody>
+            <tr><td style="white-space:nowrap;">4/1</td><td>가설→실험→검증→학습 워크플로우 도입</td><td>3/31 미팅 진단: 소통 비효율의 구조적 원인 = 학습 사이클 부재</td></tr>
+            <tr><td>4/1</td><td>Creative Brief 필수화</td><td>진단 보고서: Brief 1장이 소통 비효율의 70% 해소</td></tr>
+            <tr><td>4/1</td><td>기존 칸반 대시보드(rf-marketing-dashboard) 별도 유지</td><td>"뭘 해야 하는지" vs "왜 하는지" 분리</td></tr>
+            <tr><td>4/2</td><td>Brief 대상 = 광고 소재 + 웹 변경 + 퍼널 + 콘텐츠 + 기타 전부</td><td>2개월 이력: 광고 소재 7%, 웹 구조 30%. 소재로 한정하면 93%가 루프 밖</td></tr>
+            <tr><td>4/2</td><td>Signal/Review에서 마케터 = 주체</td><td>마케터가 담당자. AI는 보조 도구일 뿐</td></tr>
+            <tr><td>4/2</td><td>Make에서 리더 전담 가능 (개입 최소화, 금지 아님)</td><td>웹 구조/퍼널 등은 리더가 직접 실행하는 경우 있음</td></tr>
+            <tr><td>4/2</td><td>설계 배경을 대시보드 안에 포함</td><td>md 파일 가독성 문제 + 도구 사용자가 "왜 이렇게 만들었는지" 바로 볼 수 있어야</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:.72rem;color:var(--t2);margin-top:10px;">※ 주요 변경마다 이 로그에 추가됩니다.</p>
+      </div>
+    </div>
+
+    <!-- 참조 문서 -->
+    <div class="section-card">
+      <div class="sec-title">참조 문서</div>
+      <div class="sec-body">
+        <div class="insight-item"><a href="https://www.notion.so/335478cb1fa581c19cb4c655e77a6025" target="_blank" style="color:var(--ac2);">협업 구조 진단 보고서</a> — 3/31 미팅 2h30m 스크립트 분석. 소통 악순환 구조, 가설 사이클 부재, 경험의 기계적 적용 진단.</div>
+        <div class="insight-item"><a href="https://www.notion.so/335478cb1fa581cba068c65b9977f55d" target="_blank" style="color:var(--ac2);">마케팅 운영 가이드라인 2026.04~</a> — 가설 기반 업무 방식, Brief 양식, 주간 리뷰 구조, 피로도 관리 원칙.</div>
+        <div class="insight-item"><strong>크리에이티브 스키마 v1</strong> — 9요소 (Problem, Hook, CS서사, PersonaSeed, VP, USP, Stage, Structure, Channel). Brief 드롭다운의 기반.</div>
+      </div>
+    </div>
+
   </div>
 </div>
 
