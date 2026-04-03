@@ -2,6 +2,7 @@
 
 > 마케팅 워크플로우 대시보드 주간 리포트에 사용하는 지표와 계산식
 > 데이터 신뢰도: 🟢 Tier 1 (확정), 🟡 Tier 2 (높은 신뢰 추론), 🔴 Tier 3 (가설)
+> 최종 수정: 2026-04-04
 
 ---
 
@@ -71,6 +72,35 @@ CTR = 총 클릭수 / 총 노출수 × 100%
 - 의미: 광고 본 사람 중 몇 %가 클릭했나
 
 ---
+
+## 📦 본체 판매 (bodyUnits)
+
+```
+본체 판매 수량 = orders.json에서 type="body" 건수
+```
+- **출처:** 아임웹 실주문 (🟢)
+- orders.json에 `type` 필드 추가됨 (body/accessory)
+- ₩1,000 이하 테스트 주문 제외
+- **주의:** 총 주문 건수 ≠ 본체 수량. 액세서리/부품 주문 별도
+
+## 🏋️ 체험 신청 (feelBookings)
+
+```
+체험 신청 수 = Supabase feel_bookings 중 해당 주 created_at 건수
+```
+- **출처:** Supabase feel_bookings.json (🟢)
+- 현재 수동 덤프 — 자동화 미구현
+- status 전체(pending~completed) 포함 (신청 기준)
+
+## 👤 유효 회원가입 (signups)
+
+```
+유효 회원가입 = GA4 sign_up 이벤트의 totalUsers (유니크 유저)
+```
+- **출처:** GA4 (🟢)
+- `eventCount`가 아닌 `totalUsers` 사용 — 중복 제외
+- 아임웹 가입수와 차이 발생 가능 (쿠키 vs 실계정)
+- W9=12, W10=3, W11=6, W12=2, W13=4
 
 ## 📈 퍼널 지표 (GA4 기준)
 
