@@ -1567,7 +1567,13 @@ function renderBriefs(){
       const isReview = b.status === 'complete' && !b.verdict;
       const badgeCls = isReview ? 'badge-review' : getBadgeClass(b.status);
       const badgeText = isReview ? '🔍 검토대기' : (b.verdict === 'hit' ? '✅ 적중' : b.verdict === 'miss' ? '❌ 미적중' : getStatusLabel(b.status));
-      return `<div class="brief-card" onclick="openBriefDetail('${b.id}')">
+      const _sd = b.sourceDetail || '';
+      const _hasPipe = _sd.indexOf('|');
+      const _thumbUrl = (_hasPipe > 0 && _sd.substring(0, _hasPipe).startsWith('http')) ? _sd.substring(0, _hasPipe) : '';
+      const _detailText = _thumbUrl ? _sd.substring(_hasPipe + 1) : _sd;
+      return `<div class="brief-card" onclick="openBriefDetail('${b.id}')" style="${_thumbUrl ? 'display:flex;gap:10px;' : ''}">
+        ${_thumbUrl ? `<div style="flex-shrink:0;width:64px;height:64px;border-radius:8px;overflow:hidden;background:var(--b);"><img src="${_thumbUrl}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` : ''}
+        <div style="flex:1;min-width:0;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;">
           <div class="bf-title">${escHtml(b.title)}</div>
           <span class="badge ${badgeCls}">${badgeText}</span>
@@ -1584,6 +1590,7 @@ function renderBriefs(){
         <div style="font-size:.65rem;color:var(--t2);margin-top:6px;display:flex;justify-content:space-between;">
           <span>${new Date(b.createdAt).toLocaleDateString('ko-KR')}</span>
           ${b.completeness != null ? `<span style="color:${b.completeness >= 80 ? 'var(--g)' : b.completeness >= 50 ? 'var(--y)' : 'var(--r)'};">완성도 ${b.completeness}%</span>` : ''}
+        </div>
         </div>
       </div>`;
     }).join('');
@@ -1743,7 +1750,21 @@ function openBriefDetail(id){
       <span style="font-size:.7rem;color:var(--t2);">생성: ${new Date(b.createdAt).toLocaleDateString('ko-KR')}</span>
     </div>
 
-    ${b.source ? `<div style="margin-bottom:10px;"><span class="schema-tag" style="background:rgba(108,92,231,.15);color:var(--ac2);font-size:.72rem;">📍 ${escHtml(b.source)}</span>${b.sourceDetail ? ` <span style="font-size:.72rem;color:var(--t2);">— ${escHtml(b.sourceDetail)}</span>` : ''}</div>` : ''}
+    ${(() => {
+      if(!b.source) return '';
+      const sd = b.sourceDetail || '';
+      const pipeIdx = sd.indexOf('|');
+      const thumbUrl = (pipeIdx > 0 && sd.substring(0, pipeIdx).startsWith('http')) ? sd.substring(0, pipeIdx) : '';
+      const detailText = thumbUrl ? sd.substring(pipeIdx + 1) : sd;
+      const permalink = detailText.match(/https?:\/\/\S+/)?.[0] || '';
+      const cleanDetail = detailText.replace(/https?:\/\/\S+/g, '').trim();
+      return `<div style="margin-bottom:12px;">
+        <span class="schema-tag" style="background:rgba(108,92,231,.15);color:var(--ac2);font-size:.72rem;">📍 ${escHtml(b.source)}</span>
+        ${cleanDetail ? `<span style="font-size:.72rem;color:var(--t2);"> — ${escHtml(cleanDetail)}</span>` : ''}
+        ${permalink ? `<a href="${permalink}" target="_blank" style="font-size:.7rem;color:var(--ac);margin-left:6px;">🔗 원본 보기</a>` : ''}
+        ${thumbUrl ? `<div style="margin-top:8px;"><img src="${thumbUrl}" style="max-width:280px;max-height:200px;border-radius:8px;border:1px solid var(--b);object-fit:cover;" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+      </div>`;
+    })()}
     ${b.signal ? `<div class="card" style="margin-bottom:12px;"><div class="card-title">시그널/배경</div><div style="font-size:.82rem;line-height:1.7;white-space:pre-wrap;">${escHtml(b.signal)}</div></div>` : ''}
     <div class="detail-row"><span class="detail-label">액션 유형</span><span class="detail-value"><span class="schema-tag" style="background:rgba(0,184,148,.12);color:var(--g);">${escHtml(b.actionType||'-')}</span>${b.signalType?` <span class="schema-tag">${escHtml(b.signalType)}</span>`:''}</span></div>
     <div class="detail-row"><span class="detail-label">페르소나</span><span class="detail-value"><span class="schema-tag">${escHtml(b.persona)}</span></span></div>
