@@ -1186,7 +1186,8 @@ async function loadReports(){
     initTrendSection();
     renderReport(0);
   } catch(e) {
-    document.getElementById('tab-weekly').innerHTML = '<div class="empty-state"><p>reports.json 로드 실패</p></div>';
+    console.error('loadReports error:', e);
+    document.getElementById('tab-weekly').innerHTML = '<div class="empty-state"><p>reports.json 로드 실패: ' + e.message + '</p></div>';
   }
 }
 
@@ -2431,8 +2432,8 @@ function drawLineChart(canvasId, labels, values, unit, label, kpiKey, actions){
     
     // 액션 리스트를 메타 영역에 추가
     if(actionList.length){
-      const metaEl = document.getElementById('trendMeta');
-      metaEl.innerHTML += '<br><span style="color:#BAFC27">●</span> 마케팅 액션: ' + 
+      const metaEl = document.getElementById('trendMetaMain');
+      if(metaEl) metaEl.innerHTML += '<br><span style="color:#BAFC27">●</span> 마케팅 액션: ' + 
         actionList.map(a => `<br>&nbsp;&nbsp;· ${a}`).join('');
     }
   }
