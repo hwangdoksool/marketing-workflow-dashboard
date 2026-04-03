@@ -232,6 +232,7 @@ select.form-input{cursor:pointer;}
     <button class="main-tab" data-tab="weekly">📊 주간 리포트</button>
     <button class="main-tab" data-tab="signals">💡 시그널</button>
     <button class="main-tab" data-tab="learn">📚 Learn</button>
+    <button class="main-tab" data-tab="tagger">🏷️ 소재 태깅</button>
     <button class="main-tab" data-tab="settings">⚙️ 더보기</button>
   </nav>
 
@@ -266,6 +267,20 @@ select.form-input{cursor:pointer;}
     <div class="empty-state" id="signalTabEmpty">
       <p>아직 시그널 단계의 아이템이 없습니다.<br>주간 리포트에서 이상치를 발견하면 "+ 새 시그널"로 등록하세요.<br>워크플로우 탭에서 만든 아이템 중 "시그널" 상태인 것이 여기에 표시됩니다.</p>
     </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB: 소재 태깅 (크리에이티브 태깅 리뷰 임베드) -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-tagger">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div>
+        <h2 style="font-size:1rem;font-weight:700;margin-bottom:4px;">🏷️ 기존 소재 태깅 리뷰</h2>
+        <p style="font-size:.75rem;color:var(--t2);">LLM이 자동 분류한 태그를 확인/수정합니다. 태깅 완료된 소재는 향후 실험 설계 시 레퍼런스로 활용됩니다.</p>
+      </div>
+      <a href="https://rf-creative-tagger.pages.dev" target="_blank" class="btn" style="text-decoration:none;">↗ 새 탭에서 열기</a>
+    </div>
+    <iframe src="https://rf-creative-tagger.pages.dev" style="width:100%;height:calc(100vh - 200px);border:1px solid var(--b);border-radius:10px;background:var(--s);" loading="lazy"></iframe>
   </div>
 
   <!-- ═══════════════════════════════════════════ -->
@@ -1107,7 +1122,7 @@ function toggleTheme(){
    ═══════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   // Only toggle tabs that are NOT legacy hidden (!important)
-  const visibleTabs = ['tab-weekly','tab-briefs','tab-signals','tab-learn','tab-settings'];
+  const visibleTabs = ['tab-weekly','tab-briefs','tab-signals','tab-tagger','tab-learn','tab-settings'];
   document.querySelectorAll('.main-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
