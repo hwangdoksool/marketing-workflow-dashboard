@@ -227,17 +227,17 @@ select.form-input{cursor:pointer;}
 
   <!-- Main Tabs -->
   <nav class="main-tabs">
-    <button class="main-tab active" data-tab="weekly">📊 주간 리뷰</button>
-    <button class="main-tab" data-tab="buyer">🔍 구매자 역추적</button>
-    <button class="main-tab" data-tab="briefs">📋 실험 관리</button>
-    <button class="main-tab" data-tab="review">📈 종합 분석</button>
-    <button class="main-tab" data-tab="design">📐 설계 배경</button>
+    <button class="main-tab active" data-tab="briefs">📋 워크플로우</button>
+    <button class="main-tab" data-tab="weekly">📊 주간 리포트</button>
+    <button class="main-tab" data-tab="signals">💡 시그널</button>
+    <button class="main-tab" data-tab="learn">📚 Learn</button>
+    <button class="main-tab" data-tab="settings">⚙️ 더보기</button>
   </nav>
 
   <!-- ═══════════════════════════════════════════ -->
   <!-- TAB 1: 주간 리뷰 -->
   <!-- ═══════════════════════════════════════════ -->
-  <div class="tab-content active" id="tab-weekly">
+  <div class="tab-content" id="tab-weekly">
     <div class="report-nav" id="reportNav"></div>
     <div id="reportAbstract"></div>
     <div id="reportKpi"></div>
@@ -245,20 +245,72 @@ select.form-input{cursor:pointer;}
   </div>
 
   <!-- ═══════════════════════════════════════════ -->
-  <!-- TAB 2: 구매자 역추적 -->
+  <!-- TAB: 시그널 -->
   <!-- ═══════════════════════════════════════════ -->
-  <div class="tab-content" id="tab-buyer">
-    <div class="coming-soon">
-      <h2>🔍 구매자 역추적</h2>
-      <p>구매 건별 타임라인, 채널 어트리뷰션 시각화, 체험→구매 전환 추적, 퍼널 이탈 분석 기능이 준비 중입니다.</p>
-      <p style="margin-top:16px;font-size:.78rem;color:var(--t2);">GA4 User Explorer / BigQuery 연동 후 활성화 예정</p>
+  <div class="tab-content" id="tab-signals">
+    <div class="toolbar">
+      <input type="text" class="search-input" id="signalSearch" placeholder="시그널 검색..." oninput="renderSignals()">
+      <div class="filter-pills" id="signalFilters">
+        <button class="filter-pill active" data-sfilter="all" onclick="setSignalFilter('all')">전체</button>
+        <button class="filter-pill" data-sfilter="threat" onclick="setSignalFilter('threat')">⚠️ 위협</button>
+        <button class="filter-pill" data-sfilter="opportunity" onclick="setSignalFilter('opportunity')">🟢 기회</button>
+        <button class="filter-pill" data-sfilter="external" onclick="setSignalFilter('external')">🌐 외부</button>
+        <button class="filter-pill" data-sfilter="loop" onclick="setSignalFilter('loop')">🔄 루프파생</button>
+        <button class="filter-pill" data-sfilter="field" onclick="setSignalFilter('field')">👀 현장</button>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn" onclick="exportSignals()">JSON 내보내기</button>
+      <button class="btn primary" onclick="openSignalForm()">+ 새 시그널</button>
+    </div>
+    <div class="brief-grid" id="signalGrid"></div>
+    <div class="empty-state" id="signalEmpty" style="display:none;">
+      <p>등록된 시그널이 없습니다.<br>주간 리포트에서 이상치를 발견하거나, 현장/외부에서 포착한 신호를 등록하세요.</p>
     </div>
   </div>
 
   <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB: Learn -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-learn">
+    <div class="toolbar">
+      <input type="text" class="search-input" id="learnSearch" placeholder="학습 검색..." oninput="renderLearns()">
+      <div class="spacer"></div>
+      <button class="btn" onclick="exportLearns()">JSON 내보내기</button>
+      <button class="btn primary" onclick="openLearnForm()">+ 학습 기록</button>
+    </div>
+    <div id="learnGrid" class="brief-grid"></div>
+    <div class="empty-state" id="learnEmpty" style="display:none;">
+      <p>아직 누적된 학습이 없습니다.<br>실험 Review 완료 후 "의도 vs 결과" gap을 기록하세요.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB: 설정/더보기 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-settings">
+    <div style="display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;">
+      <button class="report-btn active" onclick="switchSettingsSub('design-sub')" id="sub-design">📐 설계 배경</button>
+      <button class="report-btn" onclick="switchSettingsSub('buyer-sub')" id="sub-buyer">🔍 구매자 역추적</button>
+      <button class="report-btn" onclick="switchSettingsSub('review-sub')" id="sub-review">📈 종합 분석</button>
+    </div>
+    <div id="design-sub"><!-- 설계 배경 내용은 아래 기존 tab-design에서 이동 --></div>
+    <div id="buyer-sub" style="display:none;">
+      <div class="coming-soon">
+        <h2>🔍 구매자 역추적</h2>
+        <p>구매 건별 타임라인, 채널 어트리뷰션 시각화, 체험→구매 전환 추적, 퍼널 이탈 분석 기능이 준비 중입니다.</p>
+        <p style="margin-top:16px;font-size:.78rem;color:var(--t2);">GA4 User Explorer / BigQuery 연동 후 활성화 예정</p>
+      </div>
+    </div>
+    <div id="review-sub" style="display:none;"><div id="reviewContent2"></div></div>
+  </div>
+
+  <!-- (Legacy hidden tabs for JS compat) -->
+  <div class="tab-content" id="tab-buyer" style="display:none!important;"></div>
+
+  <!-- ═══════════════════════════════════════════ -->
   <!-- TAB 3: Brief 관리 -->
   <!-- ═══════════════════════════════════════════ -->
-  <div class="tab-content" id="tab-briefs">
+  <div class="tab-content active" id="tab-briefs">
     <div class="toolbar">
       <input type="text" class="search-input" id="briefSearch" placeholder="Brief 검색...">
       <div class="filter-pills" id="briefFilters">
@@ -282,16 +334,16 @@ select.form-input{cursor:pointer;}
   </div>
 
   <!-- ═══════════════════════════════════════════ -->
-  <!-- TAB 4: 종합 분석 -->
+  <!-- TAB 4: 종합 분석 (legacy, hidden) -->
   <!-- ═══════════════════════════════════════════ -->
-  <div class="tab-content" id="tab-review">
+  <div class="tab-content" id="tab-review" style="display:none!important;">
     <div id="reviewContent"></div>
   </div>
 
   <!-- ═══════════════════════════════════════════ -->
-  <!-- TAB 5: 설계 배경 -->
+  <!-- TAB 5: 설계 배경 (now inside settings sub-tab) -->
   <!-- ═══════════════════════════════════════════ -->
-  <div class="tab-content" id="tab-design">
+  <div class="tab-content" id="tab-design" style="display:none!important;">
 
     <!-- 워크플로우 전략 -->
     <div class="section-card">
@@ -881,17 +933,27 @@ function toggleTheme(){
    Tab Navigation
    ═══════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
+  // Only toggle tabs that are NOT legacy hidden (!important)
+  const visibleTabs = ['tab-weekly','tab-briefs','tab-signals','tab-learn','tab-settings'];
   document.querySelectorAll('.main-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      visibleTabs.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.classList.remove('active');
+      });
       tab.classList.add('active');
-      document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+      const target = document.getElementById('tab-' + tab.dataset.tab);
+      if(target) target.classList.add('active');
     });
   });
   loadReports();
   renderBriefs();
   renderReview();
+  renderSignals();
+  renderLearns();
+  // Move design content into settings sub-tab
+  moveDesignToSettings();
 });
 
 /* ═══════════════════════════════════════════════════
@@ -1594,6 +1656,189 @@ document.addEventListener('keydown', e => {
     document.querySelectorAll('.modal-bg.open').forEach(m => m.classList.remove('open'));
   }
 });
+
+/* ═══════════════════════════════════════════════════
+   TAB: Signals (시그널)
+   ═══════════════════════════════════════════════════ */
+const SIGNAL_KEY = 'mktg_signals_v1';
+let signalFilter = 'all';
+
+function getSignals(){ return JSON.parse(localStorage.getItem(SIGNAL_KEY) || '[]'); }
+function saveSignals(arr){ localStorage.setItem(SIGNAL_KEY, JSON.stringify(arr)); }
+
+function setSignalFilter(f){
+  signalFilter = f;
+  document.querySelectorAll('[data-sfilter]').forEach(b => b.classList.toggle('active', b.dataset.sfilter === f));
+  renderSignals();
+}
+
+function renderSignals(){
+  const all = getSignals();
+  const q = (document.getElementById('signalSearch')?.value || '').toLowerCase();
+  let filtered = all;
+  if(signalFilter !== 'all') filtered = filtered.filter(s => s.type === signalFilter);
+  if(q) filtered = filtered.filter(s => (s.title+s.description+s.source).toLowerCase().includes(q));
+
+  const grid = document.getElementById('signalGrid');
+  const empty = document.getElementById('signalEmpty');
+  if(!filtered.length){ grid.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+
+  const typeLabels = {threat:'⚠️ 위협',opportunity:'🟢 기회',external:'🌐 외부',loop:'🔄 루프파생',field:'👀 현장',data:'📊 데이터'};
+  const statusLabels = {new:'🆕 신규',reviewing:'🔍 검토중',actioned:'✅ 실험 연결됨',dismissed:'❌ 보류'};
+
+  grid.innerHTML = filtered.map(s => `
+    <div class="brief-card" onclick="viewSignal('${s.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-size:.68rem;padding:2px 8px;border-radius:4px;background:var(--s2);color:var(--t2);">${typeLabels[s.type]||s.type}</span>
+        <span style="font-size:.65rem;color:var(--t2);">${s.date||''}</span>
+      </div>
+      <div class="bf-title">${escHtml(s.title)}</div>
+      <div style="font-size:.75rem;color:var(--t2);margin-top:4px;">${escHtml((s.description||'').substring(0,100))}</div>
+      <div style="font-size:.68rem;margin-top:8px;color:var(--t2);">포착: ${escHtml(s.source||'미지정')} | ${statusLabels[s.status]||s.status}</div>
+    </div>
+  `).join('');
+}
+
+function openSignalForm(){
+  const title = prompt('시그널 제목:');
+  if(!title) return;
+  const desc = prompt('설명 (어떤 신호를 포착했나):') || '';
+  const type = prompt('유형 (threat/opportunity/external/loop/field/data):') || 'data';
+  const source = prompt('포착자 (예: 대표님, 마케터, AI):') || '';
+
+  const signals = getSignals();
+  signals.unshift({
+    id: 'sig-' + Date.now(),
+    title, description: desc, type, source,
+    status: 'new',
+    date: new Date().toISOString().slice(0,10),
+    linkedBrief: null
+  });
+  saveSignals(signals);
+  renderSignals();
+}
+
+function viewSignal(id){
+  const signals = getSignals();
+  const s = signals.find(x => x.id === id);
+  if(!s) return;
+  const action = prompt(`[${s.title}]\n\n${s.description}\n\n상태: ${s.status}\n\n변경할 상태 (new/reviewing/actioned/dismissed) 또는 빈칸:`);
+  if(action && ['new','reviewing','actioned','dismissed'].includes(action)){
+    s.status = action;
+    saveSignals(signals);
+    renderSignals();
+  }
+}
+
+function exportSignals(){
+  const data = JSON.stringify(getSignals(), null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'signals_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+
+/* ═══════════════════════════════════════════════════
+   TAB: Learn (학습 누적)
+   ═══════════════════════════════════════════════════ */
+const LEARN_KEY = 'mktg_learns_v1';
+
+function getLearns(){ return JSON.parse(localStorage.getItem(LEARN_KEY) || '[]'); }
+function saveLearns(arr){ localStorage.setItem(LEARN_KEY, JSON.stringify(arr)); }
+
+function renderLearns(){
+  const all = getLearns();
+  const q = (document.getElementById('learnSearch')?.value || '').toLowerCase();
+  let filtered = q ? all.filter(l => (l.title+l.hypothesis+l.result+l.learning).toLowerCase().includes(q)) : all;
+
+  const grid = document.getElementById('learnGrid');
+  const empty = document.getElementById('learnEmpty');
+  if(!filtered.length){ grid.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+
+  grid.innerHTML = filtered.map(l => `
+    <div class="brief-card" onclick="viewLearn('${l.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-size:.68rem;padding:2px 8px;border-radius:4px;background:var(--s2);color:var(--t2);">${escHtml(l.period||'')}</span>
+        <span style="font-size:.65rem;color:var(--t2);">${l.date||''}</span>
+      </div>
+      <div class="bf-title">${escHtml(l.title)}</div>
+      <div style="font-size:.75rem;color:var(--t2);margin-top:4px;"><strong>가설:</strong> ${escHtml((l.hypothesis||'').substring(0,80))}</div>
+      <div style="font-size:.75rem;color:var(--g);margin-top:4px;"><strong>학습:</strong> ${escHtml((l.learning||'').substring(0,80))}</div>
+    </div>
+  `).join('');
+}
+
+function openLearnForm(){
+  const title = prompt('학습 제목 (예: CTA 중앙팝업):');
+  if(!title) return;
+  const period = prompt('실험 기간 (예: W8 2/17):') || '';
+  const hypothesis = prompt('가설은?:') || '';
+  const result = prompt('결과는?:') || '';
+  const learning = prompt('학습(인사이트):') || '';
+
+  const learns = getLearns();
+  learns.unshift({
+    id: 'lrn-' + Date.now(),
+    title, period, hypothesis, result, learning,
+    date: new Date().toISOString().slice(0,10),
+    linkedBrief: null
+  });
+  saveLearns(learns);
+  renderLearns();
+}
+
+function viewLearn(id){
+  const learns = getLearns();
+  const l = learns.find(x => x.id === id);
+  if(!l) return;
+  alert(`[${l.title}]\n기간: ${l.period}\n가설: ${l.hypothesis}\n결과: ${l.result}\n학습: ${l.learning}`);
+}
+
+function exportLearns(){
+  const data = JSON.stringify(getLearns(), null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'learns_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+
+/* ═══════════════════════════════════════════════════
+   TAB: Settings (더보기) — sub-tab navigation
+   ═══════════════════════════════════════════════════ */
+function switchSettingsSub(subId){
+  ['design-sub','buyer-sub','review-sub'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = id === subId ? '' : 'none';
+  });
+  ['sub-design','sub-buyer','sub-review'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.classList.toggle('active', id === 'sub-' + subId.replace('-sub',''));
+  });
+}
+
+function moveDesignToSettings(){
+  // Move design tab content into settings sub-tab
+  const designTab = document.getElementById('tab-design');
+  const designSub = document.getElementById('design-sub');
+  if(designTab && designSub){
+    // Clone all children
+    while(designTab.firstChild){
+      designSub.appendChild(designTab.firstChild);
+    }
+  }
+  // Move review content
+  const reviewTab = document.getElementById('tab-review');
+  const reviewSub = document.getElementById('review-sub');
+  if(reviewTab && reviewSub){
+    while(reviewTab.firstChild){
+      reviewSub.appendChild(reviewTab.firstChild);
+    }
+  }
+}
 </script>
 </body>
 </html>
