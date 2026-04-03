@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>룸핏 구매자 심층 분석 (2026.02~03)</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, 'Pretendard', sans-serif; background:#f8f9fa; color:#1a1a2e; line-height:1.7; }
+.container { max-width:900px; margin:0 auto; padding:24px; }
+h1 { font-size:28px; font-weight:800; margin:40px 0 8px; color:#0f0f23; }
+h2 { font-size:22px; font-weight:700; margin:32px 0 12px; color:#16213e; border-bottom:3px solid #e94560; padding-bottom:8px; }
+h3 { font-size:17px; font-weight:600; margin:20px 0 8px; color:#333; }
+.subtitle { color:#666; font-size:14px; margin-bottom:32px; }
+.stat-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:16px; margin:20px 0; }
+.stat-card { background:#fff; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+.stat-card .label { font-size:13px; color:#888; margin-bottom:4px; }
+.stat-card .value { font-size:28px; font-weight:800; color:#e94560; }
+.stat-card .sub { font-size:12px; color:#aaa; margin-top:4px; }
+.bar-chart { margin:16px 0; }
+.bar-row { display:flex; align-items:center; margin:6px 0; }
+.bar-label { width:100px; font-size:13px; font-weight:600; color:#555; text-align:right; padding-right:12px; }
+.bar-bg { flex:1; background:#eee; border-radius:6px; height:28px; position:relative; }
+.bar-fill { height:100%; border-radius:6px; background: linear-gradient(90deg, #e94560, #ff6b6b); display:flex; align-items:center; justify-content:flex-end; padding-right:8px; transition: width 0.5s; }
+.bar-fill span { font-size:12px; font-weight:700; color:#fff; }
+table { width:100%; border-collapse:collapse; margin:16px 0; font-size:14px; }
+th { background:#16213e; color:#fff; padding:10px 12px; text-align:left; font-weight:600; }
+td { padding:10px 12px; border-bottom:1px solid #eee; }
+tr:hover td { background:#f5f5ff; }
+.insight { background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:#fff; border-radius:12px; padding:20px 24px; margin:20px 0; }
+.insight h3 { color:#fff; margin-bottom:8px; }
+.insight ul { padding-left:20px; }
+.insight li { margin:6px 0; }
+.tag { display:inline-block; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600; margin:2px; }
+.tag-mobile { background:#e3f2fd; color:#1565c0; }
+.tag-pc { background:#fce4ec; color:#c62828; }
+.tag-card { background:#e8f5e9; color:#2e7d32; }
+.tag-kb { background:#fff3e0; color:#e65100; }
+.tag-kakao { background:#fff9c4; color:#f57f17; }
+.timeline { position:relative; padding:20px 0; }
+.timeline-item { display:flex; gap:16px; margin:12px 0; padding:12px 16px; background:#fff; border-radius:10px; border-left:4px solid #e94560; box-shadow:0 1px 4px rgba(0,0,0,0.05); }
+.timeline-date { min-width:80px; font-size:13px; font-weight:700; color:#e94560; }
+.timeline-content { flex:1; }
+.timeline-content .name { font-weight:700; }
+.timeline-content .detail { font-size:13px; color:#666; margin-top:2px; }
+.section-note { background:#fffde7; border-left:4px solid #ffd600; padding:12px 16px; border-radius:0 8px 8px 0; margin:16px 0; font-size:14px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🏋️ 룸핏 구매자 심층 분석 <span style="font-size:14px; color:#888; font-weight:400;">v2 (검증 완료)</span></h1>
+<p class="subtitle">2026년 2월~3월 | 실제 고객 본체 주문 기준 (내부 테스트·액세서리·예약금 제외)</p>
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="label">실제 본체 주문</div>
+    <div class="value">13건</div>
+    <div class="sub">2개월간 순수 고객 주문</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">총 매출</div>
+    <div class="value">₩48,940,000</div>
+    <div class="sub">결제 완료 기준</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">평균 결제금액</div>
+    <div class="value">₩3,764,615</div>
+    <div class="sub">평균 할인 ₩546,154</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">모바일 비율</div>
+    <div class="value">100%</div>
+    <div class="sub">13건 모바일 / 0건 PC</div>
+  </div>
+</div>
+
+<h2>📅 구매 타이밍 분석</h2>
+
+<h3>요일별 주문 분포</h3>
+<div class="bar-chart">
+  <div class="bar-row">
+    <div class="bar-label">월요일</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:50.0%"><span>2건</span></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">화요일</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:75.0%"><span>3건</span></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">수요일</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:25.0%"><span>1건</span></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">목요일</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:100.0%"><span>4건</span></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">금요일</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:5%"><span>0건</span></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">토요일</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:25.0%"><span>1건</span></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">일요일</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:50.0%"><span>2건</span></div></div>
+  </div>
+</div>
+
+<h3>시간대별 주문 분포</h3>
+<div class="bar-chart">
+  <div class="bar-row">
+    <div class="bar-label">오전(6-12시)</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:14.285714285714285%"><span>1건</span></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">오후(12-18시)</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:100.0%"><span>7건</span></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">저녁(18-24시)</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:71.42857142857143%"><span>5건</span></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">새벽(0-6시)</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:5%"><span>0건</span></div></div>
+  </div>
+</div>
+
+<div class="insight">
+  <h3>💡 타이밍 관찰 <span style="font-size:12px; font-weight:400;">(⚠️ N=13, 통계적 유의성 없음 — 경향 수준)</span></h3>
+  <ul>
+    <li><strong>목요일(4건)과 화요일(3건)이 가장 많다</strong> — 주중 후반부에 구매 결정이 집중. 주말 탐색 → 주중 결정 경향일 수 있으나, 표본 부족으로 단정 불가.</li>
+    <li><strong>오후(12~18시)가 전체의 54%</strong> — 점심~퇴근 전 시간대에 결제 집중. 광고 시간대 타겟팅 참고.</li>
+    <li><strong>저녁(18~24시) 38%</strong> — 퇴근 후 저녁 시간대도 상당. 이 시간대 광고 노출 강화 고려.</li>
+  </ul>
+</div>
+
+<h2>👤 구매자 프로필</h2>
+
+<h3>디바이스</h3>
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="label">📱 모바일</div>
+    <div class="value">13건</div>
+    <div class="sub">100%</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">💻 PC</div>
+    <div class="value">0건</div>
+    <div class="sub">0%</div>
+  </div>
+</div>
+
+<h3>결제수단</h3>
+<div class="bar-chart">
+  <div class="bar-row">
+    <div class="bar-label">신용카드</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:100.0%"><span>7건</span></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">KB페이</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:57.14285714285714%"><span>4건</span></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">카카오페이</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:14.285714285714285%"><span>1건</span></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">무통장입금</div>
+    <div class="bar-bg"><div class="bar-fill" style="width:14.285714285714285%"><span>1건</span></div></div>
+  </div>
+</div>
+
+<div class="insight">
+  <h3>💡 구매자 프로필 관찰 <span style="font-size:12px; font-weight:400;">(🟢 Tier 1: 아임웹 직접 데이터)</span></h3>
+  <ul>
+    <li><strong>모바일 100%</strong> — 2월 이후 전원 모바일 결제. 단, 이것은 <strong>결제 시점의 디바이스</strong>이며, 탐색은 PC에서 했을 수 있음.</li>
+    <li><strong>간편결제(KB페이+카카오페이) 비중이 높다</strong> — 300만원대 고가 제품임에도 간편결제 선호. 결제 허들이 낮아야 전환된다.</li>
+    <li><strong>무통장입금 = 사전체험/오프라인 접점 후 결제</strong> — cash 결제건은 대면 후 구매 가능성.</li>
+  </ul>
+</div>
+
+<h2>🗓️ 주문 타임라인</h2>
+<div class="timeline">
+  <div class="timeline-item">
+    <div class="timeline-date">2026-02-26<br>목요일 12시</div>
+    <div class="timeline-content">
+      <div class="name">윤여준 <span class="tag tag-mobile">📱모바일</span></div>
+      <div class="detail">₩3,880,000 (할인 ₩500,000) · KB페이 · 택배</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">2026-03-02<br>월요일 19시</div>
+    <div class="timeline-content">
+      <div class="name">전상율 <span class="tag tag-mobile">📱모바일</span></div>
+      <div class="detail">₩3,880,000 (할인 ₩500,000) · 신용카드 · 택배</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">2026-03-03<br>화요일 17시</div>
+    <div class="timeline-content">
+      <div class="name">이종운 <span class="tag tag-mobile">📱모바일</span></div>
+      <div class="detail">₩3,380,000 (할인 ₩500,000) · KB페이 · 택배</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">2026-03-03<br>화요일 20시</div>
+    <div class="timeline-content">
+      <div class="name">서재근 <span class="tag tag-mobile">📱모바일</span></div>
+      <div class="detail">₩3,880,000 (할인 ₩500,000) · 신용카드 · 택배</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">2026-03-08<br>일요일 20시</div>
+    <div class="timeline-content">
+      <div class="name">강대권 <span class="tag tag-mobile">📱모바일</span></div>
+      <div class="detail">₩3,880,000 (할인 ₩500,000) · 신용카드 · 택배</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">2026-03-12<br>목요일 14시</div>
+    <div class="timeline-content">
+      <div class="name">옥은비 <span class="tag tag-mobile">📱모바일</span></div>
+      <div class="detail">₩3,830,000 (할인 ₩500,000) · 신용카드 · 택배</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">2026-03-12<br>목요일 15시</div>
+    <div class="timeline-content">
+      <div class="name">김민주 <span class="tag tag-mobile">📱모바일</span></div>
+      <div class="detail">₩3,880,000 (할인 ₩500,000) · 신용카드 · 택배</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">2026-03-16<br>월요일 14시</div>
+    <div class="timeline-content">
+      <div class="name">이승호 <span class="tag tag-mobile">📱모바일</span></div>
+      <div class="detail">₩3,980,000 (할인 ₩400,000) · 무통장입금 · 택배</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">2026-03-19<br>목요일 21시</div>
+    <div class="timeline-content">
+      <div class="name">우승현 <span class="tag tag-mobile">📱모바일</span></div>
+      <div class="detail">₩3,980,000 (할인 ₩400,000) · 신용카드 · 택배</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">2026-03-25<br>수요일 14시</div>
+    <div class="timeline-content">
+      <div class="name">임승현 <span class="tag tag-mobile">📱모바일</span></div>
+      <div class="detail">₩3,580,000 (할인 ₩400,000) · KB페이 · 방문수령</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">2026-03-28<br>토요일 18시</div>
+    <div class="timeline-content">
+      <div class="name">남유성 <span class="tag tag-mobile">📱모바일</span></div>
+      <div class="detail">₩3,480,000 (할인 ₩1,000,000) · 카카오페이 · 택배</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">2026-03-29<br>일요일 16시</div>
+    <div class="timeline-content">
+      <div class="name">최자현 <span class="tag tag-mobile">📱모바일</span></div>
+      <div class="detail">₩3,230,000 (할인 ₩1,000,000) · KB페이 · 택배</div>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">2026-03-31<br>화요일 7시</div>
+    <div class="timeline-content">
+      <div class="name">이준한 <span class="tag tag-mobile">📱모바일</span></div>
+      <div class="detail">₩4,080,000 (할인 ₩400,000) · 신용카드 · 택배</div>
+    </div>
+  </div>
+</div>
+
+
+
+<h2>🗺️ 첫 방문 → 구매까지 소요 기간</h2>
+
+<div class="section-note" style="border-left-color:#e94560;">
+<strong>⚠️ 데이터 정확도: 🟡 Tier 2 (높은 신뢰도 추론)</strong><br><br>
+<strong>측정 방법:</strong> GA4 <code>firstSessionDate</code>(해당 브라우저/기기에서의 최초 방문일) × <code>/shop_payment_complete</code>(결제 완료 페이지) 교차.<br>
+<strong>정확한 것:</strong> "이 전환자의 첫 방문은 <strong>최소</strong> N일 전" — 각 행의 users=1은 해당 (결제일, 첫방문일, 채널) 조합의 고유 사용자 1명.<br>
+<strong>한계:</strong> ① 쿠키 기반이므로 기기 변경/쿠키 삭제 시 실제보다 짧게 잡힘 (하한값) ② 내부 테스트 8건 제외 후 ~25건 기준 ③ GA4 결제완료 건수 ≠ 아임웹 주문 건수 (소액/분할 혼재) ④ 같은 날 복수 주문 시 누가 누구인지 특정 불가
+</div>
+
+<h3>전환 소요 기간 분포 (내부 테스트 제외, ~25건)</h3>
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="label">⚡ 당일</div>
+    <div class="value">~12건</div>
+    <div class="sub">~48% — GA4 쿠키 기준 (실제 즉시구매는 이보다 낮을 가능성 높음)</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">📋 1~14일</div>
+    <div class="value">~4건</div>
+    <div class="sub">~16% — 2주 이내 결정</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">🔄 15~60일</div>
+    <div class="value">~5건</div>
+    <div class="sub">~20% — 1~2개월 탐색 후 결정</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">🔍 60일+</div>
+    <div class="value">~3건</div>
+    <div class="sub">~12% — 장기 잠복 (내부 테스트 가능성 있음)</div>
+  </div>
+</div>
+
+<div class="section-note">
+<strong>해석:</strong> "당일 48%"는 GA4 쿠키 기준이며, 다른 기기에서 이전에 방문한 경우 실제 탐색 기간은 더 길 수 있습니다. 따라서 <strong>실제 즉시 구매 비율은 48%보다 낮을 가능성이 높습니다.</strong> 반대로, 50일+로 잡힌 전환자는 <strong>최소</strong> 50일이며 실제로는 더 길 수 있습니다.
+</div>
+
+<h3>전환자별 확정 데이터 (🟡 Tier 2)</h3>
+
+<div class="section-note">
+아래 표는 GA4에서 확인할 수 있는 팩트입니다. "최소 N일"은 해당 브라우저의 첫 방문 기준이며, 실제 인지 시점은 더 이전일 수 있습니다.<br>
+<strong>⚠️ "탐색 페이지"와 "채널 전이" 데이터는 삭제했습니다.</strong> 이전 버전에서는 개인 여정처럼 서술했으나, 실제로는 같은 firstSessionDate의 수백 명 cohort(229~1,194명) 합산 데이터였습니다. 개인별 탐색 경로 추적은 GA4 User-ID 연동 없이는 불가능합니다.
+</div>
+
+<table>
+<tr><th>구매일</th><th>구매자</th><th>최소 탐색 기간</th><th>결제 시 채널</th><th>비고</th></tr>
+<tr><td>02/26</td><td>윤여준</td><td>당일</td><td>Direct</td><td>URL 직접 방문 → 당일 결제</td></tr>
+<tr><td>03/02</td><td>전상율</td><td>최소 8일</td><td>Organic Search</td><td>자연검색으로 결제</td></tr>
+<tr><td>03/03</td><td>이종운</td><td>최소 2일 또는 33일</td><td>Organic Search 또는 Paid Search</td><td>같은 날 2건 → 특정 불가</td></tr>
+<tr><td>03/03</td><td>서재근</td><td>(이종운과 구분 불가)</td><td>(상동)</td><td>같은 날 2건</td></tr>
+<tr><td>03/08</td><td>강대권</td><td>(GA4 매칭 불확실)</td><td>—</td><td>해당일 결제완료 0건 (인앱결제 가능성)</td></tr>
+<tr><td>03/12</td><td>옥은비</td><td>최소 3일 또는 당일</td><td>Organic Search 또는 Organic Social</td><td>같은 날 2건+소액 → 특정 불가</td></tr>
+<tr><td>03/12</td><td>김민주</td><td>(옥은비와 구분 불가)</td><td>(상동)</td><td>같은 날 2건</td></tr>
+<tr><td>03/16</td><td>이승호</td><td style="color:#e94560; font-weight:bold;">최소 50일</td><td>Paid Search</td><td>1/25 첫방문 → 네이버 검색광고로 결제</td></tr>
+<tr><td>03/19</td><td>우승현</td><td style="color:#e94560; font-weight:bold;">최소 53일</td><td>Organic Search</td><td>1/25 첫방문 → 자연검색으로 결제 (3/19 소액 주문 별도 존재)</td></tr>
+<tr><td>03/25</td><td>임승현</td><td>최소 11일</td><td>Direct</td><td>3/14(SPOEX 첫날) 첫방문 → 방문수령</td></tr>
+<tr><td>03/28</td><td>남유성</td><td style="color:#e94560; font-weight:bold;">최소 41일</td><td>Referral</td><td>2/15 첫방문 → SPOEX 할인(₩100만) 시점 결제</td></tr>
+<tr><td>03/29</td><td>최자현</td><td>당일</td><td>Direct</td><td>SPOEX 할인(₩100만). 오프라인 접점 후 가능성</td></tr>
+<tr><td>03/31</td><td>이준한</td><td>당일 (GA4 기준)</td><td>Organic Search</td><td>아임웹 가입은 2025-08-24 → 쿠키 리셋 가능성</td></tr>
+</table>
+
+<h3>📊 가설: 전환 경로 유형 (🔴 Tier 3 — 검증 필요)</h3>
+
+<div class="section-note" style="border-left-color:#e94560;">
+<strong>⚠️ 아래는 가설입니다.</strong> 개인별 세션 추적이 불가능한 현재 구조에서, 확정 데이터(전환 기간 + 결제 시 채널)와 재방문자 세그먼트 행동을 조합해 추론한 것입니다. GA4 User-ID 연동 후 검증이 필요합니다.
+</div>
+
+<div style="background:#fff; border-radius:12px; padding:20px; margin:16px 0; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+<h4 style="margin-bottom:12px;">가설: 3가지 전환 경로 유형이 존재할 수 있다</h4>
+
+<div style="margin:12px 0; padding:12px; background:#fff5f5; border-radius:8px; border-left:4px solid #e94560;">
+<strong>가설 A: 광고 인지 → 재방문 유입 → 검색으로 구매</strong><br>
+<span style="font-size:13px; color:#666;">
+근거: 이승호(50일+, Paid Search 결제), 우승현(53일+, Organic Search 결제), 이종운(33일+, Paid Search 결제), 전상율(8일+, Organic Search 결제) — 장기 탐색 후 검색으로 결제한 전환자가 다수.<br>
+또한 3월 재방문자 세그먼트에서 Meta display가 2,038세션으로 재방문 유입 1위, 검색 재방문자의 체류 시간이 4~13분으로 가장 긺.<br>
+한계: 개인별로 "Meta 광고를 보고 → 나중에 검색으로 왔다"는 직접 확인 불가. cohort 수준의 간접 추론.<br>
+검증: GA4 User-ID 연동 후 개인별 채널 전이 추적.
+</span>
+</div>
+
+<div style="margin:12px 0; padding:12px; background:#fff8e1; border-radius:8px; border-left:4px solid #ffa726;">
+<strong>가설 B: 장기 노출 → 가격/이벤트 트리거로 구매</strong><br>
+<span style="font-size:13px; color:#666;">
+근거: 남유성(41일+, SPOEX 할인 ₩100만 시점 결제), 임승현(11일+, SPOEX 첫날 유입→방문수령), 최자현(당일, SPOEX 할인 ₩100만).<br>
+SPOEX 기간 할인 적용자 3명은 모두 ₩100만 할인. 평소 할인은 ₩40~50만.<br>
+한계: "가격이 트리거였다"는 시점 일치 기반 추론. 다른 요인(오프라인 체험 등)이 트리거였을 수 있음.<br>
+검증: 향후 할인 이벤트 시 전환율 변화 관찰.
+</span>
+</div>
+
+<div style="margin:12px 0; padding:12px; background:#e3f2fd; border-radius:8px; border-left:4px solid #42a5f5;">
+<strong>가설 C: 이미 인지 완료 상태에서 즉시 구매</strong><br>
+<span style="font-size:13px; color:#666;">
+근거: 윤여준(당일, Direct), 최자현(당일, Direct), 이준한(GA4 당일, Organic Search). Direct 유입 = URL 직접 입력 또는 북마크.<br>
+한계: "이미 인지 완료"는 추론. 오프라인, 지인추천, SNS 등 GA4에 안 잡히는 경로에서 인지했을 수 있으나 확인 불가.<br>
+검증: 구매 후 설문("어디서 알게 되셨나요") 도입.
+</span>
+</div>
+
+<p style="font-size:12px; color:#999; margin-top:12px;">위 분류는 N=13 기준의 정성적 가설이며, 비율(%) 산출은 의미 없습니다.</p>
+</div>
+
+<h2>🔎 GA4 기반 구매 전 탐색 행동 분석</h2>
+
+<div class="section-note">
+<strong>⚠️ 데이터 기준 및 한계 명시</strong><br>
+• <strong>분석 기간:</strong> 2026년 2월 1일 ~ 3월 31일 (62일, 날짜 누락 없음 확인)<br>
+• <strong>"재방문자(returning)"란:</strong> GA4가 브라우저 쿠키(client_id)로 판별. 이전에 roomfit.kr에 방문한 적 있는 사용자. 쿠키 만료 2년.<br>
+• <strong>한계:</strong> ①다른 기기/브라우저면 같은 사람도 '신규'로 잡힘 ②쿠키 삭제 시 재방문도 '신규' ③개별 구매자를 특정할 수 없음(익명 세션) ④아임웹은 결제 시 가입이라, 가입일≈구매일이 대부분<br>
+• <strong>따라서:</strong> "이 사람이 며칠 전에 왔었다"를 직접 알 수는 없지만, <strong>재방문자 세그먼트의 행동 패턴</strong>으로 "구매 전에 사이트를 탐색한 사람들이 무엇을 보고, 어디서 돌아왔는지"를 간접 추론할 수 있음
+</div>
+
+<h3>3월 전환 퍼널 — 재방문자 vs 신규 비율</h3>
+<table>
+<tr><th>페이지</th><th>재방문 세션</th><th>재방문 비율</th><th>신규 세션</th><th>재방문 체류시간</th><th>해석</th></tr>
+<tr><td><strong>메인(/)</strong></td><td>2,766</td><td>11.9%</td><td>20,550</td><td>114초</td><td>대부분 신규 유입. 광고 랜딩</td></tr>
+<tr><td><strong>/funding (상품)</strong></td><td>2,165</td><td>15.7%</td><td>11,593</td><td>86초</td><td>상품 상세. 재방문 비율 소폭 상승</td></tr>
+<tr><td><strong>/community (후기)</strong></td><td>1,202</td><td style="color:#e94560; font-weight:bold;">43.2%</td><td>1,432</td><td>110초</td><td>재방문자 비율 가장 높음. 구매 검토자의 확인 페이지일 가능성</td></tr>
+<tr><td><strong>/feel (체험)</strong></td><td>375</td><td>21.3%</td><td>1,384</td><td>121초</td><td>체험 신청. 재방문 시에도 체험 고려</td></tr>
+<tr><td><strong>/reviews (리뷰)</strong></td><td>199</td><td style="color:#e94560; font-weight:bold;">35.0%</td><td>369</td><td>148초</td><td>리뷰 페이지도 재방문자 비중 높음</td></tr>
+<tr><td><strong>/shop_view (장바구니)</strong></td><td>33</td><td style="color:#e94560; font-weight:bold;">76.7%</td><td>10</td><td>316초</td><td>⭐⭐ 장바구니의 77%가 재방문자!</td></tr>
+<tr><td><strong>/shop_payment (결제)</strong></td><td>56</td><td style="color:#e94560; font-weight:bold;">64.4%</td><td>31</td><td>56초</td><td>결제 페이지의 64%가 재방문자</td></tr>
+<tr><td><strong>/shop_payment_complete</strong></td><td>15</td><td style="color:#e94560; font-weight:bold;">62.5%</td><td>9</td><td>118초</td><td>⭐⭐⭐ <strong>결제 완료의 63%가 재방문자</strong></td></tr>
+</table>
+
+<div class="insight">
+<h3>💡 퍼널 관찰 <span style="font-size:12px; font-weight:400;">(🟢 데이터 확정, 🟡 해석은 추론)</span></h3>
+<ul>
+<li><strong>전환 깔때기 뒤쪽으로 갈수록 재방문 비율이 높다:</strong> 메인(12%) → 커뮤니티(43%) → 장바구니(77%) → 결제(64%) → 결제완료(63%). 이 수치는 전체 사이트 사용자 기준이며, "구매자만의 퍼널"이 아닌 점 유의.</li>
+<li><strong>3월 결제완료 24건 중 15건(63%)이 이전 방문 이력 보유.</strong> 결제 완료자의 상당수가 이전 방문 이력을 보유하고 있음을 시사.</li>
+<li><strong>커뮤니티 페이지의 재방문 비율이 가장 높다:</strong> 43%는 펀딩(16%)의 3배. 재방문자가 가장 많이 재탐색하는 페이지가 후기/사용자 콘텐츠. 고가 제품에서 사회적 증거를 확인하려는 행동으로 <strong>추론</strong>되나, 커뮤니티가 재방문 자체를 유도하는 것일 수도 있음(인과 방향 미확정).</li>
+</ul>
+</div>
+
+<h3>구매 발생일별 결제 퍼널 (사이트 전체 기준)</h3>
+
+<div class="section-note" style="border-left-color:#e94560;">
+⚠️ <strong>해석 주의:</strong> 아래 결제 시도/완료는 해당 날짜의 <strong>사이트 전체 사용자</strong> 데이터입니다. 특정 구매자 개인의 시도 횟수가 아닙니다. "이탈률"은 해당 날짜에 결제 페이지를 방문했지만 결제를 완료하지 않은 세션의 비율입니다.
+</div>
+
+<table>
+<tr><th>날짜</th><th>본체 주문</th><th>결제 페이지 방문 (전체)</th><th>결제 완료 (전체)</th><th>미완료 비율</th></tr>
+<tr><td>02/26</td><td>1건</td><td>6</td><td>1</td><td>83%</td></tr>
+<tr><td>03/02</td><td>1건</td><td>2</td><td>1</td><td>50%</td></tr>
+<tr><td>03/03</td><td>2건</td><td>4</td><td>4</td><td style="color:green; font-weight:bold;">0%</td></tr>
+<tr><td>03/08</td><td>1건</td><td>0</td><td>0</td><td>— (인앱결제 가능성)</td></tr>
+<tr><td>03/12</td><td>2건</td><td>9</td><td>3</td><td>67%</td></tr>
+<tr><td>03/16</td><td>1건</td><td>2</td><td>1</td><td>50%</td></tr>
+<tr><td>03/19</td><td>1건</td><td>4</td><td>2</td><td>50%</td></tr>
+<tr><td>03/25</td><td>1건</td><td>4</td><td>2</td><td>50%</td></tr>
+<tr><td>03/28</td><td>1건</td><td>4</td><td>1</td><td>75%</td></tr>
+<tr><td>03/29</td><td>1건</td><td>6</td><td>1</td><td>83%</td></tr>
+<tr><td>03/31</td><td>1건</td><td>5</td><td>1</td><td>80%</td></tr>
+</table>
+
+<div class="section-note">
+하루 결제 시도 2~9건 수준에서 완료 1~4건이면, 결제 페이지까지 도달했다가 이탈하는 사용자가 상당수 존재한다는 의미입니다.
+</div>
+
+<h3>3월 재방문자 유입 경로 — 어디서 돌아왔나</h3>
+<table>
+<tr><th>소스 / 매체</th><th>재방문 세션</th><th>사용자</th><th>평균 체류</th><th>해석</th></tr>
+<tr><td><strong>Meta / display</strong></td><td>2,038</td><td>1,531</td><td>155초</td><td>메타 디스플레이 광고 경유 재방문 (⚠️ "리타겟팅"인지 "일반 노출 재클릭"인지는 Meta Ads Manager 확인 필요)</td></tr>
+<tr><td><strong>Meta / paidsocial</strong></td><td>523</td><td>430</td><td>184초</td><td>인스타 피드 광고 재클릭</td></tr>
+<tr><td><strong>네이버 / cpc</strong></td><td>344</td><td>173</td><td style="color:#e94560; font-weight:bold;">245초</td><td>네이버 검색광고 재방문. 4분+ 깊이 탐색</td></tr>
+<tr><td><strong>Direct (직접)</strong></td><td>207</td><td>114</td><td style="color:#e94560; font-weight:bold;">296초</td><td>URL 직접 입력/북마크. 5분 체류 = 높은 관심</td></tr>
+<tr><td><strong>Google / organic</strong></td><td>173</td><td>84</td><td style="color:#e94560; font-weight:bold;">322초</td><td>구글 자연검색 재방문. 5분+</td></tr>
+<tr><td><strong>네이버 검색결과</strong></td><td>129</td><td>80</td><td style="color:#e94560; font-weight:bold;">796초</td><td>⭐ <strong>13분!</strong> 극도로 깊은 탐색</td></tr>
+<tr><td><strong>Instagram / social</strong></td><td>103</td><td>52</td><td>382초</td><td>인스타 프로필 링크. 6분</td></tr>
+<tr><td><strong>카카오</strong></td><td>108</td><td>8</td><td>170초</td><td>카카오 로그인/메시지 경유</td></tr>
+</table>
+
+<div class="insight">
+<h3>💡 재유입 경로 관찰 <span style="font-size:12px; font-weight:400;">(🟢 Tier 1: GA4 세그먼트 데이터)</span></h3>
+<ul>
+<li><strong>Meta 광고가 재방문도 견인(2,561세션):</strong> 재방문자의 대부분이 Meta 광고를 다시 클릭해서 돌아옴. "한번 보고 간 사람"이 Meta 광고를 통해 재유입되는 구조.</li>
+<li><strong>검색으로 돌아온 사람이 가장 깊게 본다:</strong> 네이버 검색 재방문 평균 13분(!), 구글 5분+. 이들은 "스스로 찾아서 온" 능동적 탐색자. 전환 의도가 높은 세그먼트로 추정.</li>
+<li><strong>Direct = 이미 구매 검토 단계:</strong> 207세션, 평균 5분. URL을 기억하거나 북마크한 사람.</li>
+<li><strong>Meta 양 vs 검색 질:</strong> Meta는 양(2,561세션)으로 파이프라인을 채우고, 검색은 질(4~13분 체류)로 구매 결정을 만든다. 둘 다 필요.</li>
+</ul>
+</div>
+
+<h3>3/25 이후 채널 구성 변화</h3>
+<div class="section-note">
+3/25 이후 세션이 절반 이하로 급감(929→336~671). 동시에 재방문 비율이 16%→22~28%로 급상승. SPOEX 이후 신규 유입이 줄면서, 기존 관심자들의 재방문 비중이 높아진 구간. 이 시기에 남유성(최소 41일)·최자현·이준한 구매. 이준한의 아임웹 가입은 2025-08-24이나, 이는 가입일이며 첫 방문일이 아님(아임웹은 결제 시 가입). GA4 쿠키 기준으로는 당일 전환이므로 쿠키 리셋 가능성이 높음. 광고 축소 구간에서 고의도 재방문자의 전환이 관찰됨. 다만 표본이 적어(3건) 일반화는 곤란.
+</div>
+
+<h2>📊 GA4 행동 추적 — 구매일 트래픽</h2>
+<table>
+<tr><th>구매일</th><th>구매자</th><th>GA4 세션</th><th>사용자</th><th>신규</th><th>이탈률</th><th>평균체류</th></tr>
+<tr><td>2026-02-26</td><td>윤여준</td><td>644</td><td>609</td><td>625</td><td>99%</td><td>140s</td></tr>
+<tr><td>2026-03-02</td><td>전상율</td><td>569</td><td>537</td><td>429</td><td>99%</td><td>267s</td></tr>
+<tr><td>2026-03-03</td><td>서재근, 이종운</td><td>586</td><td>540</td><td>446</td><td>99%</td><td>139s</td></tr>
+<tr><td>2026-03-08</td><td>강대권</td><td>911</td><td>852</td><td>714</td><td>99%</td><td>729s</td></tr>
+<tr><td>2026-03-12</td><td>김민주, 옥은비</td><td>973</td><td>927</td><td>772</td><td>98%</td><td>112s</td></tr>
+<tr><td>2026-03-16</td><td>이승호</td><td>1998</td><td>1934</td><td>1659</td><td>99%</td><td>66s</td></tr>
+<tr><td>2026-03-19</td><td>우승현</td><td>1786</td><td>1698</td><td>1485</td><td>100%</td><td>86s</td></tr>
+<tr><td>2026-03-25</td><td>임승현</td><td>984</td><td>918</td><td>737</td><td>99%</td><td>145s</td></tr>
+<tr><td>2026-03-28</td><td>남유성</td><td>561</td><td>531</td><td>351</td><td>97%</td><td>132s</td></tr>
+<tr><td>2026-03-29</td><td>최자현</td><td>741</td><td>683</td><td>456</td><td>99%</td><td>1127s</td></tr>
+<tr><td>2026-03-31</td><td>이준한</td><td>365</td><td>333</td><td>220</td><td>97%</td><td>170s</td></tr>
+</table>
+
+<h3>3월 일별 세션 추이 (⭐ = 구매 발생일)</h3>
+<div style="background:#fff; border-radius:12px; padding:20px; margin:16px 0; box-shadow:0 2px 8px rgba(0,0,0,0.06); overflow-x:auto;">
+<div style="display:flex; align-items:flex-end; gap:2px; height:180px; padding:10px 0;">
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">573</div>
+    <div style="width:18px; height:41.824817518248175px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-01: 573 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">01</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">569</div>
+    <div style="width:18px; height:41.53284671532847px; background:#e94560; border-radius:3px 3px 0 0;" title="2026-03-02: 569 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">02⭐</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">586</div>
+    <div style="width:18px; height:42.77372262773723px; background:#e94560; border-radius:3px 3px 0 0;" title="2026-03-03: 586 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">03⭐</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">764</div>
+    <div style="width:18px; height:55.76642335766424px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-04: 764 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">04</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">839</div>
+    <div style="width:18px; height:61.24087591240876px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-05: 839 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">05</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">672</div>
+    <div style="width:18px; height:49.051094890510946px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-06: 672 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">06</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">1104</div>
+    <div style="width:18px; height:80.58394160583943px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-07: 1104 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">07</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">911</div>
+    <div style="width:18px; height:66.4963503649635px; background:#e94560; border-radius:3px 3px 0 0;" title="2026-03-08: 911 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">08⭐</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">598</div>
+    <div style="width:18px; height:43.649635036496356px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-09: 598 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">09</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">740</div>
+    <div style="width:18px; height:54.01459854014598px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-10: 740 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">10</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">827</div>
+    <div style="width:18px; height:60.36496350364964px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-11: 827 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">11</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">973</div>
+    <div style="width:18px; height:71.02189781021899px; background:#e94560; border-radius:3px 3px 0 0;" title="2026-03-12: 973 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">12⭐</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">1078</div>
+    <div style="width:18px; height:78.6861313868613px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-13: 1078 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">13</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">1318</div>
+    <div style="width:18px; height:96.2043795620438px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-14: 1318 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">14</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">1576</div>
+    <div style="width:18px; height:115.03649635036497px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-15: 1576 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">15</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">1998</div>
+    <div style="width:18px; height:145.83941605839416px; background:#e94560; border-radius:3px 3px 0 0;" title="2026-03-16: 1998 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">16⭐</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">1062</div>
+    <div style="width:18px; height:77.51824817518248px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-17: 1062 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">17</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">1600</div>
+    <div style="width:18px; height:116.78832116788323px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-18: 1600 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">18</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">1786</div>
+    <div style="width:18px; height:130.36496350364965px; background:#e94560; border-radius:3px 3px 0 0;" title="2026-03-19: 1786 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">19⭐</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">1720</div>
+    <div style="width:18px; height:125.54744525547444px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-20: 1720 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">20</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">1926</div>
+    <div style="width:18px; height:140.5839416058394px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-21: 1926 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">21</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">2055</div>
+    <div style="width:18px; height:150.0px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-22: 2055 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">22</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">1626</div>
+    <div style="width:18px; height:118.68613138686132px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-23: 1626 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">23</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">1628</div>
+    <div style="width:18px; height:118.83211678832116px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-24: 1628 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">24</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">984</div>
+    <div style="width:18px; height:71.82481751824817px; background:#e94560; border-radius:3px 3px 0 0;" title="2026-03-25: 984 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">25⭐</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">388</div>
+    <div style="width:18px; height:28.32116788321168px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-27: 388 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">27</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">561</div>
+    <div style="width:18px; height:40.94890510948905px; background:#e94560; border-radius:3px 3px 0 0;" title="2026-03-28: 561 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">28⭐</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">741</div>
+    <div style="width:18px; height:54.08759124087591px; background:#e94560; border-radius:3px 3px 0 0;" title="2026-03-29: 741 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">29⭐</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">546</div>
+    <div style="width:18px; height:39.85401459854015px; background:#ddd; border-radius:3px 3px 0 0;" title="2026-03-30: 546 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">30</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; min-width:22px;">
+    <div style="font-size:9px; color:#999; margin-bottom:2px;">365</div>
+    <div style="width:18px; height:26.642335766423358px; background:#e94560; border-radius:3px 3px 0 0;" title="2026-03-31: 365 sessions"></div>
+    <div style="font-size:9px; color:#666; margin-top:2px;">31⭐</div>
+  </div>
+</div>
+<p style="font-size:11px; color:#aaa; margin-top:8px;">빨간 막대 = 구매 발생일 | 높이 = GA4 세션 수</p>
+</div>
+
+<div class="insight">
+  <h3>💡 GA4 × 구매 교차 인사이트</h3>
+  <ul>
+    <li><strong>트래픽 피크 ≠ 구매 피크:</strong> 3/21~22 세션 2,000+ 최고치였지만 구매 0건. 3/2~3 세션 570대에서 3건 구매. 트래픽 양보다 트래픽의 질(구매 의도)이 중요.</li>
+    <li><strong>3/14~22 SPOEX 기간 세션 급증:</strong> 평소 500~1,000 → 1,300~2,000대. 하지만 이 기간 구매는 이승호(3/16), 우승현(3/19) 2건뿐. SPOEX 트래픽은 인지 단계이며 즉시 전환으로 이어지지 않음.</li>
+    <li><strong>이탈률 97~99%:</strong> 전반적으로 높음. 다만 이는 GA4의 engaged session 기준(10초+)이라, 랜딩→바로 이탈하는 광고 트래픽이 대부분인 구조적 특성.</li>
+    <li><strong>구매자별 User-ID 추적이 안 되는 현재 구조의 한계:</strong> "이 사람이 몇 번 방문했는가, 어떤 페이지를 봤는가"를 알 수 없음. 아임웹 회원 ID ↔ GA4 User-ID 연동이 최우선 과제.</li>
+  </ul>
+</div>
+
+
+
+<h2>🔍 구매 패턴 종합 인사이트</h2>
+
+<div class="insight">
+  <h3>1. 구매 결정 주기</h3>
+  <ul>
+    <li>3월에 집중 (11건/13건) — 2월은 1건(윤여준). 캠페인 효과가 3월에 본격화.</li>
+    <li>3월 초순(1~8일) 4건, 중순(9~16일) 3건, 하순(17~31일) 4건 — 고르게 분포.</li>
+  </ul>
+</div>
+
+<div class="insight">
+  <h3>2. 가격 민감도</h3>
+  <ul>
+    <li>할인 적용 주문이 대부분 (₩400,000~₩1,000,000 할인). 할인 없는 풀프라이스 구매는 0건.</li>
+    <li>최저 결제가 ₩3,230,000 ~ 최고 ₩4,080,000. 가격대가 넓지 않음.</li>
+    <li>3월 하순 SPOEX 이후 할인폭 확대(₩1,000,000) — 남유성, 최자현.</li>
+  </ul>
+</div>
+
+<div class="insight">
+  <h3>3. 구매 여정 추정</h3>
+  <ul>
+    <li><strong>모바일 발견 → 모바일 결제:</strong> 전원 모바일. 결제 디바이스 기준 전원 모바일. 단, 탐색은 PC에서 했을 수 있어 "모바일에서만 탐색"이라고 단정할 수는 없음.</li>
+    <li><strong>간편결제 의존:</strong> 300만원대에서 KB페이/카카오페이를 쓴다는 건 "고민 끝에 결정한 순간 마찰 없이 바로 결제"하고 싶다는 의미. 결제 UX가 전환에 직접 영향.</li>
+    <li><strong>사전체험 → 구매 경로:</strong> 사전체험 DB에서 구매자 이름 매칭은 0건. 다만 이종운(₩500,000 별도 결제 있음), 임승현(방문수령+별도 ₩500,000) 등은 오프라인 접점 경유 가능성.</li>
+  </ul>
+</div>
+
+<div class="insight">
+  <h3>4. 다음 단계 제안</h3>
+  <ul>
+    <li><strong>GA4 User-ID 연동:</strong> 아임웹 회원가입 시 GA4 User-ID를 심으면 구매자별 전체 행동 경로 추적 가능. 이게 되면 "첫 유입부터 구매까지 며칠, 몇 번 방문, 어떤 페이지"를 정확히 알 수 있음.</li>
+    <li><strong>UTM 일관성 확보:</strong> Meta/네이버 캠페인별 UTM 파라미터가 구매 완료까지 유지되는지 확인. 현재는 유입 채널별 구매 기여를 정확히 못 봄.</li>
+    <li><strong>구매 시간대 타겟팅:</strong> 오후~저녁 집중 → 이 시간대 광고 입찰/노출 강화.</li>
+    <li><strong>모바일 결제 경험 최적화:</strong> 100% 모바일 구매. 모바일 상품 페이지 → 결제 완료까지의 UX가 매출에 직결.</li>
+  </ul>
+</div>
+
+<p style="text-align:center; color:#aaa; font-size:12px; margin-top:40px; padding-bottom:20px;">
+생성일: 2026-04-03 19:55 | 수정일: 2026-04-03 20:15 (방법론 검증 반영) | 데이터 소스: 아임웹 주문 API + GA4
+</p>
+
+</div>
+</body>
+</html>
