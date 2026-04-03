@@ -92,6 +92,61 @@ export default {
       return json({ ok: true, count: items.length });
     }
 
+    // POST /api/analyze-signal — LLM이 자유 텍스트를 분석해서 시그널 필드 추출
+    if (path === '/api/analyze-signal' && request.method === 'POST') {
+      const { text } = await request.json();
+      if (!text) return json({ error: 'text required' }, 400);
+
+      const SOURCES = [
+        '주간리포트','Meta Ads','GA4','네이버SA','아임웹주문',
+        'CS카카오','CS아임웹','CS커뮤니티','인스타그램',
+        '현장','외부시장','내부논의','이전실험','기타'
+      ];
+      const TYPES = ['위협','기회','외부','루프','현장'];
+
+      const systemPrompt = `You are a marketing signal analyzer for Roomfit (smart weight machine, ₩3.48M).
+Given a free-text observation from a marketer, extract structured signal fields.
+
+Available sources: ${SOURCES.join(', ')}
+Available signal types: ${TYPES.join(', ')}
+
+Respond ONLY with JSON (no markdown):
+{
+  "title": "concise signal title in Korean (max 40 chars)",
+  "signal": "cleaned-up observation text in Korean",
+  "source": "one of the available sources",
+  "sourceDetail": "specific reference (e.g. W13 report, ASC campaign #3)",
+  "signalType": "one of the available types",
+  "confidence": "high/medium/low"
+}`;
+
+      try {
+        const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${env.OPENAI_KEY}`
+          },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: text }
+            ],
+            temperature: 0.3,
+            max_tokens: 300
+          })
+        });
+        const data = await resp.json();
+        const content = data.choices?.[0]?.message?.content || '';
+        // Parse JSON from response
+        const parsed = JSON.parse(content.replace(/```json?\n?/g, '').replace(/```/g, '').trim());
+        return json(parsed);
+      } catch (e) {
+        return json({ error: 'Analysis failed', detail: e.message }, 500);
+      }
+    }
+
     return json({ error: 'Not found' }, 404);
   }
 };

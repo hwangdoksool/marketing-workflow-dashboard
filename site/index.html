@@ -615,7 +615,27 @@ select.form-input{cursor:pointer;}
   <div class="modal" style="max-width:520px;">
     <span class="modal-close" onclick="closeSignalForm()">×</span>
     <h2 id="signalFormTitle">💡 새 시그널 등록</h2>
-    <p style="font-size:.75rem;color:var(--t2);margin-bottom:16px;">무엇을 관찰했는가? 3개 필드만 채우면 됩니다.</p>
+
+    <!-- AI 어시스턴트 영역 -->
+    <div style="background:var(--s2);border:1px solid var(--ac);border-radius:10px;padding:14px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+        <span style="font-size:.85rem;">🤖</span>
+        <span style="font-size:.78rem;font-weight:600;color:var(--ac2);">AI 어시스턴트</span>
+        <span style="font-size:.68rem;color:var(--t2);">— 관찰한 내용을 자유롭게 적으면 자동 분석합니다</span>
+      </div>
+      <textarea class="form-input" id="sig-ai-input" placeholder="예: 이번주 메타 CPC가 179원까지 올라갔어. W7때 113원이었는데 계속 상승 중. 소재 교체 필요할 듯" style="min-height:70px;font-size:.82rem;"></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+        <span id="sig-ai-status" style="font-size:.72rem;color:var(--t2);"></span>
+        <button type="button" class="btn primary" onclick="analyzeSignal()" id="sig-ai-btn" style="font-size:.78rem;padding:5px 14px;">✨ 분석</button>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <div style="flex:1;height:1px;background:var(--b);"></div>
+      <span style="font-size:.68rem;color:var(--t2);">또는 직접 입력</span>
+      <div style="flex:1;height:1px;background:var(--b);"></div>
+    </div>
+
     <form id="signalForm" onsubmit="saveSignal(event)">
       <label class="form-label">제목 *</label>
       <input class="form-input" id="sig-title" placeholder="예: CPC가 W11 대비 20% 올랐다" required>
@@ -1930,6 +1950,68 @@ function openSignalForm(){
 function closeSignalForm(){
   document.getElementById('signalFormModal').classList.remove('open');
 }
+// AI Signal Analysis
+async function analyzeSignal(){
+  const text = document.getElementById('sig-ai-input').value.trim();
+  if(!text){ alert('관찰 내용을 적어주세요.'); return; }
+
+  const btn = document.getElementById('sig-ai-btn');
+  const status = document.getElementById('sig-ai-status');
+  btn.disabled = true;
+  btn.textContent = '분석 중...';
+  status.textContent = '🔄 AI가 분석하고 있습니다...';
+
+  try {
+    let key = getApiKey();
+    const opts = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': key },
+      body: JSON.stringify({ text })
+    };
+    let r = await fetch(API_BASE + '/analyze-signal', opts);
+    if (r.status === 401) {
+      key = promptApiKey();
+      if (!key) throw new Error('API 키 없음');
+      opts.headers['X-API-Key'] = key;
+      r = await fetch(API_BASE + '/analyze-signal', opts);
+    }
+    if (!r.ok) throw new Error('API error ' + r.status);
+    const result = await r.json();
+
+    if (result.error) throw new Error(result.error);
+
+    // Fill form fields
+    document.getElementById('sig-title').value = result.title || '';
+    document.getElementById('sig-signal').value = result.signal || text;
+    if (result.source) {
+      const srcSelect = document.getElementById('sig-source');
+      for (const opt of srcSelect.options) {
+        if (opt.value === result.source) { srcSelect.value = result.source; break; }
+      }
+      updateSourceHint();
+    }
+    if (result.sourceDetail) {
+      document.getElementById('sig-source-detail').value = result.sourceDetail;
+    }
+    if (result.signalType) {
+      const typeSelect = document.getElementById('sig-type');
+      for (const opt of typeSelect.options) {
+        if (opt.value === result.signalType) { typeSelect.value = result.signalType; break; }
+      }
+    }
+
+    const conf = result.confidence === 'high' ? '✅ 높음' : result.confidence === 'medium' ? '⚠️ 보통' : '❓ 낮음';
+    status.innerHTML = `✅ 분석 완료 (신뢰도: ${conf}) — <strong>아래 내용을 확인하고 등록 버튼을 누르세요</strong>`;
+    status.style.color = 'var(--g)';
+  } catch(e) {
+    status.textContent = '❌ 분석 실패: ' + e.message;
+    status.style.color = 'var(--r)';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '✨ 분석';
+  }
+}
+
 const SOURCE_HINTS = {
   '주간리포트': '💡 어떤 KPI가 이상한가? WoW 변화율, 급등/급락 지표를 구체적으로',
   'Meta Ads': '💡 어떤 캠페인/소재에서? CTR, CPC, ROAS 등 구체 수치와 함께',
