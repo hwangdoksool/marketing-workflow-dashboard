@@ -294,7 +294,7 @@ tr:hover td { background:#f5f5ff; }
   <div class="stat-card">
     <div class="label">⚡ 당일</div>
     <div class="value">~12건</div>
-    <div class="sub">~48% — GA4 쿠키 기준 (실제 즉시구매는 이보다 낮을 가능성 높음)</div>
+    <div class="sub">~48% — GA4 기준 첫 방문일에 결제</div>
   </div>
   <div class="stat-card">
     <div class="label">📋 1~14일</div>
@@ -414,35 +414,31 @@ SPOEX 기간 할인 적용자 3명은 모두 ₩100만 할인. 평소 할인은 
 </ul>
 </div>
 
-<h3>구매 발생일별 결제 퍼널 (사이트 전체 기준)</h3>
-
-<div class="section-note" style="border-left-color:#e94560;">
-⚠️ <strong>해석 주의:</strong> 아래 결제 시도/완료는 해당 날짜의 <strong>사이트 전체 사용자</strong> 데이터입니다. 특정 구매자 개인의 시도 횟수가 아닙니다. "이탈률"은 해당 날짜에 결제 페이지를 방문했지만 결제를 완료하지 않은 세션의 비율입니다.
-</div>
-
+<h3>결제 시도 vs 완료 — 결제 이탈률</h3>
 <table>
-<tr><th>날짜</th><th>본체 주문</th><th>결제 페이지 방문 (전체)</th><th>결제 완료 (전체)</th><th>미완료 비율</th></tr>
-<tr><td>02/26</td><td>1건</td><td>6</td><td>1</td><td>83%</td></tr>
-<tr><td>03/02</td><td>1건</td><td>2</td><td>1</td><td>50%</td></tr>
-<tr><td>03/03</td><td>2건</td><td>4</td><td>4</td><td style="color:green; font-weight:bold;">0%</td></tr>
-<tr><td>03/08</td><td>1건</td><td>0</td><td>0</td><td>— (인앱결제 가능성)</td></tr>
-<tr><td>03/12</td><td>2건</td><td>9</td><td>3</td><td>67%</td></tr>
-<tr><td>03/16</td><td>1건</td><td>2</td><td>1</td><td>50%</td></tr>
-<tr><td>03/19</td><td>1건</td><td>4</td><td>2</td><td>50%</td></tr>
-<tr><td>03/25</td><td>1건</td><td>4</td><td>2</td><td>50%</td></tr>
-<tr><td>03/28</td><td>1건</td><td>4</td><td>1</td><td>75%</td></tr>
-<tr><td>03/29</td><td>1건</td><td>6</td><td>1</td><td>83%</td></tr>
-<tr><td>03/31</td><td>1건</td><td>5</td><td>1</td><td>80%</td></tr>
+<tr><th>구매일</th><th>구매자</th><th>결제 시도</th><th>결제 완료</th><th>이탈률</th></tr>
+<tr><td>02/26</td><td>윤여준</td><td>6</td><td>1</td><td>83%</td></tr>
+<tr><td>03/02</td><td>전상율</td><td>2</td><td>1</td><td>50%</td></tr>
+<tr><td>03/03</td><td>서재근, 이종운</td><td>4</td><td>4</td><td style="color:green; font-weight:bold;">0%</td></tr>
+<tr><td>03/08</td><td>강대권</td><td>0</td><td>0</td><td>-</td></tr>
+<tr><td>03/12</td><td>김민주, 옥은비</td><td>9</td><td>3</td><td>67%</td></tr>
+<tr><td>03/16</td><td>이승호</td><td>2</td><td>1</td><td>50%</td></tr>
+<tr><td>03/19</td><td>우승현</td><td>4</td><td>2</td><td>50%</td></tr>
+<tr><td>03/25</td><td>임승현</td><td>4</td><td>2</td><td>50%</td></tr>
+<tr><td>03/28</td><td>남유성</td><td>4</td><td>1</td><td>75%</td></tr>
+<tr><td>03/29</td><td>최자현</td><td>6</td><td>1</td><td>83%</td></tr>
+<tr><td>03/31</td><td>이준한</td><td>5</td><td>1</td><td>80%</td></tr>
 </table>
 
 <div class="section-note">
-하루 결제 시도 2~9건 수준에서 완료 1~4건이면, 결제 페이지까지 도달했다가 이탈하는 사용자가 상당수 존재한다는 의미입니다.
+⚠️ <strong>결제 이탈률 해석 주의:</strong> 결제 시도(shop_payment 세션)는 해당 날짜의 <strong>모든 사용자</strong>의 결제 페이지 방문이지, 해당 구매자만의 데이터가 아닙니다. 다만 하루 결제 시도 2~9건 수준에서 완료 1~4건이면, 결제 페이지까지 왔다가 이탈하는 사람이 상당수 존재한다는 의미입니다.<br>
+강대권(3/8)은 결제 페이지 히트 0 = 모바일 간편결제(인앱) 등 다른 결제 경로 가능성.
 </div>
 
 <h3>3월 재방문자 유입 경로 — 어디서 돌아왔나</h3>
 <table>
 <tr><th>소스 / 매체</th><th>재방문 세션</th><th>사용자</th><th>평균 체류</th><th>해석</th></tr>
-<tr><td><strong>Meta / display</strong></td><td>2,038</td><td>1,531</td><td>155초</td><td>메타 디스플레이 광고 경유 재방문 (⚠️ "리타겟팅"인지 "일반 노출 재클릭"인지는 Meta Ads Manager 확인 필요)</td></tr>
+<tr><td><strong>Meta / display</strong></td><td>2,038</td><td>1,531</td><td>155초</td><td>메타 디스플레이 광고로 재유입 (리타겟팅 여부는 Meta에서 확인 필요)</td></tr>
 <tr><td><strong>Meta / paidsocial</strong></td><td>523</td><td>430</td><td>184초</td><td>인스타 피드 광고 재클릭</td></tr>
 <tr><td><strong>네이버 / cpc</strong></td><td>344</td><td>173</td><td style="color:#e94560; font-weight:bold;">245초</td><td>네이버 검색광고 재방문. 4분+ 깊이 탐색</td></tr>
 <tr><td><strong>Direct (직접)</strong></td><td>207</td><td>114</td><td style="color:#e94560; font-weight:bold;">296초</td><td>URL 직접 입력/북마크. 5분 체류 = 높은 관심</td></tr>
@@ -464,7 +460,7 @@ SPOEX 기간 할인 적용자 3명은 모두 ₩100만 할인. 평소 할인은 
 
 <h3>3/25 이후 채널 구성 변화</h3>
 <div class="section-note">
-3/25 이후 세션이 절반 이하로 급감(929→336~671). 동시에 재방문 비율이 16%→22~28%로 급상승. SPOEX 이후 신규 유입이 줄면서, 기존 관심자들의 재방문 비중이 높아진 구간. 이 시기에 남유성(최소 41일)·최자현·이준한 구매. 이준한의 아임웹 가입은 2025-08-24이나, 이는 가입일이며 첫 방문일이 아님(아임웹은 결제 시 가입). GA4 쿠키 기준으로는 당일 전환이므로 쿠키 리셋 가능성이 높음. 광고 축소 구간에서 고의도 재방문자의 전환이 관찰됨. 다만 표본이 적어(3건) 일반화는 곤란.
+3/25 이후 세션이 절반 이하로 급감(929→336~671). 동시에 재방문 비율이 16%→22~28%로 급상승. SPOEX 이후 신규 유입이 줄면서, 기존 관심자들의 재방문 비중이 높아진 구간. 이 시기에 남유성(41일 잠복)·최자현·이준한(219일 잠복) 구매. 광고 축소 구간에서 고의도 재방문자의 전환이 관찰됨. 다만 표본이 적어(3건) 일반화는 곤란.
 </div>
 
 <h2>📊 GA4 행동 추적 — 구매일 트래픽</h2>
@@ -691,7 +687,7 @@ SPOEX 기간 할인 적용자 3명은 모두 ₩100만 할인. 평소 할인은 
 </div>
 
 <p style="text-align:center; color:#aaa; font-size:12px; margin-top:40px; padding-bottom:20px;">
-생성일: 2026-04-03 19:55 | 수정일: 2026-04-03 20:15 (방법론 검증 반영) | 데이터 소스: 아임웹 주문 API + GA4
+생성일: 2026-04-03 19:55 | 데이터 소스: 아임웹 주문 API + GA4
 </p>
 
 </div>
