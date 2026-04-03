@@ -1282,8 +1282,8 @@ function renderSections(sections){
   el.innerHTML = sections.map(sec => {
     let body = '';
     switch(sec.type){
-      case 'metrics': body = renderMetrics(sec.content); break;
-      case 'funnel': body = renderFunnel(sec.content); break;
+      case 'metrics': body = renderMetrics(sec.content, sec.extra, sec.anomalies); break;
+      case 'funnel': body = renderFunnel(sec.content, sec.prev); break;
       case 'page_insights':
       case 'insights': body = renderInsights(sec.content); break;
       case 'buyers': body = renderBuyers(sec.content); break;
@@ -1304,39 +1304,70 @@ function renderSections(sections){
     </div>`;
   }).join('');
   
-  // 구매자 분석 보고서 iframe (항상 리포트 마지막에 표시)
+  // 구매자 분석 보고서 (토글식)
   el.innerHTML += `<div class="section-card" id="sec-buyer-analysis">
-    <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center;">
+    <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="toggleBuyerAnalysis()">
       📊 구매자 심층 분석 보고서 (v2)
-      <a href="https://wspn-images.wespion.workers.dev/buyer-analysis-2026-02-03.html" target="_blank" style="font-size:.7rem;color:var(--ac);">새 탭에서 열기 ↗</a>
+      <span style="display:flex;gap:12px;align-items:center;">
+        <a href="https://wspn-images.wespion.workers.dev/buyer-analysis-2026-02-03.html" target="_blank" style="font-size:.7rem;color:var(--ac);" onclick="event.stopPropagation()">새 탭 ↗</a>
+        <span id="buyerToggleIcon" style="font-size:.8rem;color:var(--t2);">펼치기 ▼</span>
+      </span>
     </div>
-    <div class="sec-body">
+    <div id="buyerAnalysisBody" class="sec-body" style="display:none;">
       <iframe src="https://wspn-images.wespion.workers.dev/buyer-analysis-2026-02-03.html" 
-        style="width:100%;height:600px;border:1px solid var(--b);border-radius:8px;background:#fff;" 
+        style="width:100%;height:80vh;border:1px solid var(--b);border-radius:8px;background:#fff;" 
         loading="lazy"></iframe>
     </div>
   </div>`;
 }
 
-function renderMetrics(rows){
+function renderMetrics(rows, extra, anomalies){
   if(!Array.isArray(rows) || !rows.length) return '<p style="color:var(--t2);font-size:.8rem;">데이터 없음</p>';
-  const hasW12 = rows.some(r => r.w12 != null);
-  const hasW11 = rows.some(r => r.w11 != null);
-  let html = '<table class="data-table"><thead><tr><th>항목</th>';
-  if(hasW12) html += '<th>값</th>';
-  if(hasW11) html += '<th>비교</th>';
-  html += '<th>비고</th></tr></thead><tbody>';
-  for(const r of rows){
-    html += `<tr><td style="font-weight:600;">${escHtml(r.metric)}</td>`;
-    if(hasW12) html += `<td>${r.w12 != null ? escHtml(String(r.w12)) : '-'}</td>`;
-    if(hasW11) html += `<td>${r.w11 != null ? escHtml(String(r.w11)) : '-'}</td>`;
-    html += `<td style="color:var(--t2);font-size:.72rem;">${r.note ? escHtml(r.note) : ''}</td></tr>`;
+  const allRows = [...rows];
+  const hasW12 = allRows.some(r => r.w12 != null);
+  const hasW11 = allRows.some(r => r.w11 != null);
+  
+  function renderTable(data){
+    let h = '<table class="data-table"><thead><tr><th>항목</th>';
+    if(hasW12) h += '<th>값</th>';
+    if(hasW11) h += '<th>전주</th>';
+    h += '<th>비고</th></tr></thead><tbody>';
+    for(const r of data){
+      h += `<tr><td style="font-weight:600;font-size:.72rem;">${escHtml(r.metric)}</td>`;
+      if(hasW12) h += `<td>${r.w12 != null ? escHtml(String(r.w12)) : '-'}</td>`;
+      if(hasW11) h += `<td style="font-size:.7rem;color:var(--t2);">${r.w11 != null ? escHtml(String(r.w11)) : '-'}</td>`;
+      h += `<td style="color:var(--t2);font-size:.72rem;">${r.note ? escHtml(r.note) : ''}</td></tr>`;
+    }
+    h += '</tbody></table>';
+    return h;
   }
-  html += '</tbody></table>';
+  
+  let html = renderTable(rows);
+  
+  // 확장 (Meta 소재 전체 등)
+  if(extra && extra.length){
+    const uid = 'extra_' + Math.random().toString(36).slice(2,8);
+    html += `<div style="margin-top:8px;">
+      <button onclick="document.getElementById('${uid}').style.display=document.getElementById('${uid}').style.display==='none'?'':'none'" 
+        style="background:var(--s2);border:1px solid var(--b);border-radius:6px;padding:4px 10px;font-size:.7rem;cursor:pointer;color:var(--t2);font-family:inherit;">
+        + 나머지 ${extra.length}개 더 보기
+      </button>
+      <div id="${uid}" style="display:none;margin-top:8px;">${renderTable(extra)}</div>
+    </div>`;
+  }
+  
+  // 특이점 (페이지별 등)
+  if(anomalies && anomalies.length){
+    html += '<div style="margin-top:8px;padding:8px 12px;background:var(--ac2);border-radius:8px;font-size:.75rem;">';
+    html += '<b>⚠️ 특이점:</b><br>';
+    anomalies.forEach(a => { html += `· ${escHtml(a)}<br>`; });
+    html += '</div>';
+  }
+  
   return html;
 }
 
-function renderFunnel(data){
+function renderFunnel(data, prev){
   if(!data) return '';
   const steps = [
     {key:'view_item', label:'상품 조회'},
@@ -1348,16 +1379,34 @@ function renderFunnel(data){
   let html = '<div class="funnel">';
   steps.forEach((s, i) => {
     const v = data[s.key] || 0;
+    const pv = prev?.[s.key] || 0;
     const pct = maxVal > 0 ? (v / maxVal * 100) : 0;
+    
+    // 전주 대비
+    let wow = '';
+    if(pv > 0){
+      const chg = ((v - pv) / pv * 100).toFixed(0);
+      const cls = chg > 0 ? 'up' : 'down';
+      wow = ` <span class="wow ${cls}" style="font-size:.65rem;">${chg > 0 ? '▲' : '▼'}${Math.abs(chg)}%</span>`;
+    }
+    
     html += `<div class="funnel-step">
       <span class="step-name">${s.label}</span>
       <div class="step-bar"><div class="step-fill" style="width:${pct}%"></div></div>
-      <span class="step-val">${v.toLocaleString()}</span>
+      <span class="step-val">${v.toLocaleString()}${wow}</span>
     </div>`;
     if(i < steps.length - 1){
       const next = data[steps[i+1].key] || 0;
       const cvr = v > 0 ? (next / v * 100).toFixed(1) : 0;
-      html += `<div class="funnel-arrow">↓ ${cvr}%</div>`;
+      // 전주 전환율
+      const pNext = prev?.[steps[i+1].key] || 0;
+      const pCvr = pv > 0 ? (pNext / pv * 100).toFixed(1) : 0;
+      let cvrWow = '';
+      if(pv > 0 && pCvr > 0){
+        const diff = (cvr - pCvr).toFixed(1);
+        cvrWow = ` <span style="font-size:.6rem;color:var(--t2);">(전주 ${pCvr}%)</span>`;
+      }
+      html += `<div class="funnel-arrow">↓ ${cvr}%${cvrWow}</div>`;
     }
   });
   html += '</div>';
@@ -2275,8 +2324,39 @@ function initTrendSection(){
   const reports = window.__allReports;
   if(!reports || !reports.length) return;
   document.getElementById('trendSection').style.display = '';
+  
+  // 3번: 현재 리포트 기반 기본 활성 지표 자동 선택
+  autoSelectTrendKpis();
+  
   renderTrendToggles();
   renderMultiTrendChart();
+}
+
+function autoSelectTrendKpis(){
+  const reports = window.__allReports;
+  if(!reports || !reports.length) return;
+  const r = reports[currentReportIdx || 0];
+  const kpi = r?.kpi || {};
+  _trendSelected = new Set(['sessions']); // 항상 세션
+  
+  // 구매 있으면 매출+ROAS
+  if(kpi.purchases_ga4?.value > 0){ _trendSelected.add('revenue'); _trendSelected.add('roas'); }
+  // 세션 급변 시 광고비
+  if(kpi.sessions?.prev && Math.abs((kpi.sessions.value - kpi.sessions.prev) / kpi.sessions.prev) > 0.2) _trendSelected.add('adSpend');
+  // CPC 높으면 CPC
+  if(kpi.cpc?.value > 200) _trendSelected.add('cpc');
+}
+
+function toggleBuyerAnalysis(){
+  const body = document.getElementById('buyerAnalysisBody');
+  const icon = document.getElementById('buyerToggleIcon');
+  if(body.style.display === 'none'){
+    body.style.display = '';
+    icon.textContent = '접기 ▲';
+  } else {
+    body.style.display = 'none';
+    icon.textContent = '펼치기 ▼';
+  }
 }
 
 function renderTrendToggles(){

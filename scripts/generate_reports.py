@@ -370,27 +370,41 @@ def build_kpi(ga4, meta, naver, prev_ga4, prev_meta, prev_naver):
     return kpi
 
 
-def build_channel_section(ga4):
-    """Build 채널별 트래픽 section"""
+def build_channel_section(ga4, prev_ga4=None):
+    """Build 채널별 트래픽 section (전주 대비 포함)"""
     sources = []
     if isinstance(ga4, dict) and "traffic_sources" in ga4:
         sources = ga4["traffic_sources"]
     
+    # 전주 채널 데이터 매핑
+    prev_map = {}
+    if prev_ga4 and isinstance(prev_ga4, dict) and "traffic_sources" in prev_ga4:
+        for s in prev_ga4["traffic_sources"]:
+            prev_map[s["channel"]] = s
+    
     rows = []
     for s in sources[:8]:
         bounce = f"이탈 {s['bounce_rate']*100:.0f}%" if "bounce_rate" in s else ""
+        prev = prev_map.get(s["channel"])
+        wow = None
+        if prev and prev.get("sessions", 0) > 0:
+            wow = calc_wow(s["sessions"], prev["sessions"])
+        wow_str = ""
+        if wow is not None:
+            arrow = "▲" if wow > 0 else "▼"
+            wow_str = f" ({arrow}{abs(wow):.0f}%)"
         rows.append({
             "metric": s["channel"],
             "w12": s["sessions"],
-            "w11": None,
-            "note": f"유저 {fmt_num(s['users'])}명, {bounce}"
+            "w11": prev["sessions"] if prev else None,
+            "note": f"유저 {fmt_num(s['users'])}명, {bounce}{wow_str}"
         })
     
     return {"title": "📊 채널별 트래픽", "type": "metrics", "content": rows}
 
 
-def build_funnel_section(ga4):
-    """Build 전환 퍼널 section"""
+def build_funnel_section(ga4, prev_ga4=None):
+    """Build 전환 퍼널 section (전주 대비 포함)"""
     funnel = {}
     if isinstance(ga4, dict) and "funnel" in ga4:
         raw = ga4["funnel"]
@@ -400,32 +414,69 @@ def build_funnel_section(ga4):
             else:
                 funnel[k] = v
     
-    return {"title": "🎯 전환 퍼널 (GA4)", "type": "funnel", "content": funnel}
+    prev_funnel = {}
+    if prev_ga4 and isinstance(prev_ga4, dict) and "funnel" in prev_ga4:
+        raw = prev_ga4["funnel"]
+        for k, v in raw.items():
+            if isinstance(v, dict):
+                prev_funnel[k] = v.get("count", 0)
+            else:
+                prev_funnel[k] = v
+    
+    return {"title": "🎯 전환 퍼널 (GA4)", "type": "funnel", "content": funnel, "prev": prev_funnel}
 
 
-def build_meta_section(meta):
-    """Build Meta 소재 성과 section"""
+def build_meta_section(meta, prev_meta=None):
+    """Build Meta 소재 성과 section (전체 + 캠페인 + 전주 대비)"""
     if not isinstance(meta, dict):
         return {"title": "💰 Meta 광고 성과", "type": "metrics", "content": []}
     
-    # Use ads if available, otherwise campaigns
+    # 전주 광고 매핑
+    prev_ad_map = {}
+    if prev_meta and isinstance(prev_meta, dict):
+        for a in prev_meta.get("ads", []):
+            prev_ad_map[a.get("ad_name", "")] = a
+    
     ads = meta.get("ads", [])
     if ads:
-        sorted_ads = sorted(ads, key=lambda x: x.get("spend", 0), reverse=True)[:7]
-        rows = []
-        for a in sorted_ads:
+        sorted_ads = sorted(ads, key=lambda x: x.get("spend", 0), reverse=True)
+        top_ads = sorted_ads[:7]
+        rest_ads = sorted_ads[7:]
+        
+        def make_row(a):
             name = a.get("ad_name", "Unknown")
+            campaign = a.get("campaign_name", "")
             spend = a.get("spend", 0)
             imp = a.get("impressions", 0)
             clicks = a.get("clicks", 0)
             ctr = a.get("ctr", 0)
-            rows.append({
-                "metric": name[:30],
+            
+            # 전주 대비
+            prev = prev_ad_map.get(name)
+            wow = ""
+            if prev and prev.get("spend", 0) > 0:
+                spend_chg = calc_wow(spend, prev["spend"])
+                if spend_chg is not None:
+                    arrow = "▲" if spend_chg > 0 else "▼"
+                    wow = f" 지출{arrow}{abs(spend_chg):.0f}%"
+            
+            label = name[:30]
+            if campaign:
+                label = f"[{campaign[:15]}] {name[:25]}"
+            
+            return {
+                "metric": label,
                 "w12": fmt_money(spend),
                 "w11": f"imp {fmt_num(imp)}",
-                "note": f"clicks {fmt_num(clicks)}, CTR {ctr:.1f}%"
-            })
-        return {"title": "💰 Meta 소재 TOP", "type": "metrics", "content": rows}
+                "note": f"clicks {fmt_num(clicks)}, CTR {ctr:.1f}%{wow}"
+            }
+        
+        rows = [make_row(a) for a in top_ads]
+        
+        # 확장 영역 (나머지 전체)
+        extra = [make_row(a) for a in rest_ads] if rest_ads else []
+        
+        return {"title": "💰 Meta 소재 성과", "type": "metrics", "content": rows, "extra": extra}
     
     # Campaign level
     campaigns = meta.get("campaigns", {})
@@ -463,25 +514,54 @@ def build_naver_section(naver):
     return {"title": "🔍 네이버 검색광고", "type": "metrics", "content": rows}
 
 
-def build_page_section(ga4):
-    """Build 페이지별 트래픽"""
+def build_page_section(ga4, prev_ga4=None):
+    """Build 페이지별 트래픽 (뷰 비율 + 전주 대비 + 특이점)"""
     pages = []
     if isinstance(ga4, dict) and "top_pages" in ga4:
         pages = ga4["top_pages"]
     
+    # 전주 페이지 매핑
+    prev_map = {}
+    if prev_ga4 and isinstance(prev_ga4, dict) and "top_pages" in prev_ga4:
+        for p in prev_ga4["top_pages"]:
+            prev_map[p.get("page", "")] = p
+    
+    total_views = sum(p.get("views", 0) for p in pages)
+    
     rows = []
-    for p in pages[:7]:
+    anomalies = []
+    for p in pages[:10]:
         views = p.get("views", 0)
         users = p.get("users", 0)
         dur = p.get("avg_duration", 0)
+        page_name = p.get("page", "?")
+        
+        # 뷰 비율
+        ratio = (views / total_views * 100) if total_views > 0 else 0
+        
+        # 전주 대비
+        prev = prev_map.get(page_name)
+        wow_str = ""
+        if prev and prev.get("views", 0) > 0:
+            wow = calc_wow(views, prev["views"])
+            if wow is not None:
+                arrow = "▲" if wow > 0 else "▼"
+                wow_str = f" {arrow}{abs(wow):.0f}%"
+                # 특이점: 30% 이상 변화
+                if abs(wow) > 30:
+                    anomalies.append(f"{page_name}: 뷰 {arrow}{abs(wow):.0f}% (전주 {fmt_num(prev['views'])}→{fmt_num(views)})")
+        
         rows.append({
-            "metric": p.get("page", "?"),
-            "w12": f"{fmt_num(views)}뷰",
-            "w11": None,
-            "note": f"체류 {dur:.0f}초, 유저 {fmt_num(users)}"
+            "metric": page_name,
+            "w12": f"{fmt_num(views)}뷰 ({ratio:.1f}%)",
+            "w11": f"{fmt_num(prev['views'])}뷰" if prev else None,
+            "note": f"체류 {dur:.0f}초, 유저 {fmt_num(users)}{wow_str}"
         })
     
-    return {"title": "📄 페이지별 트래픽", "type": "metrics", "content": rows}
+    section = {"title": "📄 페이지별 트래픽", "type": "metrics", "content": rows}
+    if anomalies:
+        section["anomalies"] = anomalies
+    return section
 
 
 def build_meeting_agenda(week_id, kpi, prev_kpi, actions, ga4, meta, naver):
@@ -743,12 +823,12 @@ def generate_report(week_id, start, end, ga4, meta, naver, prev_ga4, prev_meta, 
         "content": "상세 데이터 (참조용)"
     })
     
-    # 지표 현황 sections
-    sections.append(build_channel_section(ga4))
-    sections.append(build_funnel_section(ga4))
-    sections.append(build_meta_section(meta))
+    # 지표 현황 sections (전주 대비 포함)
+    sections.append(build_channel_section(ga4, prev_ga4))
+    sections.append(build_funnel_section(ga4, prev_ga4))
+    sections.append(build_meta_section(meta, prev_meta))
     sections.append(build_naver_section(naver))
-    sections.append(build_page_section(ga4))
+    sections.append(build_page_section(ga4, prev_ga4))
     
     return {
         "id": f"{week_id.lower()}-2026",
