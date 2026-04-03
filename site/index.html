@@ -256,8 +256,8 @@ select.form-input{cursor:pointer;}
         <button class="filter-pill" data-stfilter="위협" onclick="setSignalTabFilter('위협')">⚠️ 위협</button>
         <button class="filter-pill" data-stfilter="기회" onclick="setSignalTabFilter('기회')">🟢 기회</button>
         <button class="filter-pill" data-stfilter="외부" onclick="setSignalTabFilter('외부')">🌐 외부</button>
-        <button class="filter-pill" data-stfilter="학습파생" onclick="setSignalTabFilter('학습파생')">🔄 루프파생</button>
-        <button class="filter-pill" data-stfilter="현장관찰" onclick="setSignalTabFilter('현장관찰')">👀 현장</button>
+        <button class="filter-pill" data-stfilter="루프" onclick="setSignalTabFilter('루프')">🔄 루프</button>
+        <button class="filter-pill" data-stfilter="현장" onclick="setSignalTabFilter('현장')">👀 현장</button>
       </div>
       <div class="spacer"></div>
       <button class="btn primary" onclick="openBriefFormAsSignal()">+ 새 시그널</button>
@@ -323,7 +323,8 @@ select.form-input{cursor:pointer;}
       <div class="spacer"></div>
       <button class="btn" onclick="importBriefs()">JSON 가져오기</button>
       <button class="btn" onclick="exportBriefs()">JSON 내보내기</button>
-      <button class="btn primary" onclick="openBriefForm()">+ 새 실험</button>
+      <button class="btn primary" onclick="openSignalForm()">💡 시그널 등록</button>
+      <button class="btn" onclick="openBriefForm()">+ 설계서 작성</button>
     </div>
     <div class="brief-grid" id="briefGrid"></div>
     <div class="empty-state" id="briefEmpty" style="display:none;">
@@ -608,7 +609,40 @@ select.form-input{cursor:pointer;}
 </div>
 
 <!-- ═══════════════════════════════════════════ -->
-<!-- Brief 생성/편집 모달 -->
+<!-- 시그널 등록 경량 모달 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="modal-bg" id="signalFormModal">
+  <div class="modal" style="max-width:520px;">
+    <span class="modal-close" onclick="closeSignalForm()">×</span>
+    <h2 id="signalFormTitle">💡 새 시그널 등록</h2>
+    <p style="font-size:.75rem;color:var(--t2);margin-bottom:16px;">무엇을 관찰했는가? 3개 필드만 채우면 됩니다.</p>
+    <form id="signalForm" onsubmit="saveSignal(event)">
+      <label class="form-label">제목 *</label>
+      <input class="form-input" id="sig-title" placeholder="예: CPC가 W11 대비 20% 올랐다" required>
+
+      <label class="form-label">관찰 내용 / 배경 *</label>
+      <textarea class="form-input" id="sig-signal" placeholder="왜 지금 이걸 주목하는가? 어떤 신호를 포착했는가?" style="min-height:100px;" required></textarea>
+
+      <label class="form-label">시그널 성격</label>
+      <select class="form-input" id="sig-type">
+        <option value="">선택 (선택사항)</option>
+        <option value="위협">🔴 위협 (성과 하락, 비용 증가)</option>
+        <option value="기회">🟢 기회 (성과 상승, 새 발견)</option>
+        <option value="외부">🔵 외부 (시장, 경쟁사, 트렌드)</option>
+        <option value="루프">🟡 루프 (이전 실험 후속)</option>
+        <option value="현장">🟠 현장 (고객 피드백, 체험)</option>
+      </select>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;">
+        <button type="button" class="btn" onclick="closeSignalForm()">취소</button>
+        <button type="submit" class="btn primary">등록</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- Brief 생성/편집 모달 (설계서 — 의도 이후 단계) -->
 <!-- ═══════════════════════════════════════════ -->
 <div class="modal-bg" id="briefFormModal">
   <div class="modal">
@@ -914,24 +948,34 @@ async function apiGet(path) {
 
 async function apiWrite(method, path, body) {
   try {
-    const r = await fetch(API_BASE + path, {
+    let key = getApiKey();
+    let r = await fetch(API_BASE + path, {
       method,
-      headers: { 'Content-Type': 'application/json', 'X-API-Key': getApiKey() },
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': key },
       body: body ? JSON.stringify(body) : undefined
     });
+    // If unauthorized, prompt for key and retry once
+    if (r.status === 401) {
+      key = promptApiKey();
+      if (!key) { _apiAvailable = false; return null; }
+      r = await fetch(API_BASE + path, {
+        method,
+        headers: { 'Content-Type': 'application/json', 'X-API-Key': key },
+        body: body ? JSON.stringify(body) : undefined
+      });
+    }
     if (!r.ok) throw new Error(r.status);
     return await r.json();
   } catch(e) { _apiAvailable = false; return null; }
 }
 
 function getApiKey() {
-  // Stored in localStorage after first prompt
-  let key = localStorage.getItem('wf_api_key');
-  if (!key) {
-    key = prompt('워크플로우 API 키를 입력하세요 (최초 1회):');
-    if (key) localStorage.setItem('wf_api_key', key);
-  }
-  return key || '';
+  return localStorage.getItem('wf_api_key') || '';
+}
+function promptApiKey() {
+  const key = prompt('워크플로우 API 키를 입력하세요 (최초 1회).\n대표님에게 문의하세요.');
+  if (key) { localStorage.setItem('wf_api_key', key); return key; }
+  return '';
 }
 
 async function loadItems() {
@@ -1216,8 +1260,7 @@ function renderText(content){
 /* ═══════════════════════════════════════════════════
    TAB 3: Brief Management
    ═══════════════════════════════════════════════════ */
-function getBriefs(){ return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-function saveBriefs(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
+/* getBriefs / saveBriefs defined above in KV API Layer */
 
 let briefFilter = 'all';
 let briefSearchTerm = '';
@@ -1368,8 +1411,8 @@ function saveBrief(e){
   const stage = document.getElementById('bf-stage').value;
   const usp = document.getElementById('bf-usp').value.trim();
 
-  if(!title || !signal || !hypothesis || !criteria){
-    alert('필수 필드를 입력해주세요 (제목, 시그널/배경, 가설, 검증 기준).');
+  if(!title || !signal){
+    alert('제목과 시그널/배경은 필수입니다.');
     return;
   }
 
@@ -1452,6 +1495,19 @@ function openBriefDetail(id){
       <button class="btn primary" style="margin-top:8px;" onclick="saveVerification('${b.id}')">인사이트 저장</button>
     </div>` : ''}
 
+    ${b.history && b.history.length ? `
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title">📅 단계 이력</div>
+      <div style="font-size:.75rem;">
+        ${b.history.map(h => `<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <span style="color:var(--t2);min-width:90px;">${new Date(h.at).toLocaleDateString('ko-KR')} ${new Date(h.at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}</span>
+          <span>${h.from ? getStatusLabel(h.from) : '(생성)'}</span>
+          <span style="color:var(--t2);">→</span>
+          <span>${getStatusLabel(h.to)}</span>
+        </div>`).join('')}
+      </div>
+    </div>` : ''}
+
     <div class="brief-actions">
       <button class="btn" onclick="openBriefForm('${b.id}');closeBriefDetail();">설계서 수정</button>
       <button class="btn danger" onclick="deleteBrief('${b.id}')">삭제</button>
@@ -1467,12 +1523,28 @@ function changeBriefStatus(id, status){
   const briefs = getBriefs();
   const idx = briefs.findIndex(b => b.id === id);
   if(idx >= 0){
-    briefs[idx].status = status;
-    briefs[idx].updatedAt = new Date().toISOString();
-    // Record stage transition in history
-    if(!briefs[idx].history) briefs[idx].history = [];
-    briefs[idx].history.push({from: briefs[idx].prevStatus, to: status, at: new Date().toISOString()});
-    briefs[idx].prevStatus = status;
+    const b = briefs[idx];
+    const from = b.status;
+
+    // Gate: 의도→설계완료 requires hypothesis + criteria
+    if(status === 'design' && (!b.hypothesis || !b.criteria)){
+      alert('설계완료로 넘기려면 "가설"과 "검증 기준"을 먼저 작성하세요.\n설계서 수정 버튼으로 입력해주세요.');
+      // revert dropdown
+      openBriefDetail(id);
+      return;
+    }
+    // Gate: 완료 requires being live first (skip check if from live/making)
+    if(status === 'complete' && !['live','making','design'].includes(from)){
+      if(!confirm('아직 Live 단계를 거치지 않았습니다. 바로 완료 처리할까요?')) {
+        openBriefDetail(id);
+        return;
+      }
+    }
+
+    b.status = status;
+    b.updatedAt = new Date().toISOString();
+    if(!b.history) b.history = [];
+    b.history.push({from, to: status, at: new Date().toISOString()});
     saveBriefs(briefs);
     renderBriefs();
     renderSignalTab();
@@ -1814,11 +1886,45 @@ function renderLearnTab(){
   `).join('');
 }
 
-// Open brief form with initial status=signal
+// Signal lightweight form
+function openSignalForm(){
+  document.getElementById('signalForm').reset();
+  document.getElementById('signalFormModal').classList.add('open');
+}
+function closeSignalForm(){
+  document.getElementById('signalFormModal').classList.remove('open');
+}
+function saveSignal(e){
+  e.preventDefault();
+  const title = document.getElementById('sig-title').value.trim();
+  const signal = document.getElementById('sig-signal').value.trim();
+  const signalType = document.getElementById('sig-type').value;
+  if(!title || !signal){ alert('제목과 관찰 내용은 필수입니다.'); return; }
+
+  const briefs = getBriefs();
+  const item = {
+    id: 'bf-' + Date.now(),
+    title, signal, signalType,
+    status: 'signal',
+    actionType:'', persona:'', jtbd:'', vp:'', structure:'', channel:'', stage:'', usp:'',
+    hypothesis:'', criteria:'',
+    completeness: 0,
+    verificationResult: '',
+    learningResult: '',
+    history: [{from:null, to:'signal', at:new Date().toISOString()}],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+  briefs.unshift(item);
+  saveBriefs(briefs);
+  closeSignalForm();
+  renderBriefs();
+  renderSignalTab();
+}
+
+// Open brief form with initial status=signal (legacy compat)
 function openBriefFormAsSignal(){
-  openBriefForm();
-  // Will set status to signal on save — mark a flag
-  window._createAsSignal = true;
+  openSignalForm();
 }
 
 // Compat wrappers
