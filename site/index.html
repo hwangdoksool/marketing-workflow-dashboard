@@ -2194,7 +2194,9 @@ function showTrend(kpiKey){
   document.getElementById('trendTitle').textContent = `📈 ${label} 추이 (${labels[0]}~${labels[labels.length-1]})`;
   document.getElementById('trendOverlay').classList.add('open');
   
-  drawLineChart('trendCanvas', labels, values, unit, label, kpiKey);
+  // 주차별 액션 수집
+  const actions = sorted.map(r => r.actions || []);
+  drawLineChart('trendCanvas', labels, values, unit, label, kpiKey, actions);
   
   // 메타 정보
   const valid = values.filter(v => v != null);
@@ -2213,7 +2215,7 @@ function closeTrend(){
   document.getElementById('trendOverlay').classList.remove('open');
 }
 
-function drawLineChart(canvasId, labels, values, unit, label, kpiKey){
+function drawLineChart(canvasId, labels, values, unit, label, kpiKey, actions){
   const canvas = document.getElementById(canvasId);
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.parentElement.getBoundingClientRect();
@@ -2319,6 +2321,52 @@ function drawLineChart(canvasId, labels, values, unit, label, kpiKey){
     ctx.fillStyle = style.getPropertyValue('--t').trim() || '#fff';
     ctx.fillText(fmtNum(p.v, unit), p.x, p.y - 12);
   });
+  
+  // 액션 마커 (주차별)
+  if(actions && actions.length){
+    const actionColor = '#BAFC27';
+    ctx.font = '10px -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    
+    const actionList = [];
+    actions.forEach((weekActions, i) => {
+      if(!weekActions || !weekActions.length) return;
+      const x = xPos(i);
+      
+      // 세로 점선
+      ctx.strokeStyle = actionColor + '60';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(x, pad.top);
+      ctx.lineTo(x, pad.top + chartH);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      
+      // 마커 (하단)
+      const markerY = pad.top + chartH + 8;
+      ctx.fillStyle = actionColor;
+      ctx.beginPath();
+      ctx.arc(x, markerY, 4, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // 액션 수
+      if(weekActions.length > 1){
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 8px -apple-system, sans-serif';
+        ctx.fillText(weekActions.length, x, markerY + 3);
+      }
+      
+      weekActions.forEach(a => actionList.push(`${labels[i]}: ${a.action} (${a.type})`));
+    });
+    
+    // 액션 리스트를 메타 영역에 추가
+    if(actionList.length){
+      const metaEl = document.getElementById('trendMeta');
+      metaEl.innerHTML += '<br><span style="color:#BAFC27">●</span> 마케팅 액션: ' + 
+        actionList.map(a => `<br>&nbsp;&nbsp;· ${a}`).join('');
+    }
+  }
 }
 
 </script>

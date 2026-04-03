@@ -757,6 +757,7 @@ def generate_report(week_id, start, end, ga4, meta, naver, prev_ga4, prev_meta, 
         "publishedAt": end,
         "kpi": kpi,
         "abstract": abstract,
+        "actions": actions,
         "sections": sections
     }
 
