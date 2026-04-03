@@ -101,6 +101,7 @@ body{font-family:-apple-system,'Pretendard','Noto Sans KR',sans-serif;background
 .brief-card .bf-meta{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;}
 .brief-card .bf-hypo{font-size:.75rem;color:var(--t2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.67rem;font-weight:600;}
+.badge-signal{background:rgba(253,203,110,.2);color:var(--y);}
 .badge-draft{background:rgba(139,144,160,.2);color:var(--t2);}
 .badge-live{background:rgba(116,185,255,.2);color:var(--bl);}
 .badge-verified-valid{background:rgba(0,184,148,.2);color:var(--g);}
@@ -245,42 +246,39 @@ select.form-input{cursor:pointer;}
   </div>
 
   <!-- ═══════════════════════════════════════════ -->
-  <!-- TAB: 시그널 -->
+  <!-- TAB: 시그널 (워크플로우 필터 뷰 — status=signal인 아이템) -->
   <!-- ═══════════════════════════════════════════ -->
   <div class="tab-content" id="tab-signals">
     <div class="toolbar">
-      <input type="text" class="search-input" id="signalSearch" placeholder="시그널 검색..." oninput="renderSignals()">
-      <div class="filter-pills" id="signalFilters">
-        <button class="filter-pill active" data-sfilter="all" onclick="setSignalFilter('all')">전체</button>
-        <button class="filter-pill" data-sfilter="threat" onclick="setSignalFilter('threat')">⚠️ 위협</button>
-        <button class="filter-pill" data-sfilter="opportunity" onclick="setSignalFilter('opportunity')">🟢 기회</button>
-        <button class="filter-pill" data-sfilter="external" onclick="setSignalFilter('external')">🌐 외부</button>
-        <button class="filter-pill" data-sfilter="loop" onclick="setSignalFilter('loop')">🔄 루프파생</button>
-        <button class="filter-pill" data-sfilter="field" onclick="setSignalFilter('field')">👀 현장</button>
+      <input type="text" class="search-input" id="signalTabSearch" placeholder="시그널 검색..." oninput="renderSignalTab()">
+      <div class="filter-pills">
+        <button class="filter-pill active" data-stfilter="all" onclick="setSignalTabFilter('all')">전체</button>
+        <button class="filter-pill" data-stfilter="위협" onclick="setSignalTabFilter('위협')">⚠️ 위협</button>
+        <button class="filter-pill" data-stfilter="기회" onclick="setSignalTabFilter('기회')">🟢 기회</button>
+        <button class="filter-pill" data-stfilter="외부" onclick="setSignalTabFilter('외부')">🌐 외부</button>
+        <button class="filter-pill" data-stfilter="학습파생" onclick="setSignalTabFilter('학습파생')">🔄 루프파생</button>
+        <button class="filter-pill" data-stfilter="현장관찰" onclick="setSignalTabFilter('현장관찰')">👀 현장</button>
       </div>
       <div class="spacer"></div>
-      <button class="btn" onclick="exportSignals()">JSON 내보내기</button>
-      <button class="btn primary" onclick="openSignalForm()">+ 새 시그널</button>
+      <button class="btn primary" onclick="openBriefFormAsSignal()">+ 새 시그널</button>
     </div>
-    <div class="brief-grid" id="signalGrid"></div>
-    <div class="empty-state" id="signalEmpty" style="display:none;">
-      <p>등록된 시그널이 없습니다.<br>주간 리포트에서 이상치를 발견하거나, 현장/외부에서 포착한 신호를 등록하세요.</p>
+    <div class="brief-grid" id="signalTabGrid"></div>
+    <div class="empty-state" id="signalTabEmpty">
+      <p>아직 시그널 단계의 아이템이 없습니다.<br>주간 리포트에서 이상치를 발견하면 "+ 새 시그널"로 등록하세요.<br>워크플로우 탭에서 만든 아이템 중 "시그널" 상태인 것이 여기에 표시됩니다.</p>
     </div>
   </div>
 
   <!-- ═══════════════════════════════════════════ -->
-  <!-- TAB: Learn -->
+  <!-- TAB: Learn (워크플로우 필터 뷰 — status=complete + learningResult 있는 아이템) -->
   <!-- ═══════════════════════════════════════════ -->
   <div class="tab-content" id="tab-learn">
     <div class="toolbar">
-      <input type="text" class="search-input" id="learnSearch" placeholder="학습 검색..." oninput="renderLearns()">
+      <input type="text" class="search-input" id="learnTabSearch" placeholder="학습 검색..." oninput="renderLearnTab()">
       <div class="spacer"></div>
-      <button class="btn" onclick="exportLearns()">JSON 내보내기</button>
-      <button class="btn primary" onclick="openLearnForm()">+ 학습 기록</button>
     </div>
-    <div id="learnGrid" class="brief-grid"></div>
-    <div class="empty-state" id="learnEmpty" style="display:none;">
-      <p>아직 누적된 학습이 없습니다.<br>실험 Review 완료 후 "의도 vs 결과" gap을 기록하세요.</p>
+    <div id="learnTabGrid" class="brief-grid"></div>
+    <div class="empty-state" id="learnTabEmpty">
+      <p>아직 누적된 학습이 없습니다.<br>워크플로우에서 실험을 "완료" 상태로 바꾸고 인사이트를 기록하면 여기에 자동으로 표시됩니다.</p>
     </div>
   </div>
 
@@ -315,6 +313,7 @@ select.form-input{cursor:pointer;}
       <input type="text" class="search-input" id="briefSearch" placeholder="Brief 검색...">
       <div class="filter-pills" id="briefFilters">
         <button class="filter-pill active" data-filter="all">전체</button>
+        <button class="filter-pill" data-filter="signal">💡 시그널</button>
         <button class="filter-pill" data-filter="intent">의도</button>
         <button class="filter-pill" data-filter="design">설계완료</button>
         <button class="filter-pill" data-filter="making">제작중</button>
@@ -1144,7 +1143,7 @@ function renderBriefs(){
   const all = getBriefs();
   let filtered = all;
   if(briefFilter !== 'all'){
-    filtered = filtered.filter(b => b.status === briefFilter || (briefFilter === 'complete' && (b.status === 'complete' || b.status.startsWith('verified'))) || (briefFilter === 'draft' && b.status === 'draft'));
+    filtered = filtered.filter(b => b.status === briefFilter || (briefFilter === 'complete' && (b.status === 'complete' || b.status.startsWith('verified'))) || (briefFilter === 'draft' && b.status === 'draft') || (briefFilter === 'signal' && b.status === 'signal'));
   }
   if(briefSearchTerm){
     const q = briefSearchTerm.toLowerCase();
@@ -1190,6 +1189,7 @@ function renderBriefs(){
 }
 
 function getBadgeClass(status){
+  if(status === 'signal') return 'badge-signal';
   if(status === 'intent') return 'badge-draft';
   if(status === 'design') return 'badge-verified-pending';
   if(status === 'making') return 'badge-draft';
@@ -1203,7 +1203,8 @@ function getBadgeClass(status){
   return 'badge-draft';
 }
 function getStatusLabel(status){
-  if(status === 'intent') return '💡 의도';
+  if(status === 'signal') return '💡 시그널';
+  if(status === 'intent') return '📝 의도';
   if(status === 'design') return '📐 설계완료';
   if(status === 'making') return '🔨 제작중';
   if(status === 'live') return '🔵 Live';
@@ -1304,16 +1305,19 @@ function saveBrief(e){
       id: 'bf-' + Date.now(),
       title, signal, actionType, signalType, persona, jtbd, vp, structure, channel, stage, usp, hypothesis, criteria,
       completeness,
-      status: 'intent',
+      status: window._createAsSignal ? 'signal' : 'intent',
       verificationResult: '',
       learningResult: '',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     });
   }
+  window._createAsSignal = false;
   saveBriefs(briefs);
   closeBriefForm();
   renderBriefs();
+  renderSignalTab();
+  renderLearnTab();
 }
 
 // Brief Detail
@@ -1327,7 +1331,8 @@ function openBriefDetail(id){
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
       <span class="badge ${getBadgeClass(b.status)}">${getStatusLabel(b.status)}</span>
       <select class="status-select" onchange="changeBriefStatus('${b.id}', this.value)">
-        <option value="intent"${b.status==='intent'?' selected':''}>💡 의도</option>
+        <option value="signal"${b.status==='signal'?' selected':''}>💡 시그널</option>
+        <option value="intent"${b.status==='intent'?' selected':''}>📝 의도</option>
         <option value="design"${b.status==='design'?' selected':''}>📐 설계완료</option>
         <option value="making"${b.status==='making'?' selected':''}>🔨 제작중</option>
         <option value="live"${b.status==='live'?' selected':''}>🔵 Live</option>
@@ -1381,8 +1386,14 @@ function changeBriefStatus(id, status){
   if(idx >= 0){
     briefs[idx].status = status;
     briefs[idx].updatedAt = new Date().toISOString();
+    // Record stage transition in history
+    if(!briefs[idx].history) briefs[idx].history = [];
+    briefs[idx].history.push({from: briefs[idx].prevStatus, to: status, at: new Date().toISOString()});
+    briefs[idx].prevStatus = status;
     saveBriefs(briefs);
     renderBriefs();
+    renderSignalTab();
+    renderLearnTab();
     openBriefDetail(id);
   }
 }
@@ -1658,153 +1669,78 @@ document.addEventListener('keydown', e => {
 });
 
 /* ═══════════════════════════════════════════════════
-   TAB: Signals (시그널)
+   TAB: Signals — 워크플로우 필터 뷰 (status=signal)
    ═══════════════════════════════════════════════════ */
-const SIGNAL_KEY = 'mktg_signals_v1';
-let signalFilter = 'all';
+let signalTabFilter = 'all';
 
-function getSignals(){ return JSON.parse(localStorage.getItem(SIGNAL_KEY) || '[]'); }
-function saveSignals(arr){ localStorage.setItem(SIGNAL_KEY, JSON.stringify(arr)); }
-
-function setSignalFilter(f){
-  signalFilter = f;
-  document.querySelectorAll('[data-sfilter]').forEach(b => b.classList.toggle('active', b.dataset.sfilter === f));
-  renderSignals();
+function setSignalTabFilter(f){
+  signalTabFilter = f;
+  document.querySelectorAll('[data-stfilter]').forEach(b => b.classList.toggle('active', b.dataset.stfilter === f));
+  renderSignalTab();
 }
 
-function renderSignals(){
-  const all = getSignals();
-  const q = (document.getElementById('signalSearch')?.value || '').toLowerCase();
+function renderSignalTab(){
+  const all = getBriefs().filter(b => b.status === 'signal');
+  const q = (document.getElementById('signalTabSearch')?.value || '').toLowerCase();
   let filtered = all;
-  if(signalFilter !== 'all') filtered = filtered.filter(s => s.type === signalFilter);
-  if(q) filtered = filtered.filter(s => (s.title+s.description+s.source).toLowerCase().includes(q));
+  if(signalTabFilter !== 'all') filtered = filtered.filter(b => b.signalType === signalTabFilter);
+  if(q) filtered = filtered.filter(b => (b.title+b.signal+b.hypothesis).toLowerCase().includes(q));
 
-  const grid = document.getElementById('signalGrid');
-  const empty = document.getElementById('signalEmpty');
+  const grid = document.getElementById('signalTabGrid');
+  const empty = document.getElementById('signalTabEmpty');
   if(!filtered.length){ grid.innerHTML = ''; empty.style.display = ''; return; }
   empty.style.display = 'none';
 
-  const typeLabels = {threat:'⚠️ 위협',opportunity:'🟢 기회',external:'🌐 외부',loop:'🔄 루프파생',field:'👀 현장',data:'📊 데이터'};
-  const statusLabels = {new:'🆕 신규',reviewing:'🔍 검토중',actioned:'✅ 실험 연결됨',dismissed:'❌ 보류'};
-
-  grid.innerHTML = filtered.map(s => `
-    <div class="brief-card" onclick="viewSignal('${s.id}')">
+  grid.innerHTML = filtered.map(b => `
+    <div class="brief-card" onclick="openBriefDetail('${b.id}')">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-        <span style="font-size:.68rem;padding:2px 8px;border-radius:4px;background:var(--s2);color:var(--t2);">${typeLabels[s.type]||s.type}</span>
-        <span style="font-size:.65rem;color:var(--t2);">${s.date||''}</span>
+        <span style="font-size:.68rem;padding:2px 8px;border-radius:4px;background:rgba(253,203,110,.15);color:var(--y);">💡 시그널</span>
+        ${b.signalType ? `<span style="font-size:.65rem;color:var(--t2);">${escHtml(b.signalType)}</span>` : ''}
       </div>
-      <div class="bf-title">${escHtml(s.title)}</div>
-      <div style="font-size:.75rem;color:var(--t2);margin-top:4px;">${escHtml((s.description||'').substring(0,100))}</div>
-      <div style="font-size:.68rem;margin-top:8px;color:var(--t2);">포착: ${escHtml(s.source||'미지정')} | ${statusLabels[s.status]||s.status}</div>
+      <div class="bf-title">${escHtml(b.title)}</div>
+      <div style="font-size:.75rem;color:var(--t2);margin-top:4px;">${escHtml((b.signal||'').substring(0,120))}</div>
+      <div style="font-size:.68rem;margin-top:8px;color:var(--t2);">${new Date(b.createdAt).toLocaleDateString('ko-KR')}</div>
     </div>
   `).join('');
-}
-
-function openSignalForm(){
-  const title = prompt('시그널 제목:');
-  if(!title) return;
-  const desc = prompt('설명 (어떤 신호를 포착했나):') || '';
-  const type = prompt('유형 (threat/opportunity/external/loop/field/data):') || 'data';
-  const source = prompt('포착자 (예: 대표님, 마케터, AI):') || '';
-
-  const signals = getSignals();
-  signals.unshift({
-    id: 'sig-' + Date.now(),
-    title, description: desc, type, source,
-    status: 'new',
-    date: new Date().toISOString().slice(0,10),
-    linkedBrief: null
-  });
-  saveSignals(signals);
-  renderSignals();
-}
-
-function viewSignal(id){
-  const signals = getSignals();
-  const s = signals.find(x => x.id === id);
-  if(!s) return;
-  const action = prompt(`[${s.title}]\n\n${s.description}\n\n상태: ${s.status}\n\n변경할 상태 (new/reviewing/actioned/dismissed) 또는 빈칸:`);
-  if(action && ['new','reviewing','actioned','dismissed'].includes(action)){
-    s.status = action;
-    saveSignals(signals);
-    renderSignals();
-  }
-}
-
-function exportSignals(){
-  const data = JSON.stringify(getSignals(), null, 2);
-  const blob = new Blob([data], {type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'signals_' + new Date().toISOString().slice(0,10) + '.json';
-  a.click();
 }
 
 /* ═══════════════════════════════════════════════════
-   TAB: Learn (학습 누적)
+   TAB: Learn — 워크플로우 필터 뷰 (status=complete + learningResult)
    ═══════════════════════════════════════════════════ */
-const LEARN_KEY = 'mktg_learns_v1';
+function renderLearnTab(){
+  const all = getBriefs().filter(b => (b.status === 'complete' || b.status.startsWith('verified')) && (b.learningResult || b.verificationResult));
+  const q = (document.getElementById('learnTabSearch')?.value || '').toLowerCase();
+  let filtered = q ? all.filter(b => (b.title+b.hypothesis+b.learningResult+b.verificationResult).toLowerCase().includes(q)) : all;
 
-function getLearns(){ return JSON.parse(localStorage.getItem(LEARN_KEY) || '[]'); }
-function saveLearns(arr){ localStorage.setItem(LEARN_KEY, JSON.stringify(arr)); }
-
-function renderLearns(){
-  const all = getLearns();
-  const q = (document.getElementById('learnSearch')?.value || '').toLowerCase();
-  let filtered = q ? all.filter(l => (l.title+l.hypothesis+l.result+l.learning).toLowerCase().includes(q)) : all;
-
-  const grid = document.getElementById('learnGrid');
-  const empty = document.getElementById('learnEmpty');
+  const grid = document.getElementById('learnTabGrid');
+  const empty = document.getElementById('learnTabEmpty');
   if(!filtered.length){ grid.innerHTML = ''; empty.style.display = ''; return; }
   empty.style.display = 'none';
 
-  grid.innerHTML = filtered.map(l => `
-    <div class="brief-card" onclick="viewLearn('${l.id}')">
+  grid.innerHTML = filtered.map(b => `
+    <div class="brief-card" onclick="openBriefDetail('${b.id}')">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-        <span style="font-size:.68rem;padding:2px 8px;border-radius:4px;background:var(--s2);color:var(--t2);">${escHtml(l.period||'')}</span>
-        <span style="font-size:.65rem;color:var(--t2);">${l.date||''}</span>
+        <span style="font-size:.68rem;padding:2px 8px;border-radius:4px;background:rgba(0,184,148,.15);color:var(--g);">📝 완료</span>
+        <span style="font-size:.65rem;color:var(--t2);">${new Date(b.updatedAt||b.createdAt).toLocaleDateString('ko-KR')}</span>
       </div>
-      <div class="bf-title">${escHtml(l.title)}</div>
-      <div style="font-size:.75rem;color:var(--t2);margin-top:4px;"><strong>가설:</strong> ${escHtml((l.hypothesis||'').substring(0,80))}</div>
-      <div style="font-size:.75rem;color:var(--g);margin-top:4px;"><strong>학습:</strong> ${escHtml((l.learning||'').substring(0,80))}</div>
+      <div class="bf-title">${escHtml(b.title)}</div>
+      <div style="font-size:.75rem;color:var(--t2);margin-top:4px;"><strong>가설:</strong> ${escHtml((b.hypothesis||'').substring(0,80))}</div>
+      ${b.verificationResult ? `<div style="font-size:.75rem;color:var(--bl);margin-top:4px;"><strong>성과:</strong> ${escHtml(b.verificationResult.substring(0,80))}</div>` : ''}
+      ${b.learningResult ? `<div style="font-size:.75rem;color:var(--g);margin-top:4px;"><strong>학습:</strong> ${escHtml(b.learningResult.substring(0,80))}</div>` : ''}
     </div>
   `).join('');
 }
 
-function openLearnForm(){
-  const title = prompt('학습 제목 (예: CTA 중앙팝업):');
-  if(!title) return;
-  const period = prompt('실험 기간 (예: W8 2/17):') || '';
-  const hypothesis = prompt('가설은?:') || '';
-  const result = prompt('결과는?:') || '';
-  const learning = prompt('학습(인사이트):') || '';
-
-  const learns = getLearns();
-  learns.unshift({
-    id: 'lrn-' + Date.now(),
-    title, period, hypothesis, result, learning,
-    date: new Date().toISOString().slice(0,10),
-    linkedBrief: null
-  });
-  saveLearns(learns);
-  renderLearns();
+// Open brief form with initial status=signal
+function openBriefFormAsSignal(){
+  openBriefForm();
+  // Will set status to signal on save — mark a flag
+  window._createAsSignal = true;
 }
 
-function viewLearn(id){
-  const learns = getLearns();
-  const l = learns.find(x => x.id === id);
-  if(!l) return;
-  alert(`[${l.title}]\n기간: ${l.period}\n가설: ${l.hypothesis}\n결과: ${l.result}\n학습: ${l.learning}`);
-}
-
-function exportLearns(){
-  const data = JSON.stringify(getLearns(), null, 2);
-  const blob = new Blob([data], {type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'learns_' + new Date().toISOString().slice(0,10) + '.json';
-  a.click();
-}
+// Compat wrappers
+function renderSignals(){ renderSignalTab(); }
+function renderLearns(){ renderLearnTab(); }
 
 /* ═══════════════════════════════════════════════════
    TAB: Settings (더보기) — sub-tab navigation
