@@ -54,6 +54,12 @@
         "unit": "₩",
         "note": "광고비/구매건수"
       },
+      "roas": {
+        "value": 2134,
+        "prev": null,
+        "unit": "%",
+        "note": "추정 매출 ₩22,587,690 / 광고비 ₩1,058,507"
+      },
       "convRate": {
         "value": 0.092,
         "prev": null,
@@ -355,6 +361,12 @@
         "prev": null,
         "unit": "₩",
         "note": "광고비/구매건수"
+      },
+      "roas": {
+        "value": 2463,
+        "prev": null,
+        "unit": "%",
+        "note": "추정 매출 ₩33,881,535 / 광고비 ₩1,375,424"
       },
       "convRate": {
         "value": 0.072,
@@ -658,6 +670,12 @@
         "prev": null,
         "unit": "₩",
         "note": "광고비/구매건수"
+      },
+      "roas": {
+        "value": 4117,
+        "prev": null,
+        "unit": "%",
+        "note": "추정 매출 ₩37,646,150 / 광고비 ₩914,420"
       },
       "convRate": {
         "value": 0.14,
@@ -964,6 +982,12 @@
         "unit": "₩",
         "note": "광고비/구매건수"
       },
+      "roas": {
+        "value": 3306,
+        "prev": null,
+        "unit": "%",
+        "note": "추정 매출 ₩18,823,075 / 광고비 ₩569,370"
+      },
       "convRate": {
         "value": 0.091,
         "prev": null,
@@ -1268,6 +1292,12 @@
         "prev": null,
         "unit": "₩",
         "note": "광고비/구매건수"
+      },
+      "roas": {
+        "value": 2243,
+        "prev": null,
+        "unit": "%",
+        "note": "추정 매출 ₩11,293,845 / 광고비 ₩503,497"
       },
       "convRate": {
         "value": 0.058,

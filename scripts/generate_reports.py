@@ -352,6 +352,14 @@ def build_kpi(ga4, meta, naver, prev_ga4, prev_meta, prev_naver):
         kpi["ctr"] = {"value": round(ctr, 2), "prev": None, "unit": "%"}
     if cpa is not None:
         kpi["cpa"] = {"value": round(cpa), "prev": None, "unit": "₩", "note": "광고비/구매건수"}
+    
+    # ROAS: 평균 객단가 ₩3,764,615 × 구매건수 / 광고비 (구매자 분석 v2 기준)
+    AVG_ORDER_VALUE = 3_764_615
+    if purchases > 0 and total_spend > 0:
+        roas = (AVG_ORDER_VALUE * purchases) / total_spend * 100
+        kpi["roas"] = {"value": round(roas), "prev": None, "unit": "%", 
+                       "note": f"추정 매출 {fmt_money(AVG_ORDER_VALUE * purchases)} / 광고비 {fmt_money(int(total_spend))}"}
+    
     if conv_rate is not None:
         kpi["convRate"] = {"value": round(conv_rate, 3), "prev": None, "unit": "%", "note": "구매/세션"}
     
