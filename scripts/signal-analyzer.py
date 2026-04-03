@@ -66,8 +66,10 @@ def synapse_search(query, collections=None, limit=5):
         return f"검색 오류: {e}"
 
 # API helpers
+UA = "signal-analyzer/1.0"
+
 def api_get(path):
-    req = urllib.request.Request(f"{API_BASE}{path}", headers={"X-API-Key": API_KEY})
+    req = urllib.request.Request(f"{API_BASE}{path}", headers={"User-Agent": UA, "X-API-Key": API_KEY})
     try:
         with urllib.request.urlopen(req, timeout=10) as resp:
             return json.loads(resp.read())
@@ -78,7 +80,7 @@ def api_get(path):
 def api_put(path, data):
     body = json.dumps(data).encode()
     req = urllib.request.Request(f"{API_BASE}{path}", data=body, method="PUT",
-                                headers={"Content-Type": "application/json", "X-API-Key": API_KEY})
+                                headers={"Content-Type": "application/json", "X-API-Key": API_KEY, "User-Agent": UA})
     try:
         with urllib.request.urlopen(req, timeout=10) as resp:
             return json.loads(resp.read())
@@ -140,7 +142,8 @@ Respond ONLY with JSON (no markdown):
     req = urllib.request.Request("https://api.openai.com/v1/chat/completions",
                                 data=body, method="POST",
                                 headers={"Content-Type": "application/json",
-                                         "Authorization": f"Bearer {OPENAI_KEY}"})
+                                         "Authorization": f"Bearer {OPENAI_KEY}",
+                                         "User-Agent": UA})
     
     with urllib.request.urlopen(req, timeout=60) as resp:
         data = json.loads(resp.read())
