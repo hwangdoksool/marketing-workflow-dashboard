@@ -696,6 +696,10 @@ def generate_report(week_id, start, end, ga4, meta, naver, prev_ga4, prev_meta, 
     # 3. Part 2: 지표 현황 (채널, 퍼널, Meta, 네이버, 페이지)
     sections = []
     
+    # 미팅 어젠다 (맨 앞, 두괄식)
+    agenda = build_meeting_agenda(week_id, kpi, prev_kpi, actions, ga4, meta, naver)
+    sections.append(agenda)
+    
     # 전환 건별 상세
     sections.append(build_conversion_section(ga4))
     
@@ -723,10 +727,6 @@ def generate_report(week_id, start, end, ga4, meta, naver, prev_ga4, prev_meta, 
     sections.append(build_meta_section(meta))
     sections.append(build_naver_section(naver))
     sections.append(build_page_section(ga4))
-    
-    # 미팅 어젠다 (리포트 끝에 자동 생성)
-    agenda = build_meeting_agenda(week_id, kpi, prev_kpi, actions, ga4, meta, naver)
-    sections.append(agenda)
     
     return {
         "id": f"{week_id.lower()}-2026",
