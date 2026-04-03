@@ -92,59 +92,52 @@ export default {
       return json({ ok: true, count: items.length });
     }
 
-    // POST /api/analyze-signal — LLM이 자유 텍스트를 분석해서 시그널 필드 추출
+    // POST /api/analyze-signal — 분석 요청 생성 (pending → 에이전트가 처리)
     if (path === '/api/analyze-signal' && request.method === 'POST') {
       const { text } = await request.json();
       if (!text) return json({ error: 'text required' }, 400);
 
-      const SOURCES = [
-        '주간리포트','Meta Ads','GA4','네이버SA','아임웹주문',
-        'CS카카오','CS아임웹','CS커뮤니티','인스타그램',
-        '현장','외부시장','내부논의','이전실험','기타'
-      ];
-      const TYPES = ['위협','기회','외부','루프','현장'];
+      const id = 'sig-' + Date.now();
+      const req = { id, text, status: 'pending', createdAt: new Date().toISOString() };
+      await env.WORKFLOW_DATA.put('analysis_' + id, JSON.stringify(req), { expirationTtl: 600 });
+      // Add to pending list
+      const pending = await env.WORKFLOW_DATA.get('analysis_pending', 'json') || [];
+      pending.push(id);
+      await env.WORKFLOW_DATA.put('analysis_pending', JSON.stringify(pending));
+      return json({ id, status: 'pending' });
+    }
 
-      const systemPrompt = `You are a marketing signal analyzer for Roomfit (smart weight machine, ₩3.48M).
-Given a free-text observation from a marketer, extract structured signal fields.
+    // GET /api/analyze-signal/:id — 분석 결과 폴링
+    if (path.startsWith('/api/analyze-signal/') && request.method === 'GET') {
+      const id = path.split('/').pop();
+      const data = await env.WORKFLOW_DATA.get('analysis_' + id, 'json');
+      if (!data) return json({ error: 'Not found' }, 404);
+      return json(data);
+    }
 
-Available sources: ${SOURCES.join(', ')}
-Available signal types: ${TYPES.join(', ')}
+    // PUT /api/analyze-signal/:id — 에이전트가 분석 결과 저장
+    if (path.startsWith('/api/analyze-signal/') && request.method === 'PUT') {
+      const id = path.split('/').pop();
+      const result = await request.json();
+      const existing = await env.WORKFLOW_DATA.get('analysis_' + id, 'json');
+      if (!existing) return json({ error: 'Not found' }, 404);
+      const updated = { ...existing, ...result, status: 'done', completedAt: new Date().toISOString() };
+      await env.WORKFLOW_DATA.put('analysis_' + id, JSON.stringify(updated), { expirationTtl: 600 });
+      // Remove from pending list
+      const pending = (await env.WORKFLOW_DATA.get('analysis_pending', 'json') || []).filter(p => p !== id);
+      await env.WORKFLOW_DATA.put('analysis_pending', JSON.stringify(pending));
+      return json({ ok: true });
+    }
 
-Respond ONLY with JSON (no markdown):
-{
-  "title": "concise signal title in Korean (max 40 chars)",
-  "signal": "cleaned-up observation text in Korean",
-  "source": "one of the available sources",
-  "sourceDetail": "specific reference (e.g. W13 report, ASC campaign #3)",
-  "signalType": "one of the available types",
-  "confidence": "high/medium/low"
-}`;
-
-      try {
-        const resp = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${env.OPENAI_KEY}`
-          },
-          body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: text }
-            ],
-            temperature: 0.3,
-            max_tokens: 300
-          })
-        });
-        const data = await resp.json();
-        const content = data.choices?.[0]?.message?.content || '';
-        // Parse JSON from response
-        const parsed = JSON.parse(content.replace(/```json?\n?/g, '').replace(/```/g, '').trim());
-        return json(parsed);
-      } catch (e) {
-        return json({ error: 'Analysis failed', detail: e.message }, 500);
+    // GET /api/analyze-pending — 에이전트가 처리할 pending 목록 조회
+    if (path === '/api/analyze-pending' && request.method === 'GET') {
+      const pending = await env.WORKFLOW_DATA.get('analysis_pending', 'json') || [];
+      const items = [];
+      for (const id of pending) {
+        const data = await env.WORKFLOW_DATA.get('analysis_' + id, 'json');
+        if (data && data.status === 'pending') items.push(data);
       }
+      return json(items);
     }
 
     return json({ error: 'Not found' }, 404);

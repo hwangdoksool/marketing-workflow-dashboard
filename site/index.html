@@ -635,13 +635,13 @@ select.form-input{cursor:pointer;}
     <div style="background:var(--s2);border:1px solid var(--ac);border-radius:10px;padding:14px;margin-bottom:16px;">
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
         <span style="font-size:.85rem;">🤖</span>
-        <span style="font-size:.78rem;font-weight:600;color:var(--ac2);">AI 어시스턴트</span>
-        <span style="font-size:.68rem;color:var(--t2);">— 관찰한 내용을 자유롭게 적으면 자동 분석합니다</span>
+        <span style="font-size:.78rem;font-weight:600;color:var(--ac2);">OpenClaw 에이전트</span>
+        <span style="font-size:.68rem;color:var(--t2);">— 시냅스서치 + 크리에이티브 스키마 기반 분석</span>
       </div>
       <textarea class="form-input" id="sig-ai-input" placeholder="예: 이번주 메타 CPC가 179원까지 올라갔어. W7때 113원이었는데 계속 상승 중. 소재 교체 필요할 듯" style="min-height:70px;font-size:.82rem;"></textarea>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
         <span id="sig-ai-status" style="font-size:.72rem;color:var(--t2);"></span>
-        <button type="button" class="btn primary" onclick="analyzeSignal()" id="sig-ai-btn" style="font-size:.78rem;padding:5px 14px;">✨ 분석</button>
+        <button type="button" class="btn primary" onclick="analyzeSignal()" id="sig-ai-btn" style="font-size:.78rem;padding:5px 14px;">🤖 에이전트 분석</button>
       </div>
     </div>
 
@@ -1965,7 +1965,7 @@ function openSignalForm(){
 function closeSignalForm(){
   document.getElementById('signalFormModal').classList.remove('open');
 }
-// AI Signal Analysis
+// AI Signal Analysis — OpenClaw 에이전트 기반
 async function analyzeSignal(){
   const text = document.getElementById('sig-ai-input').value.trim();
   if(!text){ alert('관찰 내용을 적어주세요.'); return; }
@@ -1973,29 +1973,40 @@ async function analyzeSignal(){
   const btn = document.getElementById('sig-ai-btn');
   const status = document.getElementById('sig-ai-status');
   btn.disabled = true;
-  btn.textContent = '분석 중...';
-  status.textContent = '🔄 AI가 분석하고 있습니다...';
+  btn.textContent = '분석 요청 중...';
+  status.innerHTML = '🔄 에이전트에게 분석을 요청하고 있습니다...';
+  status.style.color = 'var(--ac2)';
 
   try {
-    let key = getApiKey();
-    const opts = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-API-Key': key },
-      body: JSON.stringify({ text })
-    };
-    let r = await fetch(API_BASE + '/analyze-signal', opts);
-    if (r.status === 401) {
-      key = promptApiKey();
-      if (!key) throw new Error('API 키 없음');
-      opts.headers['X-API-Key'] = key;
-      r = await fetch(API_BASE + '/analyze-signal', opts);
+    // 1. Create analysis request
+    const createResp = await apiWrite('POST', '/analyze-signal', { text });
+    if (!createResp || createResp.error) throw new Error(createResp?.error || '요청 생성 실패');
+    
+    const reqId = createResp.id;
+    status.innerHTML = '🤖 에이전트가 시냅스서치 + 크리에이티브 스키마 기반으로 분석 중... <span style="font-size:.65rem;">(보통 10~20초)</span>';
+    
+    // 2. Poll for result
+    let result = null;
+    const maxWait = 60000; // 60s timeout
+    const pollInterval = 2000; // 2s
+    const startTime = Date.now();
+    
+    while (Date.now() - startTime < maxWait) {
+      await new Promise(r => setTimeout(r, pollInterval));
+      const elapsed = Math.round((Date.now() - startTime) / 1000);
+      status.innerHTML = `🤖 에이전트 분석 중... (${elapsed}초 경과)`;
+      
+      const check = await apiGet('/analyze-signal/' + reqId);
+      if (check && check.status === 'done') {
+        result = check;
+        break;
+      }
     }
-    if (!r.ok) throw new Error('API error ' + r.status);
-    const result = await r.json();
-
+    
+    if (!result) throw new Error('분석 시간 초과 (60초). 에이전트가 실행 중인지 확인하세요.');
     if (result.error) throw new Error(result.error);
 
-    // Fill form fields
+    // 3. Fill form fields
     document.getElementById('sig-title').value = result.title || '';
     document.getElementById('sig-signal').value = result.signal || text;
     if (result.source) {
@@ -2015,15 +2026,25 @@ async function analyzeSignal(){
       }
     }
 
+    // 4. Show rich result
+    let extra = '';
+    if (result.suggestedAction) extra += `<br>💡 <strong>제안:</strong> ${escHtml(result.suggestedAction)}`;
+    if (result.dataEvidence) extra += `<br>📊 <strong>근거:</strong> ${escHtml(result.dataEvidence)}`;
+    if (result.relatedSchema) {
+      const s = result.relatedSchema;
+      const tags = [s.vp, s.problem, s.hook].filter(Boolean).map(t => `<span class="schema-tag">${escHtml(t)}</span>`).join(' ');
+      if (tags) extra += `<br>🏷️ <strong>관련 스키마:</strong> ${tags}`;
+    }
+    
     const conf = result.confidence === 'high' ? '✅ 높음' : result.confidence === 'medium' ? '⚠️ 보통' : '❓ 낮음';
-    status.innerHTML = `✅ 분석 완료 (신뢰도: ${conf}) — <strong>아래 내용을 확인하고 등록 버튼을 누르세요</strong>`;
+    status.innerHTML = `✅ 에이전트 분석 완료 (신뢰도: ${conf})${extra}<br><strong>아래 내용을 확인하고 등록 버튼을 누르세요</strong>`;
     status.style.color = 'var(--g)';
   } catch(e) {
-    status.textContent = '❌ 분석 실패: ' + e.message;
+    status.textContent = '❌ ' + e.message;
     status.style.color = 'var(--r)';
   } finally {
     btn.disabled = false;
-    btn.textContent = '✨ 분석';
+    btn.textContent = '🤖 에이전트 분석';
   }
 }
 
