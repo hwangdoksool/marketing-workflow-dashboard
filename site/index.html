@@ -51,15 +51,13 @@ body{font-family:-apple-system,'Pretendard','Noto Sans KR',sans-serif;background
 .kpi-card .value{font-size:1.2rem;font-weight:700;}
 .kpi-card .wow{font-size:.68rem;margin-top:4px;font-weight:600;}
 
-/* ── KPI Trend Chart Modal ── */
-.trend-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
-.trend-overlay.open{opacity:1;pointer-events:auto;}
-.trend-modal{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:24px;width:min(640px,92vw);max-height:80vh;position:relative;}
-.trend-modal h3{font-size:1rem;margin:0 0 16px 0;display:flex;align-items:center;gap:8px;}
-.trend-close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--t2);font-size:1.2rem;cursor:pointer;}
-.trend-canvas-wrap{position:relative;width:100%;height:280px;}
-.trend-canvas-wrap canvas{width:100%;height:100%;}
-.trend-meta{font-size:.7rem;color:var(--t2);margin-top:12px;line-height:1.6;}
+/* ── KPI Trend Section ── */
+.trend-section{margin-bottom:16px;}
+.trend-toggles{display:flex;gap:6px;flex-wrap:wrap;}
+.trend-toggle{padding:5px 12px;border-radius:16px;font-size:.72rem;font-weight:600;cursor:pointer;border:1px solid var(--b);background:var(--s2);color:var(--t2);transition:all .12s;font-family:inherit;}
+.trend-toggle.active{background:var(--ac);color:#fff;border-color:var(--ac);}
+.trend-toggle:hover:not(.active){background:var(--s);border-color:var(--ac2);}
+.trend-meta{font-size:.7rem;color:var(--t2);line-height:1.6;}
 .trend-meta .hi{color:var(--g);font-weight:600;}
 .trend-meta .lo{color:var(--r);font-weight:600;}
 .wow.up{color:var(--g);}
@@ -254,6 +252,19 @@ select.form-input{cursor:pointer;}
   <!-- ═══════════════════════════════════════════ -->
   <div class="tab-content" id="tab-weekly">
     <div class="report-nav" id="reportNav"></div>
+    <div id="trendSection" class="trend-section" style="display:none;">
+      <div class="section-card" style="padding:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div class="sec-title" style="margin:0;">📈 추이 차트</div>
+          <button onclick="toggleTrendSection()" style="background:none;border:none;color:var(--t2);cursor:pointer;font-size:.8rem;">접기 ▲</button>
+        </div>
+        <div class="trend-toggles" id="trendToggles"></div>
+        <div class="trend-chart-area" style="position:relative;height:300px;margin-top:12px;">
+          <canvas id="trendChartMain"></canvas>
+        </div>
+        <div class="trend-meta" id="trendMetaMain" style="margin-top:8px;"></div>
+      </div>
+    </div>
     <div id="reportAbstract"></div>
     <div id="reportKpi"></div>
     <div id="reportSections"></div>
@@ -1172,6 +1183,7 @@ async function loadReports(){
     reports = await resp.json();
     window.__allReports = reports;
     renderReportNav();
+    initTrendSection();
     renderReport(0);
   } catch(e) {
     document.getElementById('tab-weekly').innerHTML = '<div class="empty-state"><p>reports.json 로드 실패</p></div>';
@@ -2176,43 +2188,100 @@ function moveDesignToSettings(){
 /* ═══════════════════════════════════════════════════
    KPI Trend Chart — Canvas 라인차트
    ═══════════════════════════════════════════════════ */
-function showTrend(kpiKey){
+// ── Trend Section (inline, toggle-based) ──
+let _trendActive = 'sessions';
+let _trendVisible = true;
+
+const TREND_KPIS = [
+  {key:'sessions', label:'세션', emoji:'👥'},
+  {key:'users', label:'유저', emoji:'🧑'},
+  {key:'adSpend', label:'광고비', emoji:'💰'},
+  {key:'revenue', label:'매출', emoji:'🏷️'},
+  {key:'roas', label:'ROAS', emoji:'📈'},
+  {key:'cpa', label:'CPA', emoji:'🎯'},
+  {key:'cpc', label:'CPC', emoji:'💵'},
+  {key:'ctr', label:'CTR', emoji:'👆'},
+  {key:'purchases_ga4', label:'구매', emoji:'🛒'},
+  {key:'convRate', label:'전환율', emoji:'🔄'},
+];
+
+function initTrendSection(){
   const reports = window.__allReports;
   if(!reports || !reports.length) return;
   
-  // 오래된 순 정렬
-  const sorted = [...reports].reverse();
-  const labels = sorted.map(r => r.title.split('·')[0].trim());
-  const values = sorted.map(r => {
-    const item = r.kpi?.[kpiKey];
-    return item ? item.value : null;
+  document.getElementById('trendSection').style.display = '';
+  
+  // 토글 버튼 렌더
+  const toggles = document.getElementById('trendToggles');
+  toggles.innerHTML = TREND_KPIS.map(t => 
+    `<button class="trend-toggle${t.key===_trendActive?' active':''}" onclick="switchTrend('${t.key}')">${t.emoji} ${t.label}</button>`
+  ).join('');
+  
+  renderTrendChart(_trendActive);
+}
+
+function switchTrend(kpiKey){
+  _trendActive = kpiKey;
+  
+  // 토글 활성화
+  document.querySelectorAll('.trend-toggle').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.includes(KPI_LABELS[kpiKey] || kpiKey));
   });
   
+  renderTrendChart(kpiKey);
+}
+
+function toggleTrendSection(){
+  _trendVisible = !_trendVisible;
+  const section = document.getElementById('trendSection');
+  const btn = section.querySelector('button[onclick*="toggleTrend"]');
+  if(_trendVisible){
+    section.querySelector('.trend-chart-area').style.display = '';
+    section.querySelector('.trend-toggles').style.display = '';
+    section.querySelector('.trend-meta').style.display = '';
+    btn.textContent = '접기 ▲';
+  } else {
+    section.querySelector('.trend-chart-area').style.display = 'none';
+    section.querySelector('.trend-toggles').style.display = 'none';
+    section.querySelector('.trend-meta').style.display = 'none';
+    btn.textContent = '펼치기 ▼';
+  }
+}
+
+function renderTrendChart(kpiKey){
+  const reports = window.__allReports;
+  if(!reports) return;
+  
+  const sorted = [...reports].reverse();
+  const labels = sorted.map(r => r.title.split('·')[0].trim());
+  const values = sorted.map(r => r.kpi?.[kpiKey]?.value ?? null);
   const unit = sorted[0]?.kpi?.[kpiKey]?.unit || '';
   const label = KPI_LABELS[kpiKey] || kpiKey;
-  
-  document.getElementById('trendTitle').textContent = `📈 ${label} 추이 (${labels[0]}~${labels[labels.length-1]})`;
-  document.getElementById('trendOverlay').classList.add('open');
-  
-  // 주차별 액션 수집
   const actions = sorted.map(r => r.actions || []);
-  drawLineChart('trendCanvas', labels, values, unit, label, kpiKey, actions);
+  
+  drawLineChart('trendChartMain', labels, values, unit, label, kpiKey, actions);
   
   // 메타 정보
   const valid = values.filter(v => v != null);
+  const metaEl = document.getElementById('trendMetaMain');
   if(valid.length > 0){
     const max = Math.max(...valid), min = Math.min(...valid);
     const avg = valid.reduce((a,b)=>a+b,0) / valid.length;
     const maxW = labels[values.indexOf(max)], minW = labels[values.indexOf(min)];
-    document.getElementById('trendMeta').innerHTML = 
+    metaEl.innerHTML = 
       `최고: <span class="hi">${fmtNum(max, unit)}</span> (${maxW}) · ` +
       `최저: <span class="lo">${fmtNum(min, unit)}</span> (${minW}) · ` +
       `평균: ${fmtNum(Math.round(avg), unit)}`;
+  } else {
+    metaEl.innerHTML = '<span style="color:var(--t2)">데이터 없음</span>';
   }
 }
 
-function closeTrend(){
-  document.getElementById('trendOverlay').classList.remove('open');
+function showTrend(kpiKey){
+  // KPI 카드 클릭 → 섹션으로 스크롤 + 해당 지표 선택
+  if(!_trendVisible) toggleTrendSection();
+  switchTrend(kpiKey);
+  document.getElementById('trendSection').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function drawLineChart(canvasId, labels, values, unit, label, kpiKey, actions){
@@ -2370,14 +2439,6 @@ function drawLineChart(canvasId, labels, values, unit, label, kpiKey, actions){
 }
 
 </script>
-<!-- KPI Trend Chart Modal -->
-<div class="trend-overlay" id="trendOverlay" onclick="if(event.target===this)closeTrend()">
-  <div class="trend-modal">
-    <button class="trend-close" onclick="closeTrend()">✕</button>
-    <h3 id="trendTitle">📈 추이</h3>
-    <div class="trend-canvas-wrap"><canvas id="trendCanvas"></canvas></div>
-    <div class="trend-meta" id="trendMeta"></div>
-  </div>
-</div>
+<!-- trend chart is inline in tab-weekly -->
 </body>
 </html>
