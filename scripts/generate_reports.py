@@ -472,6 +472,59 @@ def build_page_section(ga4):
     return {"title": "📄 페이지별 트래픽", "type": "metrics", "content": rows}
 
 
+def build_meeting_agenda(week_id, kpi, prev_kpi, actions, ga4, meta, naver):
+    """Build 📋 미팅 어젠다 — 리포트 끝에 자동 생성"""
+    items = []
+    
+    # 1. 리포트 핵심 논의 포인트
+    sessions = kpi.get("sessions", {}).get("value", 0)
+    prev_sessions = kpi.get("sessions", {}).get("prev")
+    spend = kpi.get("adSpend", {}).get("value", 0)
+    purchases = kpi.get("purchases_ga4", {}).get("value", 0)
+    
+    # 세션 변화
+    if prev_sessions and prev_sessions > 0:
+        wow = calc_wow(sessions, prev_sessions)
+        if wow and abs(wow) > 10:
+            direction = "급증" if wow > 0 else "급감"
+            items.append(f"📊 세션 전주 대비 {direction} ({wow:+.1f}%) — 원인 논의")
+    
+    # 구매 발생
+    if purchases > 0:
+        items.append(f"🛒 GA4 구매 {purchases}건 — 전환 경로 리뷰")
+    
+    # Meta CPC/CTR
+    meta_summary = meta.get("summary", {}) if isinstance(meta, dict) else {}
+    clicks = meta_summary.get("total_clicks", 0)
+    meta_spend = meta_summary.get("total_spend", 0)
+    if clicks > 0 and meta_spend > 0:
+        cpc = meta_spend / clicks
+        if cpc > 200:
+            items.append(f"🎯 Meta CPC ₩{cpc:.0f} — 소재 피로도 점검")
+    
+    # 액션 리뷰
+    if actions:
+        items.append(f"⚡ 이번 주 액션 {len(actions)}건 — 효과 판정")
+    
+    # 2. 기본 어젠다 (항상 포함)
+    items.append("💡 시그널 발견 사항 공유 — 각자 1개씩")
+    items.append("📝 진행 중 실험 상태 업데이트")
+    items.append("🎯 다음 주 실험 1개 선정 + 설계서 작성")
+    
+    # 기본 항목이 없을 때 대비
+    if len(items) <= 3:
+        items.insert(0, f"📊 {week_id} 리포트 핵심 수치 리뷰")
+    
+    content = "\n".join(f"• {item}" for item in items)
+    
+    return {
+        "title": "📋 미팅 어젠다",
+        "type": "agenda",
+        "content": content,
+        "items": items
+    }
+
+
 def build_abstract(week_id, kpi, ga4, meta, naver, actions):
     """Build 🔔 특이사항 요약"""
     sessions = kpi.get("sessions", {}).get("value", 0)
@@ -670,6 +723,10 @@ def generate_report(week_id, start, end, ga4, meta, naver, prev_ga4, prev_meta, 
     sections.append(build_meta_section(meta))
     sections.append(build_naver_section(naver))
     sections.append(build_page_section(ga4))
+    
+    # 미팅 어젠다 (리포트 끝에 자동 생성)
+    agenda = build_meeting_agenda(week_id, kpi, prev_kpi, actions, ga4, meta, naver)
+    sections.append(agenda)
     
     return {
         "id": f"{week_id.lower()}-2026",

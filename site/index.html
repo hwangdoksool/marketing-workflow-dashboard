@@ -1242,6 +1242,7 @@ function renderSections(sections){
       case 'insights': body = renderInsights(sec.content); break;
       case 'buyers': body = renderBuyers(sec.content); break;
       case 'text': body = renderText(sec.content); break;
+      case 'agenda': body = renderAgenda(sec); break;
       default: body = `<pre style="font-size:.75rem;white-space:pre-wrap;">${escHtml(JSON.stringify(sec.content, null, 2))}</pre>`;
     }
     return `<div class="section-card">
@@ -1316,6 +1317,19 @@ function renderBuyers(items){
     </tr>`;
   }
   html += '</tbody></table>';
+  return html;
+}
+
+function renderAgenda(sec){
+  const items = sec.items || sec.content.split('\n').filter(l => l.trim());
+  let html = '<div style="background:var(--ac2);color:#fff;border-radius:10px;padding:16px 20px;margin:8px 0;">';
+  html += '<div style="font-size:.7rem;opacity:.7;margin-bottom:8px;">다음 미팅에서 논의할 안건 (자동 생성)</div>';
+  html += '<ol style="padding-left:20px;margin:0;">';
+  for (const item of items) {
+    const text = item.replace(/^[•\-]\s*/, '');
+    html += `<li style="margin:6px 0;font-size:.85rem;line-height:1.5;">${escHtml(text)}</li>`;
+  }
+  html += '</ol></div>';
   return html;
 }
 
