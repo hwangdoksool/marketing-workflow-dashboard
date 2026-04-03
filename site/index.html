@@ -896,6 +896,83 @@ let reports = [];
 let currentReportIdx = 0;
 const STORAGE_KEY = 'mktg_briefs_v2';
 
+/* ═══════════════════════════════════════════════════
+   KV API Layer (workflow-api.wespion.com)
+   Falls back to localStorage if API unreachable
+   ═══════════════════════════════════════════════════ */
+const API_BASE = 'https://workflow-api.wespion.com/api';
+let _itemsCache = null;
+let _apiAvailable = true;
+
+async function apiGet(path) {
+  try {
+    const r = await fetch(API_BASE + path);
+    if (!r.ok) throw new Error(r.status);
+    return await r.json();
+  } catch(e) { _apiAvailable = false; return null; }
+}
+
+async function apiWrite(method, path, body) {
+  try {
+    const r = await fetch(API_BASE + path, {
+      method,
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': getApiKey() },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    if (!r.ok) throw new Error(r.status);
+    return await r.json();
+  } catch(e) { _apiAvailable = false; return null; }
+}
+
+function getApiKey() {
+  // Stored in localStorage after first prompt
+  let key = localStorage.getItem('wf_api_key');
+  if (!key) {
+    key = prompt('워크플로우 API 키를 입력하세요 (최초 1회):');
+    if (key) localStorage.setItem('wf_api_key', key);
+  }
+  return key || '';
+}
+
+async function loadItems() {
+  const remote = await apiGet('/items');
+  if (remote !== null) {
+    _itemsCache = remote;
+    _apiAvailable = true;
+    // Sync to localStorage as backup
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(remote));
+    return remote;
+  }
+  // Fallback to localStorage
+  _apiAvailable = false;
+  _itemsCache = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  return _itemsCache;
+}
+
+function getBriefs() {
+  // Sync getter (uses cache)
+  if (_itemsCache !== null) return _itemsCache;
+  return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+}
+
+async function saveBriefsAsync(items) {
+  _itemsCache = items;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  if (_apiAvailable) {
+    await apiWrite('POST', '/import', { items });
+  }
+}
+
+// Replace old saveBriefs with async-aware version
+function saveBriefs(arr) {
+  _itemsCache = arr;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  // Fire and forget API sync
+  if (_apiAvailable) {
+    apiWrite('POST', '/import', { items: arr }).catch(() => {});
+  }
+}
+
 const KPI_LABELS = {
   sessions:'세션', users:'유저', newUsers:'신규유저', adSpend:'총 광고비',
   adSpend_meta:'Meta 광고비', adSpend_naver:'네이버 광고비', impressions:'노출',
@@ -947,10 +1024,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   loadReports();
-  renderBriefs();
+  // Load items from KV API then render
+  loadItems().then(() => {
+    renderBriefs();
+    renderSignals();
+    renderLearns();
+    if (!_apiAvailable) {
+      console.warn('KV API unavailable, using localStorage fallback');
+    }
+  });
   renderReview();
-  renderSignals();
-  renderLearns();
   // Move design content into settings sub-tab
   moveDesignToSettings();
 });
