@@ -45,10 +45,23 @@ body{font-family:-apple-system,'Pretendard','Noto Sans KR',sans-serif;background
 
 /* ── KPI Grid ── */
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px;}
-.kpi-card{background:var(--s);border:1px solid var(--b);border-radius:10px;padding:12px;text-align:center;}
+.kpi-card{background:var(--s);border:1px solid var(--b);border-radius:10px;padding:12px;text-align:center;cursor:pointer;transition:border-color .15s,transform .1s;}
+.kpi-card:hover{border-color:var(--ac);transform:translateY(-1px);}
 .kpi-card .label{font-size:.7rem;color:var(--t2);margin-bottom:4px;font-weight:500;}
 .kpi-card .value{font-size:1.2rem;font-weight:700;}
 .kpi-card .wow{font-size:.68rem;margin-top:4px;font-weight:600;}
+
+/* ── KPI Trend Chart Modal ── */
+.trend-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.trend-overlay.open{opacity:1;pointer-events:auto;}
+.trend-modal{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:24px;width:min(640px,92vw);max-height:80vh;position:relative;}
+.trend-modal h3{font-size:1rem;margin:0 0 16px 0;display:flex;align-items:center;gap:8px;}
+.trend-close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--t2);font-size:1.2rem;cursor:pointer;}
+.trend-canvas-wrap{position:relative;width:100%;height:280px;}
+.trend-canvas-wrap canvas{width:100%;height:100%;}
+.trend-meta{font-size:.7rem;color:var(--t2);margin-top:12px;line-height:1.6;}
+.trend-meta .hi{color:var(--g);font-weight:600;}
+.trend-meta .lo{color:var(--r);font-weight:600;}
 .wow.up{color:var(--g);}
 .wow.down{color:var(--r);}
 .wow.neutral{color:var(--t2);}
@@ -1090,7 +1103,7 @@ const KPI_LABELS = {
   adSpend_meta:'Meta 광고비', adSpend_naver:'네이버 광고비', impressions:'노출',
   clicks:'클릭', purchases_ga4:'GA4 구매', units_sold:'본체 판매',
   imweb_revenue:'아임웹 매출', ga4_revenue:'GA4 매출', roas:'ROAS',
-  cpc:'CPC', cpm:'CPM', ctr:'CTR', cpa:'CPA', convRate:'전환율',
+  revenue:'매출', cpc:'CPC', cpm:'CPM', ctr:'CTR', cpa:'CPA', convRate:'전환율',
   meta_cpc:'Meta CPC', meta_ctr:'Meta CTR', meta_cpm:'Meta CPM',
   bounceRate:'이탈률', avgDuration:'평균체류(초)'
 };
@@ -1157,6 +1170,7 @@ async function loadReports(){
   try {
     const resp = await fetch('reports.json');
     reports = await resp.json();
+    window.__allReports = reports;
     renderReportNav();
     renderReport(0);
   } catch(e) {
@@ -1221,7 +1235,7 @@ function renderKpis(kpi){
       wowHtml = `<div class="wow neutral">전주 ${fmtNum(prev, unit)}</div>`;
     }
 
-    html += `<div class="kpi-card">
+    html += `<div class="kpi-card" onclick="showTrend('${key}')">
       <div class="label">${escHtml(label)}${note}</div>
       <div class="value">${fmtNum(val, unit)}</div>
       ${wowHtml}
@@ -2158,6 +2172,164 @@ function moveDesignToSettings(){
     }
   }
 }
+
+/* ═══════════════════════════════════════════════════
+   KPI Trend Chart — Canvas 라인차트
+   ═══════════════════════════════════════════════════ */
+function showTrend(kpiKey){
+  const reports = window.__allReports;
+  if(!reports || !reports.length) return;
+  
+  // 오래된 순 정렬
+  const sorted = [...reports].reverse();
+  const labels = sorted.map(r => r.title.split('·')[0].trim());
+  const values = sorted.map(r => {
+    const item = r.kpi?.[kpiKey];
+    return item ? item.value : null;
+  });
+  
+  const unit = sorted[0]?.kpi?.[kpiKey]?.unit || '';
+  const label = KPI_LABELS[kpiKey] || kpiKey;
+  
+  document.getElementById('trendTitle').textContent = `📈 ${label} 추이 (${labels[0]}~${labels[labels.length-1]})`;
+  document.getElementById('trendOverlay').classList.add('open');
+  
+  drawLineChart('trendCanvas', labels, values, unit, label, kpiKey);
+  
+  // 메타 정보
+  const valid = values.filter(v => v != null);
+  if(valid.length > 0){
+    const max = Math.max(...valid), min = Math.min(...valid);
+    const avg = valid.reduce((a,b)=>a+b,0) / valid.length;
+    const maxW = labels[values.indexOf(max)], minW = labels[values.indexOf(min)];
+    document.getElementById('trendMeta').innerHTML = 
+      `최고: <span class="hi">${fmtNum(max, unit)}</span> (${maxW}) · ` +
+      `최저: <span class="lo">${fmtNum(min, unit)}</span> (${minW}) · ` +
+      `평균: ${fmtNum(Math.round(avg), unit)}`;
+  }
+}
+
+function closeTrend(){
+  document.getElementById('trendOverlay').classList.remove('open');
+}
+
+function drawLineChart(canvasId, labels, values, unit, label, kpiKey){
+  const canvas = document.getElementById(canvasId);
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+  
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const W = rect.width, H = rect.height;
+  
+  // 테마 색상
+  const style = getComputedStyle(document.documentElement);
+  const acColor = style.getPropertyValue('--ac').trim() || '#7c5cfc';
+  const textColor = style.getPropertyValue('--t2').trim() || '#888';
+  const gridColor = style.getPropertyValue('--b').trim() || '#333';
+  
+  ctx.clearRect(0, 0, W, H);
+  
+  const pad = {top:20, right:20, bottom:40, left:65};
+  const chartW = W - pad.left - pad.right;
+  const chartH = H - pad.top - pad.bottom;
+  
+  const valid = values.filter(v => v != null);
+  if(!valid.length) return;
+  
+  let maxV = Math.max(...valid);
+  let minV = Math.min(...valid);
+  if(maxV === minV){ maxV += 1; minV = Math.max(0, minV - 1); }
+  // 여유 10%
+  const range = maxV - minV;
+  minV = Math.max(0, minV - range * 0.1);
+  maxV = maxV + range * 0.1;
+  
+  const xStep = chartW / Math.max(labels.length - 1, 1);
+  
+  function xPos(i){ return pad.left + i * xStep; }
+  function yPos(v){ return pad.top + chartH - ((v - minV) / (maxV - minV)) * chartH; }
+  
+  // 가로 그리드 (5줄)
+  ctx.strokeStyle = gridColor;
+  ctx.lineWidth = 0.5;
+  ctx.font = '11px -apple-system, sans-serif';
+  ctx.fillStyle = textColor;
+  ctx.textAlign = 'right';
+  for(let i = 0; i <= 4; i++){
+    const v = minV + (maxV - minV) * (i / 4);
+    const y = yPos(v);
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+    ctx.fillText(fmtNum(Math.round(v), unit), pad.left - 8, y + 4);
+  }
+  
+  // X축 라벨
+  ctx.textAlign = 'center';
+  ctx.fillStyle = textColor;
+  labels.forEach((l, i) => {
+    ctx.fillText(l, xPos(i), H - pad.bottom + 20);
+  });
+  
+  // 라인 + 포인트
+  const points = [];
+  values.forEach((v, i) => {
+    if(v != null) points.push({x: xPos(i), y: yPos(v), v, i});
+  });
+  
+  if(points.length > 1){
+    // 그라데이션 영역
+    const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + chartH);
+    grad.addColorStop(0, acColor + '30');
+    grad.addColorStop(1, acColor + '05');
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, pad.top + chartH);
+    points.forEach(p => ctx.lineTo(p.x, p.y));
+    ctx.lineTo(points[points.length-1].x, pad.top + chartH);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+    
+    // 라인
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    points.forEach(p => ctx.lineTo(p.x, p.y));
+    ctx.strokeStyle = acColor;
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+  }
+  
+  // 포인트 + 값
+  ctx.font = 'bold 11px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  points.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = acColor;
+    ctx.fill();
+    ctx.strokeStyle = style.getPropertyValue('--s').trim() || '#1a1a2e';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // 값 라벨
+    ctx.fillStyle = style.getPropertyValue('--t').trim() || '#fff';
+    ctx.fillText(fmtNum(p.v, unit), p.x, p.y - 12);
+  });
+}
+
 </script>
+<!-- KPI Trend Chart Modal -->
+<div class="trend-overlay" id="trendOverlay" onclick="if(event.target===this)closeTrend()">
+  <div class="trend-modal">
+    <button class="trend-close" onclick="closeTrend()">✕</button>
+    <h3 id="trendTitle">📈 추이</h3>
+    <div class="trend-canvas-wrap"><canvas id="trendCanvas"></canvas></div>
+    <div class="trend-meta" id="trendMeta"></div>
+  </div>
+</div>
 </body>
 </html>
