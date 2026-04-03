@@ -623,6 +623,34 @@ select.form-input{cursor:pointer;}
       <label class="form-label">관찰 내용 / 배경 *</label>
       <textarea class="form-input" id="sig-signal" placeholder="왜 지금 이걸 주목하는가? 어떤 신호를 포착했는가?" style="min-height:100px;" required></textarea>
 
+      <label class="form-label">데이터 출처 *</label>
+      <select class="form-input" id="sig-source" onchange="updateSourceHint()" required>
+        <option value="">어디서 포착했는가?</option>
+        <optgroup label="📊 정량 데이터">
+          <option value="주간리포트">📊 주간 리포트 KPI 이상치</option>
+          <option value="Meta Ads">🎯 Meta Ads (소재/캠페인 성과)</option>
+          <option value="GA4">🔍 GA4 (퍼널/채널/페이지)</option>
+          <option value="네이버SA">🔎 네이버 검색광고 (키워드)</option>
+          <option value="아임웹주문">🏪 아임웹 주문/매출 패턴</option>
+        </optgroup>
+        <optgroup label="💬 고객 접점">
+          <option value="CS카카오">💬 CS 카카오톡 문의</option>
+          <option value="CS아임웹">💬 CS 아임웹 문의</option>
+          <option value="CS커뮤니티">💬 커뮤니티/리뷰</option>
+          <option value="인스타그램">📱 인스타그램 (댓글/DM/반응)</option>
+        </optgroup>
+        <optgroup label="🌐 외부/현장">
+          <option value="현장">🏟️ 현장 (전시/체험/미팅)</option>
+          <option value="외부시장">🌐 경쟁사/시장/트렌드</option>
+        </optgroup>
+        <optgroup label="🧠 내부">
+          <option value="내부논의">🧠 내부 논의 (미팅/슬랙)</option>
+          <option value="이전실험">🔄 이전 실험 후속 (루프)</option>
+          <option value="기타">📝 기타 (직접 입력)</option>
+        </optgroup>
+      </select>
+      <div id="sourceHint" style="font-size:.72rem;color:var(--ac2);margin-top:4px;min-height:18px;"></div>
+
       <label class="form-label">시그널 성격</label>
       <select class="form-input" id="sig-type">
         <option value="">선택 (선택사항)</option>
@@ -632,6 +660,11 @@ select.form-input{cursor:pointer;}
         <option value="루프">🟡 루프 (이전 실험 후속)</option>
         <option value="현장">🟠 현장 (고객 피드백, 체험)</option>
       </select>
+
+      <div id="sig-source-detail-wrap" style="display:none;">
+        <label class="form-label">구체적 출처 (선택)</label>
+        <input class="form-input" id="sig-source-detail" placeholder="예: W13 리포트, ASC 캠페인 #3, 카카오 문의 4/1건...">
+      </div>
 
       <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;">
         <button type="button" class="btn" onclick="closeSignalForm()">취소</button>
@@ -1298,6 +1331,7 @@ function renderBriefs(){
           <span class="badge ${badgeCls}">${badgeText}</span>
         </div>
         <div class="bf-meta">
+          ${b.source ? `<span class="schema-tag" style="background:rgba(108,92,231,.12);color:var(--ac2);">${escHtml(b.source)}</span>` : ''}
           ${b.actionType ? `<span class="schema-tag" style="background:rgba(0,184,148,.12);color:var(--g);">${escHtml(b.actionType)}</span>` : ''}
           ${b.stage ? `<span class="schema-tag" style="background:rgba(116,185,255,.12);color:var(--bl);">${escHtml(b.stage)}</span>` : ''}
           ${b.persona ? `<span class="schema-tag">${escHtml(b.persona)}</span>` : ''}
@@ -1467,6 +1501,7 @@ function openBriefDetail(id){
       <span style="font-size:.7rem;color:var(--t2);">생성: ${new Date(b.createdAt).toLocaleDateString('ko-KR')}</span>
     </div>
 
+    ${b.source ? `<div style="margin-bottom:10px;"><span class="schema-tag" style="background:rgba(108,92,231,.15);color:var(--ac2);font-size:.72rem;">📍 ${escHtml(b.source)}</span>${b.sourceDetail ? ` <span style="font-size:.72rem;color:var(--t2);">— ${escHtml(b.sourceDetail)}</span>` : ''}</div>` : ''}
     ${b.signal ? `<div class="card" style="margin-bottom:12px;"><div class="card-title">시그널/배경</div><div style="font-size:.82rem;line-height:1.7;white-space:pre-wrap;">${escHtml(b.signal)}</div></div>` : ''}
     <div class="detail-row"><span class="detail-label">액션 유형</span><span class="detail-value"><span class="schema-tag" style="background:rgba(0,184,148,.12);color:var(--g);">${escHtml(b.actionType||'-')}</span>${b.signalType?` <span class="schema-tag">${escHtml(b.signalType)}</span>`:''}</span></div>
     <div class="detail-row"><span class="detail-label">페르소나</span><span class="detail-value"><span class="schema-tag">${escHtml(b.persona)}</span></span></div>
@@ -1853,6 +1888,7 @@ function renderSignalTab(){
         ${b.signalType ? `<span style="font-size:.65rem;color:var(--t2);">${escHtml(b.signalType)}</span>` : ''}
       </div>
       <div class="bf-title">${escHtml(b.title)}</div>
+      ${b.source ? `<div style="font-size:.68rem;margin-top:4px;"><span class="schema-tag" style="background:rgba(108,92,231,.12);color:var(--ac2);">${escHtml(b.source)}</span>${b.sourceDetail ? ` <span style="color:var(--t2);font-size:.65rem;">${escHtml(b.sourceDetail)}</span>` : ''}</div>` : ''}
       <div style="font-size:.75rem;color:var(--t2);margin-top:4px;">${escHtml((b.signal||'').substring(0,120))}</div>
       <div style="font-size:.68rem;margin-top:8px;color:var(--t2);">${new Date(b.createdAt).toLocaleDateString('ko-KR')}</div>
     </div>
@@ -1894,17 +1930,43 @@ function openSignalForm(){
 function closeSignalForm(){
   document.getElementById('signalFormModal').classList.remove('open');
 }
+const SOURCE_HINTS = {
+  '주간리포트': '💡 어떤 KPI가 이상한가? WoW 변화율, 급등/급락 지표를 구체적으로',
+  'Meta Ads': '💡 어떤 캠페인/소재에서? CTR, CPC, ROAS 등 구체 수치와 함께',
+  'GA4': '💡 어떤 퍼널 구간/채널/페이지? 전환율, 이탈률 등 수치와 함께',
+  '네이버SA': '💡 어떤 키워드? CTR, CPC, 노출 변화를 구체적으로',
+  '아임웹주문': '💡 어떤 주문 패턴? 구매 빈도, 액세서리 동반률, 환불 등',
+  'CS카카오': '💡 어떤 문의가 늘었는가? 키워드, 빈도, 고객 유형',
+  'CS아임웹': '💡 어떤 문의/환불 패턴? 반복되는 이슈는?',
+  'CS커뮤니티': '💡 어떤 글/댓글에서? 키워드, 감성, 경쟁사 언급',
+  '인스타그램': '💡 어떤 포스트/DM? 반응 수, 저장/공유 비율, 댓글 키워드',
+  '현장': '💡 어디서 누구의 반응? 구체적 장면이나 대화 내용',
+  '외부시장': '💡 경쟁사 뭐가 바뀌었는지, 시장 트렌드 출처(기사/데이터)',
+  '내부논의': '💡 누구와 어떤 맥락에서 나온 아이디어인지',
+  '이전실험': '💡 어떤 실험의 결과로부터? 실험 제목이나 Learn 내용 참조',
+  '기타': '💡 출처를 아래 구체적 출처 칸에 직접 적어주세요'
+};
+
+function updateSourceHint(){
+  const src = document.getElementById('sig-source').value;
+  document.getElementById('sourceHint').textContent = SOURCE_HINTS[src] || '';
+  // Show detail input for all sources
+  document.getElementById('sig-source-detail-wrap').style.display = src ? '' : 'none';
+}
+
 function saveSignal(e){
   e.preventDefault();
   const title = document.getElementById('sig-title').value.trim();
   const signal = document.getElementById('sig-signal').value.trim();
   const signalType = document.getElementById('sig-type').value;
-  if(!title || !signal){ alert('제목과 관찰 내용은 필수입니다.'); return; }
+  const source = document.getElementById('sig-source').value;
+  const sourceDetail = document.getElementById('sig-source-detail')?.value.trim() || '';
+  if(!title || !signal || !source){ alert('제목, 관찰 내용, 데이터 출처는 필수입니다.'); return; }
 
   const briefs = getBriefs();
   const item = {
     id: 'bf-' + Date.now(),
-    title, signal, signalType,
+    title, signal, signalType, source, sourceDetail,
     status: 'signal',
     actionType:'', persona:'', jtbd:'', vp:'', structure:'', channel:'', stage:'', usp:'',
     hypothesis:'', criteria:'',
