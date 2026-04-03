@@ -60,6 +60,12 @@
         "unit": "%",
         "note": "구매/세션"
       },
+      "bodyUnits": {
+        "value": 3,
+        "prev": null,
+        "unit": "대",
+        "note": "🟢 아임웹 본체 주문 기준"
+      },
       "roas": {
         "value": 972,
         "prev": null,
@@ -384,12 +390,43 @@
         "type": "metrics",
         "content": [
           {
-            "metric": "네이버 검색광고 합계",
+            "metric": "합계",
             "w12": "₩20,548",
             "w11": "imp 1,707",
-            "note": "clicks 242, CTR 14.2%"
+            "note": "clicks 242, CTR 14.2%, CPC ₩85"
+          },
+          {
+            "metric": "⏸️ 2412 홈짐 타겟 캠페인_파워링크",
+            "w12": "예산 ₩50,000",
+            "w11": null,
+            "note": "상태: PAUSED"
+          },
+          {
+            "metric": "⏸️ 2412_트레이너 타겟 캠페인_파워링크",
+            "w12": "예산 ₩50,000",
+            "w11": null,
+            "note": "상태: PAUSED"
+          },
+          {
+            "metric": "🟢 2601 테스트 - 파워링크#1",
+            "w12": "예산 ₩10,000",
+            "w11": null,
+            "note": "상태: ELIGIBLE"
+          },
+          {
+            "metric": "🟢 쇼핑검색#1_2601 테스트",
+            "w12": "예산 ₩10,000",
+            "w11": null,
+            "note": "상태: ELIGIBLE"
+          },
+          {
+            "metric": "활성 일수",
+            "w12": "13/28일",
+            "w11": null,
+            "note": "총 클릭 242"
           }
-        ]
+        ],
+        "note": "⚠️ 키워드별 데이터는 네이버 API 추가 수집 필요"
       },
       {
         "title": "📄 페이지별 트래픽",
@@ -527,6 +564,12 @@
         "prev": null,
         "unit": "%",
         "note": "구매/세션"
+      },
+      "bodyUnits": {
+        "value": 2,
+        "prev": null,
+        "unit": "대",
+        "note": "🟢 아임웹 본체 주문 기준"
       },
       "roas": {
         "value": 579,
@@ -834,12 +877,43 @@
         "type": "metrics",
         "content": [
           {
-            "metric": "네이버 검색광고 합계",
+            "metric": "합계",
             "w12": "₩29,689",
             "w11": "imp 2,069",
-            "note": "clicks 339, CTR 16.4%"
+            "note": "clicks 339, CTR 16.4%, CPC ₩88"
+          },
+          {
+            "metric": "⏸️ 2412 홈짐 타겟 캠페인_파워링크",
+            "w12": "예산 ₩50,000",
+            "w11": null,
+            "note": "상태: PAUSED"
+          },
+          {
+            "metric": "⏸️ 2412_트레이너 타겟 캠페인_파워링크",
+            "w12": "예산 ₩50,000",
+            "w11": null,
+            "note": "상태: PAUSED"
+          },
+          {
+            "metric": "🟢 2601 테스트 - 파워링크#1",
+            "w12": "예산 ₩10,000",
+            "w11": null,
+            "note": "상태: ELIGIBLE"
+          },
+          {
+            "metric": "🟢 쇼핑검색#1_2601 테스트",
+            "w12": "예산 ₩10,000",
+            "w11": null,
+            "note": "상태: ELIGIBLE"
+          },
+          {
+            "metric": "활성 일수",
+            "w12": "14/28일",
+            "w11": null,
+            "note": "총 클릭 339"
           }
-        ]
+        ],
+        "note": "⚠️ 키워드별 데이터는 네이버 API 추가 수집 필요"
       },
       {
         "title": "📄 페이지별 트래픽",
@@ -979,6 +1053,12 @@
         "prev": null,
         "unit": "%",
         "note": "구매/세션"
+      },
+      "bodyUnits": {
+        "value": 2,
+        "prev": null,
+        "unit": "대",
+        "note": "🟢 아임웹 본체 주문 기준"
       },
       "roas": {
         "value": 843,
@@ -1233,12 +1313,43 @@
         "type": "metrics",
         "content": [
           {
-            "metric": "네이버 검색광고 합계",
+            "metric": "합계",
             "w12": "₩21,868",
             "w11": "imp 2,199",
-            "note": "clicks 251, CTR 11.4%"
+            "note": "clicks 251, CTR 11.4%, CPC ₩87"
+          },
+          {
+            "metric": "⏸️ 2412 홈짐 타겟 캠페인_파워링크",
+            "w12": "예산 ₩50,000",
+            "w11": null,
+            "note": "상태: PAUSED"
+          },
+          {
+            "metric": "⏸️ 2412_트레이너 타겟 캠페인_파워링크",
+            "w12": "예산 ₩50,000",
+            "w11": null,
+            "note": "상태: PAUSED"
+          },
+          {
+            "metric": "🟢 2601 테스트 - 파워링크#1",
+            "w12": "예산 ₩10,000",
+            "w11": null,
+            "note": "상태: ELIGIBLE"
+          },
+          {
+            "metric": "🟢 쇼핑검색#1_2601 테스트",
+            "w12": "예산 ₩10,000",
+            "w11": null,
+            "note": "상태: ELIGIBLE"
+          },
+          {
+            "metric": "활성 일수",
+            "w12": "14/28일",
+            "w11": null,
+            "note": "총 클릭 251"
           }
-        ]
+        ],
+        "note": "⚠️ 키워드별 데이터는 네이버 API 추가 수집 필요"
       },
       {
         "title": "📄 페이지별 트래픽",
@@ -1373,6 +1484,12 @@
         "prev": null,
         "unit": "%",
         "note": "구매/세션"
+      },
+      "bodyUnits": {
+        "value": 4,
+        "prev": null,
+        "unit": "대",
+        "note": "🟢 아임웹 본체 주문 기준"
       },
       "roas": {
         "value": 2638,
@@ -1668,12 +1785,43 @@
         "type": "metrics",
         "content": [
           {
-            "metric": "네이버 검색광고 합계",
+            "metric": "합계",
             "w12": "₩13,156",
             "w11": "imp 1,611",
-            "note": "clicks 178, CTR 11.0%"
+            "note": "clicks 178, CTR 11.0%, CPC ₩74"
+          },
+          {
+            "metric": "⏸️ 2412 홈짐 타겟 캠페인_파워링크",
+            "w12": "예산 ₩50,000",
+            "w11": null,
+            "note": "상태: PAUSED"
+          },
+          {
+            "metric": "⏸️ 2412_트레이너 타겟 캠페인_파워링크",
+            "w12": "예산 ₩50,000",
+            "w11": null,
+            "note": "상태: PAUSED"
+          },
+          {
+            "metric": "🟢 2601 테스트 - 파워링크#1",
+            "w12": "예산 ₩10,000",
+            "w11": null,
+            "note": "상태: ELIGIBLE"
+          },
+          {
+            "metric": "🟢 쇼핑검색#1_2601 테스트",
+            "w12": "예산 ₩10,000",
+            "w11": null,
+            "note": "상태: ELIGIBLE"
+          },
+          {
+            "metric": "활성 일수",
+            "w12": "13/28일",
+            "w11": null,
+            "note": "총 클릭 178"
           }
-        ]
+        ],
+        "note": "⚠️ 키워드별 데이터는 네이버 API 추가 수집 필요"
       },
       {
         "title": "📄 페이지별 트래픽",
@@ -1807,6 +1955,12 @@
         "prev": null,
         "unit": "%",
         "note": "구매/세션"
+      },
+      "bodyUnits": {
+        "value": 1,
+        "prev": null,
+        "unit": "대",
+        "note": "🟢 아임웹 본체 주문 기준"
       },
       "roas": {
         "value": 771,
@@ -2061,12 +2215,43 @@
         "type": "metrics",
         "content": [
           {
-            "metric": "네이버 검색광고 합계",
+            "metric": "합계",
             "w12": "₩12,441",
             "w11": "imp 1,884",
-            "note": "clicks 180, CTR 9.6%"
+            "note": "clicks 180, CTR 9.6%, CPC ₩69"
+          },
+          {
+            "metric": "⏸️ 2412 홈짐 타겟 캠페인_파워링크",
+            "w12": "예산 ₩50,000",
+            "w11": null,
+            "note": "상태: PAUSED"
+          },
+          {
+            "metric": "⏸️ 2412_트레이너 타겟 캠페인_파워링크",
+            "w12": "예산 ₩50,000",
+            "w11": null,
+            "note": "상태: PAUSED"
+          },
+          {
+            "metric": "🟢 2601 테스트 - 파워링크#1",
+            "w12": "예산 ₩10,000",
+            "w11": null,
+            "note": "상태: ELIGIBLE"
+          },
+          {
+            "metric": "🟢 쇼핑검색#1_2601 테스트",
+            "w12": "예산 ₩10,000",
+            "w11": null,
+            "note": "상태: ELIGIBLE"
+          },
+          {
+            "metric": "활성 일수",
+            "w12": "14/28일",
+            "w11": null,
+            "note": "총 클릭 180"
           }
-        ]
+        ],
+        "note": "⚠️ 키워드별 데이터는 네이버 API 추가 수집 필요"
       },
       {
         "title": "📄 페이지별 트래픽",
@@ -2349,12 +2534,13 @@
         "type": "metrics",
         "content": [
           {
-            "metric": "네이버 검색광고 합계",
+            "metric": "합계",
             "w12": "₩3,883",
             "w11": "imp 723",
-            "note": "clicks 54, CTR 7.5%"
+            "note": "clicks 54, CTR 7.5%, CPC ₩72"
           }
-        ]
+        ],
+        "note": "⚠️ 키워드별 데이터는 네이버 API 추가 수집 필요"
       },
       {
         "title": "📄 페이지별 트래픽",
@@ -2564,12 +2750,13 @@
         "type": "metrics",
         "content": [
           {
-            "metric": "네이버 검색광고 합계",
+            "metric": "합계",
             "w12": "₩5,049",
             "w11": "imp 1,526",
-            "note": "clicks 59, CTR 3.9%"
+            "note": "clicks 59, CTR 3.9%, CPC ₩86"
           }
-        ]
+        ],
+        "note": "⚠️ 키워드별 데이터는 네이버 API 추가 수집 필요"
       },
       {
         "title": "📄 페이지별 트래픽",
@@ -2765,12 +2952,13 @@
         "type": "metrics",
         "content": [
           {
-            "metric": "네이버 검색광고 합계",
+            "metric": "합계",
             "w12": "₩5,423",
             "w11": "imp 1,651",
-            "note": "clicks 64, CTR 3.9%"
+            "note": "clicks 64, CTR 3.9%, CPC ₩85"
           }
-        ]
+        ],
+        "note": "⚠️ 키워드별 데이터는 네이버 API 추가 수집 필요"
       },
       {
         "title": "📄 페이지별 트래픽",

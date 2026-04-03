@@ -274,6 +274,15 @@ def get_week_revenue(start, end):
     total = sum(o["amount"] for o in orders if start <= o["date"] <= end)
     return total
 
+def get_week_body_count(start, end):
+    """Get body unit count for a given week (🟢 Tier 1)"""
+    orders_file = OUT_DIR / "orders.json"
+    if not orders_file.exists():
+        return 0
+    with open(orders_file, "r", encoding="utf-8") as f:
+        orders = json.load(f)
+    return sum(1 for o in orders if start <= o["date"] <= end and o.get("type") == "body")
+
 
 def build_kpi(ga4, meta, naver, prev_ga4, prev_meta, prev_naver):
     """Build KPI section"""
@@ -505,13 +514,38 @@ def build_naver_section(naver):
     spend = naver.get("total_spend", 0) if "total_spend" in naver else naver.get("summary", {}).get("total_spend", 0)
     
     rows = [{
-        "metric": "네이버 검색광고 합계",
+        "metric": "합계",
         "w12": fmt_money(spend),
         "w11": f"imp {fmt_num(imp)}",
-        "note": f"clicks {fmt_num(clk)}, CTR {clk/imp*100:.1f}%" if imp > 0 else ""
+        "note": f"clicks {fmt_num(clk)}, CTR {clk/imp*100:.1f}%, CPC ₩{spend/clk:.0f}" if clk > 0 else ""
     }]
     
-    return {"title": "🔍 네이버 검색광고", "type": "metrics", "content": rows}
+    # 캠페인 분리
+    campaigns = naver.get("campaigns", [])
+    if campaigns:
+        for c in campaigns:
+            status = c.get("status", "")
+            status_label = "🟢" if status == "ELIGIBLE" else "⏸️"
+            rows.append({
+                "metric": f"{status_label} {c.get('name', '?')[:35]}",
+                "w12": f"예산 {fmt_money(c.get('budget', 0))}",
+                "w11": None,
+                "note": f"상태: {status}"
+            })
+    
+    # 일별 추이 요약 (0이 아닌 날만)
+    stats = naver.get("stats", [])
+    active_days = [s for s in stats if s.get("clkCnt", 0) > 0]
+    if active_days:
+        rows.append({
+            "metric": f"활성 일수",
+            "w12": f"{len(active_days)}/{len(stats)}일",
+            "w11": None,
+            "note": f"총 클릭 {sum(s.get('clkCnt',0) for s in active_days)}"
+        })
+    
+    return {"title": "🔍 네이버 검색광고", "type": "metrics", "content": rows,
+            "note": "⚠️ 키워드별 데이터는 네이버 API 추가 수집 필요"}
 
 
 def build_page_section(ga4, prev_ga4=None):
@@ -778,6 +812,12 @@ def generate_report(week_id, start, end, ga4, meta, naver, prev_ga4, prev_meta, 
     # Build KPI
     kpi = build_kpi(ga4, meta, naver, prev_ga4, prev_meta, prev_naver)
     prev_kpi = build_kpi(prev_ga4, prev_meta, prev_naver, None, None, None) if prev_ga4 else None
+    
+    # 본체 판매 수량 + ROAS (🟢 Tier 1)
+    body_units = get_week_body_count(start, end)
+    if body_units > 0:
+        kpi["bodyUnits"] = {"value": body_units, "prev": None, "unit": "대", 
+                            "note": "🟢 아임웹 본체 주문 기준"}
     
     # ROAS: 아임웹 실매출 / 광고비 (🟢 Tier 1 확정 데이터)
     week_revenue = get_week_revenue(start, end)
