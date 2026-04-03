@@ -60,6 +60,12 @@
         "unit": "%",
         "note": "구매/세션"
       },
+      "signups": {
+        "value": 4,
+        "prev": null,
+        "unit": "명",
+        "note": "🟡 GA4 sign_up 유니크 유저 (중복 시도 제외)"
+      },
       "bodyUnits": {
         "value": 3,
         "prev": null,
@@ -571,6 +577,12 @@
         "unit": "%",
         "note": "구매/세션"
       },
+      "signups": {
+        "value": 2,
+        "prev": null,
+        "unit": "명",
+        "note": "🟡 GA4 sign_up 유니크 유저 (중복 시도 제외)"
+      },
       "feelBookings": {
         "value": 10,
         "prev": null,
@@ -1072,6 +1084,12 @@
         "unit": "%",
         "note": "구매/세션"
       },
+      "signups": {
+        "value": 6,
+        "prev": null,
+        "unit": "명",
+        "note": "🟡 GA4 sign_up 유니크 유저 (중복 시도 제외)"
+      },
       "feelBookings": {
         "value": 6,
         "prev": null,
@@ -1520,6 +1538,12 @@
         "prev": null,
         "unit": "%",
         "note": "구매/세션"
+      },
+      "signups": {
+        "value": 3,
+        "prev": null,
+        "unit": "명",
+        "note": "🟡 GA4 sign_up 유니크 유저 (중복 시도 제외)"
       },
       "feelBookings": {
         "value": 6,
@@ -2003,6 +2027,12 @@
         "prev": null,
         "unit": "%",
         "note": "구매/세션"
+      },
+      "signups": {
+        "value": 12,
+        "prev": null,
+        "unit": "명",
+        "note": "🟡 GA4 sign_up 유니크 유저 (중복 시도 제외)"
       },
       "feelBookings": {
         "value": 4,

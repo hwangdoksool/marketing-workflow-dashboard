@@ -830,6 +830,16 @@ def generate_report(week_id, start, end, ga4, meta, naver, prev_ga4, prev_meta, 
     kpi = build_kpi(ga4, meta, naver, prev_ga4, prev_meta, prev_naver)
     prev_kpi = build_kpi(prev_ga4, prev_meta, prev_naver, None, None, None) if prev_ga4 else None
     
+    # 유효 회원가입 (🟡 Tier 2 — GA4 sign_up users = 중복 제외)
+    signup_users = 0
+    for ev in ga4.get("events", []):
+        if ev.get("event") == "sign_up":
+            signup_users = ev.get("users", 0)
+            break
+    if signup_users > 0:
+        kpi["signups"] = {"value": signup_users, "prev": None, "unit": "명",
+                          "note": "🟡 GA4 sign_up 유니크 유저 (중복 시도 제외)"}
+    
     # 체험 신청 (🟢 Tier 1 — Supabase)
     feel_total, feel_completed = get_week_feel_bookings(start, end)
     if feel_total > 0:
