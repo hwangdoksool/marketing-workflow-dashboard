@@ -359,6 +359,29 @@ select.form-input{cursor:pointer;}
         <button class="filter-pill" data-filter="live">Live</button>
         <button class="filter-pill" data-filter="complete">완료</button>
       </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
+        <select id="filterChannel" onchange="applyBriefFilters()" style="background:var(--s2);color:var(--t);border:1px solid var(--b);border-radius:6px;padding:4px 8px;font-size:.72rem;font-family:inherit;">
+          <option value="">채널 전체</option>
+          <option value="meta">Meta 광고</option>
+          <option value="blog">블로그</option>
+          <option value="youtube">유튜브</option>
+          <option value="instagram">인스타그램</option>
+        </select>
+        <select id="filterVerdict" onchange="applyBriefFilters()" style="background:var(--s2);color:var(--t);border:1px solid var(--b);border-radius:6px;padding:4px 8px;font-size:.72rem;font-family:inherit;">
+          <option value="">판정 전체</option>
+          <option value="hit">✅ 적중(hit)</option>
+          <option value="miss">❌ 미적중(miss)</option>
+          <option value="null">⏳ 미판정</option>
+        </select>
+        <select id="filterContentType" onchange="applyBriefFilters()" style="background:var(--s2);color:var(--t);border:1px solid var(--b);border-radius:6px;padding:4px 8px;font-size:.72rem;font-family:inherit;">
+          <option value="">유형 전체</option>
+          <option value="이미지">이미지</option>
+          <option value="영상">영상</option>
+          <option value="shortform">숏폼</option>
+          <option value="블로그">블로그</option>
+        </select>
+        <span id="filterCount" style="font-size:.7rem;color:var(--t2);align-self:center;margin-left:4px;"></span>
+      </div>
       <div class="spacer"></div>
       <button class="btn" onclick="importBriefs()">JSON 가져오기</button>
       <button class="btn" onclick="exportBriefs()">JSON 내보내기</button>
@@ -1486,6 +1509,16 @@ function renderText(content){
 
 let briefFilter = 'all';
 let briefSearchTerm = '';
+let briefChannelFilter = '';
+let briefVerdictFilter = '';
+let briefContentTypeFilter = '';
+
+function applyBriefFilters(){
+  briefChannelFilter = document.getElementById('filterChannel')?.value || '';
+  briefVerdictFilter = document.getElementById('filterVerdict')?.value || '';
+  briefContentTypeFilter = document.getElementById('filterContentType')?.value || '';
+  renderBriefs();
+}
 
 function renderBriefs(){
   const all = getBriefs();
@@ -1496,12 +1529,25 @@ function renderBriefs(){
   if(briefSearchTerm){
     const q = briefSearchTerm.toLowerCase();
     filtered = filtered.filter(b =>
-      b.title.toLowerCase().includes(q) ||
-      b.persona.toLowerCase().includes(q) ||
-      b.jtbd.toLowerCase().includes(q) ||
-      b.hypothesis.toLowerCase().includes(q)
+      (b.title||'').toLowerCase().includes(q) ||
+      (b.persona||'').toLowerCase().includes(q) ||
+      (b.jtbd||'').toLowerCase().includes(q) ||
+      (b.hypothesis||'').toLowerCase().includes(q)
     );
   }
+  if(briefChannelFilter){
+    filtered = filtered.filter(b => (b.channel||'') === briefChannelFilter);
+  }
+  if(briefVerdictFilter === 'null'){
+    filtered = filtered.filter(b => !b.verdict);
+  } else if(briefVerdictFilter){
+    filtered = filtered.filter(b => b.verdict === briefVerdictFilter);
+  }
+  if(briefContentTypeFilter){
+    filtered = filtered.filter(b => (b.contentType||'') === briefContentTypeFilter);
+  }
+  const countEl = document.getElementById('filterCount');
+  if(countEl) countEl.textContent = filtered.length + '/' + all.length + '건';
 
   const grid = document.getElementById('briefGrid');
   const empty = document.getElementById('briefEmpty');
