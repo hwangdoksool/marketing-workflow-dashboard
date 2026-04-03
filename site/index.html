@@ -2393,9 +2393,11 @@ function drawMultiLineChart(canvasId, labels, series, actions){
     return pad.top + chartH - ((v - a.min) / (a.max - a.min)) * chartH;
   }
   
-  // 그리드 (좌축 기준)
+  // 그리드 (첫 시리즈 기준 좌축, 두 번째 우축)
   ctx.strokeStyle = gridColor; ctx.lineWidth = 0.5;
   ctx.font = '11px -apple-system, sans-serif';
+  
+  // 좌축
   ctx.textAlign = 'right'; ctx.fillStyle = series[0]?.color || textColor;
   for(let i = 0; i <= 4; i++){
     const v = axes[0].min + (axes[0].max - axes[0].min) * (i/4);
@@ -2403,8 +2405,8 @@ function drawMultiLineChart(canvasId, labels, series, actions){
     ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
     ctx.fillText(fmtNum(Math.round(v), series[0].unit), pad.left - 8, y + 4);
   }
-  // 우축 (두 번째 시리즈)
-  if(multiAxis && axes.length > 1){
+  // 우축 (두 번째 시리즈, 있을 때만)
+  if(multiAxis && series.length > 1){
     ctx.textAlign = 'left'; ctx.fillStyle = series[1].color;
     for(let i = 0; i <= 4; i++){
       const v = axes[1].min + (axes[1].max - axes[1].min) * (i/4);
@@ -2417,11 +2419,10 @@ function drawMultiLineChart(canvasId, labels, series, actions){
   ctx.textAlign = 'center'; ctx.fillStyle = textColor;
   labels.forEach((l, i) => ctx.fillText(l, xPos(i), H - pad.bottom + 20));
   
-  // 각 시리즈 라인
+  // 각 시리즈 라인 — 독립 정규화 (각 시리즈 자체 min/max로 0~100% 매핑)
   series.forEach((s, si) => {
-    const axIdx = multiAxis ? Math.min(si, 1) : 0; // 3+ 시리즈는 두 번째 축 공유
     const points = [];
-    s.values.forEach((v, i) => { if(v != null) points.push({x:xPos(i), y:yPos(v, si < 2 ? si : 1), v, i}); });
+    s.values.forEach((v, i) => { if(v != null) points.push({x:xPos(i), y:yPos(v, si), v, i}); });
     if(!points.length) return;
     
     // 영역 (첫 시리즈만)
