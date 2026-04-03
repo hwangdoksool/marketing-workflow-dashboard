@@ -264,6 +264,17 @@ def calc_wow(curr, prev):
     return ((curr - prev) / abs(prev)) * 100
 
 
+def get_week_revenue(start, end):
+    """Get actual revenue from imweb orders for a given week (🟢 Tier 1)"""
+    orders_file = OUT_DIR / "orders.json"
+    if not orders_file.exists():
+        return 0
+    with open(orders_file, "r", encoding="utf-8") as f:
+        orders = json.load(f)
+    total = sum(o["amount"] for o in orders if start <= o["date"] <= end)
+    return total
+
+
 def build_kpi(ga4, meta, naver, prev_ga4, prev_meta, prev_naver):
     """Build KPI section"""
     # Current values
@@ -351,14 +362,7 @@ def build_kpi(ga4, meta, naver, prev_ga4, prev_meta, prev_naver):
     if ctr is not None:
         kpi["ctr"] = {"value": round(ctr, 2), "prev": None, "unit": "%"}
     if cpa is not None:
-        kpi["cpa"] = {"value": round(cpa), "prev": None, "unit": "₩", "note": "광고비/구매건수"}
-    
-    # ROAS: 평균 객단가 ₩3,764,615 × 구매건수 / 광고비 (구매자 분석 v2 기준)
-    AVG_ORDER_VALUE = 3_764_615
-    if purchases > 0 and total_spend > 0:
-        roas = (AVG_ORDER_VALUE * purchases) / total_spend * 100
-        kpi["roas"] = {"value": round(roas), "prev": None, "unit": "%", 
-                       "note": f"추정 매출 {fmt_money(AVG_ORDER_VALUE * purchases)} / 광고비 {fmt_money(int(total_spend))}"}
+        kpi["cpa"] = {"value": round(cpa), "prev": None, "unit": "₩", "note": "광고비/GA4구매건수"}
     
     if conv_rate is not None:
         kpi["convRate"] = {"value": round(conv_rate, 3), "prev": None, "unit": "%", "note": "구매/세션"}
@@ -694,6 +698,16 @@ def generate_report(week_id, start, end, ga4, meta, naver, prev_ga4, prev_meta, 
     # Build KPI
     kpi = build_kpi(ga4, meta, naver, prev_ga4, prev_meta, prev_naver)
     prev_kpi = build_kpi(prev_ga4, prev_meta, prev_naver, None, None, None) if prev_ga4 else None
+    
+    # ROAS: 아임웹 실매출 / 광고비 (🟢 Tier 1 확정 데이터)
+    week_revenue = get_week_revenue(start, end)
+    total_spend = kpi.get("adSpend", {}).get("value", 0)
+    if week_revenue > 0 and total_spend > 0:
+        roas = week_revenue / total_spend * 100
+        kpi["roas"] = {"value": round(roas), "prev": None, "unit": "%",
+                       "note": f"🟢 실매출 {fmt_money(week_revenue)} / 광고비 {fmt_money(total_spend)}"}
+        kpi["revenue"] = {"value": week_revenue, "prev": None, "unit": "₩",
+                          "note": "🟢 아임웹 결제 완료 기준"}
     
     # Build abstract (🔔)
     abstract = build_abstract(week_id, kpi, ga4, meta, naver, actions)
