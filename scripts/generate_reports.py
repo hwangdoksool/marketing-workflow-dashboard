@@ -274,6 +274,17 @@ def get_week_revenue(start, end):
     total = sum(o["amount"] for o in orders if start <= o["date"] <= end)
     return total
 
+def get_week_feel_bookings(start, end):
+    """Get feel booking count for a given week (🟢 Tier 1)"""
+    feel_file = OUT_DIR / "feel_bookings.json"
+    if not feel_file.exists():
+        return 0, 0
+    with open(feel_file, "r", encoding="utf-8") as f:
+        bookings = json.load(f)
+    week_bookings = [b for b in bookings if start <= b["created_at"][:10] <= end]
+    completed = sum(1 for b in week_bookings if b.get("status") in ("completed", "visited", "notified", "confirmed"))
+    return len(week_bookings), completed
+
 def get_week_body_count(start, end):
     """Get body unit count for a given week (🟢 Tier 1)"""
     orders_file = OUT_DIR / "orders.json"
@@ -812,6 +823,12 @@ def generate_report(week_id, start, end, ga4, meta, naver, prev_ga4, prev_meta, 
     # Build KPI
     kpi = build_kpi(ga4, meta, naver, prev_ga4, prev_meta, prev_naver)
     prev_kpi = build_kpi(prev_ga4, prev_meta, prev_naver, None, None, None) if prev_ga4 else None
+    
+    # 체험 신청 (🟢 Tier 1 — Supabase)
+    feel_total, feel_completed = get_week_feel_bookings(start, end)
+    if feel_total > 0:
+        kpi["feelBookings"] = {"value": feel_total, "prev": None, "unit": "건",
+                               "note": f"🟢 완료 {feel_completed}건"}
     
     # 본체 판매 수량 + ROAS (🟢 Tier 1)
     body_units = get_week_body_count(start, end)

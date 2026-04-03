@@ -565,6 +565,12 @@
         "unit": "%",
         "note": "구매/세션"
       },
+      "feelBookings": {
+        "value": 10,
+        "prev": null,
+        "unit": "건",
+        "note": "🟢 완료 4건"
+      },
       "bodyUnits": {
         "value": 2,
         "prev": null,
@@ -1054,6 +1060,12 @@
         "unit": "%",
         "note": "구매/세션"
       },
+      "feelBookings": {
+        "value": 6,
+        "prev": null,
+        "unit": "건",
+        "note": "🟢 완료 2건"
+      },
       "bodyUnits": {
         "value": 2,
         "prev": null,
@@ -1484,6 +1496,12 @@
         "prev": null,
         "unit": "%",
         "note": "구매/세션"
+      },
+      "feelBookings": {
+        "value": 6,
+        "prev": null,
+        "unit": "건",
+        "note": "🟢 완료 2건"
       },
       "bodyUnits": {
         "value": 4,
@@ -1956,6 +1974,12 @@
         "unit": "%",
         "note": "구매/세션"
       },
+      "feelBookings": {
+        "value": 4,
+        "prev": null,
+        "unit": "건",
+        "note": "🟢 완료 0건"
+      },
       "bodyUnits": {
         "value": 1,
         "prev": null,
@@ -2375,6 +2399,12 @@
         "prev": null,
         "unit": "%",
         "note": "구매/세션"
+      },
+      "feelBookings": {
+        "value": 4,
+        "prev": null,
+        "unit": "건",
+        "note": "🟢 완료 3건"
       }
     },
     "abstract": "세션 3,141, 유저 2,944명. 총 광고비 ₩3,883. 세션 전주 대비 ▲12.3%. 주요 액션: 크리에이티브 Vision 분석 — I, 홈페이지 CF Pages 전환 + 히, CTA 테스트 페이지(/cta-tes",
