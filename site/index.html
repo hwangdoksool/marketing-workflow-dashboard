@@ -1184,7 +1184,21 @@ async function loadReports(){
     window.__allReports = reports;
     renderReportNav();
     initTrendSection();
-    renderReport(0);
+    window.addEventListener('hashchange', () => {
+      const h = location.hash.replace('#','').toLowerCase();
+      if(h && h.startsWith('w')){
+        const fi = reports.findIndex(r => r.id.startsWith(h));
+        if(fi >= 0){ switchTab('tab-weekly'); selectReport(fi, false); }
+      }
+    });
+    // 해시 라우팅: #w13 → 해당 주차 선택
+    const hash = location.hash.replace('#','').toLowerCase();
+    let startIdx = 0;
+    if(hash){
+      const found = reports.findIndex(r => r.id.startsWith(hash));
+      if(found >= 0) startIdx = found;
+    }
+    selectReport(startIdx, true);
   } catch(e) {
     console.error('loadReports error:', e);
     document.getElementById('tab-weekly').innerHTML = '<div class="empty-state"><p>reports.json 로드 실패: ' + e.message + '</p></div>';
@@ -1198,10 +1212,15 @@ function renderReportNav(){
   ).join('');
 }
 
-function selectReport(idx){
+function selectReport(idx, pushHash = true){
   currentReportIdx = idx;
   document.querySelectorAll('.report-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
   renderReport(idx);
+  // 해시 라우팅: #w13 등
+  if(pushHash && reports[idx]){
+    const weekId = reports[idx].id.split('-')[0]; // w13
+    history.replaceState(null, '', `#${weekId}`);
+  }
 }
 
 function renderReport(idx){
@@ -1272,11 +1291,31 @@ function renderSections(sections){
       case 'agenda': body = renderAgenda(sec); break;
       default: body = `<pre style="font-size:.75rem;white-space:pre-wrap;">${escHtml(JSON.stringify(sec.content, null, 2))}</pre>`;
     }
-    return `<div class="section-card">
+    const secId = sec.type === 'agenda' ? 'sec-agenda' :
+                  sec.title?.includes('전환 건별') ? 'sec-conversion' :
+                  sec.title?.includes('관계 분석') ? 'sec-relation' :
+                  sec.title?.includes('지표 현황') ? 'sec-metrics' :
+                  sec.title?.includes('채널별') ? 'sec-channels' :
+                  sec.title?.includes('퍼널') ? 'sec-funnel' :
+                  sec.title?.includes('Meta') ? 'sec-meta' : '';
+    return `<div class="section-card" ${secId ? 'id="'+secId+'"' : ''}>
       <div class="sec-title">${escHtml(sec.title)}</div>
       <div class="sec-body">${body}</div>
     </div>`;
   }).join('');
+  
+  // 구매자 분석 보고서 iframe (항상 리포트 마지막에 표시)
+  el.innerHTML += `<div class="section-card" id="sec-buyer-analysis">
+    <div class="sec-title" style="display:flex;justify-content:space-between;align-items:center;">
+      📊 구매자 심층 분석 보고서 (v2)
+      <a href="https://wspn-images.wespion.workers.dev/buyer-analysis-2026-02-03.html" target="_blank" style="font-size:.7rem;color:var(--ac);">새 탭에서 열기 ↗</a>
+    </div>
+    <div class="sec-body">
+      <iframe src="https://wspn-images.wespion.workers.dev/buyer-analysis-2026-02-03.html" 
+        style="width:100%;height:600px;border:1px solid var(--b);border-radius:8px;background:#fff;" 
+        loading="lazy"></iframe>
+    </div>
+  </div>`;
 }
 
 function renderMetrics(rows){
@@ -1350,13 +1389,38 @@ function renderBuyers(items){
 function renderAgenda(sec){
   const items = sec.items || sec.content.split('\n').filter(l => l.trim());
   let html = '<div style="background:var(--ac2);color:#fff;border-radius:10px;padding:16px 20px;margin:8px 0;">';
-  html += '<div style="font-size:.7rem;opacity:.7;margin-bottom:8px;">다음 미팅에서 논의할 안건 (자동 생성)</div>';
+  html += '<div style="font-size:.7rem;opacity:.7;margin-bottom:8px;">다음 미팅에서 논의할 안건 (클릭 → 해당 섹션 이동)</div>';
   html += '<ol style="padding-left:20px;margin:0;">';
+  
+  // 섹션 매핑: 안건 키워드 → 섹션 인덱스
+  const sectionMap = [
+    {match: '세션', target: 'trendSection'},
+    {match: '구매', target: 'sec-conversion'},
+    {match: '전환', target: 'sec-conversion'},
+    {match: 'CPC', target: 'trendSection'},
+    {match: '액션', target: 'sec-relation'},
+    {match: '시그널', target: null},
+    {match: '실험', target: null},
+    {match: '구매자', target: 'sec-buyer-analysis'},
+  ];
+  
   for (const item of items) {
     const text = item.replace(/^[•\-]\s*/, '');
-    html += `<li style="margin:6px 0;font-size:.85rem;line-height:1.5;">${escHtml(text)}</li>`;
+    const mapping = sectionMap.find(m => text.includes(m.match));
+    if(mapping && mapping.target){
+      html += `<li style="margin:6px 0;font-size:.85rem;line-height:1.5;cursor:pointer;text-decoration:underline dotted;" onclick="document.getElementById('${mapping.target}')?.scrollIntoView({behavior:'smooth'})">${escHtml(text)}</li>`;
+    } else {
+      html += `<li style="margin:6px 0;font-size:.85rem;line-height:1.5;">${escHtml(text)}</li>`;
+    }
   }
-  html += '</ol></div>';
+  html += '</ol>';
+  
+  // 구매자 분석 보고서 링크
+  html += '<div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.2);">';
+  html += '<div style="cursor:pointer;font-size:.82rem;" onclick="document.getElementById(\'sec-buyer-analysis\')?.scrollIntoView({behavior:\'smooth\'})">📊 구매자 심층 분석 보고서 →</div>';
+  html += '</div>';
+  
+  html += '</div>';
   return html;
 }
 
@@ -2189,10 +2253,11 @@ function moveDesignToSettings(){
 /* ═══════════════════════════════════════════════════
    KPI Trend Chart — Canvas 라인차트
    ═══════════════════════════════════════════════════ */
-// ── Trend Section (inline, toggle-based) ──
-let _trendActive = 'sessions';
+// ── Trend Section (multi-select overlay) ──
+let _trendSelected = new Set(['sessions']);
 let _trendVisible = true;
 
+const TREND_COLORS = ['#7c5cfc','#BAFC27','#fc5c8c','#5cccfc','#fca95c','#5cfc9e','#fc5cfc','#fcfc5c','#5c5cfc','#ff8a65'];
 const TREND_KPIS = [
   {key:'sessions', label:'세션', emoji:'👥'},
   {key:'users', label:'유저', emoji:'🧑'},
@@ -2209,84 +2274,87 @@ const TREND_KPIS = [
 function initTrendSection(){
   const reports = window.__allReports;
   if(!reports || !reports.length) return;
-  
   document.getElementById('trendSection').style.display = '';
-  
-  // 토글 버튼 렌더
-  const toggles = document.getElementById('trendToggles');
-  toggles.innerHTML = TREND_KPIS.map(t => 
-    `<button class="trend-toggle${t.key===_trendActive?' active':''}" onclick="switchTrend('${t.key}')">${t.emoji} ${t.label}</button>`
-  ).join('');
-  
-  renderTrendChart(_trendActive);
+  renderTrendToggles();
+  renderMultiTrendChart();
 }
 
-function switchTrend(kpiKey){
-  _trendActive = kpiKey;
-  
-  // 토글 활성화
-  document.querySelectorAll('.trend-toggle').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent.includes(KPI_LABELS[kpiKey] || kpiKey));
-  });
-  
-  renderTrendChart(kpiKey);
+function renderTrendToggles(){
+  const toggles = document.getElementById('trendToggles');
+  toggles.innerHTML = TREND_KPIS.map((t, i) => {
+    const active = _trendSelected.has(t.key);
+    const color = TREND_COLORS[i % TREND_COLORS.length];
+    const style = active ? `background:${color};color:#000;border-color:${color}` : '';
+    return `<button class="trend-toggle${active?' active':''}" style="${style}" onclick="toggleTrendKpi('${t.key}',${i})">${t.emoji} ${t.label}</button>`;
+  }).join('');
+}
+
+function toggleTrendKpi(key, idx){
+  if(_trendSelected.has(key)){
+    if(_trendSelected.size > 1) _trendSelected.delete(key);
+  } else {
+    _trendSelected.add(key);
+  }
+  renderTrendToggles();
+  renderMultiTrendChart();
 }
 
 function toggleTrendSection(){
   _trendVisible = !_trendVisible;
   const section = document.getElementById('trendSection');
   const btn = section.querySelector('button[onclick*="toggleTrend"]');
-  if(_trendVisible){
-    section.querySelector('.trend-chart-area').style.display = '';
-    section.querySelector('.trend-toggles').style.display = '';
-    section.querySelector('.trend-meta').style.display = '';
-    btn.textContent = '접기 ▲';
-  } else {
-    section.querySelector('.trend-chart-area').style.display = 'none';
-    section.querySelector('.trend-toggles').style.display = 'none';
-    section.querySelector('.trend-meta').style.display = 'none';
-    btn.textContent = '펼치기 ▼';
-  }
+  const els = ['.trend-chart-area','.trend-toggles','.trend-meta'].map(s=>section.querySelector(s));
+  els.forEach(el => { if(el) el.style.display = _trendVisible ? '' : 'none'; });
+  btn.textContent = _trendVisible ? '접기 ▲' : '펼치기 ▼';
 }
 
-function renderTrendChart(kpiKey){
+function renderMultiTrendChart(){
   const reports = window.__allReports;
   if(!reports) return;
-  
   const sorted = [...reports].reverse();
   const labels = sorted.map(r => r.title.split('·')[0].trim());
-  const values = sorted.map(r => r.kpi?.[kpiKey]?.value ?? null);
-  const unit = sorted[0]?.kpi?.[kpiKey]?.unit || '';
-  const label = KPI_LABELS[kpiKey] || kpiKey;
   const actions = sorted.map(r => r.actions || []);
   
-  drawLineChart('trendChartMain', labels, values, unit, label, kpiKey, actions);
+  const series = [];
+  const kpiArr = Array.from(_trendSelected);
+  kpiArr.forEach((key, si) => {
+    const colorIdx = TREND_KPIS.findIndex(t => t.key === key);
+    series.push({
+      key, label: KPI_LABELS[key] || key,
+      values: sorted.map(r => r.kpi?.[key]?.value ?? null),
+      unit: sorted[0]?.kpi?.[key]?.unit || '',
+      color: TREND_COLORS[colorIdx >= 0 ? colorIdx : si]
+    });
+  });
   
-  // 메타 정보
-  const valid = values.filter(v => v != null);
+  drawMultiLineChart('trendChartMain', labels, series, actions);
+  
+  // 메타: 각 시리즈별 최고/최저
   const metaEl = document.getElementById('trendMetaMain');
-  if(valid.length > 0){
+  const parts = series.map(s => {
+    const valid = s.values.filter(v => v != null);
+    if(!valid.length) return '';
     const max = Math.max(...valid), min = Math.min(...valid);
-    const avg = valid.reduce((a,b)=>a+b,0) / valid.length;
-    const maxW = labels[values.indexOf(max)], minW = labels[values.indexOf(min)];
-    metaEl.innerHTML = 
-      `최고: <span class="hi">${fmtNum(max, unit)}</span> (${maxW}) · ` +
-      `최저: <span class="lo">${fmtNum(min, unit)}</span> (${minW}) · ` +
-      `평균: ${fmtNum(Math.round(avg), unit)}`;
-  } else {
-    metaEl.innerHTML = '<span style="color:var(--t2)">데이터 없음</span>';
-  }
+    const maxW = labels[s.values.indexOf(max)], minW = labels[s.values.indexOf(min)];
+    return `<span style="color:${s.color}">●</span> <b>${s.label}</b>: ` +
+      `<span class="hi">${fmtNum(max, s.unit)}</span>(${maxW}) ~ <span class="lo">${fmtNum(min, s.unit)}</span>(${minW})`;
+  }).filter(Boolean);
+  metaEl.innerHTML = parts.join('<br>');
 }
 
 function showTrend(kpiKey){
-  // KPI 카드 클릭 → 섹션으로 스크롤 + 해당 지표 선택
   if(!_trendVisible) toggleTrendSection();
-  switchTrend(kpiKey);
+  if(!_trendSelected.has(kpiKey)){
+    _trendSelected.add(kpiKey);
+    renderTrendToggles();
+    renderMultiTrendChart();
+  }
   document.getElementById('trendSection').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-function drawLineChart(canvasId, labels, values, unit, label, kpiKey, actions){
+function drawMultiLineChart(canvasId, labels, series, actions){
   const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.parentElement.getBoundingClientRect();
   canvas.width = rect.width * dpr;
@@ -2297,145 +2365,110 @@ function drawLineChart(canvasId, labels, values, unit, label, kpiKey, actions){
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
   const W = rect.width, H = rect.height;
-  
-  // 테마 색상
   const style = getComputedStyle(document.documentElement);
-  const acColor = style.getPropertyValue('--ac').trim() || '#7c5cfc';
   const textColor = style.getPropertyValue('--t2').trim() || '#888';
   const gridColor = style.getPropertyValue('--b').trim() || '#333';
   
   ctx.clearRect(0, 0, W, H);
   
-  const pad = {top:20, right:20, bottom:40, left:65};
+  const multiAxis = series.length > 1;
+  const pad = {top:24, right: multiAxis ? 65 : 20, bottom:40, left:65};
   const chartW = W - pad.left - pad.right;
   const chartH = H - pad.top - pad.bottom;
-  
-  const valid = values.filter(v => v != null);
-  if(!valid.length) return;
-  
-  let maxV = Math.max(...valid);
-  let minV = Math.min(...valid);
-  if(maxV === minV){ maxV += 1; minV = Math.max(0, minV - 1); }
-  // 여유 10%
-  const range = maxV - minV;
-  minV = Math.max(0, minV - range * 0.1);
-  maxV = maxV + range * 0.1;
-  
   const xStep = chartW / Math.max(labels.length - 1, 1);
-  
   function xPos(i){ return pad.left + i * xStep; }
-  function yPos(v){ return pad.top + chartH - ((v - minV) / (maxV - minV)) * chartH; }
   
-  // 가로 그리드 (5줄)
-  ctx.strokeStyle = gridColor;
-  ctx.lineWidth = 0.5;
-  ctx.font = '11px -apple-system, sans-serif';
-  ctx.fillStyle = textColor;
-  ctx.textAlign = 'right';
-  for(let i = 0; i <= 4; i++){
-    const v = minV + (maxV - minV) * (i / 4);
-    const y = yPos(v);
-    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
-    ctx.fillText(fmtNum(Math.round(v), unit), pad.left - 8, y + 4);
+  // 축 범위: 첫 번째 시리즈 = 좌축, 나머지 = 자체 스케일(같은 캔버스 공간에 정규화)
+  const axes = series.map(s => {
+    const valid = s.values.filter(v => v != null);
+    if(!valid.length) return {min:0,max:1};
+    let mx = Math.max(...valid), mn = Math.min(...valid);
+    if(mx === mn){ mx += 1; mn = Math.max(0, mn - 1); }
+    const rng = mx - mn;
+    return {min: Math.max(0, mn - rng*0.1), max: mx + rng*0.1};
+  });
+  
+  function yPos(v, axisIdx){
+    const a = axes[axisIdx];
+    return pad.top + chartH - ((v - a.min) / (a.max - a.min)) * chartH;
   }
   
-  // X축 라벨
-  ctx.textAlign = 'center';
-  ctx.fillStyle = textColor;
-  labels.forEach((l, i) => {
-    ctx.fillText(l, xPos(i), H - pad.bottom + 20);
-  });
+  // 그리드 (좌축 기준)
+  ctx.strokeStyle = gridColor; ctx.lineWidth = 0.5;
+  ctx.font = '11px -apple-system, sans-serif';
+  ctx.textAlign = 'right'; ctx.fillStyle = series[0]?.color || textColor;
+  for(let i = 0; i <= 4; i++){
+    const v = axes[0].min + (axes[0].max - axes[0].min) * (i/4);
+    const y = yPos(v, 0);
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+    ctx.fillText(fmtNum(Math.round(v), series[0].unit), pad.left - 8, y + 4);
+  }
+  // 우축 (두 번째 시리즈)
+  if(multiAxis && axes.length > 1){
+    ctx.textAlign = 'left'; ctx.fillStyle = series[1].color;
+    for(let i = 0; i <= 4; i++){
+      const v = axes[1].min + (axes[1].max - axes[1].min) * (i/4);
+      const y = yPos(v, 1);
+      ctx.fillText(fmtNum(Math.round(v), series[1].unit), W - pad.right + 8, y + 4);
+    }
+  }
   
-  // 라인 + 포인트
-  const points = [];
-  values.forEach((v, i) => {
-    if(v != null) points.push({x: xPos(i), y: yPos(v), v, i});
-  });
+  // X축
+  ctx.textAlign = 'center'; ctx.fillStyle = textColor;
+  labels.forEach((l, i) => ctx.fillText(l, xPos(i), H - pad.bottom + 20));
   
-  if(points.length > 1){
-    // 그라데이션 영역
-    const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + chartH);
-    grad.addColorStop(0, acColor + '30');
-    grad.addColorStop(1, acColor + '05');
-    ctx.beginPath();
-    ctx.moveTo(points[0].x, pad.top + chartH);
-    points.forEach(p => ctx.lineTo(p.x, p.y));
-    ctx.lineTo(points[points.length-1].x, pad.top + chartH);
-    ctx.closePath();
-    ctx.fillStyle = grad;
-    ctx.fill();
+  // 각 시리즈 라인
+  series.forEach((s, si) => {
+    const axIdx = multiAxis ? Math.min(si, 1) : 0; // 3+ 시리즈는 두 번째 축 공유
+    const points = [];
+    s.values.forEach((v, i) => { if(v != null) points.push({x:xPos(i), y:yPos(v, si < 2 ? si : 1), v, i}); });
+    if(!points.length) return;
+    
+    // 영역 (첫 시리즈만)
+    if(si === 0 && points.length > 1){
+      const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + chartH);
+      grad.addColorStop(0, s.color + '20'); grad.addColorStop(1, s.color + '05');
+      ctx.beginPath(); ctx.moveTo(points[0].x, pad.top + chartH);
+      points.forEach(p => ctx.lineTo(p.x, p.y));
+      ctx.lineTo(points[points.length-1].x, pad.top + chartH);
+      ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
+    }
     
     // 라인
-    ctx.beginPath();
-    ctx.moveTo(points[0].x, points[0].y);
-    points.forEach(p => ctx.lineTo(p.x, p.y));
-    ctx.strokeStyle = acColor;
-    ctx.lineWidth = 2.5;
-    ctx.lineJoin = 'round';
-    ctx.stroke();
-  }
-  
-  // 포인트 + 값
-  ctx.font = 'bold 11px -apple-system, sans-serif';
-  ctx.textAlign = 'center';
-  points.forEach(p => {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
-    ctx.fillStyle = acColor;
-    ctx.fill();
-    ctx.strokeStyle = style.getPropertyValue('--s').trim() || '#1a1a2e';
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    if(points.length > 1){
+      ctx.beginPath(); ctx.moveTo(points[0].x, points[0].y);
+      points.forEach(p => ctx.lineTo(p.x, p.y));
+      ctx.strokeStyle = s.color; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.stroke();
+    }
     
-    // 값 라벨
-    ctx.fillStyle = style.getPropertyValue('--t').trim() || '#fff';
-    ctx.fillText(fmtNum(p.v, unit), p.x, p.y - 12);
+    // 포인트 + 값
+    ctx.font = 'bold 10px -apple-system, sans-serif'; ctx.textAlign = 'center';
+    points.forEach(p => {
+      ctx.beginPath(); ctx.arc(p.x, p.y, 3.5, 0, Math.PI*2);
+      ctx.fillStyle = s.color; ctx.fill();
+      ctx.strokeStyle = style.getPropertyValue('--s').trim() || '#1a1a2e';
+      ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.fillStyle = s.color;
+      const offsetY = si % 2 === 0 ? -10 : 14; // 겹침 방지: 짝수 위, 홀수 아래
+      ctx.fillText(fmtNum(p.v, s.unit), p.x, p.y + offsetY);
+    });
   });
   
-  // 액션 마커 (주차별)
+  // 액션 마커
   if(actions && actions.length){
-    const actionColor = '#BAFC27';
-    ctx.font = '10px -apple-system, sans-serif';
-    ctx.textAlign = 'center';
-    
-    const actionList = [];
     actions.forEach((weekActions, i) => {
       if(!weekActions || !weekActions.length) return;
       const x = xPos(i);
-      
-      // 세로 점선
-      ctx.strokeStyle = actionColor + '60';
-      ctx.lineWidth = 1;
-      ctx.setLineDash([3, 3]);
-      ctx.beginPath();
-      ctx.moveTo(x, pad.top);
-      ctx.lineTo(x, pad.top + chartH);
-      ctx.stroke();
+      ctx.strokeStyle = '#BAFC2760'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+      ctx.beginPath(); ctx.moveTo(x, pad.top); ctx.lineTo(x, pad.top+chartH); ctx.stroke();
       ctx.setLineDash([]);
-      
-      // 마커 (하단)
-      const markerY = pad.top + chartH + 8;
-      ctx.fillStyle = actionColor;
-      ctx.beginPath();
-      ctx.arc(x, markerY, 4, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // 액션 수
+      ctx.fillStyle = '#BAFC27'; ctx.beginPath();
+      ctx.arc(x, pad.top+chartH+8, 4, 0, Math.PI*2); ctx.fill();
       if(weekActions.length > 1){
-        ctx.fillStyle = '#000';
-        ctx.font = 'bold 8px -apple-system, sans-serif';
-        ctx.fillText(weekActions.length, x, markerY + 3);
+        ctx.fillStyle = '#000'; ctx.font = 'bold 8px -apple-system, sans-serif';
+        ctx.textAlign = 'center'; ctx.fillText(weekActions.length, x, pad.top+chartH+11);
       }
-      
-      weekActions.forEach(a => actionList.push(`${labels[i]}: ${a.action} (${a.type})`));
     });
-    
-    // 액션 리스트를 메타 영역에 추가
-    if(actionList.length){
-      const metaEl = document.getElementById('trendMetaMain');
-      if(metaEl) metaEl.innerHTML += '<br><span style="color:#BAFC27">●</span> 마케팅 액션: ' + 
-        actionList.map(a => `<br>&nbsp;&nbsp;· ${a}`).join('');
-    }
   }
 }
 
