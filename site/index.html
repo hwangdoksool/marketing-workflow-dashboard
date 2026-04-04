@@ -3034,18 +3034,30 @@ function renderSchemaOverview() {
       </div>`;
     };
 
-    const section = (title, items, defs, color) => {
+    const sectionId = (() => { let c=0; return ()=>'schema-sec-'+(c++); })();
+    const section = (title, items, defs, color, startOpen=false) => {
       const sorted = Object.entries(items).sort((a,b)=>b[1]-a[1]);
-      const maxV = Math.max(...sorted.map(([,v])=>v), 1);
-      return `<div style="background:var(--s);border:1px solid var(--b);border-radius:10px;padding:16px;margin-bottom:12px;">
-        <div style="font-weight:700;font-size:.85rem;margin-bottom:12px;">${title}</div>
-        ${sorted.map(([k,v]) => `
-          <div style="margin-bottom:8px;">
-            <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:2px;">
-              <span><strong>${k}</strong> <span style="color:var(--t2);">${defs[k]||''}</span></span>
-            </div>
-            ${bar(v, n, color)}
-          </div>`).join('')}
+      const top3 = sorted.slice(0,3);
+      const sid = sectionId();
+      const total = sorted.reduce((s,[,v])=>s+v,0);
+      return `<div style="background:var(--s);border:1px solid var(--b);border-radius:10px;padding:14px;cursor:pointer;" onclick="const d=document.getElementById('${sid}');d.style.display=d.style.display==='none'?'':'none';this.querySelector('.chevron').textContent=d.style.display==='none'?'▶':'▼'">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-weight:700;font-size:.82rem;"><span class="chevron">${startOpen?'▼':'▶'}</span> ${title}</span>
+          <span style="font-size:.7rem;color:var(--t2);">${sorted.length}개 유형 · ${total}건</span>
+        </div>
+        <div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">
+          ${top3.map(([k,v])=>`<span style="font-size:.68rem;background:${color}22;color:${color};border:1px solid ${color}44;border-radius:4px;padding:2px 6px;"><strong>${k}</strong> ${v}건</span>`).join('')}
+          ${sorted.length>3?`<span style="font-size:.68rem;color:var(--t2);">+${sorted.length-3}</span>`:''}
+        </div>
+        <div id="${sid}" style="display:${startOpen?'':'none'};margin-top:12px;" onclick="event.stopPropagation()">
+          ${sorted.map(([k,v]) => `
+            <div style="margin-bottom:6px;">
+              <div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:2px;">
+                <span><strong>${k}</strong> <span style="color:var(--t2);font-size:.68rem;">${defs[k]||''}</span></span>
+              </div>
+              ${bar(v, n, color)}
+            </div>`).join('')}
+        </div>
       </div>`;
     };
 
@@ -3061,13 +3073,15 @@ function renderSchemaOverview() {
           <div style="font-size:.72rem;color:var(--t2);">총 소재</div>
         </div>
       </div>
-      ${section('🎯 VP (가치 제안)', vpC, SCHEMA_DEFS.VP, '#6366f1')}
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;">
+      ${section('🎯 VP (가치 제안)', vpC, SCHEMA_DEFS.VP, '#6366f1', true)}
       ${section('🔥 Problem (고객 고충)', probC, SCHEMA_DEFS.Problem, '#f59e0b')}
       ${section('🎣 Hook (후킹 기법)', hookC2, {}, '#10b981')}
       ${section('🗺️ Stage (구매 여정)', stageC, SCHEMA_DEFS.Stage, '#3b82f6')}
       ${section('⚙️ USP (제품 특장점)', uspC, SCHEMA_DEFS.USP, '#ec4899')}
       ${section('🎬 Content Type', contentC, {}, '#8b5cf6')}
       ${section('🏆 Verdict (판정)', verdictC, {hit:'성과 확인',miss:'성과 미달','미판정':'데이터 부족/보류'}, '#ef4444')}
+      </div>
     `;
   });
 }
@@ -3106,19 +3120,34 @@ function renderSchemaDef() {
     '블로그': '네이버/웹 블로그 텍스트+이미지',
   };
 
+  const defSection = (title, rows) => {
+    const sid = 'def-' + title.replace(/[^a-zA-Z]/g,'').slice(0,10) + Math.random().toString(36).slice(2,5);
+    return `<div style="background:var(--s);border:1px solid var(--b);border-radius:10px;padding:14px;cursor:pointer;" onclick="const d=document.getElementById('${sid}');d.style.display=d.style.display==='none'?'':'none';this.querySelector('.chevron').textContent=d.style.display==='none'?'▶':'▼'">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-weight:700;font-size:.82rem;"><span class="chevron">▶</span> ${title}</span>
+        <span style="font-size:.7rem;color:var(--t2);">${rows.length}개</span>
+      </div>
+      <div id="${sid}" style="display:none;margin-top:12px;" onclick="event.stopPropagation()">
+        <table class="data-table">
+          <thead><tr><th>코드</th><th>설명</th></tr></thead>
+          <tbody>${rows.map(([k,v])=>`<tr><td><strong>${k}</strong></td><td style="color:var(--t2);font-size:.78rem;">${v}</td></tr>`).join('')}</tbody>
+        </table>
+      </div>
+    </div>`;
+  };
+
   el.innerHTML = `
-    <p style="color:var(--t2);font-size:.78rem;margin-bottom:16px;">크리에이티브 스키마 v1 — 9축 × 302개 소재 태깅 체계. 프레임(비전) 분석 기반 직접 태깅.</p>
-    ${table('🎯 VP — Value Proposition (10축)', Object.entries(SCHEMA_DEFS.VP))}
-    ${table('🔥 Problem — 고객 고충 (22축)', Object.entries(SCHEMA_DEFS.Problem))}
-    ${table('🎣 Hook — 후킹 기법 (10축)', Object.entries(hookDefs))}
-    ${table('🗺️ Stage — 구매 여정 (12축)', Object.entries(SCHEMA_DEFS.Stage))}
-    ${table('⚙️ USP — 제품 특장점 (18축)', Object.entries(SCHEMA_DEFS.USP))}
-    ${table('🎬 Format — 콘텐츠 형식', Object.entries(formatDefs))}
-    <div style="background:var(--s);border:1px solid var(--b);border-radius:10px;padding:16px;font-size:.78rem;color:var(--t2);">
-      <strong style="color:var(--t);">태깅 방식</strong><br>
-      영상/이미지 프레임 비전 분석 → 직접 판단 태깅 (LLM 자동 태깅 폐기).<br>
-      캡션/제목 키워드 매칭 금지 — 실제 영상 내용 기반.<br>
-      최종 업데이트: 2026-04-04
+    <p style="color:var(--t2);font-size:.78rem;margin-bottom:16px;">크리에이티브 스키마 v1 — 9축 × 302개 소재. 프레임(비전) 분석 기반 직접 태깅. 클릭하여 정의 펼치기.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;">
+    ${defSection('🎯 VP — Value Proposition (10축)', Object.entries(SCHEMA_DEFS.VP))}
+    ${defSection('🔥 Problem — 고객 고충 (22축)', Object.entries(SCHEMA_DEFS.Problem))}
+    ${defSection('🎣 Hook — 후킹 기법 (10축)', Object.entries(hookDefs))}
+    ${defSection('🗺️ Stage — 구매 여정 (12축)', Object.entries(SCHEMA_DEFS.Stage))}
+    ${defSection('⚙️ USP — 제품 특장점 (18축)', Object.entries(SCHEMA_DEFS.USP))}
+    ${defSection('🎬 Format — 콘텐츠 형식', Object.entries(formatDefs))}
+    </div>
+    <div style="background:var(--s);border:1px solid var(--b);border-radius:10px;padding:14px;font-size:.78rem;color:var(--t2);margin-top:10px;">
+      <strong style="color:var(--t);">태깅 방식</strong> — 영상/이미지 프레임 비전 분석 → 직접 판단 태깅. 캡션 키워드 매칭 금지. 최종: 2026-04-04
     </div>`;
 }
 
