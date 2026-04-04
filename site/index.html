@@ -1450,7 +1450,7 @@ function renderReportNav(){
 
 function selectReport(idx, pushHash = true){
   currentReportIdx = idx;
-  document.querySelectorAll('.report-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+  document.querySelectorAll('#reportNav .report-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
   renderReport(idx);
   // 해시 라우팅: #w13 등
   if(pushHash && reports[idx]){
