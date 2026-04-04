@@ -3417,7 +3417,7 @@ function renderMeetingTab() {
     reportLink = `<div class="card" style="border-color:var(--ac);margin-bottom:12px;">
       <div class="card-title">📊 연결된 주간 리포트: ${mtg.reportId}</div>
       <p style="font-size:.78rem;color:var(--t2);">주간 리포트 탭에서 상세 데이터를 확인하세요. 리포트 관련 어젠다는 리포트 내에서 다룹니다.</p>
-      <button class="btn" style="margin-top:8px;" onclick="document.querySelector('[data-tab=weekly]').click()">📊 리포트 보기</button>
+      <button class="btn" style="margin-top:8px;" onclick="activateMainTab('analysis');setTimeout(()=>switchAnalysisSub('weekly'),50);">📊 리포트 보기</button>
     </div>`;
   }
 
