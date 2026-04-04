@@ -1359,23 +1359,42 @@ document.addEventListener('DOMContentLoaded', () => {
   // Only toggle tabs that are NOT legacy hidden (!important)
   // 메인 탭은 이 5개만
   const mainTabIds = ['tab-briefs','tab-meeting','tab-analysis','tab-creative','tab-settings'];
+  
+  function activateMainTab(tabName, skipHash) {
+    document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+    mainTabIds.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
+    const btn = document.querySelector(`.main-tab[data-tab="${tabName}"]`);
+    if (btn) btn.classList.add('active');
+    const target = document.getElementById('tab-' + tabName);
+    if (target) target.style.display = 'block';
+    if (!skipHash) {
+      const sub = tabName === 'analysis' ? '/weekly' : tabName === 'creative' ? '/schema' : '';
+      window.history.replaceState(null, '', '#' + tabName + sub);
+    }
+  }
+
   document.querySelectorAll('.main-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
-      mainTabIds.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.style.display = 'none';
-      });
-      tab.classList.add('active');
-      const target = document.getElementById('tab-' + tab.dataset.tab);
-      if(target) target.style.display = 'block';
-    });
+    tab.addEventListener('click', () => activateMainTab(tab.dataset.tab));
   });
-  // 초기 상태: briefs만 보이고 나머지 숨김
-  mainTabIds.forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.style.display = id === 'tab-briefs' ? 'block' : 'none';
-  });
+
+  // URL 해시 라우팅
+  function routeFromHash() {
+    const hash = (window.location.hash || '').replace('#','');
+    if (!hash) { activateMainTab('briefs', true); return; }
+    const [main, sub] = hash.split('/');
+    const validMains = ['briefs','meeting','analysis','creative','settings'];
+    if (validMains.includes(main)) {
+      activateMainTab(main, true);
+      if (main === 'analysis' && sub) setTimeout(() => switchAnalysisSub(sub), 50);
+      if (main === 'creative' && sub) setTimeout(() => switchCreativeSub(sub), 50);
+      if (main === 'meeting') setTimeout(() => renderMeetingTab(), 50);
+    } else {
+      activateMainTab('briefs', true);
+    }
+  }
+  
+  routeFromHash();
+  window.addEventListener('hashchange', routeFromHash);
   loadReports();
   // Load items from KV API then render
   loadItems().then(() => {
@@ -3288,6 +3307,7 @@ function switchAnalysisSub(sub) {
   moveTabInner('tab-signals', 'analysis-sub-signals');
   moveTabInner('tab-learn', 'analysis-sub-learn');
   
+  window.history.replaceState(null, '', '#analysis/' + sub);
   if (sub === 'weekly' && typeof loadReports === 'function') loadReports();
   if (sub === 'learn' && typeof renderLearnTab === 'function') renderLearnTab();
   if (sub === 'reports') renderAdhocReports();
@@ -3305,7 +3325,7 @@ function switchCreativeSub(sub) {
   });
   moveTabInner('tab-schema', 'creative-sub-schema');
   moveTabInner('tab-tagger', 'creative-sub-tagger');
-  
+  window.history.replaceState(null, '', '#creative/' + sub);
   if (sub === 'schema') {
     if (typeof renderSchemaOverview === 'function') setTimeout(() => renderSchemaOverview(), 50);
   }
