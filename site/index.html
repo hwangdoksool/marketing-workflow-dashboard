@@ -1357,7 +1357,7 @@ function toggleTheme(){
    ═══════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   // Only toggle tabs that are NOT legacy hidden (!important)
-  const visibleTabs = ['tab-weekly','tab-briefs','tab-signals','tab-tagger','tab-learn','tab-schema','tab-settings'];
+  const visibleTabs = ['tab-weekly','tab-briefs','tab-signals','tab-tagger','tab-learn','tab-schema','tab-settings','tab-meeting','tab-analysis','tab-creative'];
   document.querySelectorAll('.main-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
