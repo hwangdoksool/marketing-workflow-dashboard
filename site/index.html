@@ -245,6 +245,7 @@ select.form-input{cursor:pointer;}
     <button class="main-tab" data-tab="signals">💡 시그널</button>
     <button class="main-tab" data-tab="learn">📚 Learn</button>
     <button class="main-tab" data-tab="tagger">🏷️ 소재 태깅</button>
+    <button class="main-tab" data-tab="schema">🗂️ 크리에이티브 스키마</button>
     <button class="main-tab" data-tab="settings">⚙️ 더보기</button>
   </nav>
 
@@ -340,6 +341,55 @@ select.form-input{cursor:pointer;}
       </div>
     </div>
     <div id="review-sub" style="display:none;"><div id="reviewContent2"></div></div>
+  </div>
+
+  <!-- ═══ 크리에이티브 스키마 탭 ═══ -->
+  <div class="tab-content" id="tab-schema">
+    <div style="display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;">
+      <button class="report-btn active" onclick="switchSchemaSub('schema-overview')" id="schema-sub-overview">📊 태깅 현황</button>
+      <button class="report-btn" onclick="switchSchemaSub('schema-def')" id="schema-sub-def">📖 스키마 정의</button>
+      <button class="report-btn" onclick="switchSchemaSub('schema-list')" id="schema-sub-list">🔍 소재 탐색</button>
+    </div>
+    <!-- 1. 태깅 현황 -->
+    <div id="schema-overview">
+      <div id="schemaOverviewContent">
+        <div class="coming-soon" style="padding:40px 0;"><p>로딩 중...</p></div>
+      </div>
+    </div>
+    <!-- 2. 스키마 정의 -->
+    <div id="schema-def" style="display:none;">
+      <div id="schemaDefContent"></div>
+    </div>
+    <!-- 3. 소재 탐색 -->
+    <div id="schema-list" style="display:none;">
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
+        <input type="text" class="search-input" id="schemaSearch" placeholder="소재 검색..." oninput="renderSchemaList()" style="flex:1;min-width:160px;">
+        <select id="schemaFilterVP" onchange="renderSchemaList()" style="padding:6px 10px;border-radius:6px;border:1px solid var(--b);background:var(--s);color:var(--t);font-size:.8rem;">
+          <option value="">VP 전체</option>
+          <option value="VP1">VP1 자유/해방</option>
+          <option value="VP2">VP2 안심/안전</option>
+          <option value="VP3">VP3 성장/성취</option>
+          <option value="VP4">VP4 경제성</option>
+          <option value="VP5">VP5 라이프스타일</option>
+          <option value="VP6">VP6 프리미엄/소유</option>
+          <option value="VP7">VP7 전문성/B2B</option>
+          <option value="VP8">VP8 호기심/재미</option>
+          <option value="VP9">VP9 사회적인정</option>
+          <option value="VP10">VP10 정서적안정</option>
+        </select>
+        <select id="schemaFilterSource" onchange="renderSchemaList()" style="padding:6px 10px;border-radius:6px;border:1px solid var(--b);background:var(--s);color:var(--t);font-size:.8rem;">
+          <option value="">소스 전체</option>
+          <option value="instagram">인스타</option>
+          <option value="youtube">유튜브</option>
+          <option value="naver_blog">블로그</option>
+        </select>
+        <select id="schemaFilterHook" onchange="renderSchemaList()" style="padding:6px 10px;border-radius:6px;border:1px solid var(--b);background:var(--s);color:var(--t);font-size:.8rem;">
+          <option value="">Hook 전체</option>
+        </select>
+      </div>
+      <div id="schemaListCount" style="font-size:.75rem;color:var(--t2);margin-bottom:8px;"></div>
+      <div id="schemaListGrid"></div>
+    </div>
   </div>
 
   <!-- (Legacy hidden tabs for JS compat) -->
@@ -1171,7 +1221,7 @@ function toggleTheme(){
    ═══════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   // Only toggle tabs that are NOT legacy hidden (!important)
-  const visibleTabs = ['tab-weekly','tab-briefs','tab-signals','tab-tagger','tab-learn','tab-settings'];
+  const visibleTabs = ['tab-weekly','tab-briefs','tab-signals','tab-tagger','tab-learn','tab-schema','tab-settings'];
   document.querySelectorAll('.main-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
@@ -2630,6 +2680,244 @@ function drawMultiLineChart(canvasId, labels, series, actions){
   }
 }
 
+</script>
+
+<script>
+/* ═══════════════════════════════════════════
+   크리에이티브 스키마 탭
+   ═══════════════════════════════════════════ */
+
+const SCHEMA_DEFS = {
+  VP: {
+    VP1:  '자유/해방 — 공간·시간·눈치·소음·육아·날씨 제약에서 해방',
+    VP2:  '안심/안전 — 부상 안심, 국내 설계·제조·AS, 자세 ROM, 내구성',
+    VP3:  '성장/성취 — 체형 변화, 기록 갱신, 한계 돌파, 진전 시각화',
+    VP4:  '경제성 — 헬스장·PT 대체, 가족 공유, 장기 비용 환산',
+    VP5:  '라이프스타일 — 습관 정착, 가정 화목, 인테리어 조화, 일상 루틴',
+    VP6:  '프리미엄/소유 — 내 전용 헬스장, 프리미엄 장비 소유감',
+    VP7:  '전문성/B2B — AI 코칭, 재활, B2B 공간 효율·차별화',
+    VP8:  '호기심/재미 — 스마트 기술 체험, 게이미피케이션, 터치 무게 쾌감',
+    VP9:  '사회적 인정 — 홈짐 자랑, SNS 공유, 얼리어답터 이미지',
+    VP10: '정서적 안정 — 스트레스 해소, 성취감, 자기 관리 뿌듯함',
+  },
+  Problem: {
+    P1:'헬스장 왕복 시간', P2:'헬스장 비용 누적', P3:'PT 비용 부담',
+    P4:'혼자 운동 안전 불안(깔림/부상)', P5:'자세 피드백 부재', P6:'운동 기록 관리 어려움',
+    P7:'홈짐 공간 부족', P8:'홈짐 소음/진동', P9:'홈짐 이사/처분 곤란',
+    P10:'장비 성과 한계(덤벨/밴드/운동종류 제한)', P11:'운동 지루함/동기 저하',
+    P12:'헬스장 눈치/불편', P13:'아이/가족 돌봄 제약', P14:'날씨/계절 제약',
+    P15:'장비 안전성 불신', P16:'재활/부상 후 운동 제한', P17:'센터 공간 대비 장비 효율(B2B)',
+    P18:'센터 회원 경험 차별화(B2B)', P19:'의사/전문가 운동 권고', P20:'나이 들면서 근감소',
+    P21:'출산 후 체형 변화', P22:'운동 습관 유지 실패',
+  },
+  Stage: {
+    S1:'무인지', S2:'최초 인지', S3:'호기심', S4:'정보 탐색',
+    S5:'비교 검토', S6:'체험 의향', S7:'체험 완료', S8:'구매 고려',
+    S9:'구매 결정', S10:'초기 사용', S11:'습관화', S12:'옹호/추천',
+  },
+  USP: {
+    U1:'모터 부하 제어', U2:'오토스팟', U3:'올인원 멀티', U4:'세이프티 시스템',
+    U5:'앱 연동', U6:'소형화(0.5평)', U7:'고중량 120kg+', U8:'무소음',
+    U9:'AI 코칭', U10:'다양한 운동', U11:'VBT', U12:'자동 기록',
+    U13:'멀티 모드', U14:'웨이트 스택 내장', U15:'벤치 일체형', U16:'1평 설치',
+    U17:'국내 설계·제조·AS', U18:'이동성',
+  },
+  Hook: ['질문형','공포충격','반전','호기심','도발','숫자','인물등장','시연데모','비교','사회적증거'],
+};
+
+let schemaBriefs = [];
+
+function switchSchemaSub(id) {
+  ['schema-overview','schema-def','schema-list'].forEach(s => {
+    document.getElementById(s).style.display = s === id ? '' : 'none';
+  });
+  ['schema-sub-overview','schema-sub-def','schema-sub-list'].forEach(b => {
+    document.getElementById(b).classList.toggle('active', b === 'schema-sub-' + id.replace('schema-',''));
+  });
+  if (id === 'schema-overview') renderSchemaOverview();
+  if (id === 'schema-def') renderSchemaDef();
+  if (id === 'schema-list') renderSchemaList();
+}
+
+async function loadSchemaBriefs() {
+  if (schemaBriefs.length) return schemaBriefs;
+  try {
+    const r = await fetch('schema_briefs.json');
+    if (r.ok) { schemaBriefs = await r.json(); return schemaBriefs; }
+    return [];
+  } catch(e) { console.error(e); return []; }
+}
+
+function renderSchemaOverview() {
+  const el = document.getElementById('schemaOverviewContent');
+  el.innerHTML = '<div style="padding:40px 0;text-align:center;color:var(--t2)">로딩 중...</div>';
+
+  loadSchemaBriefs().then(briefs => {
+    if (!briefs.length) {
+      el.innerHTML = '<div class="coming-soon"><p>데이터를 불러올 수 없습니다.</p></div>';
+      return;
+    }
+
+    const count = (field, split=', ') => {
+      const c = {};
+      briefs.forEach(b => {
+        (b[field]||'').split(split).forEach(v => { v=v.trim(); if(v) c[v]=(c[v]||0)+1; });
+      });
+      return c;
+    };
+
+    const vpC = count('target_vp');
+    const probC = count('target_problem');
+    const hookC = count('hook_type', '|NONE|');  // hook은 단일값
+    briefs.forEach(b => { const h=(b.hook_type||'').trim(); if(h) hookC[h]=(hookC[h]||0)+1; });
+
+    const stageC = {}, uspC = {};
+    briefs.forEach(b => {
+      try {
+        const h = JSON.parse(b.hypothesis||'{}');
+        (h.stage||[]).forEach(s => stageC[s]=(stageC[s]||0)+1);
+        (h.usp||[]).forEach(u => uspC[u]=(uspC[u]||0)+1);
+      } catch {}
+    });
+
+    const n = briefs.length;
+    const srcC = {};
+    briefs.forEach(b => { const s=b.source||''; srcC[s]=(srcC[s]||0)+1; });
+
+    const bar = (v, max, color='var(--ac)') => {
+      const pct = Math.round(v/max*100);
+      return `<div style="display:flex;align-items:center;gap:8px;margin:3px 0;">
+        <div style="flex:1;background:var(--b);border-radius:3px;height:8px;overflow:hidden;">
+          <div style="width:${pct}%;height:100%;background:${color};border-radius:3px;"></div>
+        </div>
+        <span style="font-size:.72rem;color:var(--t2);min-width:50px;">${v}개 (${pct}%)</span>
+      </div>`;
+    };
+
+    const section = (title, items, defs, color) => {
+      const sorted = Object.entries(items).sort((a,b)=>b[1]-a[1]);
+      const maxV = Math.max(...sorted.map(([,v])=>v), 1);
+      return `<div style="background:var(--s);border:1px solid var(--b);border-radius:10px;padding:16px;margin-bottom:12px;">
+        <div style="font-weight:700;font-size:.85rem;margin-bottom:12px;">${title}</div>
+        ${sorted.map(([k,v]) => `
+          <div style="margin-bottom:8px;">
+            <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:2px;">
+              <span><strong>${k}</strong> <span style="color:var(--t2);">${defs[k]||''}</span></span>
+            </div>
+            ${bar(v, n, color)}
+          </div>`).join('')}
+      </div>`;
+    };
+
+    el.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:16px;">
+        ${Object.entries(srcC).map(([s,c])=>`
+          <div style="background:var(--s);border:1px solid var(--b);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-size:1.4rem;font-weight:700;">${c}</div>
+            <div style="font-size:.72rem;color:var(--t2);">${{instagram:'인스타',youtube:'유튜브',naver_blog:'블로그'}[s]||s}</div>
+          </div>`).join('')}
+        <div style="background:var(--s);border:1px solid var(--b);border-radius:8px;padding:12px;text-align:center;">
+          <div style="font-size:1.4rem;font-weight:700;">${n}</div>
+          <div style="font-size:.72rem;color:var(--t2);">총 소재</div>
+        </div>
+      </div>
+      ${section('🎯 VP (가치 제안)', vpC, SCHEMA_DEFS.VP, '#6366f1')}
+      ${section('🔥 Problem', probC, SCHEMA_DEFS.Problem, '#f59e0b')}
+      ${section('🎣 Hook', Object.fromEntries(Object.entries(hookC).sort((a,b)=>b[1]-a[1])), {}, '#10b981')}
+      ${section('🗺️ Stage (구매 여정)', stageC, SCHEMA_DEFS.Stage, '#3b82f6')}
+      ${section('⚙️ USP (제품 특장점)', uspC, SCHEMA_DEFS.USP, '#ec4899')}
+    `;
+  });
+}
+
+function renderSchemaDef() {
+  const el = document.getElementById('schemaDefContent');
+  const table = (title, rows) => `
+    <div style="background:var(--s);border:1px solid var(--b);border-radius:10px;padding:16px;margin-bottom:12px;">
+      <div style="font-weight:700;font-size:.85rem;margin-bottom:10px;">${title}</div>
+      <table class="data-table">
+        <thead><tr><th>코드</th><th>설명</th></tr></thead>
+        <tbody>${rows.map(([k,v])=>`<tr><td><strong>${k}</strong></td><td style="color:var(--t2);font-size:.78rem;">${v}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+
+  el.innerHTML = `
+    ${table('🎯 VP — Value Proposition (10)', Object.entries(SCHEMA_DEFS.VP))}
+    ${table('🔥 Problem (22)', Object.entries(SCHEMA_DEFS.Problem))}
+    ${table('🗺️ Stage — 구매 여정 (12)', Object.entries(SCHEMA_DEFS.Stage))}
+    ${table('⚙️ USP — 제품 특장점 (18)', Object.entries(SCHEMA_DEFS.USP))}
+    <div style="background:var(--s);border:1px solid var(--b);border-radius:10px;padding:16px;margin-bottom:12px;">
+      <div style="font-weight:700;font-size:.85rem;margin-bottom:10px;">🎣 Hook — 후킹 기법</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${SCHEMA_DEFS.Hook.map(h=>`<span style="background:var(--s2);border:1px solid var(--b);border-radius:6px;padding:4px 10px;font-size:.78rem;">${h}</span>`).join('')}
+      </div>
+    </div>
+    <div style="background:var(--s);border:1px solid var(--b);border-radius:10px;padding:16px;font-size:.78rem;color:var(--t2);">
+      <strong style="color:var(--t);">태깅 방식</strong><br>
+      프레임 비전 분석(영상/이미지) + GPT-4o-mini few-shot 추론.<br>
+      캡션 키워드 매칭 아님 — 실제 영상 내용 기반.<br>
+      최종 업데이트: 2026-04-04
+    </div>`;
+}
+
+function renderSchemaList() {
+  const el = document.getElementById('schemaListGrid');
+  const countEl = document.getElementById('schemaListCount');
+  const q = (document.getElementById('schemaSearch')?.value||'').toLowerCase();
+  const vp = document.getElementById('schemaFilterVP')?.value||'';
+  const src = document.getElementById('schemaFilterSource')?.value||'';
+  const hook = document.getElementById('schemaFilterHook')?.value||'';
+
+  loadSchemaBriefs().then(briefs => {
+    // hook 필터 옵션 채우기
+    const hookSel = document.getElementById('schemaFilterHook');
+    if (hookSel && hookSel.options.length === 1) {
+      const hooks = [...new Set(briefs.map(b=>b.hook_type||'').filter(Boolean))].sort();
+      hooks.forEach(h => { const o=document.createElement('option'); o.value=h; o.textContent=h; hookSel.appendChild(o); });
+    }
+
+    let filtered = briefs.filter(b => {
+      if (vp && !(b.target_vp||'').includes(vp)) return false;
+      if (src && b.source !== src) return false;
+      if (hook && b.hook_type !== hook) return false;
+      if (q && !(b.title||'').toLowerCase().includes(q)) return false;
+      return true;
+    });
+
+    countEl.textContent = `${filtered.length}개 / 전체 ${briefs.length}개`;
+
+    const srcIcon = {instagram:'📸',youtube:'🎬',naver_blog:'📝'};
+    el.innerHTML = filtered.map(b => {
+      let stage='', usp='';
+      try { const h=JSON.parse(b.hypothesis||'{}'); stage=(h.stage||[]).join(' '); usp=(h.usp||[]).join(' '); } catch {}
+      const vps = (b.target_vp||'').split(', ').filter(Boolean);
+      const probs = (b.target_problem||'').split(', ').filter(Boolean);
+      const tag = (t,color) => `<span style="background:${color}22;color:${color};border:1px solid ${color}44;border-radius:4px;padding:2px 6px;font-size:.68rem;font-weight:600;">${t}</span>`;
+      return `<div style="background:var(--s);border:1px solid var(--b);border-radius:8px;padding:12px;margin-bottom:6px;">
+        <div style="display:flex;gap:8px;align-items:flex-start;">
+          <span style="font-size:1.1rem;">${srcIcon[b.source]||'📄'}</span>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:.8rem;font-weight:600;margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${b.title||''}">${b.title||''}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;">
+              ${vps.map(v=>tag(v,'#6366f1')).join('')}
+              ${probs.map(p=>tag(p,'#f59e0b')).join('')}
+              ${b.hook_type ? tag(b.hook_type,'#10b981') : ''}
+              ${stage ? stage.split(' ').map(s=>tag(s,'#3b82f6')).join('') : ''}
+              ${usp ? usp.split(' ').map(u=>tag(u,'#ec4899')).join('') : ''}
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join('') || '<div style="text-align:center;padding:40px;color:var(--t2);">결과 없음</div>';
+  });
+}
+
+// 탭 클릭 시 스키마 탭이면 overview 렌더
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('[data-tab="schema"]')?.addEventListener('click', () => {
+    setTimeout(() => renderSchemaOverview(), 50);
+  });
+});
 </script>
 <!-- trend chart is inline in tab-weekly -->
 </body>
