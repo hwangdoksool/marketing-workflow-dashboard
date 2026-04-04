@@ -242,11 +242,8 @@ select.form-input{cursor:pointer;}
   <nav class="main-tabs">
     <button class="main-tab active" data-tab="briefs">📋 워크플로우</button>
     <button class="main-tab" data-tab="meeting">🤝 미팅</button>
-    <button class="main-tab" data-tab="weekly">📊 주간 리포트</button>
-    <button class="main-tab" data-tab="signals">💡 시그널</button>
-    <button class="main-tab" data-tab="learn">📚 Learn</button>
-    <button class="main-tab" data-tab="tagger">🏷️ 소재 태깅</button>
-    <button class="main-tab" data-tab="schema">🗂️ 크리에이티브 스키마</button>
+    <button class="main-tab" data-tab="analysis">📊 분석</button>
+    <button class="main-tab" data-tab="creative">🎨 소재</button>
     <button class="main-tab" data-tab="settings">⚙️ 더보기</button>
   </nav>
 
@@ -308,6 +305,28 @@ select.form-input{cursor:pointer;}
       </div>
       <button class="btn primary" onclick="saveMeetingAgenda()" style="width:100%;margin-top:8px;">저장</button>
     </div>
+  </div>
+
+  <!-- TAB: 분석 (그룹) -->
+  <div class="tab-content" id="tab-analysis">
+    <nav class="report-nav" style="margin-bottom:14px;">
+      <button class="report-btn active" onclick="switchAnalysisSub('weekly')">📊 주간 리포트</button>
+      <button class="report-btn" onclick="switchAnalysisSub('signals')">💡 시그널</button>
+      <button class="report-btn" onclick="switchAnalysisSub('learn')">📚 Learn</button>
+    </nav>
+    <div id="analysis-sub-weekly"></div>
+    <div id="analysis-sub-signals" style="display:none;"></div>
+    <div id="analysis-sub-learn" style="display:none;"></div>
+  </div>
+
+  <!-- TAB: 소재 (그룹) -->
+  <div class="tab-content" id="tab-creative">
+    <nav class="report-nav" style="margin-bottom:14px;">
+      <button class="report-btn active" onclick="switchCreativeSub('schema')">🗂️ 크리에이티브 스키마</button>
+      <button class="report-btn" onclick="switchCreativeSub('tagger')">🏷️ 소재 태깅</button>
+    </nav>
+    <div id="creative-sub-schema"></div>
+    <div id="creative-sub-tagger" style="display:none;"></div>
   </div>
 
   <div class="tab-content" id="tab-weekly">
@@ -2975,6 +2994,71 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.querySelector('[data-tab="meeting"]')?.addEventListener('click', () => {
     setTimeout(() => renderMeetingTab(), 50);
+  });
+});
+
+/* ═══════════════════════════════════════════
+   📊 분석 / 🎨 소재 그룹 탭
+   ═══════════════════════════════════════════ */
+
+function switchAnalysisSub(sub) {
+  ['weekly','signals','learn'].forEach(s => {
+    const el = document.getElementById('analysis-sub-' + s);
+    if (el) el.style.display = s === sub ? '' : 'none';
+  });
+  document.querySelectorAll('#tab-analysis .report-nav .report-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.includes(
+      sub === 'weekly' ? '주간' : sub === 'signals' ? '시그널' : 'Learn'
+    ));
+  });
+  // 기존 탭 내용을 서브 컨테이너로 이동
+  moveTabContent('tab-weekly', 'analysis-sub-weekly');
+  moveTabContent('tab-signals', 'analysis-sub-signals');
+  moveTabContent('tab-learn', 'analysis-sub-learn');
+  
+  if (sub === 'weekly') {
+    // 트리거 리포트 렌더
+    if (typeof loadReports === 'function') loadReports();
+  }
+  if (sub === 'learn') {
+    if (typeof renderLearnTab === 'function') renderLearnTab();
+  }
+}
+
+function switchCreativeSub(sub) {
+  ['schema','tagger'].forEach(s => {
+    const el = document.getElementById('creative-sub-' + s);
+    if (el) el.style.display = s === sub ? '' : 'none';
+  });
+  document.querySelectorAll('#tab-creative .report-nav .report-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.includes(
+      sub === 'schema' ? '스키마' : '태깅'
+    ));
+  });
+  moveTabContent('tab-schema', 'creative-sub-schema');
+  moveTabContent('tab-tagger', 'creative-sub-tagger');
+  
+  if (sub === 'schema') {
+    if (typeof renderSchemaOverview === 'function') setTimeout(() => renderSchemaOverview(), 50);
+  }
+}
+
+function moveTabContent(fromId, toId) {
+  const from = document.getElementById(fromId);
+  const to = document.getElementById(toId);
+  if (!from || !to || to.children.length > 0) return; // 이미 이동됨
+  while (from.firstChild) {
+    to.appendChild(from.firstChild);
+  }
+}
+
+// 그룹 탭 초기화 — 메인 탭 클릭 시
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('[data-tab="analysis"]')?.addEventListener('click', () => {
+    setTimeout(() => switchAnalysisSub('weekly'), 50);
+  });
+  document.querySelector('[data-tab="creative"]')?.addEventListener('click', () => {
+    setTimeout(() => switchCreativeSub('schema'), 50);
   });
 });
 
