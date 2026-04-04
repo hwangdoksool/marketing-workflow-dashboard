@@ -258,7 +258,7 @@ select.form-input{cursor:pointer;}
   <!-- TAB 1: 주간 리뷰 -->
   <!-- ═══════════════════════════════════════════ -->
   <!-- TAB: 미팅 -->
-  <div class="tab-content" id="tab-meeting">
+  <div class="tab-content" id="tab-meeting" style="display:none;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
       <div>
         <h2 style="font-size:1rem;font-weight:700;">🤝 미팅 안건</h2>
@@ -319,7 +319,7 @@ select.form-input{cursor:pointer;}
   </div>
 
   <!-- TAB: 분석 (그룹) -->
-  <div class="tab-content" id="tab-analysis">
+  <div class="tab-content" id="tab-analysis" style="display:none;">
     <nav class="report-nav" style="margin-bottom:14px;">
       <button class="report-btn active" onclick="switchAnalysisSub('weekly')">📊 주간 리포트</button>
       <button class="report-btn" onclick="switchAnalysisSub('reports')">📄 리포트</button>
@@ -340,7 +340,7 @@ select.form-input{cursor:pointer;}
   </div>
 
   <!-- TAB: 소재 (그룹) -->
-  <div class="tab-content" id="tab-creative">
+  <div class="tab-content" id="tab-creative" style="display:none;">
     <nav class="report-nav" style="margin-bottom:14px;">
       <button class="report-btn active" onclick="switchCreativeSub('schema')">🗂️ 크리에이티브 스키마</button>
       <button class="report-btn" onclick="switchCreativeSub('tagger')">🏷️ 소재 태깅</button>
@@ -349,7 +349,7 @@ select.form-input{cursor:pointer;}
     <div id="creative-sub-tagger" style="display:none;"></div>
   </div>
 
-  <div class="tab-content" id="tab-weekly">
+  <div class="tab-content" id="tab-weekly" style="display:none!important;">
     <div class="report-nav" id="reportNav"></div>
     <div id="trendSection" class="trend-section" style="display:none;">
       <div class="section-card" style="padding:16px;">
@@ -372,7 +372,7 @@ select.form-input{cursor:pointer;}
   <!-- ═══════════════════════════════════════════ -->
   <!-- TAB: 시그널 (워크플로우 필터 뷰 — status=signal인 아이템) -->
   <!-- ═══════════════════════════════════════════ -->
-  <div class="tab-content" id="tab-signals">
+  <div class="tab-content" id="tab-signals" style="display:none!important;">
     <div class="toolbar">
       <input type="text" class="search-input" id="signalTabSearch" placeholder="시그널 검색..." oninput="renderSignalTab()">
       <div class="filter-pills">
@@ -395,7 +395,7 @@ select.form-input{cursor:pointer;}
   <!-- ═══════════════════════════════════════════ -->
   <!-- TAB: 소재 태깅 (크리에이티브 태깅 리뷰 임베드) -->
   <!-- ═══════════════════════════════════════════ -->
-  <div class="tab-content" id="tab-tagger">
+  <div class="tab-content" id="tab-tagger" style="display:none!important;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
       <div>
         <h2 style="font-size:1rem;font-weight:700;margin-bottom:4px;">🏷️ 소재 태깅 관리</h2>
@@ -409,7 +409,7 @@ select.form-input{cursor:pointer;}
   <!-- ═══════════════════════════════════════════ -->
   <!-- TAB: Learn (워크플로우 필터 뷰 — status=complete + learningResult 있는 아이템) -->
   <!-- ═══════════════════════════════════════════ -->
-  <div class="tab-content" id="tab-learn">
+  <div class="tab-content" id="tab-learn" style="display:none!important;">
     <div class="toolbar">
       <input type="text" class="search-input" id="learnTabSearch" placeholder="학습 검색..." oninput="renderLearnTab()">
       <div class="spacer"></div>
@@ -423,7 +423,7 @@ select.form-input{cursor:pointer;}
   <!-- ═══════════════════════════════════════════ -->
   <!-- TAB: 설정/더보기 -->
   <!-- ═══════════════════════════════════════════ -->
-  <div class="tab-content" id="tab-settings">
+  <div class="tab-content" id="tab-settings" style="display:none;">
     <div style="display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;">
       <button class="report-btn active" onclick="switchSettingsSub('design-sub')" id="sub-design">📐 설계 배경</button>
       <button class="report-btn" onclick="switchSettingsSub('buyer-sub')" id="sub-buyer">🔍 구매자 역추적</button>
@@ -441,7 +441,7 @@ select.form-input{cursor:pointer;}
   </div>
 
   <!-- ═══ 크리에이티브 스키마 탭 ═══ -->
-  <div class="tab-content" id="tab-schema">
+  <div class="tab-content" id="tab-schema" style="display:none!important;">
     <div style="display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;">
       <button class="report-btn active" onclick="switchSchemaSub('schema-overview')" id="schema-sub-overview">📊 태깅 현황</button>
       <button class="report-btn" onclick="switchSchemaSub('schema-def')" id="schema-sub-def">📖 스키마 정의</button>
@@ -548,7 +548,7 @@ select.form-input{cursor:pointer;}
   <!-- ═══════════════════════════════════════════ -->
   <!-- TAB 3: Brief 관리 -->
   <!-- ═══════════════════════════════════════════ -->
-  <div class="tab-content active" id="tab-briefs">
+  <div class="tab-content" id="tab-briefs" style="display:block;">
     <div class="toolbar">
       <input type="text" class="search-input" id="briefSearch" placeholder="Brief 검색...">
       <div class="filter-pills" id="briefFilters">
@@ -1357,18 +1357,24 @@ function toggleTheme(){
    ═══════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   // Only toggle tabs that are NOT legacy hidden (!important)
-  const visibleTabs = ['tab-weekly','tab-briefs','tab-signals','tab-tagger','tab-learn','tab-schema','tab-settings','tab-meeting','tab-analysis','tab-creative'];
+  // 메인 탭은 이 5개만
+  const mainTabIds = ['tab-briefs','tab-meeting','tab-analysis','tab-creative','tab-settings'];
   document.querySelectorAll('.main-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
-      visibleTabs.forEach(id => {
+      mainTabIds.forEach(id => {
         const el = document.getElementById(id);
-        if(el) el.classList.remove('active');
+        if(el) el.style.display = 'none';
       });
       tab.classList.add('active');
       const target = document.getElementById('tab-' + tab.dataset.tab);
-      if(target) target.classList.add('active');
+      if(target) target.style.display = 'block';
     });
+  });
+  // 초기 상태: briefs만 보이고 나머지 숨김
+  mainTabIds.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = id === 'tab-briefs' ? 'block' : 'none';
   });
   loadReports();
   // Load items from KV API then render
@@ -3277,9 +3283,10 @@ function switchAnalysisSub(sub) {
   document.querySelectorAll('#tab-analysis > .report-nav > .report-btn').forEach(btn => {
     btn.classList.toggle('active', btn.textContent.includes(labelMap[sub]||''));
   });
-  moveTabContent('tab-weekly', 'analysis-sub-weekly');
-  moveTabContent('tab-signals', 'analysis-sub-signals');
-  moveTabContent('tab-learn', 'analysis-sub-learn');
+  // 기존 탭 내용을 서브 컨테이너로 이동 (최초 1회)
+  moveTabInner('tab-weekly', 'analysis-sub-weekly');
+  moveTabInner('tab-signals', 'analysis-sub-signals');
+  moveTabInner('tab-learn', 'analysis-sub-learn');
   
   if (sub === 'weekly' && typeof loadReports === 'function') loadReports();
   if (sub === 'learn' && typeof renderLearnTab === 'function') renderLearnTab();
@@ -3296,18 +3303,18 @@ function switchCreativeSub(sub) {
       sub === 'schema' ? '스키마' : '태깅'
     ));
   });
-  moveTabContent('tab-schema', 'creative-sub-schema');
-  moveTabContent('tab-tagger', 'creative-sub-tagger');
+  moveTabInner('tab-schema', 'creative-sub-schema');
+  moveTabInner('tab-tagger', 'creative-sub-tagger');
   
   if (sub === 'schema') {
     if (typeof renderSchemaOverview === 'function') setTimeout(() => renderSchemaOverview(), 50);
   }
 }
 
-function moveTabContent(fromId, toId) {
+function moveTabInner(fromId, toId) {
   const from = document.getElementById(fromId);
   const to = document.getElementById(toId);
-  if (!from || !to || to.children.length > 0) return; // 이미 이동됨
+  if (!from || !to || to.children.length > 0) return;
   while (from.firstChild) {
     to.appendChild(from.firstChild);
   }
@@ -3316,10 +3323,10 @@ function moveTabContent(fromId, toId) {
 // 그룹 탭 초기화 — 메인 탭 클릭 시
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('[data-tab="analysis"]')?.addEventListener('click', () => {
-    setTimeout(() => switchAnalysisSub('weekly'), 50);
+    switchAnalysisSub('weekly');
   });
   document.querySelector('[data-tab="creative"]')?.addEventListener('click', () => {
-    setTimeout(() => switchCreativeSub('schema'), 50);
+    switchCreativeSub('schema');
   });
 });
 
