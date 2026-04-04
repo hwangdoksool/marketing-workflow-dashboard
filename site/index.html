@@ -2838,25 +2838,54 @@ function drawMultiLineChart(canvasId, labels, series, actions){
     return pad.top + chartH - ((v - a.min) / (a.max - a.min)) * chartH;
   }
   
-  // 그리드 (첫 시리즈 기준 좌축, 두 번째 우축)
+  // 듀얼 Y축: 금액(₩/건수) = 좌축, 비율(%/배) = 우축
+  const pctUnits = new Set(['%']);
+  const pctKeys = new Set(['ctr','convRate','roas','bounceRate']);
+  const leftSeries = [], rightSeries = [];
+  series.forEach((s, si) => {
+    if (pctUnits.has(s.unit) || pctKeys.has(s.key)) {
+      rightSeries.push(si);
+    } else {
+      leftSeries.push(si);
+    }
+  });
+  // 좌/우 공유축 계산
+  function sharedAxis(indices) {
+    let mn = Infinity, mx = -Infinity;
+    indices.forEach(si => { mn = Math.min(mn, axes[si].min); mx = Math.max(mx, axes[si].max); });
+    if (mn === Infinity) { mn = 0; mx = 1; }
+    return { min: mn, max: mx };
+  }
+  const leftAxis = leftSeries.length ? sharedAxis(leftSeries) : null;
+  const rightAxis = rightSeries.length ? sharedAxis(rightSeries) : null;
+  // yPos 재정의: 좌축/우축 공유
+  function yPosShared(v, si) {
+    const axis = rightSeries.includes(si) ? (rightAxis || axes[si]) : (leftAxis || axes[si]);
+    return pad.top + chartH - ((v - axis.min) / (axis.max - axis.min)) * chartH;
+  }
+
   ctx.strokeStyle = gridColor; ctx.lineWidth = 0.5;
   ctx.font = '11px -apple-system, sans-serif';
   
-  // 좌축
-  ctx.textAlign = 'right'; ctx.fillStyle = series[0]?.color || textColor;
-  for(let i = 0; i <= 4; i++){
-    const v = axes[0].min + (axes[0].max - axes[0].min) * (i/4);
-    const y = yPos(v, 0);
-    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
-    ctx.fillText(fmtNum(Math.round(v), series[0].unit), pad.left - 8, y + 4);
-  }
-  // 우축 (두 번째 시리즈, 있을 때만)
-  if(multiAxis && series.length > 1){
-    ctx.textAlign = 'left'; ctx.fillStyle = series[1].color;
+  // 좌축 눈금
+  if (leftAxis) {
+    ctx.textAlign = 'right'; ctx.fillStyle = textColor;
+    const lu = series[leftSeries[0]]?.unit || '';
     for(let i = 0; i <= 4; i++){
-      const v = axes[1].min + (axes[1].max - axes[1].min) * (i/4);
-      const y = yPos(v, 1);
-      ctx.fillText(fmtNum(Math.round(v), series[1].unit), W - pad.right + 8, y + 4);
+      const v = leftAxis.min + (leftAxis.max - leftAxis.min) * (i/4);
+      const y = pad.top + chartH - (i/4) * chartH;
+      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+      ctx.fillText(fmtNum(Math.round(v), lu), pad.left - 8, y + 4);
+    }
+  }
+  // 우축 눈금
+  if (rightAxis && rightSeries.length) {
+    ctx.textAlign = 'left'; ctx.fillStyle = series[rightSeries[0]]?.color || textColor;
+    const ru = series[rightSeries[0]]?.unit || '%';
+    for(let i = 0; i <= 4; i++){
+      const v = rightAxis.min + (rightAxis.max - rightAxis.min) * (i/4);
+      const y = pad.top + chartH - (i/4) * chartH;
+      ctx.fillText(fmtNum(Math.round(v*10)/10, ru), W - pad.right + 8, y + 4);
     }
   }
   
@@ -2867,7 +2896,7 @@ function drawMultiLineChart(canvasId, labels, series, actions){
   // 각 시리즈 라인 — 독립 정규화 (각 시리즈 자체 min/max로 0~100% 매핑)
   series.forEach((s, si) => {
     const points = [];
-    s.values.forEach((v, i) => { if(v != null) points.push({x:xPos(i), y:yPos(v, si), v, i}); });
+    s.values.forEach((v, i) => { if(v != null) points.push({x:xPos(i), y:yPosShared(v, si), v, i}); });
     if(!points.length) return;
     
     // 영역 (첫 시리즈만)
