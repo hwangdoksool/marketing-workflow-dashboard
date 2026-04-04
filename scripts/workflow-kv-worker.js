@@ -1,10 +1,11 @@
 // Workflow API Worker — Supabase backend
 // Briefs → mktg_briefs table, Signal analyses → signal_analyses table
+// Auth: CF Access JWT (logged-in users get full read/write)
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, X-API-Key',
+  'Access-Control-Allow-Headers': 'Content-Type, X-API-Key, CF-Access-Jwt-Assertion',
 };
 
 function json(data, status = 200) {
@@ -86,6 +87,54 @@ function fromDb(row) {
   };
 }
 
+// CF Access JWT verification
+async function verifyCfAccessJwt(token, env) {
+  try {
+    // Decode payload (middle part)
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+    
+    // Check expiry
+    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) return null;
+    
+    // Check audience matches our CF Access app
+    const aud = env.CF_ACCESS_AUD;
+    if (aud) {
+      const tokenAud = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
+      if (!tokenAud.includes(aud)) return null;
+    }
+    
+    // Fetch CF Access certs and verify signature
+    const certsUrl = `https://${env.CF_ACCESS_TEAM || 'wespion'}.cloudflareaccess.com/cdn-cgi/access/certs`;
+    const certsResp = await fetch(certsUrl);
+    if (!certsResp.ok) return null;
+    const certs = await certsResp.json();
+    
+    // Find matching key
+    const header = JSON.parse(atob(parts[0].replace(/-/g, '+').replace(/_/g, '/')));
+    const key = certs.keys.find(k => k.kid === header.kid);
+    if (!key) return null;
+    
+    // Import key and verify
+    const cryptoKey = await crypto.subtle.importKey(
+      'jwk', key, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']
+    );
+    
+    const sigBytes = Uint8Array.from(atob(parts[2].replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+    const dataBytes = new TextEncoder().encode(parts[0] + '.' + parts[1]);
+    
+    const valid = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', cryptoKey, sigBytes, dataBytes);
+    if (!valid) return null;
+    
+    return { email: payload.email, sub: payload.sub, method: 'cf-access' };
+  } catch (e) {
+    console.error('CF Access JWT verify error:', e.message);
+    return null;
+  }
+}
+
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') {
@@ -95,10 +144,21 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // Auth check for writes
+    // Auth: CF Access JWT or legacy API key
+    const cfJwt = request.headers.get('CF-Access-Jwt-Assertion') || request.headers.get('Cf-Access-Jwt-Assertion');
+    const apiKey = request.headers.get('X-API-Key');
+    let authedUser = null;
+
+    if (cfJwt) {
+      // Verify CF Access JWT
+      authedUser = await verifyCfAccessJwt(cfJwt, env);
+    } else if (apiKey && apiKey === env.API_KEY) {
+      authedUser = { email: 'api-key', method: 'legacy' };
+    }
+
+    // Writes require auth
     if (['POST', 'PUT', 'DELETE'].includes(request.method)) {
-      const key = request.headers.get('X-API-Key');
-      if (key !== env.API_KEY) {
+      if (!authedUser) {
         return json({ error: 'Unauthorized' }, 401);
       }
     }
@@ -147,11 +207,34 @@ export default {
       return json(fromDb(rows[0]));
     }
 
-    // DELETE /api/items/:id
+    // DELETE /api/items/:id — soft delete (archive)
     if (path.startsWith('/api/items/') && request.method === 'DELETE') {
       const id = path.split('/').pop();
+      
+      // Get existing data before "deleting"
+      const existing = await supa(env, `mktg_briefs?id=eq.${id}`);
+      if (!existing || existing.length === 0) return json({ error: 'Not found' }, 404);
+      
+      const row = existing[0];
+      const who = authedUser ? (authedUser.email || 'unknown') : 'unknown';
+      
+      // Archive to mktg_briefs_archive table
+      const archive = {
+        original_id: row.id,
+        data: row,
+        deleted_by: who,
+        deleted_at: new Date().toISOString(),
+      };
+      try {
+        await supa(env, 'mktg_briefs_archive', 'POST', archive);
+      } catch (e) {
+        // Archive table might not exist yet — log but continue
+        console.error('Archive failed (table may not exist):', e.message);
+      }
+      
+      // Actually delete from main table
       await supa(env, `mktg_briefs?id=eq.${id}`, 'DELETE');
-      return json({ ok: true });
+      return json({ ok: true, archived: true, deletedBy: who });
     }
 
     // GET /api/export — full export
