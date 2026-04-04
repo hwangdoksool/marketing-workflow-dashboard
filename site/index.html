@@ -241,6 +241,7 @@ select.form-input{cursor:pointer;}
   <!-- Main Tabs -->
   <nav class="main-tabs">
     <button class="main-tab active" data-tab="briefs">📋 워크플로우</button>
+    <button class="main-tab" data-tab="meeting">🤝 미팅</button>
     <button class="main-tab" data-tab="weekly">📊 주간 리포트</button>
     <button class="main-tab" data-tab="signals">💡 시그널</button>
     <button class="main-tab" data-tab="learn">📚 Learn</button>
@@ -252,6 +253,63 @@ select.form-input{cursor:pointer;}
   <!-- ═══════════════════════════════════════════ -->
   <!-- TAB 1: 주간 리뷰 -->
   <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB: 미팅 -->
+  <div class="tab-content" id="tab-meeting">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+      <div>
+        <h2 style="font-size:1rem;font-weight:700;">🤝 미팅 안건</h2>
+        <p style="font-size:.75rem;color:var(--t2);">주간 리포트 + 별도 안건을 한눈에. 미팅 전 여기만 보면 됩니다.</p>
+      </div>
+      <button class="btn primary" onclick="openMeetingAgendaModal()">+ 안건 추가</button>
+    </div>
+
+    <!-- 미팅 선택 -->
+    <div class="report-nav" id="meetingNav"></div>
+
+    <!-- 미팅 내용 -->
+    <div id="meetingContent">
+      <div class="empty-state">
+        <p>아직 등록된 미팅이 없습니다.<br>"+ 안건 추가"로 첫 미팅 안건을 등록하세요.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 미팅 안건 추가 모달 -->
+  <div class="modal-bg" id="meetingAgendaModal">
+    <div class="modal" style="max-width:500px;">
+      <button class="close" onclick="closeMeetingAgendaModal()">&times;</button>
+      <h2>📝 미팅 안건 추가</h2>
+      <div class="form-group">
+        <label>미팅 <span class="req">*</span></label>
+        <select class="form-input" id="agendaMeetingId">
+          <option value="">미팅 선택...</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>안건 제목 <span class="req">*</span></label>
+        <input class="form-input" id="agendaTitle" placeholder="논의할 주제">
+      </div>
+      <div class="form-group">
+        <label>카테고리</label>
+        <select class="form-input" id="agendaCategory">
+          <option value="discussion">💬 논의</option>
+          <option value="decision">🔴 의사결정 필요</option>
+          <option value="share">📢 공유</option>
+          <option value="review">📊 리뷰</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>상세 내용</label>
+        <textarea class="form-input" id="agendaDetail" rows="3" placeholder="배경, 참고 데이터, 질문 등"></textarea>
+      </div>
+      <div class="form-group">
+        <label>관련 Brief ID (선택)</label>
+        <input class="form-input" id="agendaBriefId" placeholder="예: exp-meta-20855">
+      </div>
+      <button class="btn primary" onclick="saveMeetingAgenda()" style="width:100%;margin-top:8px;">저장</button>
+    </div>
+  </div>
+
   <div class="tab-content" id="tab-weekly">
     <div class="report-nav" id="reportNav"></div>
     <div id="trendSection" class="trend-section" style="display:none;">
@@ -982,110 +1040,108 @@ select.form-input{cursor:pointer;}
 <div class="modal-bg guide-modal" id="guideModal">
   <div class="modal">
     <button class="close" onclick="closeGuide()">&times;</button>
-    <h2>사용 가이드</h2>
+    <h2>📖 워크플로우 가이드</h2>
 
-    <h3>이 대시보드는?</h3>
-    <p><strong>시그널 → 실험 설계 → 제작 → 검증 → 학습</strong> 사이클을 구조적으로 돌리기 위한 도구입니다.<br>
-    핵심은 <strong>실험 설계서</strong>입니다. 설계서 없이는 실행할 이유가 없고, 설계서가 있으면 결과를 검증할 수 있습니다.</p>
+    <h3>왜 이 도구를 만들었나</h3>
+    <p>2개월간 40+건의 마케팅 액션 중 <strong>"왜 이걸 하는가"</strong>를 기록한 적이 없었습니다. 결과적으로 같은 논의가 반복되고, 성공/실패 원인이 축적되지 않았습니다.</p>
+    <p>이 대시보드는 <strong>양식의 빈칸이 행동을 강제하는 시스템</strong>입니다. 설계서를 쓰면 자연스럽게 가설이 세워지고, 실험이 끝나면 자연스럽게 학습이 기록됩니다.</p>
+    <div class="guide-tip">💡 핵심 원칙: 설득이나 교육이 아니라, <strong>구조가 행동을 만든다</strong>.</div>
 
-    <h3>화면 구성</h3>
+    <h3>전체 사이클</h3>
+    <div class="guide-flow">
+      <span class="gf-step badge-signal" style="padding:5px 12px;border-radius:8px;">💡 시그널 발견</span>
+      <span class="gf-arrow">→</span>
+      <span class="gf-step badge-draft" style="padding:5px 12px;border-radius:8px;">📐 설계서 작성</span>
+      <span class="gf-arrow">→</span>
+      <span class="gf-step badge-live" style="padding:5px 12px;border-radius:8px;">🔵 실행</span>
+      <span class="gf-arrow">→</span>
+      <span class="gf-step badge-verified-valid" style="padding:5px 12px;border-radius:8px;">✅ 검증</span>
+      <span class="gf-arrow">→</span>
+      <span class="gf-step" style="padding:5px 12px;border-radius:8px;background:rgba(0,184,148,.15);color:var(--g);">📚 학습</span>
+    </div>
+    <p><strong>시그널</strong> = "이거 이상한데?" / <strong>설계서</strong> = "이렇게 하면 이럴 것이다" / <strong>검증</strong> = "실제로 어땠나" / <strong>학습</strong> = "다음엔 뭘 다르게 할까"</p>
+
+    <h3>화면 구성 (7탭)</h3>
     <table class="guide-table">
-      <thead><tr><th>탭</th><th>용도</th></tr></thead>
+      <thead><tr><th>탭</th><th>용도</th><th>취지</th></tr></thead>
       <tbody>
-        <tr><td>📊 주간 리뷰</td><td>이번 주 성과 (KPI, 퍼널, 구매자, 인사이트)</td></tr>
-        <tr><td>🔍 구매자 역추적</td><td>구매 건별 유입경로 → 전환 타임라인 (준비 중)</td></tr>
-        <tr><td>📋 <strong>Brief 관리</strong></td><td>⭐ 핵심. Brief 작성 / 상태 관리 / 검증 기록</td></tr>
-        <tr><td>📈 종합 분석</td><td>8주 회고, 장기 트렌드</td></tr>
+        <tr><td>📋 워크플로우</td><td>모든 실험/Brief 한눈에 보기 + 상태 관리</td><td>실험의 전체 파이프라인을 가시화</td></tr>
+        <tr><td>🤝 미팅</td><td>미팅별 안건 모아보기 + 주간 리포트 연결</td><td>미팅에서 뭘 논의할지 사전 정리. 리포트 외 별도 안건도 관리</td></tr>
+        <tr><td>📊 주간 리포트</td><td>자동 생성 주간 성과 분석</td><td>마케터가 데이터를 모을 필요 없음. AI가 정리, 사람은 해석에 집중</td></tr>
+        <tr><td>💡 시그널</td><td>이상 징후/기회 등록 + AI 분석</td><td>"이거 뭔가 이상한데?"를 놓치지 않고 기록. 실험의 시작점</td></tr>
+        <tr><td>📚 Learn</td><td>완료된 실험의 학습 기록</td><td>같은 실수 반복 방지. "왜 됐고 왜 안 됐는지"가 누적되는 곳</td></tr>
+        <tr><td>🗂️ 크리에이티브 스키마</td><td>기존 소재 태깅 + 패턴 분석</td><td>어떤 가치·문제·훅 조합이 효과적인지 데이터로 파악</td></tr>
+        <tr><td>⚙️ 더보기</td><td>소급 회고, 분석 자료, 설정</td><td>과거 데이터와 맥락 참조</td></tr>
       </tbody>
     </table>
-
-    <h3>Brief 작성법</h3>
-    <ol>
-      <li><strong>📋 Brief 관리</strong> 탭 → <strong>+ 새 Brief</strong> 클릭</li>
-      <li>양식 작성 (모든 항목 필수)</li>
-      <li>저장 → Draft 상태로 등록</li>
-    </ol>
-    <table class="guide-table">
-      <thead><tr><th>필드</th><th>설명</th><th>예시</th></tr></thead>
-      <tbody>
-        <tr><td>제목</td><td>캠페인/소재 이름</td><td>4월 1주차 릴스 — 홈트 시연</td></tr>
-        <tr><td>페르소나</td><td>타겟</td><td>PS1 바쁜직장인</td></tr>
-        <tr><td>JTBD</td><td>고객이 해결할 일</td><td>JT5 시간효율</td></tr>
-        <tr><td>VP</td><td>전달할 가치</td><td>VP1 자유해방</td></tr>
-        <tr><td>소재 구성</td><td>영상/이미지 형식</td><td>문제→솔루션</td></tr>
-        <tr><td>채널</td><td>게시/집행 채널</td><td>Meta전환, 인스타릴스</td></tr>
-        <tr><td><strong>가설</strong></td><td>기대 결과 (구체적!)</td><td>PS1+VP1로 CTR 5% 이상</td></tr>
-        <tr><td><strong>검증 기준</strong></td><td>판단 기준과 시점</td><td>7일 후 CTR 5% 이상이면 유효</td></tr>
-      </tbody>
-    </table>
-    <div class="guide-warn">⚠️ "효과 있을 것이다" → 너무 모호!<br>"CTR 5% 이상, 7일 후 판단" → 이래야 검증 가능</div>
 
     <h3>실험 상태 흐름</h3>
-    <div class="guide-flow">
-      <span class="gf-step badge-draft" style="padding:5px 12px;border-radius:8px;">💡 의도</span>
-      <span class="gf-arrow">→</span>
-      <span class="gf-step badge-verified-pending" style="padding:5px 12px;border-radius:8px;">📐 설계완료</span>
-      <span class="gf-arrow">→</span>
-      <span class="gf-step badge-draft" style="padding:5px 12px;border-radius:8px;">🔨 제작중</span>
-      <span class="gf-arrow">→</span>
-      <span class="gf-step badge-live" style="padding:5px 12px;border-radius:8px;">🔵 Live</span>
-      <span class="gf-arrow">→</span>
-      <span class="gf-step badge-verified-valid" style="padding:5px 12px;border-radius:8px;">📝 완료</span>
-    </div>
     <table class="guide-table">
-      <thead><tr><th>상태</th><th>언제 바꾸나</th></tr></thead>
+      <thead><tr><th>상태</th><th>의미</th><th>누가 바꾸나</th></tr></thead>
       <tbody>
-        <tr><td>💡 의도</td><td>시그널 잡고 실험 등록할 때 (자동)</td></tr>
-        <tr><td>📐 설계완료</td><td>설계서 작성 완료 시</td></tr>
-        <tr><td>🔨 제작중</td><td>정식 협의 통과, 제작 시작 시</td></tr>
-        <tr><td>🔵 Live</td><td>실제로 게시/적용되면</td></tr>
-        <tr><td>📝 완료</td><td>인사이트 도출 완료 시 (성과 분석 + 학습 기록)</td></tr>
+        <tr><td>💡 시그널</td><td>데이터에서 이상 징후/기회 발견</td><td>마케터 or AI</td></tr>
+        <tr><td>📐 의도</td><td>가설 + 검증 기준을 설계서로 정리</td><td>마케터</td></tr>
+        <tr><td>🎨 설계</td><td>소재/캠페인 구체 설계</td><td>마케터</td></tr>
+        <tr><td>🔨 제작</td><td>실제 제작 중</td><td>마케터</td></tr>
+        <tr><td>🔵 Live</td><td>게시/집행 중</td><td>마케터</td></tr>
+        <tr><td>✅ 완료</td><td>결과 확인 + 학습 기록 완료</td><td>마케터 or AI</td></tr>
       </tbody>
     </table>
-    <div class="guide-tip">💡 "완료"는 합격/불합격이 아닙니다. 성과가 좋든 나쁘든, 의도대로 됐든 아니든, 모두 학습입니다.</div>
+    <div class="guide-tip">💡 "완료"는 성공/실패 판정이 아닙니다. 성과가 좋든 나쁘든, <strong>배운 게 있으면 완료</strong>입니다.</div>
 
-    <h3>상태 변경 & 검증 결과 기록</h3>
-    <ol>
-      <li>Brief 카드 클릭 → 상세 모달</li>
-      <li>상단 <strong>드롭다운</strong>에서 새 상태 선택 → 즉시 반영</li>
-      <li>Verified 상태로 바꾸면 <strong>검증 결과 기록</strong> 입력란 등장</li>
-      <li>왜 유효/기각인지 기록 → <strong>결과 저장</strong></li>
-    </ol>
-    <div class="guide-tip">💡 검증 결과를 남겨야 다음 Brief 작성 시 참고할 수 있습니다.</div>
-
-    <h3>검색 & 필터</h3>
-    <p><strong>검색창</strong>: 제목, 페르소나, JTBD, 가설에서 키워드 검색<br>
-    <strong>필터 버튼</strong>: 전체 / Draft / Live / Verified 상태별 필터링</p>
-
-    <h3>JSON 내보내기 / 가져오기</h3>
-    <p>Brief 데이터는 <strong>브라우저 로컬 저장소</strong>에 저장됩니다.</p>
+    <h3>판정 기준</h3>
     <table class="guide-table">
-      <thead><tr><th>버튼</th><th>기능</th></tr></thead>
+      <thead><tr><th>판정</th><th>의미</th><th>기준 예시</th></tr></thead>
       <tbody>
-        <tr><td>JSON 내보내기</td><td>모든 Brief를 .json 파일로 다운로드 (백업)</td></tr>
-        <tr><td>JSON 가져오기</td><td>.json 파일 선택하여 Brief 일괄 불러오기</td></tr>
+        <tr><td>✅ Hit</td><td>가설이 맞았거나 유의미한 성과</td><td>Meta CTR ≥5%, IG 반응 높음</td></tr>
+        <tr><td>❌ Miss</td><td>가설이 틀렸거나 기대 이하</td><td>Meta CTR &lt;3%, IG 반응 저조</td></tr>
+        <tr><td>⏳ 미확정</td><td>데이터 부족 or 판단 보류</td><td>집행 기간 짧음, 외부 변수</td></tr>
       </tbody>
     </table>
-    <div class="guide-warn">⚠️ 가져오기 시 기존 데이터가 덮어쓰기됩니다! 먼저 내보내기로 백업하세요.</div>
 
-    <h3>주간 리뷰 탭 보는 법</h3>
-    <ol>
-      <li><strong>주차 선택</strong> — 상단 버튼으로 이동</li>
-      <li><strong>KPI 카드</strong> — 🟢 개선 / 🔴 악화 (CPC 등 비용은 반대)</li>
-      <li><strong>섹션별 상세</strong> — 채널 성과, 퍼널, 구매자, 인사이트</li>
-    </ol>
-    <div class="guide-tip">💡 데이터는 자동 업데이트됩니다. 마케터가 직접 할 일은 없습니다.</div>
-
-    <h3>새 소재 기획 시 체크리스트</h3>
+    <h3>주간 루틴</h3>
     <ul class="guide-checklist">
-      <li>Brief 작성 (모든 필수 필드)</li>
-      <li>리더와 Brief 협의 (방향 확정)</li>
-      <li>소재 제작</li>
-      <li>상태를 Live로 변경</li>
-      <li>검증 기준 기간 도래 시 데이터 확인</li>
-      <li>상태를 Verified로 변경 + 검증 결과 기록</li>
-      <li>다음 Brief에 학습 반영</li>
+      <li><strong>월요일:</strong> 📊 주간 리포트 확인 → 시그널 등록 → 🤝 미팅 안건 정리</li>
+      <li><strong>화~수:</strong> 설계서 작성 → 리더 승인</li>
+      <li><strong>목~금:</strong> 제작/집행 → Live 상태 변경</li>
+      <li><strong>금요일:</strong> 검증 기간 도래한 실험 → 결과 기록 → 📚 Learn</li>
     </ul>
+
+    <h3>역할 분담</h3>
+    <table class="guide-table">
+      <thead><tr><th>역할</th><th>하는 일</th></tr></thead>
+      <tbody>
+        <tr><td><strong>마케터</strong></td><td>시그널 포착, 설계서 작성, 실행, 결과 기록</td></tr>
+        <tr><td><strong>리더</strong></td><td>설계서 승인, 전략 방향, 주간 리뷰</td></tr>
+        <tr><td><strong>AI (에이전트)</strong></td><td>리포트 자동 생성, 시그널 분석, 데이터 검증, 학습 기록</td></tr>
+      </tbody>
+    </table>
+
+    <h3>크리에이티브 스키마 v1 (9축)</h3>
+    <p>모든 소재를 9개 축으로 분류합니다. 이를 통해 "어떤 조합이 효과적인가"를 데이터로 파악할 수 있습니다.</p>
+    <table class="guide-table">
+      <thead><tr><th>축</th><th>질문</th><th>예시</th></tr></thead>
+      <tbody>
+        <tr><td>VP</td><td>어떤 가치를 전달하나?</td><td>자유/해방, 안전, 성장/성취</td></tr>
+        <tr><td>Problem</td><td>어떤 문제를 건드리나?</td><td>시간부족, 안전불안, 장비한계</td></tr>
+        <tr><td>Hook</td><td>어떻게 멈추게 하나?</td><td>호기심, 시연데모, 도발</td></tr>
+        <tr><td>Stage</td><td>구매 여정 어디?</td><td>인지, 정보탐색, 구매검토</td></tr>
+        <tr><td>USP</td><td>제품의 어떤 차별점?</td><td>모터부하제어, 안전정지, 음성인식</td></tr>
+        <tr><td>Format</td><td>영상/이미지/캐러셀?</td><td>숏폼, 롱폼, 이미지</td></tr>
+        <tr><td>CS서사</td><td>고객 스토리 있나?</td><td>체험후기, 비포애프터</td></tr>
+        <tr><td>PersonaSeed</td><td>누구에게?</td><td>바쁜직장인, 홈트초보</td></tr>
+      </tbody>
+    </table>
+
+    <h3>미팅 탭 사용법</h3>
+    <ol>
+      <li>"+ 새 미팅"으로 미팅 생성 (날짜, 연결할 주간 리포트 지정)</li>
+      <li>"+ 안건 추가"로 리포트 외 논의사항 등록 (카테고리: 논의/의사결정/공유/리뷰)</li>
+      <li>미팅 전 이 탭만 보면 전체 어젠다 파악 가능</li>
+      <li>리포트 관련 어젠다는 "📊 리포트 보기" 버튼으로 이동</li>
+    </ol>
+
+    <div class="guide-warn">⚠️ 미팅 안건/미팅 목록은 현재 브라우저 로컬 저장소에 저장됩니다. 기기 간 동기화는 추후 지원 예정.</div>
   </div>
 </div>
 
@@ -2917,7 +2973,172 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('[data-tab="schema"]')?.addEventListener('click', () => {
     setTimeout(() => renderSchemaOverview(), 50);
   });
+  document.querySelector('[data-tab="meeting"]')?.addEventListener('click', () => {
+    setTimeout(() => renderMeetingTab(), 50);
+  });
 });
+
+/* ═══════════════════════════════════════════
+   🤝 미팅 탭
+   ═══════════════════════════════════════════ */
+
+const MEETINGS_KEY = 'wf_meetings';
+const AGENDAS_KEY = 'wf_meeting_agendas';
+
+function getMeetings() {
+  try { return JSON.parse(localStorage.getItem(MEETINGS_KEY)) || getDefaultMeetings(); }
+  catch { return getDefaultMeetings(); }
+}
+function getAgendas() {
+  try { return JSON.parse(localStorage.getItem(AGENDAS_KEY)) || []; }
+  catch { return []; }
+}
+function saveMeetings(m) { localStorage.setItem(MEETINGS_KEY, JSON.stringify(m)); }
+function saveAgendas(a) { localStorage.setItem(AGENDAS_KEY, JSON.stringify(a)); }
+
+function getDefaultMeetings() {
+  const m = [
+    { id: 'mtg-w14', title: 'W14 킥오프 미팅', date: '2026-04-07', status: 'upcoming', reportId: 'w13-2026' },
+  ];
+  saveMeetings(m);
+  return m;
+}
+
+let currentMeetingId = null;
+
+function renderMeetingTab() {
+  const meetings = getMeetings();
+  const agendas = getAgendas();
+  const nav = document.getElementById('meetingNav');
+  const content = document.getElementById('meetingContent');
+  if (!nav || !content) return;
+
+  // 미팅 네비
+  nav.innerHTML = meetings.map(m => 
+    `<button class="report-btn ${m.id === currentMeetingId ? 'active' : ''}" onclick="selectMeeting('${m.id}')">${m.status === 'upcoming' ? '🔵' : m.status === 'done' ? '✅' : '📋'} ${m.title} (${m.date})</button>`
+  ).join('') + `<button class="report-btn" onclick="openNewMeetingModal()" style="border-style:dashed;">+ 새 미팅</button>`;
+
+  if (!currentMeetingId && meetings.length > 0) currentMeetingId = meetings[0].id;
+  const mtg = meetings.find(m => m.id === currentMeetingId);
+  if (!mtg) { content.innerHTML = '<div class="empty-state"><p>미팅을 선택하세요.</p></div>'; return; }
+
+  const mtgAgendas = agendas.filter(a => a.meetingId === mtg.id);
+  const catIcons = { discussion: '💬', decision: '🔴', share: '📢', review: '📊' };
+  const catLabels = { discussion: '논의', decision: '의사결정', share: '공유', review: '리뷰' };
+
+  // 주간 리포트 연결
+  let reportLink = '';
+  if (mtg.reportId) {
+    reportLink = `<div class="card" style="border-color:var(--ac);margin-bottom:12px;">
+      <div class="card-title">📊 연결된 주간 리포트: ${mtg.reportId}</div>
+      <p style="font-size:.78rem;color:var(--t2);">주간 리포트 탭에서 상세 데이터를 확인하세요. 리포트 관련 어젠다는 리포트 내에서 다룹니다.</p>
+      <button class="btn" style="margin-top:8px;" onclick="document.querySelector('[data-tab=weekly]').click()">📊 리포트 보기</button>
+    </div>`;
+  }
+
+  // 별도 안건
+  let agendasHtml = '';
+  if (mtgAgendas.length === 0) {
+    agendasHtml = '<div class="empty-state"><p>리포트 외 별도 안건이 없습니다.<br>"+ 안건 추가"로 논의할 사항을 등록하세요.</p></div>';
+  } else {
+    agendasHtml = mtgAgendas.map((a, i) => `
+      <div class="card" style="margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div style="font-size:.82rem;font-weight:700;">${catIcons[a.category] || '📋'} ${a.title}</div>
+            <span class="badge" style="background:rgba(108,92,231,.12);color:var(--ac2);margin-top:4px;">${catLabels[a.category] || a.category}</span>
+            ${a.briefId ? `<span class="schema-tag" style="margin-left:4px;">Brief: ${a.briefId}</span>` : ''}
+          </div>
+          <button class="btn" style="font-size:.7rem;padding:3px 8px;" onclick="deleteMeetingAgenda(${i})">삭제</button>
+        </div>
+        ${a.detail ? `<p style="font-size:.78rem;color:var(--t2);margin-top:6px;line-height:1.6;">${a.detail.replace(/\n/g,'<br>')}</p>` : ''}
+      </div>
+    `).join('');
+  }
+
+  content.innerHTML = `
+    <div style="margin-bottom:12px;">
+      <h3 style="font-size:.95rem;font-weight:700;">${mtg.title}</h3>
+      <p style="font-size:.75rem;color:var(--t2);">📅 ${mtg.date} · ${mtg.status === 'upcoming' ? '예정' : mtg.status === 'done' ? '완료' : '진행중'}</p>
+    </div>
+    ${reportLink}
+    <div style="margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h4 style="font-size:.85rem;font-weight:700;">📝 별도 안건</h4>
+      </div>
+    </div>
+    ${agendasHtml}
+  `;
+
+  // 안건 추가 모달의 미팅 드롭다운 갱신
+  const select = document.getElementById('agendaMeetingId');
+  if (select) {
+    select.innerHTML = meetings.map(m => `<option value="${m.id}" ${m.id === currentMeetingId ? 'selected' : ''}>${m.title} (${m.date})</option>`).join('');
+  }
+}
+
+function selectMeeting(id) {
+  currentMeetingId = id;
+  renderMeetingTab();
+}
+
+function openMeetingAgendaModal() {
+  document.getElementById('meetingAgendaModal').classList.add('open');
+  renderMeetingTab(); // 드롭다운 갱신
+}
+function closeMeetingAgendaModal() {
+  document.getElementById('meetingAgendaModal').classList.remove('open');
+}
+
+function saveMeetingAgenda() {
+  const meetingId = document.getElementById('agendaMeetingId').value;
+  const title = document.getElementById('agendaTitle').value.trim();
+  const category = document.getElementById('agendaCategory').value;
+  const detail = document.getElementById('agendaDetail').value.trim();
+  const briefId = document.getElementById('agendaBriefId').value.trim();
+  
+  if (!meetingId || !title) { alert('미팅과 안건 제목은 필수입니다.'); return; }
+  
+  const agendas = getAgendas();
+  agendas.push({ meetingId, title, category, detail, briefId, createdAt: new Date().toISOString() });
+  saveAgendas(agendas);
+  
+  // 폼 초기화
+  document.getElementById('agendaTitle').value = '';
+  document.getElementById('agendaDetail').value = '';
+  document.getElementById('agendaBriefId').value = '';
+  
+  closeMeetingAgendaModal();
+  currentMeetingId = meetingId;
+  renderMeetingTab();
+}
+
+function deleteMeetingAgenda(idx) {
+  if (!confirm('이 안건을 삭제하시겠습니까?')) return;
+  const agendas = getAgendas();
+  const mtgAgendas = agendas.filter(a => a.meetingId === currentMeetingId);
+  const target = mtgAgendas[idx];
+  const globalIdx = agendas.indexOf(target);
+  if (globalIdx >= 0) agendas.splice(globalIdx, 1);
+  saveAgendas(agendas);
+  renderMeetingTab();
+}
+
+function openNewMeetingModal() {
+  const title = prompt('미팅 제목:');
+  if (!title) return;
+  const date = prompt('날짜 (YYYY-MM-DD):', new Date().toISOString().slice(0,10));
+  if (!date) return;
+  const reportId = prompt('연결할 주간 리포트 ID (선택, 예: w14-2026):', '');
+  
+  const meetings = getMeetings();
+  const id = 'mtg-' + Date.now();
+  meetings.unshift({ id, title, date, status: 'upcoming', reportId: reportId || null });
+  saveMeetings(meetings);
+  currentMeetingId = id;
+  renderMeetingTab();
+}
+
 </script>
 <!-- trend chart is inline in tab-weekly -->
 </body>
