@@ -249,7 +249,7 @@ select.form-input{cursor:pointer;}
   <nav class="main-tabs">
     <button class="main-tab active" data-tab="briefs">📋 워크플로우</button>
     <button class="main-tab" data-tab="meeting">🤝 미팅</button>
-    <button class="main-tab" data-tab="analysis">📊 분석</button>
+    <button class="main-tab" data-tab="analysis">📊 분석/리포트</button>
     <button class="main-tab" data-tab="creative">🎨 소재</button>
     <button class="main-tab" data-tab="settings">⚙️ 더보기</button>
   </nav>
@@ -318,10 +318,19 @@ select.form-input{cursor:pointer;}
   <div class="tab-content" id="tab-analysis">
     <nav class="report-nav" style="margin-bottom:14px;">
       <button class="report-btn active" onclick="switchAnalysisSub('weekly')">📊 주간 리포트</button>
+      <button class="report-btn" onclick="switchAnalysisSub('reports')">📄 리포트</button>
       <button class="report-btn" onclick="switchAnalysisSub('signals')">💡 시그널</button>
       <button class="report-btn" onclick="switchAnalysisSub('learn')">📚 Learn</button>
     </nav>
     <div id="analysis-sub-weekly"></div>
+    <div id="analysis-sub-reports" style="display:none;">
+      <div style="margin-bottom:12px;">
+        <h2 style="font-size:1rem;font-weight:700;">📄 비정기 리포트</h2>
+        <p style="font-size:.75rem;color:var(--t2);">심층 분석, 캠페인 리뷰, 구매자 분석 등 비정기 리포트를 여기서 관리합니다.</p>
+      </div>
+      <div id="adhocReportNav" class="report-nav" style="margin-bottom:12px;"></div>
+      <div id="adhocReportContent"></div>
+    </div>
     <div id="analysis-sub-signals" style="display:none;"></div>
     <div id="analysis-sub-learn" style="display:none;"></div>
   </div>
@@ -3041,6 +3050,113 @@ function renderSchemaList() {
 }
 
 /* ═══════════════════════════════════════════
+   📄 비정기 리포트
+   ═══════════════════════════════════════════ */
+
+const ADHOC_REPORTS_KEY = 'wf_adhoc_reports';
+
+function getAdhocReports() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(ADHOC_REPORTS_KEY));
+    if (saved && saved.length) return saved;
+  } catch {}
+  // 기본 데이터
+  const defaults = [
+    {
+      id: 'meta-ads-review-2026',
+      title: '메타광고 심층 리뷰 2026',
+      date: '2026-04-04',
+      status: 'draft',
+      category: '캠페인 리뷰',
+      url: 'https://wspn-images.wespion.workers.dev/reports/meta-ads-review-2026.html',
+      description: '2026년 메타광고 전체 소재 성과 분석. CTR/CPC/전환 추이, 소재별 비교, VP-Problem 조합 효과 분석.',
+      tags: ['Meta Ads', '소재 분석', '2026']
+    }
+  ];
+  localStorage.setItem(ADHOC_REPORTS_KEY, JSON.stringify(defaults));
+  return defaults;
+}
+
+let currentAdhocReportId = null;
+
+function renderAdhocReports() {
+  const reports = getAdhocReports();
+  const nav = document.getElementById('adhocReportNav');
+  const content = document.getElementById('adhocReportContent');
+  if (!nav || !content) return;
+
+  if (!currentAdhocReportId && reports.length) currentAdhocReportId = reports[0].id;
+
+  const statusIcon = {draft:'📝',review:'🔍',final:'✅'};
+  nav.innerHTML = reports.map(r =>
+    `<button class="report-btn ${r.id === currentAdhocReportId ? 'active' : ''}" onclick="selectAdhocReport('${r.id}')">${statusIcon[r.status]||'📄'} ${r.title}</button>`
+  ).join('') + `<button class="report-btn" onclick="addAdhocReport()" style="border-style:dashed;">+ 리포트 추가</button>`;
+
+  const r = reports.find(x => x.id === currentAdhocReportId);
+  if (!r) { content.innerHTML = '<div class="empty-state"><p>리포트를 선택하세요.</p></div>'; return; }
+
+  const statusBadge = r.status === 'draft' ? '<span class="badge badge-draft">📝 초안</span>' 
+    : r.status === 'review' ? '<span class="badge badge-review">🔍 검증중</span>'
+    : '<span class="badge badge-verified-valid">✅ 확정</span>';
+
+  content.innerHTML = `
+    <div class="card" style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+        <div>
+          <div style="font-size:.95rem;font-weight:700;">${r.title} ${statusBadge}</div>
+          <div style="font-size:.75rem;color:var(--t2);margin-top:4px;">📅 ${r.date} · ${r.category || '기타'}</div>
+          ${r.tags ? `<div style="display:flex;gap:4px;margin-top:6px;">${r.tags.map(t=>`<span class="schema-tag">${t}</span>`).join('')}</div>` : ''}
+        </div>
+        <div style="display:flex;gap:4px;">
+          <button class="btn" style="font-size:.7rem;padding:4px 10px;" onclick="window.open('${r.url}','_blank')">↗ 새 탭</button>
+          <button class="btn" style="font-size:.7rem;padding:4px 10px;" onclick="deleteAdhocReport('${r.id}')">삭제</button>
+        </div>
+      </div>
+      ${r.description ? `<p style="font-size:.8rem;color:var(--t);margin-top:8px;line-height:1.6;">${r.description}</p>` : ''}
+    </div>
+    <div style="border:1px solid var(--b);border-radius:10px;overflow:hidden;background:var(--s);">
+      <iframe src="${r.url}" style="width:100%;height:75vh;border:none;" loading="lazy"></iframe>
+    </div>
+  `;
+}
+
+function selectAdhocReport(id) {
+  currentAdhocReportId = id;
+  renderAdhocReports();
+}
+
+function addAdhocReport() {
+  const title = prompt('리포트 제목:');
+  if (!title) return;
+  const url = prompt('리포트 URL (HTML):');
+  if (!url) return;
+  const category = prompt('카테고리 (캠페인 리뷰/구매자 분석/채널 분석/기타):', '기타');
+  const description = prompt('설명 (선택):', '');
+
+  const reports = getAdhocReports();
+  const id = 'report-' + Date.now();
+  reports.unshift({
+    id, title, url,
+    date: new Date().toISOString().slice(0,10),
+    status: 'draft',
+    category: category || '기타',
+    description: description || '',
+    tags: []
+  });
+  localStorage.setItem(ADHOC_REPORTS_KEY, JSON.stringify(reports));
+  currentAdhocReportId = id;
+  renderAdhocReports();
+}
+
+function deleteAdhocReport(id) {
+  if (!confirm('이 리포트를 목록에서 삭제하시겠습니까?')) return;
+  const reports = getAdhocReports().filter(r => r.id !== id);
+  localStorage.setItem(ADHOC_REPORTS_KEY, JSON.stringify(reports));
+  if (currentAdhocReportId === id) currentAdhocReportId = reports[0]?.id || null;
+  renderAdhocReports();
+}
+
+/* ═══════════════════════════════════════════
    🏷️ 태깅 편집 모달
    ═══════════════════════════════════════════ */
 
@@ -3149,27 +3265,21 @@ document.addEventListener('DOMContentLoaded', () => {
    ═══════════════════════════════════════════ */
 
 function switchAnalysisSub(sub) {
-  ['weekly','signals','learn'].forEach(s => {
+  ['weekly','reports','signals','learn'].forEach(s => {
     const el = document.getElementById('analysis-sub-' + s);
     if (el) el.style.display = s === sub ? '' : 'none';
   });
-  document.querySelectorAll('#tab-analysis .report-nav .report-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent.includes(
-      sub === 'weekly' ? '주간' : sub === 'signals' ? '시그널' : 'Learn'
-    ));
+  const labelMap = {weekly:'주간',reports:'리포트',signals:'시그널',learn:'Learn'};
+  document.querySelectorAll('#tab-analysis > .report-nav > .report-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.includes(labelMap[sub]||''));
   });
-  // 기존 탭 내용을 서브 컨테이너로 이동
   moveTabContent('tab-weekly', 'analysis-sub-weekly');
   moveTabContent('tab-signals', 'analysis-sub-signals');
   moveTabContent('tab-learn', 'analysis-sub-learn');
   
-  if (sub === 'weekly') {
-    // 트리거 리포트 렌더
-    if (typeof loadReports === 'function') loadReports();
-  }
-  if (sub === 'learn') {
-    if (typeof renderLearnTab === 'function') renderLearnTab();
-  }
+  if (sub === 'weekly' && typeof loadReports === 'function') loadReports();
+  if (sub === 'learn' && typeof renderLearnTab === 'function') renderLearnTab();
+  if (sub === 'reports') renderAdhocReports();
 }
 
 function switchCreativeSub(sub) {
@@ -3232,6 +3342,16 @@ function getDefaultMeetings() {
     { id: 'mtg-w14', title: 'W14 킥오프 미팅', date: '2026-04-07', status: 'upcoming', reportId: 'w13-2026' },
   ];
   saveMeetings(m);
+  // 기본 안건도 세팅
+  const agendas = getAgendas();
+  if (!agendas.length) {
+    const defaults = [
+      { meetingId: 'mtg-w14', title: '메타광고 심층 리뷰 2026', category: 'review', detail: '메타광고 전체 소재 성과 분석 (CTR/CPC/전환 추이). 검증 미완 상태이나 데이터 확인 필요.\n📄 리포트 탭에서 전문 확인 가능.', briefId: '', createdAt: '2026-04-04T05:30:00Z' },
+      { meetingId: 'mtg-w14', title: '워크플로우 도구 소개 + 첫 실험 설계', category: 'discussion', detail: '대시보드 라이브 데모 → 시그널 등록 → 설계서 작성 실습', briefId: '', createdAt: '2026-04-04T05:31:00Z' },
+      { meetingId: 'mtg-w14', title: '역할 분담 + 주간 루틴 합의', category: 'decision', detail: '마케터/리더/AI 역할, 주간 리뷰 요일/시간 확정', briefId: '', createdAt: '2026-04-04T05:32:00Z' },
+    ];
+    saveAgendas(defaults);
+  }
   return m;
 }
 
