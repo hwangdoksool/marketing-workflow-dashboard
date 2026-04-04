@@ -320,11 +320,11 @@ select.form-input{cursor:pointer;}
 
   <!-- TAB: 분석 (그룹) -->
   <div class="tab-content" id="tab-analysis" style="display:none;">
-    <nav class="report-nav" style="margin-bottom:14px;">
-      <button class="report-btn active" onclick="switchAnalysisSub('weekly')">📊 주간 리포트</button>
-      <button class="report-btn" onclick="switchAnalysisSub('reports')">📄 리포트</button>
-      <button class="report-btn" onclick="switchAnalysisSub('signals')">💡 시그널</button>
-      <button class="report-btn" onclick="switchAnalysisSub('learn')">📚 Learn</button>
+    <nav class="report-nav" id="analysisNav" style="margin-bottom:14px;">
+      <button class="report-btn active" data-sub="weekly" onclick="switchAnalysisSub('weekly')">📊 주간 리포트</button>
+      <button class="report-btn" data-sub="reports" onclick="switchAnalysisSub('reports')">📄 리포트</button>
+      <button class="report-btn" data-sub="signals" onclick="switchAnalysisSub('signals')">💡 시그널</button>
+      <button class="report-btn" data-sub="learn" onclick="switchAnalysisSub('learn')">📚 Learn</button>
     </nav>
     <div id="analysis-sub-weekly"></div>
     <div id="analysis-sub-reports" style="display:none;">
@@ -341,9 +341,9 @@ select.form-input{cursor:pointer;}
 
   <!-- TAB: 소재 (그룹) -->
   <div class="tab-content" id="tab-creative" style="display:none;">
-    <nav class="report-nav" style="margin-bottom:14px;">
-      <button class="report-btn active" onclick="switchCreativeSub('schema')">🗂️ 크리에이티브 스키마</button>
-      <button class="report-btn" onclick="switchCreativeSub('tagger')">🏷️ 소재 태깅</button>
+    <nav class="report-nav" id="creativeNav" style="margin-bottom:14px;">
+      <button class="report-btn active" data-sub="schema" onclick="switchCreativeSub('schema')">🗂️ 크리에이티브 스키마</button>
+      <button class="report-btn" data-sub="tagger" onclick="switchCreativeSub('tagger')">🏷️ 소재 태깅</button>
     </nav>
     <div id="creative-sub-schema"></div>
     <div id="creative-sub-tagger" style="display:none;"></div>
@@ -3298,9 +3298,8 @@ function switchAnalysisSub(sub) {
     const el = document.getElementById('analysis-sub-' + s);
     if (el) el.style.display = s === sub ? '' : 'none';
   });
-  const labelMap = {weekly:'주간',reports:'리포트',signals:'시그널',learn:'Learn'};
-  document.querySelectorAll('#tab-analysis > .report-nav > .report-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent.includes(labelMap[sub]||''));
+  document.querySelectorAll('#analysisNav .report-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.sub === sub);
   });
   // 기존 탭 내용을 서브 컨테이너로 이동 (최초 1회)
   moveTabInner('tab-weekly', 'analysis-sub-weekly');
@@ -3318,10 +3317,8 @@ function switchCreativeSub(sub) {
     const el = document.getElementById('creative-sub-' + s);
     if (el) el.style.display = s === sub ? '' : 'none';
   });
-  document.querySelectorAll('#tab-creative .report-nav .report-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent.includes(
-      sub === 'schema' ? '스키마' : '태깅'
-    ));
+  document.querySelectorAll('#creativeNav .report-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.sub === sub);
   });
   moveTabInner('tab-schema', 'creative-sub-schema');
   moveTabInner('tab-tagger', 'creative-sub-tagger');
