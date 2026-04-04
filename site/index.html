@@ -2997,14 +2997,28 @@ function renderSchemaOverview() {
     const hookC = count('hook_type', '|NONE|');  // hook은 단일값
     briefs.forEach(b => { const h=(b.hook_type||'').trim(); if(h) hookC[h]=(hookC[h]||0)+1; });
 
+    // hypothesis 한글 텍스트에서 Stage/USP 파싱
     const stageC = {}, uspC = {};
+    const codeRe = /[SU]\d+/g;
     briefs.forEach(b => {
-      try {
-        const h = JSON.parse(b.hypothesis||'{}');
-        (h.stage||[]).forEach(s => stageC[s]=(stageC[s]||0)+1);
-        (h.usp||[]).forEach(u => uspC[u]=(uspC[u]||0)+1);
-      } catch {}
+      const h = b.hypothesis || '';
+      const stageLine = (h.match(/구매여정:\s*(.+)/)||[])[1]||'';
+      const uspLine = (h.match(/USP:\s*(.+)/)||[])[1]||'';
+      (stageLine.match(codeRe)||[]).forEach(s => stageC[s]=(stageC[s]||0)+1);
+      (uspLine.match(codeRe)||[]).forEach(u => uspC[u]=(uspC[u]||0)+1);
     });
+
+    // hook_type 단일값 카운트 (이미 count로 잘 안 되므로 별도)
+    const hookC2 = {};
+    briefs.forEach(b => { const h=(b.hook_type||'').trim(); if(h) hookC2[h]=(hookC2[h]||0)+1; });
+
+    // content_type 카운트
+    const contentC = {};
+    briefs.forEach(b => { const c=(b.content_type||'').trim(); if(c) contentC[c]=(contentC[c]||0)+1; });
+
+    // verdict 분포
+    const verdictC = {};
+    briefs.forEach(b => { const v=b.verdict||'미판정'; verdictC[v]=(verdictC[v]||0)+1; });
 
     const n = briefs.length;
     const srcC = {};
@@ -3048,10 +3062,12 @@ function renderSchemaOverview() {
         </div>
       </div>
       ${section('🎯 VP (가치 제안)', vpC, SCHEMA_DEFS.VP, '#6366f1')}
-      ${section('🔥 Problem', probC, SCHEMA_DEFS.Problem, '#f59e0b')}
-      ${section('🎣 Hook', Object.fromEntries(Object.entries(hookC).sort((a,b)=>b[1]-a[1])), {}, '#10b981')}
+      ${section('🔥 Problem (고객 고충)', probC, SCHEMA_DEFS.Problem, '#f59e0b')}
+      ${section('🎣 Hook (후킹 기법)', hookC2, {}, '#10b981')}
       ${section('🗺️ Stage (구매 여정)', stageC, SCHEMA_DEFS.Stage, '#3b82f6')}
       ${section('⚙️ USP (제품 특장점)', uspC, SCHEMA_DEFS.USP, '#ec4899')}
+      ${section('🎬 Content Type', contentC, {}, '#8b5cf6')}
+      ${section('🏆 Verdict (판정)', verdictC, {hit:'성과 확인',miss:'성과 미달','미판정':'데이터 부족/보류'}, '#ef4444')}
     `;
   });
 }
@@ -3067,21 +3083,41 @@ function renderSchemaDef() {
       </table>
     </div>`;
 
+  const hookDefs = {
+    '질문형': '시청자에게 직접 질문을 던져 참여 유도 ("혹시 이런 경험 있으신가요?")',
+    '공포충격': '부정적 결과/위험을 제시하여 주의 환기 ("이렇게 하면 다칩니다")',
+    '반전': '예상과 다른 전개로 시선 고정 ("이게 헬스장이라고?")',
+    '호기심': '정보 격차 활용, "이건 뭐지?" 유발 ("이 머신의 정체는...")',
+    '도발': '통념에 반박하여 논쟁 유발 ("헬스장 다니지 마세요")',
+    '숫자': '구체적 수치로 신뢰도 확보 ("120kg까지 가능한 0.5평 머신")',
+    '인물등장': '실제 사용자/전문가 등장으로 신뢰 부여',
+    '시연데모': '제품 사용 장면을 직접 보여주는 영상',
+    '비교': '기존 장비/헬스장과 직접 비교 ("덤벨 vs 룸핏")',
+    '사회적증거': '리뷰/반응/구매 현황 등 타인의 선택 제시',
+  };
+
+  const formatDefs = {
+    '릴스': '인스타그램 세로형 숏폼 (15~90초)',
+    '숏폼': '유튜브 Shorts 등 세로형 숏폼',
+    '카드뉴스': '이미지 슬라이드 형태 (정보 전달)',
+    '이미지': '단일 이미지 게시물',
+    '캐러셀': '복수 이미지 슬라이드',
+    '영상': '가로형 또는 긴 영상 콘텐츠',
+    '블로그': '네이버/웹 블로그 텍스트+이미지',
+  };
+
   el.innerHTML = `
-    ${table('🎯 VP — Value Proposition (10)', Object.entries(SCHEMA_DEFS.VP))}
-    ${table('🔥 Problem (22)', Object.entries(SCHEMA_DEFS.Problem))}
-    ${table('🗺️ Stage — 구매 여정 (12)', Object.entries(SCHEMA_DEFS.Stage))}
-    ${table('⚙️ USP — 제품 특장점 (18)', Object.entries(SCHEMA_DEFS.USP))}
-    <div style="background:var(--s);border:1px solid var(--b);border-radius:10px;padding:16px;margin-bottom:12px;">
-      <div style="font-weight:700;font-size:.85rem;margin-bottom:10px;">🎣 Hook — 후킹 기법</div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;">
-        ${SCHEMA_DEFS.Hook.map(h=>`<span style="background:var(--s2);border:1px solid var(--b);border-radius:6px;padding:4px 10px;font-size:.78rem;">${h}</span>`).join('')}
-      </div>
-    </div>
+    <p style="color:var(--t2);font-size:.78rem;margin-bottom:16px;">크리에이티브 스키마 v1 — 9축 × 302개 소재 태깅 체계. 프레임(비전) 분석 기반 직접 태깅.</p>
+    ${table('🎯 VP — Value Proposition (10축)', Object.entries(SCHEMA_DEFS.VP))}
+    ${table('🔥 Problem — 고객 고충 (22축)', Object.entries(SCHEMA_DEFS.Problem))}
+    ${table('🎣 Hook — 후킹 기법 (10축)', Object.entries(hookDefs))}
+    ${table('🗺️ Stage — 구매 여정 (12축)', Object.entries(SCHEMA_DEFS.Stage))}
+    ${table('⚙️ USP — 제품 특장점 (18축)', Object.entries(SCHEMA_DEFS.USP))}
+    ${table('🎬 Format — 콘텐츠 형식', Object.entries(formatDefs))}
     <div style="background:var(--s);border:1px solid var(--b);border-radius:10px;padding:16px;font-size:.78rem;color:var(--t2);">
       <strong style="color:var(--t);">태깅 방식</strong><br>
-      프레임 비전 분석(영상/이미지) + GPT-4o-mini few-shot 추론.<br>
-      캡션 키워드 매칭 아님 — 실제 영상 내용 기반.<br>
+      영상/이미지 프레임 비전 분석 → 직접 판단 태깅 (LLM 자동 태깅 폐기).<br>
+      캡션/제목 키워드 매칭 금지 — 실제 영상 내용 기반.<br>
       최종 업데이트: 2026-04-04
     </div>`;
 }
