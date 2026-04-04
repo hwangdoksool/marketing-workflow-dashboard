@@ -1453,21 +1453,33 @@ function enrichReportKpi(report) {
     ctr:         { value: m.ctr, prev: pm?.ctr, unit: '%' },
     cpc:         { value: m.cpc, prev: pm?.cpc, unit: '₩' },
     bodySales:   { value: s.bodySales, prev: ps?.bodySales, unit: '대', note: '🟢 아임웹 본체 주문 기준' },
+    bodyUnits:   { value: s.bodySales, prev: ps?.bodySales, unit: '대', note: '🟢 아임웹 본체 주문 기준' },
     feelBookings:{ value: s.feelBookings, prev: ps?.feelBookings, unit: '건', note: '체험 예약' },
     revenue:     { value: s.revenue, prev: ps?.revenue, unit: '₩', note: '🟢 아임웹 결제 완료 기준' },
     cpa:         { value: s.cpa, prev: ps?.cpa, unit: '₩', note: '광고비 / (본체+체험)' },
     roas:        { value: s.roas, prev: ps?.roas, unit: '%', note: '실매출 / 광고비' },
+    purchases_ga4: { value: s.pixelPurchases, prev: ps?.pixelPurchases, note: '⚠️ 픽셀 참고용 (정본 아님)' },
     pixelPurchases: { value: s.pixelPurchases, prev: ps?.pixelPurchases, note: '⚠️ 픽셀 참고용 (정본 아님)' },
+    convRate:    { value: s.bodySales + s.feelBookings > 0 && s.sessions > 0 ? 
+                   Math.round((s.bodySales + s.feelBookings) / s.sessions * 10000) / 100 : 0,
+                   prev: ps && (ps.bodySales + ps.feelBookings) > 0 && ps.sessions > 0 ?
+                   Math.round((ps.bodySales + ps.feelBookings) / ps.sessions * 10000) / 100 : null,
+                   unit: '%', note: '(본체+체험)/세션' },
   };
 
-  // reports.json의 기존 KPI에서 note가 있으면 보존 (인사이트성 메모)
+  // reports.json의 기존 KPI에서 note/값 보존 (정본에 없는 항목)
   const oldKpi = report.kpi || {};
   report.kpi = {};
   for (const [key, def] of Object.entries(kpiMap)) {
     if (def.value == null && def.value !== 0) continue;
     report.kpi[key] = { ...def };
-    // 기존에 사람이 쓴 note가 있으면 우선
     if (oldKpi[key]?.note && !def.note) report.kpi[key].note = oldKpi[key].note;
+  }
+  // 정본에 없는 기존 KPI 보존 (signups 등)
+  for (const [key, val] of Object.entries(oldKpi)) {
+    if (!report.kpi[key] && val?.value != null) {
+      report.kpi[key] = val;
+    }
   }
 }
 
