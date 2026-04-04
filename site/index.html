@@ -192,6 +192,13 @@ select.form-input{cursor:pointer;}
 }
 
 /* ── Guide modal ── */
+.tag-checkbox-grid{display:flex;flex-wrap:wrap;gap:4px;}
+.tag-checkbox-grid label{display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;border:1px solid var(--b);background:var(--s);transition:all .12s;user-select:none;}
+.tag-checkbox-grid label:hover{background:var(--s2);}
+.tag-checkbox-grid input[type="checkbox"]{display:none;}
+.tag-checkbox-grid input[type="checkbox"]:checked+span{color:#fff;}
+.tag-checkbox-grid label:has(input:checked){background:var(--ac);border-color:var(--ac);color:#fff;}
+
 .guide-modal .modal{max-width:720px;}
 .guide-modal h3{font-size:.92rem;font-weight:700;margin:18px 0 8px;color:var(--ac2);}
 .guide-modal h3:first-of-type{margin-top:4px;}
@@ -378,10 +385,10 @@ select.form-input{cursor:pointer;}
   <div class="tab-content" id="tab-tagger">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
       <div>
-        <h2 style="font-size:1rem;font-weight:700;margin-bottom:4px;">🏷️ 기존 소재 태깅 리뷰</h2>
-        <p style="font-size:.75rem;color:var(--t2);">LLM이 자동 분류한 태그를 확인/수정합니다. 태깅 완료된 소재는 향후 실험 설계 시 레퍼런스로 활용됩니다.</p>
+        <h2 style="font-size:1rem;font-weight:700;margin-bottom:4px;">🏷️ 소재 태깅 관리</h2>
+        <p style="font-size:.75rem;color:var(--t2);">크리에이티브 스키마 탭의 "🔍 소재 탐색"에서 카드를 클릭하면 태깅을 직접 편집할 수 있습니다.</p>
       </div>
-      <a href="https://rf-creative-tagger.pages.dev" target="_blank" class="btn" style="text-decoration:none;">↗ 새 탭에서 열기</a>
+      <button class="btn primary" onclick="switchCreativeSub('schema');setTimeout(()=>switchSchemaSub('schema-list'),100);">🔍 소재 탐색으로 이동</button>
     </div>
     <iframe src="https://rf-creative-tagger.pages.dev" style="width:100%;height:calc(100vh - 200px);border:1px solid var(--b);border-radius:10px;background:var(--s);" loading="lazy"></iframe>
   </div>
@@ -466,6 +473,59 @@ select.form-input{cursor:pointer;}
       </div>
       <div id="schemaListCount" style="font-size:.75rem;color:var(--t2);margin-bottom:8px;"></div>
       <div id="schemaListGrid"></div>
+    </div>
+  </div>
+
+  <!-- 태깅 편집 모달 -->
+  <div class="modal-bg" id="tagEditModal">
+    <div class="modal" style="max-width:560px;">
+      <button class="close" onclick="closeTagEditModal()">&times;</button>
+      <h2 id="tagEditTitle">🏷️ 태깅 편집</h2>
+      <input type="hidden" id="tagEditId">
+      <div style="margin-bottom:12px;">
+        <label style="font-size:.75rem;font-weight:600;color:var(--t2);display:block;margin-bottom:6px;">VP (가치 제안) <span style="font-size:.65rem;color:var(--t2);">복수 선택</span></label>
+        <div id="tagEditVP" class="tag-checkbox-grid"></div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:.75rem;font-weight:600;color:var(--t2);display:block;margin-bottom:6px;">Problem (문제) <span style="font-size:.65rem;color:var(--t2);">복수 선택</span></label>
+        <div id="tagEditProblem" class="tag-checkbox-grid"></div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:.75rem;font-weight:600;color:var(--t2);display:block;margin-bottom:6px;">Hook 유형</label>
+        <select class="form-input" id="tagEditHook">
+          <option value="">선택...</option>
+          <option value="호기심">호기심</option>
+          <option value="시연데모">시연데모</option>
+          <option value="사회적증거">사회적증거</option>
+          <option value="도발">도발</option>
+          <option value="숫자">숫자</option>
+          <option value="질문형">질문형</option>
+          <option value="비교">비교</option>
+          <option value="공포충격">공포충격</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Stage (구매여정)</label>
+          <input class="form-input" id="tagEditStage" placeholder="예: S3, S4">
+        </div>
+        <div class="form-group">
+          <label>USP (차별점)</label>
+          <input class="form-input" id="tagEditUSP" placeholder="예: U1, U5">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>판정</label>
+        <select class="form-input" id="tagEditVerdict">
+          <option value="">미확정</option>
+          <option value="hit">✅ Hit</option>
+          <option value="miss">❌ Miss</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
+        <button class="btn" onclick="closeTagEditModal()">취소</button>
+        <button class="btn primary" onclick="saveTagEdit()">💾 저장</button>
+      </div>
     </div>
   </div>
 
@@ -967,20 +1027,8 @@ select.form-input{cursor:pointer;}
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>VP (가치 제안)</label>
-          <select class="form-input" id="bf-vp">
-            <option value="">선택하세요</option>
-            <option value="VP1 자유해방">VP1 자유해방</option>
-            <option value="VP2 안심안전">VP2 안심안전</option>
-            <option value="VP3 성장성취">VP3 성장성취</option>
-            <option value="VP4 경제성">VP4 경제성</option>
-            <option value="VP5 라이프스타일">VP5 라이프스타일</option>
-            <option value="VP6 프리미엄소유">VP6 프리미엄소유</option>
-            <option value="VP7 전문성접근">VP7 전문성접근</option>
-            <option value="VP8 호기심재미">VP8 호기심재미</option>
-            <option value="VP9 사회적인정">VP9 사회적인정</option>
-            <option value="VP10 정서적안정">VP10 정서적안정</option>
-          </select>
+          <label>VP (가치 제안) <span style="font-size:.65rem;color:var(--t2);">복수 선택</span></label>
+          <div id="bf-vp-grid" class="tag-checkbox-grid"></div>
         </div>
         <div class="form-group">
           <label>소재 구성/포맷</label>
@@ -1783,7 +1831,7 @@ function openBriefForm(id){
       document.getElementById('bf-signaltype').value = b.signalType || '';
       document.getElementById('bf-persona').value = b.persona;
       document.getElementById('bf-jtbd').value = b.jtbd;
-      document.getElementById('bf-vp').value = b.vp;
+      buildCheckboxGrid('bf-vp-grid', VP_OPTIONS, (b.vp||'').replace(/ /g,'').split(',').map(v=>v.trim()).filter(Boolean).join(', '));
       document.getElementById('bf-structure').value = b.structure;
       document.getElementById('bf-channel').value = b.channel;
       document.getElementById('bf-stage').value = b.stage || '';
@@ -1794,6 +1842,7 @@ function openBriefForm(id){
     document.getElementById('briefFormTitle').textContent = '실험 설계서 수정';
   } else {
     document.getElementById('briefFormTitle').textContent = '새 실험 설계서';
+    buildCheckboxGrid('bf-vp-grid', VP_OPTIONS, '');
   }
   document.getElementById('briefFormModal').classList.add('open');
 }
@@ -1810,7 +1859,7 @@ function saveBrief(e){
   const signalType = document.getElementById('bf-signaltype').value;
   const persona = document.getElementById('bf-persona').value;
   const jtbd = document.getElementById('bf-jtbd').value;
-  const vp = document.getElementById('bf-vp').value;
+  const vp = getCheckedValues('bf-vp-grid');
   const structure = document.getElementById('bf-structure').value;
   const channel = document.getElementById('bf-channel').value;
   const hypothesis = document.getElementById('bf-hypothesis').value.trim();
@@ -2968,11 +3017,15 @@ function renderSchemaList() {
       const vps = (b.target_vp||'').split(', ').filter(Boolean);
       const probs = (b.target_problem||'').split(', ').filter(Boolean);
       const tag = (t,color) => `<span style="background:${color}22;color:${color};border:1px solid ${color}44;border-radius:4px;padding:2px 6px;font-size:.68rem;font-weight:600;">${t}</span>`;
-      return `<div style="background:var(--s);border:1px solid var(--b);border-radius:8px;padding:12px;margin-bottom:6px;">
+      const verdictBadge = b.verdict === 'hit' ? '<span style="color:#10b981;font-size:.7rem;font-weight:700;">✅ Hit</span>' : b.verdict === 'miss' ? '<span style="color:#ef4444;font-size:.7rem;font-weight:700;">❌ Miss</span>' : '';
+      return `<div style="background:var(--s);border:1px solid var(--b);border-radius:8px;padding:12px;margin-bottom:6px;cursor:pointer;transition:all .12s;" onclick="openTagEditModal('${b.id}')" onmouseover="this.style.borderColor='var(--ac)'" onmouseout="this.style.borderColor='var(--b)'">
         <div style="display:flex;gap:8px;align-items:flex-start;">
           <span style="font-size:1.1rem;">${srcIcon[b.source]||'📄'}</span>
           <div style="flex:1;min-width:0;">
-            <div style="font-size:.8rem;font-weight:600;margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${b.title||''}">${b.title||''}</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <div style="font-size:.8rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;" title="${b.title||''}">${b.title||''}</div>
+              ${verdictBadge}
+            </div>
             <div style="display:flex;flex-wrap:wrap;gap:4px;">
               ${vps.map(v=>tag(v,'#6366f1')).join('')}
               ${probs.map(p=>tag(p,'#f59e0b')).join('')}
@@ -2985,6 +3038,100 @@ function renderSchemaList() {
       </div>`;
     }).join('') || '<div style="text-align:center;padding:40px;color:var(--t2);">결과 없음</div>';
   });
+}
+
+/* ═══════════════════════════════════════════
+   🏷️ 태깅 편집 모달
+   ═══════════════════════════════════════════ */
+
+const VP_OPTIONS = [
+  {code:'VP1',label:'자유/해방'},{code:'VP2',label:'안심/안전'},{code:'VP3',label:'성장/성취'},
+  {code:'VP4',label:'경제성'},{code:'VP5',label:'라이프스타일'},{code:'VP6',label:'프리미엄/소유'},
+  {code:'VP7',label:'전문성/B2B'},{code:'VP8',label:'호기심/재미'},{code:'VP9',label:'사회적인정'},{code:'VP10',label:'정서적안정'}
+];
+const PROBLEM_OPTIONS = [
+  {code:'P1',label:'시간부족'},{code:'P2',label:'비용부담'},{code:'P3',label:'동기부족'},
+  {code:'P4',label:'안전불안'},{code:'P5',label:'소음진동'},{code:'P6',label:'자세불안'},
+  {code:'P7',label:'공간부족'},{code:'P8',label:'정보부족'},{code:'P9',label:'지루함'},
+  {code:'P10',label:'장비한계'},{code:'P11',label:'외모스트레스'},{code:'P12',label:'근감소'},
+  {code:'P13',label:'재활필요'},{code:'P14',label:'센터접근성'},{code:'P15',label:'장비불신'},
+  {code:'P16',label:'가족시간'},{code:'P17',label:'프라이버시'},{code:'P18',label:'날씨제약'},
+  {code:'P19',label:'혼자운동'},{code:'P20',label:'관리감독B2B'},{code:'P21',label:'고객경험B2B'},
+  {code:'P22',label:'습관유지'}
+];
+
+function buildCheckboxGrid(containerId, options, selectedCodes) {
+  const container = document.getElementById(containerId);
+  const sel = (selectedCodes||'').split(', ').map(s=>s.trim()).filter(Boolean);
+  container.innerHTML = options.map(o => 
+    `<label><input type="checkbox" value="${o.code}" ${sel.includes(o.code)?'checked':''}><span>${o.code} ${o.label}</span></label>`
+  ).join('');
+}
+
+function getCheckedValues(containerId) {
+  return [...document.querySelectorAll(`#${containerId} input:checked`)].map(cb=>cb.value).join(', ');
+}
+
+function openTagEditModal(briefId) {
+  loadSchemaBriefs().then(briefs => {
+    const b = briefs.find(x => x.id === briefId);
+    if (!b) return;
+    document.getElementById('tagEditId').value = briefId;
+    document.getElementById('tagEditTitle').textContent = `🏷️ ${(b.title||'').slice(0,40)}`;
+    buildCheckboxGrid('tagEditVP', VP_OPTIONS, b.target_vp);
+    buildCheckboxGrid('tagEditProblem', PROBLEM_OPTIONS, b.target_problem);
+    document.getElementById('tagEditHook').value = b.hook_type || '';
+    // stage/usp from hypothesis
+    let stage='', usp='';
+    try { const h=JSON.parse(b.hypothesis||'{}'); stage=(h.stage||[]).join(', '); usp=(h.usp||[]).join(', '); } catch {
+      // 한글 텍스트 포맷에서 파싱
+      const hyp = b.hypothesis||'';
+      const stageM = hyp.match(/구매여정:\s*(.+)/); if(stageM) stage=stageM[1].trim();
+      const uspM = hyp.match(/USP:\s*(.+)/); if(uspM) usp=uspM[1].trim();
+    }
+    document.getElementById('tagEditStage').value = stage;
+    document.getElementById('tagEditUSP').value = usp;
+    document.getElementById('tagEditVerdict').value = b.verdict || '';
+    document.getElementById('tagEditModal').classList.add('open');
+  });
+}
+
+function closeTagEditModal() {
+  document.getElementById('tagEditModal').classList.remove('open');
+}
+
+async function saveTagEdit() {
+  const id = document.getElementById('tagEditId').value;
+  const target_vp = getCheckedValues('tagEditVP');
+  const target_problem = getCheckedValues('tagEditProblem');
+  const hook_type = document.getElementById('tagEditHook').value;
+  const stage = document.getElementById('tagEditStage').value.trim();
+  const usp = document.getElementById('tagEditUSP').value.trim();
+  const verdict = document.getElementById('tagEditVerdict').value || null;
+
+  // hypothesis 업데이트
+  const parts = [];
+  if (target_vp) parts.push('가치: ' + target_vp.split(', ').map(v => { const o=VP_OPTIONS.find(x=>x.code===v); return o ? `${v}(${o.label})` : v; }).join(', '));
+  if (target_problem) parts.push('문제: ' + target_problem.split(', ').map(p => { const o=PROBLEM_OPTIONS.find(x=>x.code===p); return o ? `${p}(${o.label})` : p; }).join(', '));
+  if (hook_type) parts.push('훅: ' + hook_type);
+  if (stage) parts.push('구매여정: ' + stage);
+  if (usp) parts.push('USP: ' + usp);
+  const hypothesis = parts.join('\n');
+
+  const payload = { target_vp, target_problem, hook_type, hypothesis, verdict, updated_at: new Date().toISOString() };
+
+  try {
+    const resp = await kvFetch(`/briefs/${id}`, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    if (!resp.ok) throw new Error('저장 실패: ' + resp.status);
+    // 로컬 캐시 갱신
+    const idx = schemaBriefs.findIndex(b => b.id === id);
+    if (idx >= 0) Object.assign(schemaBriefs[idx], payload);
+    closeTagEditModal();
+    renderSchemaList();
+    renderSchemaOverview();
+  } catch (e) {
+    alert('저장 실패: ' + e.message);
+  }
 }
 
 // 탭 클릭 시 스키마 탭이면 overview 렌더
