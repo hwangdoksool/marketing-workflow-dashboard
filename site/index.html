@@ -1424,7 +1424,7 @@ async function loadReports(){
       const h = location.hash.replace('#','').toLowerCase();
       if(h && h.startsWith('w')){
         const fi = reports.findIndex(r => r.id.startsWith(h));
-        if(fi >= 0){ switchTab('tab-weekly'); selectReport(fi, false); }
+        if(fi >= 0){ activateMainTab('analysis');setTimeout(()=>{switchAnalysisSub('weekly');selectReport(fi, false);},50); }
       }
     });
     // 해시 라우팅: #w13 → 해당 주차 선택
