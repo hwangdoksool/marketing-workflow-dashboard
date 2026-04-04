@@ -3342,22 +3342,25 @@ function getDefaultMeetings() {
     { id: 'mtg-w14', title: 'W14 킥오프 미팅', date: '2026-04-07', status: 'upcoming', reportId: 'w13-2026' },
   ];
   saveMeetings(m);
-  // 기본 안건도 세팅
-  const agendas = getAgendas();
-  if (!agendas.length) {
-    const defaults = [
-      { meetingId: 'mtg-w14', title: '메타광고 심층 리뷰 2026', category: 'review', detail: '메타광고 전체 소재 성과 분석 (CTR/CPC/전환 추이). 검증 미완 상태이나 데이터 확인 필요.\n📄 리포트 탭에서 전문 확인 가능.', briefId: '', createdAt: '2026-04-04T05:30:00Z' },
-      { meetingId: 'mtg-w14', title: '워크플로우 도구 소개 + 첫 실험 설계', category: 'discussion', detail: '대시보드 라이브 데모 → 시그널 등록 → 설계서 작성 실습', briefId: '', createdAt: '2026-04-04T05:31:00Z' },
-      { meetingId: 'mtg-w14', title: '역할 분담 + 주간 루틴 합의', category: 'decision', detail: '마케터/리더/AI 역할, 주간 리뷰 요일/시간 확정', briefId: '', createdAt: '2026-04-04T05:32:00Z' },
-    ];
-    saveAgendas(defaults);
-  }
   return m;
+}
+
+function seedDefaultAgendas() {
+  const agendas = getAgendas();
+  // 이미 mtg-w14 안건이 있으면 스킵
+  if (agendas.some(a => a.meetingId === 'mtg-w14')) return;
+  const defaults = [
+    { meetingId: 'mtg-w14', title: '메타광고 심층 리뷰 2026', category: 'review', detail: '메타광고 전체 소재 성과 분석 (CTR/CPC/전환 추이). 검증 미완 상태이나 데이터 확인 필요.\n📄 리포트 탭에서 전문 확인 가능.', briefId: '', createdAt: '2026-04-04T05:30:00Z' },
+    { meetingId: 'mtg-w14', title: '워크플로우 도구 소개 + 첫 실험 설계', category: 'discussion', detail: '대시보드 라이브 데모 → 시그널 등록 → 설계서 작성 실습', briefId: '', createdAt: '2026-04-04T05:31:00Z' },
+    { meetingId: 'mtg-w14', title: '역할 분담 + 주간 루틴 합의', category: 'decision', detail: '마케터/리더/AI 역할, 주간 리뷰 요일/시간 확정', briefId: '', createdAt: '2026-04-04T05:32:00Z' },
+  ];
+  saveAgendas([...agendas, ...defaults]);
 }
 
 let currentMeetingId = null;
 
 function renderMeetingTab() {
+  seedDefaultAgendas();
   const meetings = getMeetings();
   const agendas = getAgendas();
   const nav = document.getElementById('meetingNav');
