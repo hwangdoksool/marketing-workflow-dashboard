@@ -324,8 +324,8 @@ select.form-input{cursor:pointer;}
         <textarea class="form-input" id="agendaDetail" rows="3" placeholder="배경, 참고 데이터, 질문 등"></textarea>
       </div>
       <div class="form-group">
-        <label>관련 링크 (선택)</label>
-        <input class="form-input" id="agendaLink" placeholder="https://...">
+        <label>보고서 URL (선택 — 미팅에서 바로 볼 수 있도록 임베드)</label>
+        <input class="form-input" id="agendaLink" placeholder="https://wspn-images.wespion.workers.dev/reports/...">
       </div>
       <div class="form-group">
         <label>관련 Brief ID (선택)</label>
@@ -3671,8 +3671,8 @@ function getDefaultMeetings() {
 function seedDefaultAgendas() {
   const agendas = getAgendas();
   const defaults = [
-    { meetingId: 'mtg-w14', title: '메타광고 심층 리뷰 2026', category: 'review', detail: '메타광고 전체 소재 성과 분석 (CTR/CPC/전환 추이). 검증 미완 상태이나 데이터 확인 필요.\n📄 리포트 탭에서 전문 확인 가능.', briefId: '', createdAt: '2026-04-04T05:30:00Z' },
-    { meetingId: 'mtg-w14', title: '캠페인 구조 변경 전후 전환 분석', category: 'review', detail: '2/25~4/4 캠페인 4구간 비교: ASC+체험→ASC단독→ASC+B2B→2555+B2B. 간트 타임라인으로 캠페인 가동기간 × 실구매/체험/카카오 매핑.\n핵심: ASC 예산 피크(일20만+)에 전환 오히려 희박, D구간 CPA 290K로 효율 회복. 소재별 드릴다운 포함.\n📄 리포트 탭 "캠페인 구조 변경 × 전환 타임라인" 참조.', briefId: '', createdAt: '2026-04-05T12:00:00Z' },
+    { meetingId: 'mtg-w14', title: '메타광고 심층 리뷰 2026', category: 'review', detail: '메타광고 전체 소재 성과 분석 (CTR/CPC/전환 추이). 검증 미완 상태이나 데이터 확인 필요.', url: 'https://wspn-images.wespion.workers.dev/reports/meta-ads-review-2026.html', briefId: '', createdAt: '2026-04-04T05:30:00Z' },
+    { meetingId: 'mtg-w14', title: '캠페인 구조 변경 전후 전환 분석', category: 'review', detail: '2/25~4/4 캠페인 4구간 비교. ASC 예산 피크(일20만+)에 전환 희박, D구간 CPA 290K로 효율 회복. 소재별 드릴다운 포함.', url: 'https://wspn-images.wespion.workers.dev/reports/meta-campaign-analysis-20260405.html', briefId: '', createdAt: '2026-04-05T12:00:00Z' },
     { meetingId: 'mtg-w14', title: '워크플로우 도구 소개 + 첫 실험 설계', category: 'discussion', detail: '대시보드 라이브 데모 → 시그널 등록 → 설계서 작성 실습', briefId: '', createdAt: '2026-04-04T05:31:00Z' },
     { meetingId: 'mtg-w14', title: '역할 분담 + 주간 루틴 합의', category: 'decision', detail: '마케터/리더/AI 역할, 주간 리뷰 요일/시간 확정', briefId: '', createdAt: '2026-04-04T05:32:00Z' },
   ];
@@ -3729,17 +3729,16 @@ function renderMeetingTab() {
     agendasHtml = '<div class="empty-state"><p>리포트 외 별도 안건이 없습니다.<br>"+ 안건 추가"로 논의할 사항을 등록하세요.</p></div>';
   } else {
     agendasHtml = mtgAgendas.map((a, i) => {
-      const hasDetail = a.detail || a.briefId || a.links;
-      const links = a.links || [];
-      // 자동 링크: 메타광고 리뷰 안건이면 리포트 링크 추가
-      if (a.title.includes('메타광고') && !links.length) {
-        links.push({label:'📄 메타광고 리뷰 전문 보기', url:'https://wspn-images.wespion.workers.dev/reports/meta-ads-review-2026.html'});
-        links.push({label:'📊 분석/리포트 탭에서 보기', action:"switchToReport('meta-ads-review-2026')"});
-      }
-      const linksHtml = links.map(l => 
-        l.url ? `<a href="${l.url}" target="_blank" style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;background:rgba(99,102,241,.1);color:var(--ac2);font-size:.75rem;font-weight:600;text-decoration:none;transition:all .12s;" onmouseover="this.style.background='rgba(99,102,241,.2)'" onmouseout="this.style.background='rgba(99,102,241,.1)'">${l.label} ↗</a>`
-        : `<button class="btn" style="font-size:.75rem;padding:4px 10px;" onclick="${l.action}">${l.label}</button>`
-      ).join(' ');
+      const hasDetail = a.detail || a.briefId || a.url;
+      // Inline iframe for agenda items with url
+      const iframeHtml = a.url ? `
+        <div style="margin-top:10px;border:1px solid var(--b);border-radius:8px;overflow:hidden;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--s2);border-bottom:1px solid var(--b);">
+            <span style="font-size:.72rem;color:var(--t2);">📄 보고서</span>
+            <a href="${a.url}" target="_blank" style="font-size:.7rem;color:var(--ac);text-decoration:none;">새 탭 ↗</a>
+          </div>
+          <iframe src="${a.url}" style="width:100%;height:70vh;border:none;" loading="lazy"></iframe>
+        </div>` : '';
       return `
       <div class="card" style="margin-bottom:8px;cursor:${hasDetail?'pointer':'default'};transition:all .12s;" onclick="toggleAgendaDetail(this)">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;">
@@ -3757,7 +3756,7 @@ function renderMeetingTab() {
         </div>
         <div class="agenda-detail" style="display:none;margin-top:10px;margin-left:20px;padding-top:10px;border-top:1px solid var(--b);">
           ${a.detail ? `<p style="font-size:.8rem;color:var(--t);line-height:1.7;margin-bottom:8px;">${a.detail.replace(/\n/g,'<br>')}</p>` : ''}
-          ${linksHtml ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">${linksHtml}</div>` : ''}
+          ${iframeHtml}
         </div>
       </div>`;
     }).join('');
@@ -3807,9 +3806,8 @@ function saveMeetingAgenda() {
   
   if (!meetingId || !title) { alert('미팅과 안건 제목은 필수입니다.'); return; }
   
-  const links = link ? [{label:'🔗 관련 자료', url: link}] : [];
   const agendas = getAgendas();
-  agendas.push({ meetingId, title, category, detail, briefId, links, createdAt: new Date().toISOString() });
+  agendas.push({ meetingId, title, category, detail, briefId, url: link || '', createdAt: new Date().toISOString() });
   saveAgendas(agendas);
   
   // 폼 초기화
