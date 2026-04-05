@@ -23,7 +23,22 @@ WEEKS = {
     "W11": ("2026-03-09", "2026-03-15"),
     "W12": ("2026-03-16", "2026-03-22"),
     "W13": ("2026-03-23", "2026-03-29"),
+    "W14": ("2026-03-30", "2026-04-05"),
 }
+
+# Auto-extend: add future weeks dynamically
+def _extend_weeks():
+    from datetime import date
+    today = date.today()
+    last_num = max(int(k[1:]) for k in WEEKS)
+    last_end = date.fromisoformat(WEEKS[f"W{last_num}"][1])
+    while last_end < today:
+        last_num += 1
+        s = last_end + timedelta(days=1)
+        e = s + timedelta(days=6)
+        WEEKS[f"W{last_num}"] = (s.isoformat(), e.isoformat())
+        last_end = e
+_extend_weeks()
 
 # 2개월 이력 타임라인 (2MONTH-REVIEW.md 기반)
 ACTIONS_TIMELINE = {
@@ -167,7 +182,8 @@ def extract_ga4_week(ga4_full, start, end):
 
 def extract_meta_week(meta_full, start, end):
     """Extract weekly Meta data from full dataset"""
-    dates = set(date_range_dash(start, end))
+    # meta_full uses YYYYMMDD format (no dashes)
+    dates = set(date_range(start, end))
     daily = [r for r in meta_full["daily"] if r["date"] in dates]
     campaigns = [r for r in meta_full["campaigns"] if r["date"] in dates]
     
@@ -924,7 +940,7 @@ def main():
     reports = []
     prev_ga4 = prev_meta = prev_naver = None
     
-    week_order = ["W6", "W7", "W8", "W9", "W10", "W11", "W12", "W13"]
+    week_order = [f"W{i}" for i in sorted(int(k[1:]) for k in WEEKS)]
     
     for week_id in week_order:
         start, end = WEEKS[week_id]
