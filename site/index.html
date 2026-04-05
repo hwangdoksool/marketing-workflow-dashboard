@@ -227,6 +227,21 @@ select.form-input{cursor:pointer;}
 .empty-state{text-align:center;padding:40px 20px;color:var(--t2);}
 .empty-state p{font-size:.85rem;}
 
+/* ── Feel / Leads shared ── */
+.modal .tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px;}
+.modal .field{margin-bottom:10px;}
+.modal .field-label{font-size:.75rem;color:var(--t2);margin-bottom:2px;}
+.modal .field-val{font-size:.88rem;}
+.tag{display:inline-block;padding:1px 7px;border-radius:4px;font-size:.67rem;font-weight:600;margin-right:2px;}
+.lead-modal-actions{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0;}
+.lead-modal-actions .btn{font-size:.78rem;padding:6px 14px;}
+.lead-modal-actions .btn-primary{background:var(--ac);color:#fff;border-color:var(--ac);}
+.lead-modal-actions .btn-success{background:var(--g);color:#fff;border-color:var(--g);}
+.lead-modal-actions .btn-danger{background:var(--r);color:#fff;border-color:var(--r);}
+.lead-modal-actions .btn-warning{background:var(--y);color:#111;border-color:var(--y);}
+.lead-notes-input{width:100%;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:6px;padding:8px;font-size:.82rem;font-family:inherit;resize:vertical;min-height:60px;}
+@keyframes spin { to { transform: rotate(360deg); } }
+
 /* ── Brief actions row ── */
 .brief-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
 
@@ -252,6 +267,8 @@ select.form-input{cursor:pointer;}
     <button class="main-tab" data-tab="analysis">📊 분석/리포트</button>
     <button class="main-tab" data-tab="creative">🎨 소재</button>
     <button class="main-tab" data-tab="settings">⚙️ 더보기</button>
+    <button class="main-tab" data-tab="feel">🏋️ 체험신청</button>
+    <button class="main-tab" data-tab="leads">🤝 B2B 리드 <span id="leads-badge" class="badge" style="display:none;margin-left:4px;background:var(--g);color:#fff;">0</span></button>
   </nav>
 
   <!-- ═══════════════════════════════════════════ -->
@@ -1225,6 +1242,25 @@ select.form-input{cursor:pointer;}
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════════ -->
+<!-- TAB: 체험신청 (Feel) -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tab-content" id="tab-feel" style="display:none;">
+  <div id="feel-view"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TAB: B2B 리드 (Leads) -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tab-content" id="tab-leads" style="display:none;">
+  <div id="leads-view"></div>
+</div>
+
+<!-- Shared modal for Feel/Leads detail views -->
+<div class="modal-bg" id="feelLeadsModal">
+  <div class="modal" id="feelLeadsModalContent"></div>
+</div>
+
 <script>
 /* ═══════════════════════════════════════════════════
    Global State & Config
@@ -1356,7 +1392,7 @@ function toggleTheme(){
    Tab Navigation
    ═══════════════════════════════════════════════════ */
 // 전역 탭 라우팅
-const mainTabIds = ['tab-briefs','tab-meeting','tab-analysis','tab-creative','tab-settings'];
+const mainTabIds = ['tab-briefs','tab-meeting','tab-analysis','tab-creative','tab-settings','tab-feel','tab-leads'];
 
 function activateMainTab(tabName, skipHash) {
   document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
@@ -1369,18 +1405,23 @@ function activateMainTab(tabName, skipHash) {
     const sub = tabName === 'analysis' ? '/weekly' : tabName === 'creative' ? '/schema' : '';
     window.history.replaceState(null, '', '#' + tabName + sub);
   }
+  // Auto-load data for feel/leads tabs
+  if (tabName === 'feel') loadBookings();
+  if (tabName === 'leads') loadLeads();
 }
 
 function routeFromHash() {
   const hash = (window.location.hash || '').replace('#','');
   if (!hash) { activateMainTab('briefs', true); return; }
   const [main, sub] = hash.split('/');
-  const validMains = ['briefs','meeting','analysis','creative','settings'];
+  const validMains = ['briefs','meeting','analysis','creative','settings','feel','leads'];
   if (validMains.includes(main)) {
     activateMainTab(main, true);
     if (main === 'analysis' && sub) setTimeout(() => switchAnalysisSub(sub), 50);
     if (main === 'creative' && sub) setTimeout(() => switchCreativeSub(sub), 50);
     if (main === 'meeting') setTimeout(() => renderMeetingTab(), 50);
+    if (main === 'feel') setTimeout(() => loadBookings(), 50);
+    if (main === 'leads') setTimeout(() => loadLeads(), 50);
   } else {
     activateMainTab('briefs', true);
   }
@@ -3714,6 +3755,950 @@ function openNewMeetingModal() {
   currentMeetingId = id;
   renderMeetingTab();
 }
+
+
+/* ═══════════════════════════════════════════════════
+   Feel Bookings + B2B Leads (integrated from old dashboard)
+   ═══════════════════════════════════════════════════ */
+
+// ── Supabase Config ──
+const SB_URL = 'https://ssidizurrvnfmqbvfsqr.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzaWRpenVycnZuZm1xYnZmc3FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4NDg1OTgsImV4cCI6MjA4NzQyNDU5OH0.3UMwz8QPAOoN_hFu-EaheLQunHdpJk_WvMjxuiONRSI';
+
+// ── Util ──
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function closeFeelLeadsModal(){
+  document.getElementById('feelLeadsModal').classList.remove('open');
+}
+// Click outside modal to close
+document.getElementById('feelLeadsModal')?.addEventListener('click', function(e){
+  if(e.target === this) closeFeelLeadsModal();
+});
+
+// ===== B2B LEADS =====
+const LEADS_API = 'https://meta-lead-webhook.wespion.workers.dev/api/leads';
+var leadsData = [];
+var leadsFilter = 'all';
+const LEAD_STATUSES = [
+  {key:'new', label:'📥 신규', color:'var(--r)', desc:'Meta 광고 유입'},
+  {key:'email_sent', label:'📧 메일발송', color:'var(--y)', desc:'제안서 메일 발송'},
+  {key:'contacted', label:'📞 연락완료', color:'var(--bl)', desc:'직접 연락/통화'},
+  {key:'qualified', label:'✅ 적합', color:'var(--ac)', desc:'도입 적합 판단'},
+  {key:'converted', label:'🎉 전환', color:'var(--g)', desc:'계약 완료'},
+];
+const LEAD_STATUS_LOST = {key:'lost', label:'❌ 이탈', color:'var(--t2)'};
+
+// loadLeads는 아래 Supabase 버전(1곳)으로 통합
+
+function updateLeadsBadge(){
+  const newCount = leadsData.filter(l=>l.status==='new').length;
+  const badge = document.getElementById('leads-badge');
+  if(newCount>0){badge.textContent=newCount;badge.style.display='inline';}
+  else badge.style.display='none';
+}
+
+function leadTimeSince(isoStr){
+  if(!isoStr) return '';
+  const diff = Date.now() - new Date(isoStr).getTime();
+  const mins = Math.floor(diff/60000);
+  if(mins<60) return mins+'분 전';
+  const hrs = Math.floor(mins/60);
+  if(hrs<24) return hrs+'시간 전';
+  const days = Math.floor(hrs/24);
+  return days+'일 전';
+}
+
+function isUrgent(lead){
+  if(lead.status!=='new') return false;
+  const diff = Date.now() - new Date(lead.createdAt).getTime();
+  return diff > 24*60*60*1000; // 24h+
+}
+
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── STT Upload ──
+
+let bookingsData = [];
+let bookingsFilter = 'all';
+
+async function loadBookings(){
+  const fv = document.getElementById('feel-view');
+  fv.innerHTML='<div style="padding:40px;text-align:center;color:var(--t2);">체험 신청 데이터 불러오는 중...</div>';
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/feel_bookings?select=*&order=created_at.desc`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    });
+    bookingsData = await res.json();
+    renderBookings();
+  } catch(e) {
+    fv.innerHTML='<div style="padding:40px;text-align:center;color:var(--r);">데이터를 불러올 수 없습니다.</div>';
+  }
+}
+
+function renderBookings(){
+  const fv = document.getElementById('feel-view');
+  const statusMap = {
+    'pending_payment':'💰 결제대기','paid_pending':'💳 결제완료','confirmed':'✅ 확정',
+    'notified':'📩 안내완료','visited':'🏋️ 체험완료','completed':'🎉 완료',
+    'cancelled':'❌ 취소','rejected':'🚫 불가','no_show':'👻 노쇼'
+  };
+  const statusColors = {
+    'pending_payment':'var(--y)','paid_pending':'var(--bl)','confirmed':'var(--g)',
+    'notified':'var(--ac2)','visited':'var(--g)','completed':'var(--g)',
+    'cancelled':'var(--t2)','rejected':'var(--r)','no_show':'var(--r)'
+  };
+
+  const filtered = bookingsFilter==='all' ? bookingsData : bookingsData.filter(b=>b.status===bookingsFilter);
+
+  // Stats
+  const stats = {total:bookingsData.length};
+  const activeStatuses = ['pending_payment','paid_pending','confirmed','notified'];
+  const doneStatuses = ['visited','completed'];
+  const cancelledStatuses = ['cancelled','rejected','no_show'];
+  stats.active = bookingsData.filter(b=>activeStatuses.includes(b.status)).length;
+  stats.done = bookingsData.filter(b=>doneStatuses.includes(b.status)).length;
+  stats.cancelled = bookingsData.filter(b=>cancelledStatuses.includes(b.status)).length;
+
+  let html = '';
+
+  // Header
+  html += '<div style="background:var(--s);border:1px solid var(--b);border-radius:12px;padding:16px;margin-bottom:12px;">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">';
+  html += '<div><h2 style="font-size:1rem;margin-bottom:4px;">🏋️ 체험 신청 관리</h2>';
+  html += '<p style="font-size:0.78rem;color:var(--t2);">Supabase · feel_bookings</p></div>';
+  html += '<a href="https://roomfit.kr/feel" target="_blank" style="font-size:0.78rem;color:var(--bl);text-decoration:none;">신청 페이지 ↗</a>';
+  html += '</div>';
+
+  // Status KPI
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;">';
+  [['all','전체',stats.total,'var(--t)'],['active','진행중',stats.active,'var(--bl)'],['done','완료',stats.done,'var(--g)'],['cancelled','취소/불가',stats.cancelled,'var(--t2)']].forEach(([key,label,count,color])=>{
+    const active = bookingsFilter===key ? 'border-color:'+color+';box-shadow:inset 0 0 0 1px '+color : '';
+    html += `<div onclick="bookingsFilter='${key}';renderBookings();" style="background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:8px;text-align:center;cursor:pointer;${active}">`;
+    html += `<div style="font-size:1.1rem;font-weight:700;color:${color};">${count}</div>`;
+    html += `<div style="font-size:0.68rem;color:var(--t2);">${label}</div></div>`;
+  });
+  html += '</div></div>';
+
+  // Apply filter groups
+  let displayData = filtered;
+  if(bookingsFilter==='active') displayData = bookingsData.filter(b=>activeStatuses.includes(b.status));
+  else if(bookingsFilter==='done') displayData = bookingsData.filter(b=>doneStatuses.includes(b.status));
+  else if(bookingsFilter==='cancelled') displayData = bookingsData.filter(b=>cancelledStatuses.includes(b.status));
+
+  // Table
+  if(displayData.length === 0){
+    html += '<div style="background:var(--s);border:1px solid var(--b);border-radius:12px;padding:40px;text-align:center;color:var(--t2);">해당 조건의 신청이 없습니다.</div>';
+  } else {
+    html += '<div style="background:var(--s);border:1px solid var(--b);border-radius:12px;overflow:hidden;">';
+    html += '<table style="width:100%;border-collapse:collapse;">';
+    html += '<thead><tr>';
+    ['상태','이름','연락처','예약일시','운동','질문','메모'].forEach(h=>{
+      html += `<th style="text-align:left;padding:10px;font-size:0.72rem;color:var(--t2);border-bottom:1px solid var(--b);">${h}</th>`;
+    });
+    html += '</tr></thead><tbody>';
+
+    displayData.forEach(b=>{
+      const statusLabel = statusMap[b.status] || b.status;
+      const statusColor = statusColors[b.status] || 'var(--t2)';
+      const slotStr = b.slot_date ? `${b.slot_date} ${b.slot_time||''}` : '-';
+      const contact = b.phone || b.email || '-';
+
+      html += `<tr style="cursor:pointer;transition:background .1s;" onmouseover="this.style.background='var(--s2)'" onmouseout="this.style.background=''" onclick="openBookingModal(${b.id})">`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.75rem;"><span style="color:${statusColor};font-weight:600;">${statusLabel}</span></td>`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.82rem;font-weight:600;">${esc(b.name||'-')}</td>`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.78rem;color:var(--t2);">${esc(contact)}</td>`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.78rem;">${slotStr}</td>`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.75rem;color:var(--t2);">${esc(b.sport_preference||'-')}</td>`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.75rem;color:var(--t2);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(b.question||'')}</td>`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.75rem;color:var(--t2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(b.admin_memo||'')}</td>`;
+      html += '</tr>';
+    });
+
+    html += '</tbody></table></div>';
+  }
+
+  fv.innerHTML = html;
+}
+
+// Constants from original dashboard
+const FEEL_CHECKLIST = [
+  '아이스 브레이킹','운동 관련 경력, 취향','룸핏 접한 경로','룸핏 기대하는 점 / 우려하는 점',
+  '구매 의사','활용하기 좋은 동작 / 무게맛','무게맛 첫 반응 영상','이질감 / 한계',
+  '앱 서비스 관련','후기 인터뷰 (촬영)','인증샷 (체험자 & 룸핏)','체험 후기 작성 안내','후속 문자 (쿠폰 발송)'
+];
+const FEEL_IQ = [
+  {key:'iq1',num:'Q1',q:'평소 어떤 운동을 즐겨 하셨나요? 기존 운동 방식에서 가장 불편하거나 아쉬웠던 점은?'},
+  {key:'iq2',num:'Q2',q:'홈짐이나 개인 기구 구매를 고민해보신 적이 있나요? 망설이게 했던 가장 큰 이유는?'},
+  {key:'iq3',num:'Q3',q:'룸핏을 처음 보셨을 때와 직접 당겨보셨을 때의 느낌 차이는? 모터 제어 기반 머신이 기존 기구와 비교해서 어땠나요?'},
+  {key:'iq4',num:'Q4',q:'오늘 체험하신 모드 중 가장 인상 깊었던 기능은? (네거티브 모드, 밴드 모드 등)'},
+  {key:'iq5',num:'Q5',q:'자동 카운팅이나 VBT(속도/파워) 분석 데이터를 실시간으로 보면서 운동하니 어떤 점이 가장 좋았나요?'},
+  {key:'iq8',num:'Q8',q:'룸핏이 우리 집에, 혹은 우리 센터에 들어온다면 일상이 어떻게 변할 것 같나요?'},
+  {key:'iq9',num:'Q9',q:'룸핏을 어떤 분들에게 가장 추천하고 싶으신가요? (야근이 잦은 직장인, 공간이 좁은 1인 가구 등)'}
+];
+const FEEL_CANCEL_REASONS = [
+  {value:'unpaid',label:'💳 미결제 취소'},{value:'user_request',label:'🙋 신청자 의사로 취소'},
+  {value:'abuse',label:'🚫 어뷰징/스팸'},{value:'duplicate',label:'📋 중복 신청'},
+  {value:'duplicate_submission',label:'📋 중복 제출'},{value:'schedule_unavailable',label:'📅 스케줄 불가'},{value:'other',label:'💬 기타'}
+];
+let _feelSaveTimer = null;
+
+function openBookingModal(bookingId){
+  const b = bookingsData.find(x=>x.id===bookingId);
+  if(!b) return;
+  const cl = b.interview_checklist || {};
+
+  const statusMap = {
+    'pending_payment':'💰 결제대기','paid_pending':'💳 결제완료','confirmed':'✅ 확정',
+    'notified':'📩 안내완료','visited':'🏋️ 체험완료','completed':'🎉 완료',
+    'cancelled':'❌ 취소','rejected':'🚫 불가','no_show':'👻 노쇼'
+  };
+  const date = b.created_at ? new Date(b.created_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}) : '-';
+  const dayNames = ['일','월','화','수','목','금','토'];
+  const slotDate = b.slot_date ? new Date(b.slot_date+'T00:00:00+09:00') : null;
+  const dayStr = slotDate ? `(${dayNames[slotDate.getDay()]})` : '';
+
+  let html = '<span class="close" onclick="closeFeelLeadsModal()">✕</span>';
+  html += `<h2>#${b.id} ${esc(b.name||'')}</h2>`;
+
+  // Tags
+  html += '<div class="tags" style="margin-bottom:12px;">';
+  html += `<span class="tag" style="background:rgba(0,184,148,.15);color:var(--g);">${statusMap[b.status]||b.status}</span>`;
+  if(b.contact_method) html += `<span class="tag" style="background:rgba(116,185,255,.15);color:var(--bl);">${b.contact_method==='kakao'?'💬 카카오':'📱 SMS'}</span>`;
+  if(b.joint_ok) html += `<span class="tag" style="background:rgba(253,203,110,.15);color:var(--y);">동반 가능</span>`;
+  if(b.marketing_consent) html += `<span class="tag" style="background:rgba(0,184,148,.15);color:var(--g);">🎬 촬영동의</span>`;
+  if(b.paid_at) html += `<span class="tag" style="background:rgba(0,184,148,.15);color:var(--g);">💳 결제완료</span>`;
+  html += '</div>';
+
+  // ── Basic Info (설문 전체 항목) ──
+  html += '<div style="font-size:0.85rem;line-height:1.8;color:var(--t2);margin-bottom:12px;">';
+  if(b.slot_date) html += `<div>📅 ${b.slot_date}${dayStr} ${b.slot_time||''}</div>`;
+  if(b.phone) html += `<div>📞 ${esc(b.phone)}</div>`;
+  if(b.email) html += `<div>✉️ ${esc(b.email)}</div>`;
+  html += `<div>📢 인지 경로: ${(b.sources||[]).join(', ')||'-'}</div>`;
+  if(b.sport_preference) html += `<div>🏋️ 선호 운동: ${esc(b.sport_preference)}</div>`;
+  if(b.exercise_preference) html += `<div>💪 체험 동작: ${esc(b.exercise_preference)}</div>`;
+  html += `<div>🎬 영상 촬영/활용 동의: ${b.marketing_consent ? '<span style="color:var(--g);font-weight:600;">동의 ✅</span>' : '<span style="font-weight:600;">미동의</span>'}</div>`;
+  html += `<div>👥 동반 진행: ${b.joint_ok ? '괜찮습니다 ✅' : '<span style="font-weight:600;">단독 희망 👤</span>'}</div>`;
+  html += `<div>💬 연락 방식: ${b.contact_method==='sms'?'📱 문자 (카카오 이용 어려움)':'💬 카카오톡'}</div>`;
+  html += `<div>🕐 접수: ${date}</div>`;
+  if(b.paid_at) html += `<div>💳 결제: ${new Date(b.paid_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}</div>`;
+  if(b.confirmed_at) html += `<div>✅ 확정: ${new Date(b.confirmed_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}</div>`;
+  if(b.visited_at) html += `<div>🏋️ 체험: ${new Date(b.visited_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}</div>`;
+  if(b.landing_page) html += `<div>🔗 유입 페이지: ${esc(b.landing_page)}</div>`;
+  if(b.referrer) html += `<div>↩️ 리퍼러: ${esc(b.referrer)}</div>`;
+  if(b.cancel_reason) html += `<div style="color:var(--r);">❌ 취소 사유: ${esc(b.cancel_reason)}</div>`;
+  html += '</div>';
+
+  if(b.question) html += `<div style="background:var(--s2);padding:8px 12px;border-radius:6px;font-size:0.82rem;margin-bottom:12px;">❓ ${esc(b.question)}</div>`;
+
+  // ── Status Change ──
+  html += '<div style="padding:10px 0;border-top:1px solid var(--b);">';
+  html += '<div class="field-label" style="margin-bottom:6px;">상태 변경</div>';
+  html += '<div style="display:flex;gap:3px;flex-wrap:wrap;">';
+  ['pending_payment','paid_pending','confirmed','notified','visited','completed','cancelled','rejected','no_show'].forEach(s=>{
+    const active = b.status===s ? 'background:var(--ac);color:#fff;border-color:var(--ac);' : '';
+    html += `<button onclick="updateBookingStatus(${b.id},'${s}')" style="padding:3px 7px;border-radius:4px;font-size:0.65rem;font-weight:600;cursor:pointer;border:1px solid var(--b);background:var(--s);color:var(--t);${active}">${statusMap[s]}</button>`;
+  });
+  html += '</div>';
+  // Cancel reason (show if cancelled/rejected)
+  if(['cancelled','rejected'].includes(b.status)){
+    html += '<div style="margin-top:6px;display:flex;gap:3px;flex-wrap:wrap;">';
+    FEEL_CANCEL_REASONS.forEach(cr=>{
+      const active = b.cancel_reason===cr.value ? 'background:var(--r);color:#fff;border-color:var(--r);' : '';
+      html += `<button onclick="updateBookingField(${b.id},'cancel_reason','${cr.value}')" style="padding:3px 7px;border-radius:4px;font-size:0.65rem;cursor:pointer;border:1px solid var(--b);background:var(--s);color:var(--t);${active}">${cr.label}</button>`;
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // ── Admin Memo ──
+  html += '<div style="padding:10px 0;border-top:1px solid var(--b);">';
+  html += '<div class="field-label" style="margin-bottom:4px;">📌 관리자 메모</div>';
+  html += `<textarea id="bk-memo" style="width:100%;height:50px;background:var(--s2);border:1px solid var(--b);border-radius:6px;color:var(--t);padding:8px;font-size:0.82rem;resize:vertical;"
+    oninput="autoSaveBooking(${b.id})">${esc(b.admin_memo||'')}</textarea>`;
+  html += '</div>';
+
+  // ── AI 분석 결과 (요약 + STT 원본) ──
+  html += '<div style="padding:10px 0;border-top:1px solid var(--b);">';
+  html += '<div class="field-label" style="margin-bottom:8px;">🎙️ 인터뷰 분석</div>';
+  
+  // 핵심 요약
+  if(b.interview_notes) {
+    html += '<div style="padding:10px;background:var(--s2);border-radius:8px;border:1px solid var(--b);margin-bottom:8px;">';
+    html += '<div style="font-size:0.72rem;color:var(--t2);margin-bottom:4px;font-weight:600;">📋 핵심 요약</div>';
+    html += '<div style="font-size:0.82rem;line-height:1.6;">'+esc(b.interview_notes)+'</div>';
+    html += '</div>';
+  }
+  
+  // 하이라이트
+  if(cl.highlights && cl.highlights.length) {
+    html += '<div style="margin-bottom:8px;">';
+    cl.highlights.forEach(h => {
+      html += '<div style="font-size:0.78rem;padding:3px 0;color:var(--t);">💡 '+esc(h)+'</div>';
+    });
+    html += '</div>';
+  }
+  
+  // 구매의향 근거
+  if(cl.purchase_intent_reason) {
+    html += '<div style="font-size:0.75rem;color:var(--t2);margin-bottom:8px;">💰 '+esc(cl.purchase_intent_reason)+'</div>';
+  }
+  
+  // STT 원본 (접이식)
+  if(cl.stt_transcript) {
+    html += '<details style="margin-bottom:8px;"><summary style="font-size:0.78rem;color:var(--t2);cursor:pointer;">📜 STT 원본 보기</summary>';
+    html += '<pre style="font-size:0.75rem;color:var(--t2);margin-top:4px;white-space:pre-wrap;max-height:300px;overflow-y:auto;background:var(--s);padding:8px;border-radius:6px;border:1px solid var(--b);">'+esc(cl.stt_transcript)+'</pre></details>';
+  }
+  html += '</div>';
+  // ── Purchase Intent ──
+  html += '<div style="padding:10px 0;border-top:1px solid var(--b);">';
+  html += '<div class="field-label" style="margin-bottom:6px;">🎯 구매 의향</div>';
+  html += '<div style="display:flex;gap:4px;flex-wrap:wrap;">';
+  ['높음','보통','낮음'].forEach(intent=>{
+    const active = b.purchase_intent===intent ? 'background:var(--ac);color:#fff;border-color:var(--ac);' : '';
+    html += `<button onclick="updateBookingField(${b.id},'purchase_intent','${intent}')" style="padding:4px 10px;border-radius:5px;font-size:0.75rem;font-weight:600;cursor:pointer;border:1px solid var(--b);background:var(--s);color:var(--t);${active}">${intent}</button>`;
+  });
+  html += '</div></div>';
+
+  // ── Interview Notes ──
+  html += '<div style="padding:10px 0;border-top:1px solid var(--b);">';
+  html += '<div class="field-label" style="margin-bottom:4px;">📝 인터뷰 메모 <span id="feel-save-ind" style="font-size:0.68rem;color:var(--g);margin-left:6px;"></span></div>';
+  html += `<textarea id="bk-interview" style="width:100%;height:80px;background:var(--s2);border:1px solid var(--b);border-radius:6px;color:var(--t);padding:8px;font-size:0.82rem;resize:vertical;"
+    oninput="autoSaveBooking(${b.id})">${esc(b.interview_notes||'')}</textarea>`;
+  html += '</div>';
+
+  // ── Follow-up ──
+  html += '<div style="padding:10px 0;border-top:1px solid var(--b);">';
+  html += '<div class="field-label" style="margin-bottom:6px;">후속 조치</div>';
+  html += `<label style="display:flex;align-items:center;gap:6px;font-size:0.78rem;cursor:pointer;margin-bottom:4px;">
+    <input type="checkbox" ${b.review_requested?'checked':''} onchange="updateBookingField(${b.id},'review_requested',this.checked)"> 후기 작성 요청됨</label>`;
+  html += `<label style="display:flex;align-items:center;gap:6px;font-size:0.78rem;cursor:pointer;">
+    <input type="checkbox" ${b.coupon_sent?'checked':''} onchange="updateBookingField(${b.id},'coupon_sent',this.checked)"> 쿠폰 발송됨</label>`;
+  if(b.review_url) html += `<div style="margin-top:4px;"><a href="${esc(b.review_url)}" target="_blank" style="color:var(--bl);font-size:0.78rem;">후기 링크 →</a></div>`;
+  html += '</div>';
+
+  // ── Audio STT Upload ──
+  html += '<div style="padding:10px 0;border-top:1px solid var(--b);">';
+  html += '<div class="field-label" style="margin-bottom:8px;">🎙️ 인터뷰 녹음 → AI 자동 정리</div>';
+  if(cl.audio_url) {
+    html += `<div style="margin-bottom:10px;padding:8px;background:var(--s2);border-radius:6px;border:1px solid var(--b);">
+      <div style="font-size:0.78rem;color:var(--g);margin-bottom:4px;">✅ 녹음 업로드됨 ${cl.stt_at ? '(' + new Date(cl.stt_at).toLocaleString('ko-KR') + ')' : ''}</div>
+      <audio controls style="width:100%;height:32px;" src="${esc(cl.audio_url)}"></audio>
+    </div>`;
+  }
+  const nameEsc = esc(b.name).replace(/'/g,"\\'");
+  html += `<div id="stt-upload-${b.id}" style="padding:14px;border:2px dashed var(--b);border-radius:10px;text-align:center;cursor:pointer;transition:all 0.2s;"
+    onclick="document.getElementById('stt-file-${b.id}').click()"
+    ondragover="event.preventDefault();this.style.borderColor='var(--pr)';this.style.background='rgba(82,82,250,0.08)'"
+    ondragleave="this.style.borderColor='var(--b)';this.style.background='transparent'"
+    ondrop="event.preventDefault();this.style.borderColor='var(--b)';this.style.background='transparent';handleAudioDrop(event,${b.id},'${nameEsc}')">
+    <input type="file" id="stt-file-${b.id}" accept="audio/*" style="display:none"
+      onchange="handleAudioSelect(this,${b.id},'${nameEsc}')">
+    <div style="font-size:1.3rem;margin-bottom:2px;">🎙️</div>
+    <div style="font-size:0.82rem;color:var(--t2);">녹음 파일 드롭 또는 클릭해서 선택</div>
+    <div style="font-size:0.68rem;color:var(--t2);margin-top:2px;">m4a, mp3, wav, webm (최대 25MB)</div>
+  </div>`;
+  html += `<div id="stt-progress-${b.id}" style="display:none;margin-top:8px;">
+    <div style="display:flex;align-items:center;gap:6px;">
+      <div id="stt-spinner-${b.id}" style="width:16px;height:16px;border:2px solid var(--b);border-top-color:var(--pr);border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+      <span id="stt-status-${b.id}" style="font-size:0.82rem;color:var(--t2);">업로드 중...</span>
+    </div>
+    <div style="margin-top:4px;height:3px;background:var(--b);border-radius:2px;overflow:hidden;">
+      <div id="stt-bar-${b.id}" style="height:100%;width:0%;background:var(--pr);transition:width 0.3s;"></div>
+    </div>
+  </div>`;
+  html += `<div id="stt-result-${b.id}" style="display:none;margin-top:8px;"></div>`;
+  html += '</div>';
+
+  // ── UTM / Tracking (collapsible) ──
+  if(b.utm_source || b.utm_medium || b.utm_campaign || b.meta_fbclid || b.landing_page || b.referrer){
+    html += '<details style="padding:8px 0;border-top:1px solid var(--b);"><summary style="font-size:0.72rem;color:var(--t2);cursor:pointer;">📊 UTM / 트래킹 정보</summary>';
+    html += '<div style="margin-top:6px;padding:8px;background:var(--s2);border-radius:6px;font-size:0.72rem;line-height:1.6;">';
+    if(b.utm_source) html += `<div>source: ${esc(b.utm_source)}</div>`;
+    if(b.utm_medium) html += `<div>medium: ${esc(b.utm_medium)}</div>`;
+    if(b.utm_campaign) html += `<div>campaign: ${esc(b.utm_campaign)}</div>`;
+    if(b.utm_content) html += `<div>content: ${esc(b.utm_content)}</div>`;
+    if(b.utm_term) html += `<div>term: ${esc(b.utm_term)}</div>`;
+    if(b.landing_page) html += `<div>landing: ${esc(b.landing_page)}</div>`;
+    if(b.referrer) html += `<div>referrer: ${esc(b.referrer)}</div>`;
+    if(b.meta_fbclid) html += `<div>fbclid: ${esc(b.meta_fbclid)}</div>`;
+    if(b.ga_client_id) html += `<div>ga_client: ${esc(b.ga_client_id)}</div>`;
+    html += '</div></details>';
+  }
+
+  const modal = document.getElementById('feelLeadsModalContent');
+  modal.innerHTML = html;
+  document.getElementById('feelLeadsModal').classList.add('open');
+}
+
+// ── Auto-save helpers ──
+async function patchBooking(bookingId, updates){
+  await fetch(`${SB_URL}/rest/v1/feel_bookings?id=eq.${bookingId}`, {
+    method:'PATCH',
+    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+    body:JSON.stringify(updates)
+  });
+  const b = bookingsData.find(x=>x.id===bookingId);
+  if(b) Object.assign(b, updates);
+}
+
+async function updateBookingStatus(bookingId, status){
+  const updates = {status};
+  if(status==='visited') updates.visited_at = new Date().toISOString();
+  if(status==='cancelled') updates.cancelled_at = new Date().toISOString();
+  if(status==='confirmed') updates.confirmed_at = new Date().toISOString();
+  try {
+    await patchBooking(bookingId, updates);
+    closeModal();
+    renderBookings();
+  } catch(e){ alert('상태 업데이트 실패'); }
+}
+
+async function updateBookingField(bookingId, field, value){
+  try {
+    await patchBooking(bookingId, {[field]: value});
+    const b = bookingsData.find(x=>x.id===bookingId);
+    if(b) b[field] = value;
+    // Re-render modal to update UI
+    openBookingModal(bookingId);
+  } catch(e){ alert('업데이트 실패'); }
+}
+
+async function toggleFeelChecklist(bookingId, key, checked){
+  const b = bookingsData.find(x=>x.id===bookingId);
+  if(!b) return;
+  const cl = {...(b.interview_checklist||{})};
+  cl[key] = checked;
+  b.interview_checklist = cl;
+  try {
+    await patchBooking(bookingId, {interview_checklist: cl});
+    const ind = document.getElementById('feel-save-ind');
+    if(ind){ind.textContent='저장됨 ✓'; setTimeout(()=>{if(ind)ind.textContent='';},2000);}
+  } catch(e){}
+}
+
+async function autoSaveFeelAnswer(bookingId, key, value){
+  const b = bookingsData.find(x=>x.id===bookingId);
+  if(!b) return;
+  const cl = {...(b.interview_checklist||{})};
+  cl[key] = value;
+  b.interview_checklist = cl;
+  clearTimeout(_feelSaveTimer);
+  _feelSaveTimer = setTimeout(async()=>{
+    try {
+      await patchBooking(bookingId, {interview_checklist: cl});
+      const ind = document.getElementById('feel-save-ind');
+      if(ind){ind.textContent='저장됨 ✓'; setTimeout(()=>{if(ind)ind.textContent='';},2000);}
+    } catch(e){}
+  }, 800);
+}
+
+function autoSaveBooking(bookingId){
+  clearTimeout(_feelSaveTimer);
+  _feelSaveTimer = setTimeout(async()=>{
+    const updates = {};
+    const memoEl = document.getElementById('bk-memo');
+    const interEl = document.getElementById('bk-interview');
+    if(memoEl) updates.admin_memo = memoEl.value;
+    if(interEl) updates.interview_notes = interEl.value;
+    try {
+      await patchBooking(bookingId, updates);
+      const ind = document.getElementById('feel-save-ind');
+      if(ind){ind.textContent='저장됨 ✓'; setTimeout(()=>{if(ind)ind.textContent='';},2000);}
+    } catch(e){}
+  }, 800);
+}
+
+// ─── B2B Leads Management (Supabase) ───
+
+async function loadLeads(){
+  const lv = document.getElementById('leads-view');
+  lv.innerHTML='<div style="padding:40px;text-align:center;color:var(--t2);">리드 데이터 불러오는 중...</div>';
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/business_leads?select=*&order=created_at.desc`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    });
+    leadsData = await res.json();
+    renderLeads();
+  } catch(e) {
+    lv.innerHTML='<div style="padding:40px;text-align:center;color:var(--r);">리드 데이터를 불러올 수 없습니다.</div>';
+  }
+}
+
+function renderLeads(){
+  const lv = document.getElementById('leads-view');
+  const statusMap = {
+    'new':'📥 신규','email_sent':'📧 메일발송','contacted':'📞 연락완료','qualified':'✅ 적합','converted':'🎉 전환','lost':'❌ 이탈'
+  };
+  const statusColors = {
+    'new':'var(--bl)','email_sent':'var(--y)','contacted':'var(--ac)','qualified':'var(--g)','converted':'var(--ac2)','lost':'var(--t2)'
+  };
+
+  const filtered = leadsFilter==='all' ? leadsData : leadsData.filter(l=>l.lead_status===leadsFilter);
+
+  // Stats
+  const stats = {total:leadsData.length};
+  ['new','email_sent','contacted','qualified','converted','lost'].forEach(s=>{
+    stats[s] = leadsData.filter(l=>l.lead_status===s).length;
+  });
+
+  let html = '';
+
+  // Header
+  html += '<div style="background:var(--s);border:1px solid var(--b);border-radius:12px;padding:16px;margin-bottom:12px;">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">';
+  html += '<div><h2 style="font-size:1rem;margin-bottom:4px;">🤝 B2B 리드 관리</h2>';
+  html += '<p style="font-size:0.78rem;color:var(--t2);">Meta 리드 광고 + 홈페이지 견적 → 자동 수집 · Supabase</p></div>';
+  html += `<span style="font-size:0.78rem;color:var(--t2);">총 ${stats.total}건</span>`;
+  html += '</div>';
+
+  // Status KPI cards
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;">';
+  [['all','전체',stats.total,'var(--t)'],['new','신규',stats.new,'var(--bl)'],['email_sent','메일발송',stats.email_sent,'var(--y)'],['contacted','연락완료',stats.contacted,'var(--ac)'],['qualified','적합',stats.qualified,'var(--g)'],['converted','전환',stats.converted,'var(--ac2)'],['lost','이탈',stats.lost,'var(--t2)']].forEach(([key,label,count,color])=>{
+    const active = leadsFilter===key ? 'border-color:'+color+';box-shadow:inset 0 0 0 1px '+color : '';
+    html += `<div onclick="leadsFilter='${key}';renderLeads();" style="background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:8px;text-align:center;cursor:pointer;${active}">`;
+    html += `<div style="font-size:1.1rem;font-weight:700;color:${color};">${count}</div>`;
+    html += `<div style="font-size:0.68rem;color:var(--t2);">${label}</div></div>`;
+  });
+  html += '</div></div>';
+
+  // Leads list
+  if(filtered.length === 0){
+    html += '<div style="background:var(--s);border:1px solid var(--b);border-radius:12px;padding:40px;text-align:center;color:var(--t2);">';
+    html += leadsData.length===0 ? '아직 접수된 리드가 없습니다. 메타 리드 광고에서 양식이 제출되면 여기에 자동으로 표시됩니다.' : '해당 상태의 리드가 없습니다.';
+    html += '</div>';
+  } else {
+    html += '<div style="background:var(--s);border:1px solid var(--b);border-radius:12px;overflow:hidden;">';
+    html += '<table style="width:100%;border-collapse:collapse;">';
+    html += '<thead><tr>';
+    html += '<th style="text-align:left;padding:10px;font-size:0.72rem;color:var(--t2);border-bottom:1px solid var(--b);">상태</th>';
+    html += '<th style="text-align:left;padding:10px;font-size:0.72rem;color:var(--t2);border-bottom:1px solid var(--b);">이름</th>';
+    html += '<th style="text-align:left;padding:10px;font-size:0.72rem;color:var(--t2);border-bottom:1px solid var(--b);">연락처</th>';
+    html += '<th style="text-align:left;padding:10px;font-size:0.72rem;color:var(--t2);border-bottom:1px solid var(--b);">회사</th>';
+    html += '<th style="text-align:left;padding:10px;font-size:0.72rem;color:var(--t2);border-bottom:1px solid var(--b);">소스</th>';
+    html += '<th style="text-align:left;padding:10px;font-size:0.72rem;color:var(--t2);border-bottom:1px solid var(--b);">접수일</th>';
+    html += '<th style="text-align:left;padding:10px;font-size:0.72rem;color:var(--t2);border-bottom:1px solid var(--b);">메모</th>';
+    html += '</tr></thead><tbody>';
+
+    filtered.forEach(lead=>{
+      const name = lead.full_name || '-';
+      const phone = lead.phone || '-';
+      const email = lead.email || '';
+      const company = lead.company_name || '-';
+      const contact = phone !== '-' ? phone : email;
+      const date = lead.created_at ? new Date(lead.created_at).toLocaleDateString('ko-KR') : '-';
+      const statusLabel = statusMap[lead.lead_status] || lead.lead_status;
+      const statusColor = statusColors[lead.lead_status] || 'var(--t2)';
+      const sourceLabel = lead.source==='meta_lead' ? '📱 메타광고' : lead.source==='website' ? '🌐 홈페이지' : lead.source || '-';
+      const adName = lead.meta_ad_name || '';
+
+      html += `<tr style="cursor:pointer;transition:background .1s;" onmouseover="this.style.background='var(--s2)'" onmouseout="this.style.background=''" onclick="openLeadModal(${lead.id})">`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.78rem;"><span style="color:${statusColor};font-weight:600;">${statusLabel}</span></td>`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.82rem;font-weight:600;">${esc(name)}</td>`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.78rem;color:var(--t2);">${esc(contact)}</td>`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.78rem;">${esc(company)}</td>`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.72rem;color:var(--t2);">${sourceLabel}${adName?' · '+esc(adName):''}</td>`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.75rem;color:var(--t2);">${date}</td>`;
+      html += `<td style="padding:8px 10px;border-bottom:1px solid var(--b);font-size:0.75rem;color:var(--t2);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(lead.admin_memo||'')}</td>`;
+      html += '</tr>';
+    });
+
+    html += '</tbody></table></div>';
+  }
+
+  lv.innerHTML = html;
+}
+
+
+function openLeadModal(leadId){
+  const lead = leadsData.find(l=>l.id===leadId);
+  if(!lead) return;
+
+  const statusMap = {'new':'📥 신규','email_sent':'📧 메일발송','contacted':'📞 연락완료','qualified':'✅ 적합','converted':'🎉 전환','lost':'❌ 이탈'};
+  const date = lead.created_at ? new Date(lead.created_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}) : '-';
+  const sourceLabel = lead.source==='meta_lead' ? '📱 메타 리드 광고' : lead.source==='website' ? '🌐 홈페이지 견적' : lead.source || '-';
+
+  let html = '<span class="close" onclick="closeFeelLeadsModal()">✕</span>';
+  html += `<h2>🤝 리드 상세</h2>`;
+  html += '<div class="tags">';
+  html += `<span class="tag" style="background:rgba(108,92,231,.15);color:var(--ac2);">#${lead.id}</span>`;
+  html += `<span class="tag" style="background:rgba(0,184,148,.15);color:var(--g);">${statusMap[lead.lead_status]||lead.lead_status}</span>`;
+  html += `<span class="tag" style="background:rgba(116,185,255,.15);color:var(--bl);">${sourceLabel}</span>`;
+  html += '</div>';
+
+  // Core fields
+  const fields = [
+    ['이름', lead.full_name],
+    ['전화번호', lead.phone],
+    ['이메일', lead.email],
+    ['회사명', lead.company_name],
+    ['지역', lead.city],
+    ['웹사이트', lead.website],
+    ['메시지', lead.message],
+  ];
+  
+  fields.forEach(([label,val])=>{
+    if(val){
+      html += `<div class="field"><div class="field-label">${label}</div><div class="field-val">${esc(val)}</div></div>`;
+    }
+  });
+
+  html += `<div class="field"><div class="field-label">접수일</div><div class="field-val">${date}</div></div>`;
+
+  // Meta ad info (if from meta)
+  if(lead.source==='meta_lead' && lead.meta_campaign_name){
+    html += '<div style="margin-top:8px;padding:8px;background:var(--s2);border-radius:6px;font-size:0.78rem;">';
+    html += `<div style="color:var(--t2);margin-bottom:4px;">📊 광고 정보</div>`;
+    if(lead.meta_campaign_name) html += `<div>캠페인: ${esc(lead.meta_campaign_name)}</div>`;
+    if(lead.meta_adset_name) html += `<div>광고세트: ${esc(lead.meta_adset_name)}</div>`;
+    if(lead.meta_ad_name) html += `<div>소재: ${esc(lead.meta_ad_name)}</div>`;
+    if(lead.meta_form_name) html += `<div>양식: ${esc(lead.meta_form_name)}</div>`;
+    if(lead.meta_platform) html += `<div>플랫폼: ${lead.meta_platform}</div>`;
+    html += '</div>';
+  }
+
+  // Status update
+  html += '<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--b);">';
+  html += '<div class="field-label" style="margin-bottom:6px;">상태 변경</div>';
+  html += '<div style="display:flex;gap:4px;flex-wrap:wrap;">';
+  ['new','email_sent','contacted','qualified','converted','lost'].forEach(s=>{
+    const active = lead.lead_status===s ? 'background:var(--ac);color:#fff;border-color:var(--ac);' : '';
+    html += `<button onclick="updateLeadStatus(${lead.id},'${s}')" style="padding:4px 10px;border-radius:5px;font-size:0.75rem;font-weight:600;cursor:pointer;border:1px solid var(--b);background:var(--s);color:var(--t);${active}">${statusMap[s]}</button>`;
+  });
+  html += '</div></div>';
+
+  // 메일 초안 복사
+  html += '<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--b);">';
+  html += '<div class="field-label" style="margin-bottom:6px;">제안서 발송</div>';
+  html += '<div style="display:flex;gap:6px;flex-wrap:wrap;">';
+  html += `<button onclick="copyEmailDraft(${lead.id})" style="padding:6px 14px;border-radius:6px;background:var(--ac);color:#fff;border:none;cursor:pointer;font-size:0.78rem;font-weight:600;">📋 메일 초안 복사</button>`;
+  html += `<a href="https://roomfit-b2b-proposal.pages.dev/roomfit-b2b-proposal.pdf" target="_blank" style="padding:6px 14px;border-radius:6px;background:var(--s2);color:var(--t);border:1px solid var(--b);cursor:pointer;font-size:0.78rem;font-weight:600;text-decoration:none;display:inline-block;">📄 제안서 PDF</a>`;
+  html += '</div></div>';
+
+  // Notes
+  html += '<div style="margin-top:12px;">';
+  html += '<div class="field-label" style="margin-bottom:4px;">메모</div>';
+  html += `<textarea id="lead-notes" style="width:100%;height:60px;background:var(--s2);border:1px solid var(--b);border-radius:6px;color:var(--t);padding:8px;font-size:0.82rem;resize:vertical;">${esc(lead.admin_memo||'')}</textarea>`;
+  html += `<button onclick="saveLeadNotes(${lead.id})" style="margin-top:6px;padding:5px 14px;border-radius:6px;background:var(--ac);color:#fff;border:none;cursor:pointer;font-size:0.78rem;">메모 저장</button>`;
+  html += '</div>';
+
+  const modal = document.getElementById('feelLeadsModalContent');
+  modal.innerHTML = html;
+  document.getElementById('feelLeadsModal').classList.add('open');
+}
+
+function copyEmailDraft(leadId){
+  const lead = leadsData.find(l=>l.id===leadId);
+  if(!lead) return;
+  const name = lead.full_name || '담당자';
+  const company = lead.company_name || '센터';
+  const subject = `[룸핏] ${company} 센터 도입 안내 드립니다`;
+  const body = `제목: ${subject}\n\n───\n\n안녕하세요, ${name} 님.\n스마트 웨이트 머신 룸핏(Roomfit) 입니다.\n\n센터 도입에 관심 가져주셔서 감사합니다.\n\n룸핏은 실제 웨이트 운동 중 속도·파워·ROM을 실시간 측정하는 스마트 웨이트 머신입니다. 운동 데이터가 자동으로 쌓여 회원에게 PT 효과를 숫자로 보여줄 수 있습니다.\n\n📎 첨부된 PDF에서 상세 내용을 확인하실 수 있습니다.\n\n센터 도입 시 혜택:\n• B2B 전용 센터 앱 무료 제공\n• 대량 도입 할인 협의\n• A/S 우선 접수\n\n도입 규모에 맞춘 견적을 안내드리겠습니다.\n편하신 시간에 회신 주시거나 카카오톡(룸핏 검색)으로 연락 주시면 됩니다.`;
+  navigator.clipboard.writeText(body).then(()=>{
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✅ 복사됨!';
+    btn.style.background = 'var(--g)';
+    setTimeout(()=>{ btn.textContent = orig; btn.style.background = 'var(--ac)'; }, 1500);
+  }).catch(()=>alert('클립보드 복사 실패'));
+}
+
+async function updateLeadStatus(leadId, status){
+  try {
+    await fetch(`${SB_URL}/rest/v1/business_leads?id=eq.${leadId}`, {
+      method:'PATCH',
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body:JSON.stringify({lead_status:status, updated_at:new Date().toISOString()})
+    });
+    const lead = leadsData.find(l=>l.id===leadId);
+    if(lead) lead.lead_status = status;
+    closeModal();
+    renderLeads();
+  } catch(e){ alert('상태 업데이트 실패'); }
+}
+
+async function saveLeadNotes(leadId){
+  const notes = document.getElementById('lead-notes').value;
+  try {
+    await fetch(`${SB_URL}/rest/v1/business_leads?id=eq.${leadId}`, {
+      method:'PATCH',
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body:JSON.stringify({admin_memo:notes, updated_at:new Date().toISOString()})
+    });
+    const lead = leadsData.find(l=>l.id===leadId);
+    if(lead) lead.admin_memo = notes;
+    renderLeads();
+  } catch(e){ alert('메모 저장 실패'); }
+}
+
+
+const STT_WORKER_URL = 'https://roomfit-feel-stt.wespion.workers.dev';
+
+// Client-side: decode audio, split into 5-min WAV chunks, process each via Worker
+async function processLargeAudio(file, bookingId, bookingName, statusEl, barEl) {
+  const arrayBuf = await file.arrayBuffer();
+  if(statusEl) statusEl.textContent = '📦 오디오 디코딩 중...';
+  if(barEl) barEl.style.width = '5%';
+
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  let audioBuffer;
+  try {
+    audioBuffer = await audioCtx.decodeAudioData(arrayBuf);
+  } catch(e) {
+    audioCtx.close();
+    throw new Error('오디오 디코딩 실패 — 슬랙 DM으로 파일을 보내주세요');
+  }
+
+  const duration = audioBuffer.duration;
+  const CHUNK_SEC = 300; // 5 minutes
+  const numChunks = Math.ceil(duration / CHUNK_SEC);
+  const sampleRate = 16000; // downsample target
+
+  if(statusEl) statusEl.textContent = '📦 '+numChunks+'개 청크로 분할 중... (총 '+Math.round(duration/60)+'분)';
+  if(barEl) barEl.style.width = '10%';
+
+  const allTranscripts = [];
+
+  for (let i = 0; i < numChunks; i++) {
+    const startSec = i * CHUNK_SEC;
+    const endSec = Math.min((i + 1) * CHUNK_SEC, duration);
+    const chunkDuration = endSec - startSec;
+
+    if(statusEl) statusEl.textContent = '🎙️ 청크 '+(i+1)+'/'+numChunks+' 처리 중... ('+ Math.round(startSec/60)+'~'+Math.round(endSec/60)+'분)';
+    const progress = 10 + (80 * i / numChunks);
+    if(barEl) barEl.style.width = progress + '%';
+
+    // Resample chunk to 16kHz mono
+    const chunkSamples = Math.ceil(chunkDuration * sampleRate);
+    const offlineCtx = new OfflineAudioContext(1, chunkSamples, sampleRate);
+    const source = offlineCtx.createBufferSource();
+    source.buffer = audioBuffer;
+    source.connect(offlineCtx.destination);
+    source.start(0, startSec, chunkDuration);
+    const rendered = await offlineCtx.startRendering();
+    const pcm = rendered.getChannelData(0);
+
+    // Encode as WAV
+    const wavBuf = encodeWAV(pcm, sampleRate);
+    const chunkFile = new Blob([wavBuf], { type: 'audio/wav' });
+    const chunkMB = (chunkFile.size / 1024 / 1024).toFixed(1);
+
+    // Send to Worker (just for STT, no GPT structuring on individual chunks)
+    const res = await fetch(STT_WORKER_URL+'/transcribe?ext=wav', {
+      method: 'POST',
+      headers: { 'Content-Type': 'audio/wav' },
+      body: chunkFile,
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      console.error('Chunk '+(i+1)+' failed:', err);
+      allTranscripts.push('[청크 '+(i+1)+' 변환 실패]');
+      continue;
+    }
+
+    const data = await res.json();
+    if (data.transcript) {
+      allTranscripts.push(data.transcript);
+    }
+  }
+
+  audioCtx.close();
+
+  // Now send combined transcript for GPT structuring
+  const fullTranscript = allTranscripts.join('\n\n');
+  if (!fullTranscript || fullTranscript.trim().length < 10) {
+    throw new Error('음성 인식 결과가 비어있습니다');
+  }
+
+  if(statusEl) statusEl.textContent = '🤖 AI 분석 중...';
+  if(barEl) barEl.style.width = '90%';
+
+  const structRes = await fetch(STT_WORKER_URL+'/structure', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ bookingId, bookingName, transcript: fullTranscript }),
+  });
+
+  if (!structRes.ok) {
+    throw new Error('AI 구조화 실패: ' + await structRes.text());
+  }
+
+  return await structRes.json();
+}
+
+function encodeWAV(samples, sampleRate) {
+  const numSamples = samples.length;
+  const buffer = new ArrayBuffer(44 + numSamples * 2);
+  const view = new DataView(buffer);
+  function writeStr(o, s) { for(let i=0;i<s.length;i++) view.setUint8(o+i, s.charCodeAt(i)); }
+  writeStr(0,'RIFF');
+  view.setUint32(4, 36+numSamples*2, true);
+  writeStr(8,'WAVE'); writeStr(12,'fmt ');
+  view.setUint32(16,16,true); view.setUint16(20,1,true); view.setUint16(22,1,true);
+  view.setUint32(24,sampleRate,true); view.setUint32(28,sampleRate*2,true);
+  view.setUint16(32,2,true); view.setUint16(34,16,true);
+  writeStr(36,'data'); view.setUint32(40,numSamples*2,true);
+  let o=44;
+  for(let i=0;i<numSamples;i++){
+    const s=Math.max(-1,Math.min(1,samples[i]));
+    view.setInt16(o, s<0?s*0x8000:s*0x7FFF, true); o+=2;
+  }
+  return buffer;
+}
+
+function handleAudioDrop(event, bookingId, bookingName) {
+  const files = event.dataTransfer.files;
+  if (files.length > 0) processAudioUpload(files[0], bookingId, bookingName);
+}
+function handleAudioSelect(input, bookingId, bookingName) {
+  if (input.files.length > 0) processAudioUpload(input.files[0], bookingId, bookingName);
+}
+async function processAudioUpload(file, bookingId, bookingName) {
+  if (file.size > 100*1024*1024) { alert('파일이 100MB를 초과합니다'); return; }
+  const validExts = /\.(m4a|mp3|wav|webm|ogg|aac|mp4)$/i;
+  if (!validExts.test(file.name)) { alert('지원하지 않는 파일 형식입니다'); return; }
+
+  const uploadEl = document.getElementById('stt-upload-'+bookingId);
+  const progressEl = document.getElementById('stt-progress-'+bookingId);
+  const statusEl = document.getElementById('stt-status-'+bookingId);
+  const barEl = document.getElementById('stt-bar-'+bookingId);
+  const resultEl = document.getElementById('stt-result-'+bookingId);
+
+  if(uploadEl) uploadEl.style.display = 'none';
+  if(progressEl) progressEl.style.display = 'block';
+  if(resultEl) resultEl.style.display = 'none';
+
+  const sizeMB = (file.size/1024/1024).toFixed(1);
+  if(statusEl) statusEl.textContent = '업로드 중... ('+sizeMB+'MB)';
+  if(barEl) barEl.style.width = '10%';
+
+  try {
+    const fileSizeMB = file.size / 1024 / 1024;
+    let res;
+
+    if (fileSizeMB > 20) {
+      // Large file: split into 5-min chunks client-side, process each
+      const result = await processLargeAudio(file, bookingId, bookingName, statusEl, barEl);
+
+      if(barEl) barEl.style.width = '100%';
+      if(statusEl) statusEl.textContent = '✅ 완료!';
+
+      // Show result
+      const resEl = document.getElementById('stt-result-'+bookingId);
+      if(resEl) {
+        resEl.style.display = 'block';
+        let lrhtml = '<div style="color:var(--g);font-weight:600;margin-bottom:6px;">✅ 처리 완료!</div>';
+        if(result.structured?.summary) lrhtml += '<div style="font-size:0.82rem;margin-bottom:8px;line-height:1.6;">'+esc(result.structured.summary)+'</div>';
+        if(result.structured?.key_quotes?.length) {
+          result.structured.key_quotes.forEach(h => { lrhtml += '<div style="font-size:0.78rem;padding:2px 0;">💬 '+esc(h)+'</div>'; });
+        }
+        if(result.transcript) {
+          lrhtml += '<details style="margin-top:6px;"><summary style="font-size:0.78rem;color:var(--t2);cursor:pointer;">📜 STT 원본 보기</summary>';
+          lrhtml += '<pre style="font-size:0.75rem;color:var(--t2);margin-top:4px;white-space:pre-wrap;max-height:300px;overflow-y:auto;background:var(--s2);padding:8px;border-radius:6px;">'+esc(result.transcript)+'</pre></details>';
+        }
+        resEl.innerHTML = lrhtml;
+      }
+      setTimeout(()=>{ loadBookings(); }, 2000);
+      return;
+    } else {
+      // Small file: send binary directly with metadata in headers
+      if(barEl) barEl.style.width = '30%';
+      if(statusEl) statusEl.textContent = '🎙️ 음성 인식 중... (30초~2분)';
+
+      const fileExt = file.name.split('.').pop() || 'mp3';
+      res = await fetch(STT_WORKER_URL+'/process?bookingId='+bookingId+'&bookingName='+encodeURIComponent(bookingName)+'&ext='+fileExt, {
+        method: 'POST',
+        headers: { 'Content-Type': file.type || 'audio/mpeg' },
+        body: file,
+      });
+    }
+    if(barEl) barEl.style.width = '90%';
+    if(statusEl) statusEl.textContent = '결과 처리 중...';
+
+    const data = await res.json();
+    if(barEl) barEl.style.width = '100%';
+
+    if(data.ok) {
+      const spinEl = document.getElementById('stt-spinner-'+bookingId);
+      if(spinEl) spinEl.style.display = 'none';
+      if(data.pending) {
+        // Large file — queued for background processing
+        if(statusEl) statusEl.textContent = '⏳ 대기 중';
+        if(resultEl) {
+          resultEl.style.display = 'block';
+          resultEl.innerHTML = '<div style="padding:10px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:8px;">'
+            + '<div style="font-size:0.85rem;font-weight:600;color:var(--y);margin-bottom:6px;">⏳ 업로드 완료 — 백그라운드 처리 중</div>'
+            + '<div style="font-size:0.78rem;color:var(--t2);line-height:1.4;">파일이 25MB를 초과하여 서버에서 압축 후 자동 처리됩니다.<br>5~10분 후 새로고침하시면 결과가 반영됩니다.</div>'
+            + '<button style="margin-top:8px;padding:6px 12px;border-radius:6px;border:1px solid var(--pr);background:transparent;color:var(--pr);font-size:0.78rem;cursor:pointer;" onclick="location.reload()">🔄 새로고침</button>'
+            + '</div>';
+        }
+      } else {
+        if(statusEl) statusEl.textContent = '✅ 완료!';
+        if(resultEl) {
+          resultEl.style.display = 'block';
+          let rhtml = '<div style="padding:10px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:8px;">';
+          rhtml += '<div style="font-size:0.85rem;font-weight:600;color:var(--g);margin-bottom:6px;">✅ AI 정리 완료!</div>';
+          if(data.structured?.summary) rhtml += '<div style="font-size:0.82rem;margin-bottom:8px;line-height:1.6;">'+esc(data.structured.summary)+'</div>';
+          if(data.structured?.key_quotes?.length) {
+            rhtml += '<div style="margin-bottom:8px;">';
+            data.structured.key_quotes.forEach(h => { rhtml += '<div style="font-size:0.78rem;padding:2px 0;color:var(--t);">💬 '+esc(h)+'</div>'; });
+            rhtml += '</div>';
+          }
+          if(data.structured?.purchase_intent) rhtml += '<div style="font-size:0.78rem;color:var(--t2);margin-bottom:6px;">구매 의향: <b>'+esc(data.structured.purchase_intent)+'</b>'+(data.structured.purchase_intent_reason ? ' — '+esc(data.structured.purchase_intent_reason) : '')+'</div>';
+          rhtml += '<details style="margin-top:6px;"><summary style="font-size:0.78rem;color:var(--t2);cursor:pointer;">📜 STT 원본 보기</summary>';
+          rhtml += '<pre style="font-size:0.75rem;color:var(--t2);margin-top:4px;white-space:pre-wrap;max-height:300px;overflow-y:auto;background:var(--s2);padding:8px;border-radius:6px;">'+esc(data.transcript)+'</pre></details>';
+          rhtml += '<button style="margin-top:8px;padding:6px 12px;border-radius:6px;border:1px solid var(--g);background:transparent;color:var(--g);font-size:0.78rem;cursor:pointer;" onclick="location.reload()">🔄 새로고침</button>';
+          rhtml += '</div>';
+          resultEl.innerHTML = rhtml;
+        }
+      }
+    } else {
+      throw new Error(data.error || 'STT 처리 실패');
+    }
+  } catch(e) {
+    if(statusEl) statusEl.textContent = '❌ ' + e.message;
+    const spinEl = document.getElementById('stt-spinner-'+bookingId);
+    if(spinEl) spinEl.style.display = 'none';
+    if(barEl) { barEl.style.width = '100%'; barEl.style.background = 'var(--r)'; }
+    if(resultEl) {
+      resultEl.style.display = 'block';
+      resultEl.innerHTML = '<div style="padding:8px;background:rgba(255,77,106,0.1);border-radius:6px;font-size:0.78rem;color:var(--r);">'
+        + esc(e.message)
+        + '<br><button style="margin-top:4px;padding:4px 8px;border-radius:4px;border:1px solid var(--b);background:var(--s2);color:var(--t2);font-size:0.72rem;cursor:pointer;" onclick="resetSttUpload('+bookingId+')">다시 시도</button></div>';
+    }
+  }
+}
+function resetSttUpload(bookingId) {
+  const uploadEl = document.getElementById('stt-upload-'+bookingId);
+  const progressEl = document.getElementById('stt-progress-'+bookingId);
+  const resultEl = document.getElementById('stt-result-'+bookingId);
+  const barEl = document.getElementById('stt-bar-'+bookingId);
+  const spinEl = document.getElementById('stt-spinner-'+bookingId);
+  if(uploadEl) uploadEl.style.display = 'block';
+  if(progressEl) progressEl.style.display = 'none';
+  if(resultEl) resultEl.style.display = 'none';
+  if(barEl) { barEl.style.width = '0%'; barEl.style.background = 'var(--pr)'; }
+  if(spinEl) spinEl.style.display = 'block';
+}
+
+// Handle hash on load
+const initHash = window.location.hash.replace('#','');
+if(['report','feel','leads'].includes(initHash)) setTimeout(()=>switchMainTab(initHash),100);
+// Auto-load leads badge on page load (Supabase)
+fetch(`${SB_URL}/rest/v1/business_leads?select=*&order=created_at.desc`,{
+  headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}
+}).then(r=>r.json()).then(d=>{
+  leadsData=d||[];
+  updateLeadsBadge();
+  if(window.location.hash==='#leads') switchMainTab('leads');
+}).catch(()=>{});
+
+</script>
+</body>
+</html>
+<!-- v1774400642 -->
 
 </script>
 <!-- trend chart is inline in tab-weekly -->
