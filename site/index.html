@@ -1293,27 +1293,29 @@ async function apiGet(path) {
   } catch(e) { _apiAvailable = false; return null; }
 }
 
-async function apiWrite(method, path, body) {
+async function apiWrite(method, path, body, skipPrompt = false) {
   try {
     let key = getApiKey();
+    const headers = { 'Content-Type': 'application/json' };
+    if (key) headers['X-API-Key'] = key;
+    // CF Access JWT is sent automatically via cookie (credentials: include)
     let r = await fetch(API_BASE + path, {
-      method,
-      headers: { 'Content-Type': 'application/json', 'X-API-Key': key },
+      method, headers, credentials: 'include',
       body: body ? JSON.stringify(body) : undefined
     });
-    // If unauthorized, prompt for key and retry once
-    if (r.status === 401) {
+    // If unauthorized and not skipping prompt, ask for key
+    if (r.status === 401 && !skipPrompt) {
       key = promptApiKey();
       if (!key) { _apiAvailable = false; return null; }
+      headers['X-API-Key'] = key;
       r = await fetch(API_BASE + path, {
-        method,
-        headers: { 'Content-Type': 'application/json', 'X-API-Key': key },
+        method, headers, credentials: 'include',
         body: body ? JSON.stringify(body) : undefined
       });
     }
     if (!r.ok) throw new Error(r.status);
     return await r.json();
-  } catch(e) { _apiAvailable = false; return null; }
+  } catch(e) { return null; }
 }
 
 function getApiKey() {
@@ -3343,20 +3345,16 @@ function getAdhocReports() {
 function saveAdhocReports(reports) {
   _adhocCache = reports;
   localStorage.setItem(ADHOC_REPORTS_KEY, JSON.stringify(reports));
-  apiWrite('PUT', '/adhoc-reports', reports).catch(() => {});
+  apiWrite('PUT', '/adhoc-reports', reports, true).catch(() => {});
 }
 
 async function syncAdhocFromKV() {
   try {
     const kvReports = await apiGet('/adhoc-reports');
+    // KV is source of truth — replace localStorage entirely
     if (kvReports && kvReports.length) {
-      const local = getAdhocReports();
-      const merged = [...kvReports];
-      for (const l of local) {
-        if (!merged.find(r => r.id === l.id)) merged.push(l);
-      }
-      _adhocCache = merged;
-      localStorage.setItem(ADHOC_REPORTS_KEY, JSON.stringify(merged));
+      _adhocCache = kvReports;
+      localStorage.setItem(ADHOC_REPORTS_KEY, JSON.stringify(kvReports));
       renderAdhocReports();
     }
   } catch (e) { console.warn('KV sync adhoc failed:', e); }
@@ -3656,12 +3654,12 @@ function getAgendas() {
 function saveMeetings(m) {
   _meetingsCache = m;
   localStorage.setItem(MEETINGS_KEY, JSON.stringify(m));
-  apiWrite('PUT', '/meetings', m).catch(() => {});
+  apiWrite('PUT', '/meetings', m, true).catch(() => {});
 }
 function saveAgendas(a) {
   _agendasCache = a;
   localStorage.setItem(AGENDAS_KEY, JSON.stringify(a));
-  apiWrite('PUT', '/agendas', a).catch(() => {});
+  apiWrite('PUT', '/agendas', a, true).catch(() => {});
 }
 
 // Load from KV on startup, merge with localStorage
@@ -3670,24 +3668,14 @@ async function syncMeetingsFromKV() {
     const [kvMeetings, kvAgendas] = await Promise.all([
       apiGet('/meetings'), apiGet('/agendas')
     ]);
+    // KV is source of truth — replace localStorage entirely
     if (kvMeetings && kvMeetings.length) {
-      const local = getMeetings();
-      // KV wins, but merge any local-only items
-      const merged = [...kvMeetings];
-      for (const l of local) {
-        if (!merged.find(m => m.id === l.id)) merged.push(l);
-      }
-      _meetingsCache = merged;
-      localStorage.setItem(MEETINGS_KEY, JSON.stringify(merged));
+      _meetingsCache = kvMeetings;
+      localStorage.setItem(MEETINGS_KEY, JSON.stringify(kvMeetings));
     }
     if (kvAgendas && kvAgendas.length) {
-      const local = getAgendas();
-      const merged = [...kvAgendas];
-      for (const l of local) {
-        if (!merged.find(a => a.title === l.title && a.meetingId === l.meetingId)) merged.push(l);
-      }
-      _agendasCache = merged;
-      localStorage.setItem(AGENDAS_KEY, JSON.stringify(merged));
+      _agendasCache = kvAgendas;
+      localStorage.setItem(AGENDAS_KEY, JSON.stringify(kvAgendas));
     }
     renderMeetingTab();
   } catch (e) { console.warn('KV sync meetings failed:', e); }
