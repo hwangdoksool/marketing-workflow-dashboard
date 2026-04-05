@@ -4150,7 +4150,7 @@ async function updateBookingStatus(bookingId, status){
   if(status==='confirmed') updates.confirmed_at = new Date().toISOString();
   try {
     await patchBooking(bookingId, updates);
-    closeModal();
+    closeFeelLeadsModal();
     renderBookings();
   } catch(e){ alert('상태 업데이트 실패'); }
 }
@@ -4413,7 +4413,7 @@ async function updateLeadStatus(leadId, status){
     });
     const lead = leadsData.find(l=>l.id===leadId);
     if(lead) lead.lead_status = status;
-    closeModal();
+    closeFeelLeadsModal();
     renderLeads();
   } catch(e){ alert('상태 업데이트 실패'); }
 }
