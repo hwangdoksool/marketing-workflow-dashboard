@@ -1563,9 +1563,18 @@ async function loadReports(){
 
 function renderReportNav(){
   const nav = document.getElementById('reportNav');
-  nav.innerHTML = reports.map((r, i) =>
-    `<button class="report-btn${i===0?' active':''}" onclick="selectReport(${i})">${r.title}</button>`
-  ).join('');
+  nav.style.cssText = 'display:flex;flex-direction:column;gap:2px;margin-bottom:14px;max-height:320px;overflow-y:auto;';
+  nav.innerHTML = reports.map((r, i) => {
+    const kpi = r.kpi || {};
+    const sessions = kpi.sessions?.value ? kpi.sessions.value.toLocaleString() : '-';
+    const spend = kpi.adSpend?.value ? '₩' + Math.round(kpi.adSpend.value/1000) + 'K' : '-';
+    const wow = kpi.sessions?.prev ? ((kpi.sessions.value - kpi.sessions.prev) / kpi.sessions.prev * 100).toFixed(0) : null;
+    const wowBadge = wow ? `<span style="font-size:.65rem;color:${wow>=0?'var(--green)':'var(--red)'};margin-left:4px">${wow>=0?'▲':'▼'}${Math.abs(wow)}%</span>` : '';
+    return `<button class="report-btn${i===0?' active':''}" onclick="selectReport(${i})" style="text-align:left;display:flex;justify-content:space-between;align-items:center;padding:8px 12px;white-space:nowrap;">
+      <span style="font-weight:600;">${r.title}</span>
+      <span style="font-size:.7rem;color:var(--t2);">${sessions}세션 · ${spend}${wowBadge}</span>
+    </button>`;
+  }).join('');
 }
 
 function selectReport(idx, pushHash = true){
@@ -3355,9 +3364,13 @@ function renderAdhocReports() {
 
   if (!currentAdhocReportId && reports.length) currentAdhocReportId = reports[0].id;
 
-  const statusIcon = {draft:'📝',review:'🔍',final:'✅'};
+  const statusIcon = {draft:'📝',review:'🔍',final:'��'};
+  nav.style.cssText = 'display:flex;flex-direction:column;gap:2px;margin-bottom:14px;max-height:320px;overflow-y:auto;';
   nav.innerHTML = reports.map(r =>
-    `<button class="report-btn ${r.id === currentAdhocReportId ? 'active' : ''}" onclick="selectAdhocReport('${r.id}')">${statusIcon[r.status]||'📄'} ${r.title}</button>`
+    `<button class="report-btn ${r.id === currentAdhocReportId ? 'active' : ''}" onclick="selectAdhocReport('${r.id}')" style="text-align:left;display:flex;justify-content:space-between;align-items:center;padding:8px 12px;white-space:nowrap;">
+      <span>${statusIcon[r.status]||'📄'} ${r.title}</span>
+      <span style="font-size:.68rem;color:var(--t2);">${r.date} · ${r.category||''}</span>
+    </button>`
   ).join('') + `<button class="report-btn" onclick="addAdhocReport()" style="border-style:dashed;">+ 리포트 추가</button>`;
 
   const r = reports.find(x => x.id === currentAdhocReportId);
