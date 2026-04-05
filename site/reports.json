@@ -1,94 +1,53 @@
 [
   {
-    "id": "w14-2026",
-    "title": "W14 · 3월 5주차",
-    "period": "03-30 ~ 04-05",
-    "publishedAt": "2026-04-05",
+    "id": "w15-2026",
+    "title": "W15 · 4월 1주차",
+    "period": "04-06 ~ 04-12",
+    "publishedAt": "2026-04-12",
     "kpi": {
       "sessions": {
-        "value": 2828,
-        "prev": 6532
+        "value": 0,
+        "prev": 3152
       },
       "users": {
-        "value": 2646,
-        "prev": 5909
+        "value": 0,
+        "prev": 2952
       },
       "newUsers": {
-        "value": 1876,
-        "prev": 5094
+        "value": 0,
+        "prev": 2110
       },
       "adSpend": {
-        "value": 584642,
-        "prev": 1058507,
+        "value": 0,
+        "prev": 645994,
         "unit": "₩",
-        "note": "Meta ₩573,866 + 네이버 ₩10,776"
+        "note": "Meta ₩0 + 네이버 ₩0"
       },
       "impressions": {
-        "value": 48163,
+        "value": 0,
         "prev": null,
-        "note": "Meta 46,992 + 네이버 1,171"
+        "note": "Meta 0 + 네이버 0"
       },
       "clicks": {
-        "value": 2607,
+        "value": 0,
         "prev": null,
-        "note": "Meta 2,474 + 네이버 133"
+        "note": "Meta 0 + 네이버 0"
       },
       "purchases_ga4": {
         "value": 0,
-        "prev": 6,
+        "prev": null,
         "note": "GA4 purchase 이벤트"
-      },
-      "cpc": {
-        "value": 224,
-        "prev": null,
-        "unit": "₩"
-      },
-      "ctr": {
-        "value": 5.41,
-        "prev": null,
-        "unit": "%"
-      },
-      "convRate": {
-        "value": 0.0,
-        "prev": null,
-        "unit": "%",
-        "note": "구매/세션"
-      },
-      "feelBookings": {
-        "value": 2,
-        "prev": null,
-        "unit": "건",
-        "note": "🟢 완료 1건"
-      },
-      "bodyUnits": {
-        "value": 1,
-        "prev": null,
-        "unit": "대",
-        "note": "🟢 아임웹 본체 주문 기준"
-      },
-      "roas": {
-        "value": 698,
-        "prev": null,
-        "unit": "%",
-        "note": "🟢 실매출 ₩4,080,000 / 광고비 ₩584,642"
-      },
-      "revenue": {
-        "value": 4080000,
-        "prev": null,
-        "unit": "₩",
-        "note": "🟢 아임웹 결제 완료 기준"
       }
     },
-    "abstract": "세션 2,828, 유저 2,646명. 총 광고비 ₩584,642. 세션 전주 대비 ▼56.7%.",
+    "abstract": "세션 0, 유저 0명. 총 광고비 ₩0. 세션 전주 대비 ▼100.0%.",
     "actions": [],
     "sections": [
       {
         "title": "📋 미팅 어젠다",
         "type": "agenda",
-        "content": "• 📊 세션 전주 대비 급감 (-56.7%) — 원인 논의\n• 🎯 Meta CPC ₩232 — 소재 피로도 점검\n• 💡 시그널 발견 사항 공유 — 각자 1개씩\n• 📝 진행 중 실험 상태 업데이트\n• 🎯 다음 주 실험 1개 선정 + 설계서 작성",
+        "content": "• 📊 세션 전주 대비 급감 (-100.0%) — 원인 논의\n• 💡 시그널 발견 사항 공유 — 각자 1개씩\n• 📝 진행 중 실험 상태 업데이트\n• 🎯 다음 주 실험 1개 선정 + 설계서 작성",
         "items": [
-          "📊 세션 전주 대비 급감 (-56.7%) — 원인 논의",
-          "🎯 Meta CPC ₩232 — 소재 피로도 점검",
+          "📊 세션 전주 대비 급감 (-100.0%) — 원인 논의",
           "💡 시그널 발견 사항 공유 — 각자 1개씩",
           "📝 진행 중 실험 상태 업데이트",
           "🎯 다음 주 실험 1개 선정 + 설계서 작성"
@@ -126,7 +85,185 @@
         "title": "❓ 1-3. 매칭 안 되는 변화",
         "type": "insights",
         "content": [
-          "세션 -56.7% 변화 — 명시적 액션 없이 발생"
+          "세션 -100.0% 변화 — 명시적 액션 없이 발생"
+        ]
+      },
+      {
+        "title": "⏱️ 1-4. 시차 매칭 (1~2주 전 액션의 지연 효과)",
+        "type": "insights",
+        "content": [
+          "소급 리포트 — 과거 데이터 기반 시차 분석은 전체 기간 종합 리뷰에서 수행"
+        ]
+      },
+      {
+        "title": "━━ Part 2: 지표 현황 ━━",
+        "type": "text",
+        "content": "상세 데이터 (참조용)"
+      },
+      {
+        "title": "📊 채널별 트래픽",
+        "type": "metrics",
+        "content": []
+      },
+      {
+        "title": "🎯 전환 퍼널 (GA4)",
+        "type": "funnel",
+        "content": {},
+        "prev": {}
+      },
+      {
+        "title": "💰 Meta 캠페인별",
+        "type": "metrics",
+        "content": []
+      },
+      {
+        "title": "🔍 네이버 검색광고",
+        "type": "metrics",
+        "content": [
+          {
+            "metric": "합계",
+            "w12": "₩0",
+            "w11": "imp 0",
+            "note": ""
+          }
+        ],
+        "note": "⚠️ 키워드별 데이터는 네이버 API 추가 수집 필요"
+      },
+      {
+        "title": "📄 페이지별 트래픽",
+        "type": "metrics",
+        "content": []
+      }
+    ]
+  },
+  {
+    "id": "w14-2026",
+    "title": "W14 · 3월 5주차",
+    "period": "03-30 ~ 04-05",
+    "publishedAt": "2026-04-05",
+    "kpi": {
+      "sessions": {
+        "value": 3152,
+        "prev": 6532
+      },
+      "users": {
+        "value": 2952,
+        "prev": 5909
+      },
+      "newUsers": {
+        "value": 2110,
+        "prev": 5094
+      },
+      "adSpend": {
+        "value": 645994,
+        "prev": 1058507,
+        "unit": "₩",
+        "note": "Meta ₩633,218 + 네이버 ₩12,776"
+      },
+      "impressions": {
+        "value": 52747,
+        "prev": null,
+        "note": "Meta 51,428 + 네이버 1,319"
+      },
+      "clicks": {
+        "value": 2857,
+        "prev": null,
+        "note": "Meta 2,700 + 네이버 157"
+      },
+      "purchases_ga4": {
+        "value": 0,
+        "prev": 6,
+        "note": "GA4 purchase 이벤트"
+      },
+      "cpc": {
+        "value": 226,
+        "prev": null,
+        "unit": "₩"
+      },
+      "ctr": {
+        "value": 5.42,
+        "prev": null,
+        "unit": "%"
+      },
+      "convRate": {
+        "value": 0.0,
+        "prev": null,
+        "unit": "%",
+        "note": "구매/세션"
+      },
+      "feelBookings": {
+        "value": 2,
+        "prev": null,
+        "unit": "건",
+        "note": "🟢 완료 1건"
+      },
+      "bodyUnits": {
+        "value": 1,
+        "prev": null,
+        "unit": "대",
+        "note": "🟢 아임웹 본체 주문 기준"
+      },
+      "roas": {
+        "value": 632,
+        "prev": null,
+        "unit": "%",
+        "note": "🟢 실매출 ₩4,080,000 / 광고비 ₩645,994"
+      },
+      "revenue": {
+        "value": 4080000,
+        "prev": null,
+        "unit": "₩",
+        "note": "🟢 아임웹 결제 완료 기준"
+      }
+    },
+    "abstract": "세션 3,152, 유저 2,952명. 총 광고비 ₩645,994. 세션 전주 대비 ▼51.7%.",
+    "actions": [],
+    "sections": [
+      {
+        "title": "📋 미팅 어젠다",
+        "type": "agenda",
+        "content": "• 📊 세션 전주 대비 급감 (-51.7%) — 원인 논의\n• 🎯 Meta CPC ₩235 — 소재 피로도 점검\n• 💡 시그널 발견 사항 공유 — 각자 1개씩\n• 📝 진행 중 실험 상태 업데이트\n• 🎯 다음 주 실험 1개 선정 + 설계서 작성",
+        "items": [
+          "📊 세션 전주 대비 급감 (-51.7%) — 원인 논의",
+          "🎯 Meta CPC ₩235 — 소재 피로도 점검",
+          "💡 시그널 발견 사항 공유 — 각자 1개씩",
+          "📝 진행 중 실험 상태 업데이트",
+          "🎯 다음 주 실험 1개 선정 + 설계서 작성"
+        ]
+      },
+      {
+        "title": "🛒 전환 건별 상세 (GA4 기준)",
+        "type": "insights",
+        "content": [
+          "📦 구매 완료: 0건",
+          "🛒 결제 시작: 0건",
+          "💳 결제정보 입력: 0건"
+        ]
+      },
+      {
+        "title": "━━ Part 1: 관계 분석 ━━",
+        "type": "text",
+        "content": "이번 주 액션과 지표 변화의 관계"
+      },
+      {
+        "title": "📋 1-1. 이번 주 액션 × 지표 변화",
+        "type": "insights",
+        "content": [
+          "이번 주 기록된 마케팅 액션 없음"
+        ]
+      },
+      {
+        "title": "🔗 1-2. 전환 건 ↔ 액션 매칭",
+        "type": "insights",
+        "content": [
+          "이번 주 GA4 구매 이벤트 0건"
+        ]
+      },
+      {
+        "title": "❓ 1-3. 매칭 안 되는 변화",
+        "type": "insights",
+        "content": [
+          "세션 -51.7% 변화 — 명시적 액션 없이 발생"
         ]
       },
       {
@@ -146,52 +283,52 @@
         "type": "metrics",
         "content": [
           {
-            "metric": "Paid Social",
-            "w12": 1677,
-            "w11": 1351,
-            "note": "유저 1,632명, 이탈 98% (▲24%)"
+            "metric": "Unassigned",
+            "w12": 1860,
+            "w11": 53,
+            "note": "유저 1,788명, 이탈 100% (▲3409%)"
           },
           {
-            "metric": "Unassigned",
-            "w12": 1653,
-            "w11": 53,
-            "note": "유저 1,586명, 이탈 100% (▲3019%)"
+            "metric": "Paid Social",
+            "w12": 1856,
+            "w11": 1351,
+            "note": "유저 1,806명, 이탈 98% (▲37%)"
           },
           {
             "metric": "Direct",
-            "w12": 422,
+            "w12": 480,
             "w11": 1061,
-            "note": "유저 407명, 이탈 100% (▼60%)"
+            "note": "유저 463명, 이탈 100% (▼55%)"
           },
           {
             "metric": "Paid Search",
-            "w12": 168,
+            "w12": 187,
             "w11": 257,
-            "note": "유저 143명, 이탈 98% (▼35%)"
+            "note": "유저 159명, 이탈 97% (▼27%)"
           },
           {
             "metric": "Organic Social",
-            "w12": 143,
+            "w12": 168,
             "w11": 444,
-            "note": "유저 127명, 이탈 98% (▼68%)"
+            "note": "유저 150명, 이탈 98% (▼62%)"
           },
           {
             "metric": "Organic Search",
-            "w12": 123,
+            "w12": 144,
             "w11": 192,
-            "note": "유저 110명, 이탈 93% (▼36%)"
+            "note": "유저 129명, 이탈 94% (▼25%)"
           },
           {
             "metric": "Display",
-            "w12": 54,
+            "w12": 58,
             "w11": 3175,
-            "note": "유저 36명, 이탈 100% (▼98%)"
+            "note": "유저 40명, 이탈 100% (▼98%)"
           },
           {
             "metric": "Referral",
-            "w12": 28,
+            "w12": 29,
             "w11": 81,
-            "note": "유저 21명, 이탈 96% (▼65%)"
+            "note": "유저 22명, 이탈 97% (▼64%)"
           }
         ]
       },
@@ -212,15 +349,15 @@
         "content": [
           {
             "metric": "[전환]메인페이지 랜딩_2555남성_260326",
-            "w12": "₩343,363",
-            "w11": "imp 34,296",
-            "note": "clicks 2,127"
+            "w12": "₩377,965",
+            "w11": "imp 37,648",
+            "note": "clicks 2,326"
           },
           {
             "metric": "[잠재고객]B2B 상담 메타 양식",
-            "w12": "₩230,503",
-            "w11": "imp 12,696",
-            "note": "clicks 347"
+            "w12": "₩255,253",
+            "w11": "imp 13,780",
+            "note": "clicks 374"
           }
         ]
       },
@@ -230,9 +367,9 @@
         "content": [
           {
             "metric": "합계",
-            "w12": "₩10,776",
-            "w11": "imp 1,171",
-            "note": "clicks 133, CTR 11.4%, CPC ₩81"
+            "w12": "₩12,776",
+            "w11": "imp 1,319",
+            "note": "clicks 157, CTR 11.9%, CPC ₩81"
           }
         ],
         "note": "⚠️ 키워드별 데이터는 네이버 API 추가 수집 필요"
