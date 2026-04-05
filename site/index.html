@@ -3736,10 +3736,9 @@ function renderMeetingTab() {
   // 주간 리포트 연결
   let reportLink = '';
   if (mtg.reportId) {
-    reportLink = `<div class="card" style="border-color:var(--ac);margin-bottom:12px;">
-      <div class="card-title">📊 연결된 주간 리포트: ${mtg.reportId}</div>
-      <p style="font-size:.78rem;color:var(--t2);">주간 리포트 탭에서 상세 데이터를 확인하세요. 리포트 관련 어젠다는 리포트 내에서 다룹니다.</p>
-      <button class="btn" style="margin-top:8px;" onclick="activateMainTab('analysis');setTimeout(()=>switchAnalysisSub('weekly'),50);">📊 리포트 보기</button>
+    reportLink = `<div class="card" style="border-color:var(--b);opacity:.8;">
+      <div class="card-title" style="font-size:.8rem;">📊 참고: 주간 리포트 ${mtg.reportId}</div>
+      <button class="btn" style="margin-top:4px;font-size:.72rem;" onclick="activateMainTab('analysis');setTimeout(()=>switchAnalysisSub('weekly'),50);">주간 리포트 보기 →</button>
     </div>`;
   }
 
@@ -3766,7 +3765,7 @@ function renderMeetingTab() {
           <div style="flex:1;">
             <div style="display:flex;align-items:center;gap:6px;">
               <span style="font-size:.75rem;color:var(--t2);transition:transform .15s;" class="agenda-arrow">${hasDetail?'▶':''}</span>
-              <div style="font-size:.82rem;font-weight:700;">${catIcons[a.category] || '📋'} ${a.title}</div>
+              <div style="font-size:.82rem;font-weight:700;"><span style="color:var(--ac);margin-right:2px;">${i+1}.</span> ${catIcons[a.category] || '📋'} ${a.title}</div>
             </div>
             <div style="display:flex;gap:4px;margin-top:4px;margin-left:20px;">
               <span class="badge" style="background:rgba(108,92,231,.12);color:var(--ac2);">${catLabels[a.category] || a.category}</span>
@@ -3783,18 +3782,30 @@ function renderMeetingTab() {
     }).join('');
   }
 
+  // Meeting guide summary
+  const guideItems = mtgAgendas.map((a, i) => {
+    const icon = catIcons[a.category] || '📋';
+    const label = catLabels[a.category] || a.category;
+    return `<span style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;"><strong>${i+1}.</strong> ${icon} ${a.title} <span class="badge" style="background:rgba(108,92,231,.12);color:var(--ac2);font-size:.65rem;">${label}</span></span>`;
+  }).join('<span style="color:var(--t2);margin:0 6px;">→</span>');
+
   content.innerHTML = `
-    <div style="margin-bottom:12px;">
+    <div style="margin-bottom:14px;">
       <h3 style="font-size:.95rem;font-weight:700;">${mtg.title}</h3>
       <p style="font-size:.75rem;color:var(--t2);">📅 ${mtg.date} · ${mtg.status === 'upcoming' ? '예정' : mtg.status === 'done' ? '완료' : '진행중'}</p>
     </div>
-    ${reportLink}
+    ${mtgAgendas.length > 0 ? `
+    <div class="card" style="border-color:var(--ac);margin-bottom:14px;padding:12px 16px;">
+      <div style="font-size:.82rem;font-weight:700;margin-bottom:8px;">📋 진행 가이드</div>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;line-height:2;">${guideItems}</div>
+    </div>` : ''}
     <div style="margin-bottom:8px;">
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <h4 style="font-size:.85rem;font-weight:700;">📝 별도 안건</h4>
+        <h4 style="font-size:.85rem;font-weight:700;">📝 안건 (${mtgAgendas.length})</h4>
       </div>
     </div>
     ${agendasHtml}
+    ${reportLink ? `<div style="margin-top:12px;">${reportLink}</div>` : ''}
   `;
 
   // 안건 추가 모달의 미팅 드롭다운 갱신
