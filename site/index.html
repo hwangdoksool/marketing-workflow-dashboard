@@ -1442,6 +1442,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!_apiAvailable) {
       console.warn('KV API unavailable, using localStorage fallback');
     }
+    // Sync KV-backed collections (meetings, agendas, adhoc reports)
+    syncMeetingsFromKV();
+    syncAdhocFromKV();
   });
   renderReview();
   // Move design content into settings sub-tab
@@ -3274,14 +3277,51 @@ function renderSchemaList() {
    ═══════════════════════════════════════════ */
 
 const ADHOC_REPORTS_KEY = 'wf_adhoc_reports';
+let _adhocCache = null;
 
 function getAdhocReports() {
+  if (_adhocCache) return _adhocCache;
   try {
     const saved = JSON.parse(localStorage.getItem(ADHOC_REPORTS_KEY));
-    if (saved && saved.length) return saved;
+    if (saved && saved.length) {
+      const defaults = _adhocDefaults();
+      let changed = false;
+      for (const d of defaults) {
+        if (!saved.find(r => r.id === d.id)) { saved.push(d); changed = true; }
+      }
+      if (changed) localStorage.setItem(ADHOC_REPORTS_KEY, JSON.stringify(saved));
+      return saved;
+    }
   } catch {}
-  // 기본 데이터
-  const defaults = [
+  const defaults = _adhocDefaults();
+  localStorage.setItem(ADHOC_REPORTS_KEY, JSON.stringify(defaults));
+  return defaults;
+}
+
+function saveAdhocReports(reports) {
+  _adhocCache = reports;
+  localStorage.setItem(ADHOC_REPORTS_KEY, JSON.stringify(reports));
+  apiWrite('PUT', '/adhoc-reports', reports).catch(() => {});
+}
+
+async function syncAdhocFromKV() {
+  try {
+    const kvReports = await apiGet('/adhoc-reports');
+    if (kvReports && kvReports.length) {
+      const local = getAdhocReports();
+      const merged = [...kvReports];
+      for (const l of local) {
+        if (!merged.find(r => r.id === l.id)) merged.push(l);
+      }
+      _adhocCache = merged;
+      localStorage.setItem(ADHOC_REPORTS_KEY, JSON.stringify(merged));
+      renderAdhocReports();
+    }
+  } catch (e) { console.warn('KV sync adhoc failed:', e); }
+}
+
+function _adhocDefaults() {
+  return [
     {
       id: 'meta-ads-review-2026',
       title: '메타광고 심층 리뷰 2026',
@@ -3291,10 +3331,18 @@ function getAdhocReports() {
       url: 'https://wspn-images.wespion.workers.dev/reports/meta-ads-review-2026.html',
       description: '2026년 메타광고 전체 소재 성과 분석. CTR/CPC/전환 추이, 소재별 비교, VP-Problem 조합 효과 분석.',
       tags: ['Meta Ads', '소재 분석', '2026']
+    },
+    {
+      id: 'meta-campaign-timeline-20260405',
+      title: '캠페인 구조 변경 × 전환 타임라인',
+      date: '2026-04-05',
+      status: 'draft',
+      category: '캠페인 리뷰',
+      url: 'https://wspn-images.wespion.workers.dev/reports/meta-campaign-analysis-20260405.html',
+      description: '2/25~4/4 캠페인 변경 4구간(ASC+체험→ASC단독→ASC+B2B→2555+B2B) 전후 실전환 비교. 간트차트 타임라인 + 캠페인→소재 드릴다운 + 인사이트.',
+      tags: ['Meta Ads', '캠페인 구조', '전환 분석', '2026']
     }
   ];
-  localStorage.setItem(ADHOC_REPORTS_KEY, JSON.stringify(defaults));
-  return defaults;
 }
 
 let currentAdhocReportId = null;
@@ -3363,7 +3411,7 @@ function addAdhocReport() {
     description: description || '',
     tags: []
   });
-  localStorage.setItem(ADHOC_REPORTS_KEY, JSON.stringify(reports));
+  saveAdhocReports(reports);
   currentAdhocReportId = id;
   renderAdhocReports();
 }
@@ -3371,7 +3419,7 @@ function addAdhocReport() {
 function deleteAdhocReport(id) {
   if (!confirm('이 리포트를 목록에서 삭제하시겠습니까?')) return;
   const reports = getAdhocReports().filter(r => r.id !== id);
-  localStorage.setItem(ADHOC_REPORTS_KEY, JSON.stringify(reports));
+  saveAdhocReports(reports);
   if (currentAdhocReportId === id) currentAdhocReportId = reports[0]?.id || null;
   renderAdhocReports();
 }
@@ -3545,16 +3593,59 @@ document.addEventListener('DOMContentLoaded', () => {
 const MEETINGS_KEY = 'wf_meetings';
 const AGENDAS_KEY = 'wf_meeting_agendas';
 
+// KV-backed collections with localStorage fallback
+let _meetingsCache = null;
+let _agendasCache = null;
+
 function getMeetings() {
+  if (_meetingsCache) return _meetingsCache;
   try { return JSON.parse(localStorage.getItem(MEETINGS_KEY)) || getDefaultMeetings(); }
   catch { return getDefaultMeetings(); }
 }
 function getAgendas() {
+  if (_agendasCache) return _agendasCache;
   try { return JSON.parse(localStorage.getItem(AGENDAS_KEY)) || []; }
   catch { return []; }
 }
-function saveMeetings(m) { localStorage.setItem(MEETINGS_KEY, JSON.stringify(m)); }
-function saveAgendas(a) { localStorage.setItem(AGENDAS_KEY, JSON.stringify(a)); }
+function saveMeetings(m) {
+  _meetingsCache = m;
+  localStorage.setItem(MEETINGS_KEY, JSON.stringify(m));
+  apiWrite('PUT', '/meetings', m).catch(() => {});
+}
+function saveAgendas(a) {
+  _agendasCache = a;
+  localStorage.setItem(AGENDAS_KEY, JSON.stringify(a));
+  apiWrite('PUT', '/agendas', a).catch(() => {});
+}
+
+// Load from KV on startup, merge with localStorage
+async function syncMeetingsFromKV() {
+  try {
+    const [kvMeetings, kvAgendas] = await Promise.all([
+      apiGet('/meetings'), apiGet('/agendas')
+    ]);
+    if (kvMeetings && kvMeetings.length) {
+      const local = getMeetings();
+      // KV wins, but merge any local-only items
+      const merged = [...kvMeetings];
+      for (const l of local) {
+        if (!merged.find(m => m.id === l.id)) merged.push(l);
+      }
+      _meetingsCache = merged;
+      localStorage.setItem(MEETINGS_KEY, JSON.stringify(merged));
+    }
+    if (kvAgendas && kvAgendas.length) {
+      const local = getAgendas();
+      const merged = [...kvAgendas];
+      for (const l of local) {
+        if (!merged.find(a => a.title === l.title && a.meetingId === l.meetingId)) merged.push(l);
+      }
+      _agendasCache = merged;
+      localStorage.setItem(AGENDAS_KEY, JSON.stringify(merged));
+    }
+    renderMeetingTab();
+  } catch (e) { console.warn('KV sync meetings failed:', e); }
+}
 
 function getDefaultMeetings() {
   const m = [
@@ -3566,13 +3657,23 @@ function getDefaultMeetings() {
 
 function seedDefaultAgendas() {
   const agendas = getAgendas();
-  // 이미 mtg-w14 안건이 있으면 스킵
-  if (agendas.some(a => a.meetingId === 'mtg-w14')) return;
   const defaults = [
     { meetingId: 'mtg-w14', title: '메타광고 심층 리뷰 2026', category: 'review', detail: '메타광고 전체 소재 성과 분석 (CTR/CPC/전환 추이). 검증 미완 상태이나 데이터 확인 필요.\n📄 리포트 탭에서 전문 확인 가능.', briefId: '', createdAt: '2026-04-04T05:30:00Z' },
+    { meetingId: 'mtg-w14', title: '캠페인 구조 변경 전후 전환 분석', category: 'review', detail: '2/25~4/4 캠페인 4구간 비교: ASC+체험→ASC단독→ASC+B2B→2555+B2B. 간트 타임라인으로 캠페인 가동기간 × 실구매/체험/카카오 매핑.\n핵심: ASC 예산 피크(일20만+)에 전환 오히려 희박, D구간 CPA 290K로 효율 회복. 소재별 드릴다운 포함.\n📄 리포트 탭 "캠페인 구조 변경 × 전환 타임라인" 참조.', briefId: '', createdAt: '2026-04-05T12:00:00Z' },
     { meetingId: 'mtg-w14', title: '워크플로우 도구 소개 + 첫 실험 설계', category: 'discussion', detail: '대시보드 라이브 데모 → 시그널 등록 → 설계서 작성 실습', briefId: '', createdAt: '2026-04-04T05:31:00Z' },
     { meetingId: 'mtg-w14', title: '역할 분담 + 주간 루틴 합의', category: 'decision', detail: '마케터/리더/AI 역할, 주간 리뷰 요일/시간 확정', briefId: '', createdAt: '2026-04-04T05:32:00Z' },
   ];
+  // 이미 안건이 있으면 새 항목만 merge
+  if (agendas.some(a => a.meetingId === 'mtg-w14')) {
+    let changed = false;
+    for (const d of defaults) {
+      if (!agendas.some(a => a.title === d.title && a.meetingId === d.meetingId)) {
+        agendas.push(d); changed = true;
+      }
+    }
+    if (changed) saveAgendas(agendas);
+    return;
+  }
   saveAgendas([...agendas, ...defaults]);
 }
 

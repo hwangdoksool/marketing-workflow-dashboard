@@ -306,6 +306,43 @@ export default {
       return json(rows.map(r => ({ id: r.id, text: r.input_text, status: r.status, createdAt: r.created_at })));
     }
 
+    // ─── KV-backed collections (meetings, agendas, adhoc-reports) ───
+
+    const KV_COLLECTIONS = ['meetings', 'agendas', 'adhoc-reports'];
+    const kvMatch = path.match(/^\/api\/(meetings|agendas|adhoc-reports)$/);
+
+    if (kvMatch) {
+      const col = kvMatch[1];
+      const kvKey = `collection:${col}`;
+
+      if (request.method === 'GET') {
+        const raw = await env.WORKFLOW_KV.get(kvKey);
+        return json(raw ? JSON.parse(raw) : []);
+      }
+
+      if (request.method === 'PUT') {
+        const data = await request.json();
+        if (!Array.isArray(data)) return json({ error: 'Array required' }, 400);
+        await env.WORKFLOW_KV.put(kvKey, JSON.stringify(data));
+        return json({ ok: true, count: data.length });
+      }
+
+      // PATCH — merge (add items not already present by id/title)
+      if (request.method === 'PATCH') {
+        const newItems = await request.json();
+        if (!Array.isArray(newItems)) return json({ error: 'Array required' }, 400);
+        const raw = await env.WORKFLOW_KV.get(kvKey);
+        const existing = raw ? JSON.parse(raw) : [];
+        let added = 0;
+        for (const item of newItems) {
+          const dup = existing.some(e => (item.id && e.id === item.id) || (item.title && e.title === item.title && e.meetingId === item.meetingId));
+          if (!dup) { existing.push(item); added++; }
+        }
+        await env.WORKFLOW_KV.put(kvKey, JSON.stringify(existing));
+        return json({ ok: true, total: existing.length, added });
+      }
+    }
+
     return json({ error: 'Not found' }, 404);
 
     } catch (e) {
