@@ -4994,7 +4994,8 @@ function filterAndRender() {
     const actionsByDate = {};
     Object.entries(actionsRawData?.by_date || {}).forEach(([d,v]) => { if (d >= startDate && d <= endDate) actionsByDate[d] = v; });
     renderDailyView({ daily: filteredRows, spendByDate, actionsByDate }, container);
-    renderCampaignGantt(filteredDates, campRawData, container);
+    const dailyByDate = {}; filteredRows.forEach(r => dailyByDate[r.date] = r);
+    renderCampaignGantt(filteredDates, campRawData, dailyByDate, container);
     requestAnimationFrame(() => {
       container.querySelectorAll('canvas').forEach(c => {
         const ci = Chart.getChart(c);
@@ -5177,7 +5178,7 @@ function renderDailyView(data, container) {
 const _adChartInstances = {};
 const _campChartInstances = {};
 
-function renderCampaignGantt(dailyDates, campData, container) {
+function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
   // Destroy any leftover chart instances
   Object.keys(_adChartInstances).forEach(k => { try { _adChartInstances[k].destroy(); } catch(e){} delete _adChartInstances[k]; });
   Object.keys(_campChartInstances).forEach(k => { try { _campChartInstances[k].destroy(); } catch(e){} delete _campChartInstances[k]; });
@@ -5191,7 +5192,7 @@ function renderCampaignGantt(dailyDates, campData, container) {
   dates.forEach((d,i) => dateIdx[d] = i);
 
   // Title
-  container.insertAdjacentHTML('beforeend', '<div class="card-title" style="margin:20px 0 8px;">캠페인 / 소재 상세 데이터</div>');
+  container.insertAdjacentHTML('beforeend', '<div class="card-title" style="margin:20px 0 8px;">캠페인 / 소재 상세 데이터 <span style="font-size:.72rem;color:var(--t2);font-weight:500;">· 노란 점 = 해당 날짜 실제 전환</span></div>');
 
   // Build gantt
   const wrap = document.createElement('div');
@@ -5235,8 +5236,11 @@ function renderCampaignGantt(dailyDates, campData, container) {
       const wd = new Date(d).getDay();
       const cls = (wd === 0 || wd === 6) ? ' weekend' : '';
       const hasData = daily[d] && daily[d].spend > 0;
-      const bg = hasData ? `background:${barColor};opacity:${barOpacity};border-radius:2px;` : '';
-      trackHtml += `<div class="gantt-cell${cls}" data-di="${di}" style="${bg}"></div>`;
+      const bg = hasData ? `background:${barColor};opacity:${barOpacity};border-radius:2px;position:relative;` : 'position:relative;';
+      const conv = dailyByDate?.[d];
+      const hasConv = conv && ((conv.orders||0) > 0 || (conv.body_units||0) > 0 || (conv.revenue||0) > 0);
+      const marker = hasConv ? `<span style="position:absolute;top:1px;right:1px;min-width:11px;height:11px;border-radius:999px;background:var(--y);color:#111;font-size:.52rem;line-height:11px;text-align:center;font-weight:700;box-shadow:0 0 0 1px rgba(0,0,0,.18);">${(conv.body_units||conv.orders||1)}</span>` : '';
+      trackHtml += `<div class="gantt-cell${cls}" data-di="${di}" style="${bg}">${marker}</div>`;
     });
 
     const statusDot = camp.status==='ACTIVE' ? '<span style="font-size:.55rem;color:var(--g);">●</span>' : '<span style="font-size:.55rem;color:var(--t2);">⏸</span>';
@@ -5257,7 +5261,9 @@ function renderCampaignGantt(dailyDates, campData, container) {
         if (dv) {
           const cpc = dv.clicks ? (dv.spend / dv.clicks).toFixed(0) : '-';
           const ctr = dv.impressions ? ((dv.clicks / dv.impressions) * 100).toFixed(2) : '-';
-          tooltip.innerHTML = `<strong>${camp.name||'N/A'}</strong><br><span style="color:var(--t2)">${hoverDate}</span><br>Spend: ${(dv.spend||0).toLocaleString(undefined,{maximumFractionDigits:0})}원<br>Clicks: ${(dv.clicks||0).toLocaleString()}<br>Impr: ${(dv.impressions||0).toLocaleString()}<br>CPC: ${cpc}원 · CTR: ${ctr}%`;
+          const conv = dailyByDate?.[hoverDate];
+          const convLine = conv ? `<br><span style="color:var(--y)">주문 ${conv.orders||0} · 본체 ${conv.body_units||0} · 매출 ${((conv.revenue||0)/10000).toLocaleString()}만</span>` : '';
+          tooltip.innerHTML = `<strong>${camp.name||'N/A'}</strong><br><span style="color:var(--t2)">${hoverDate}</span><br>Spend: ${(dv.spend||0).toLocaleString(undefined,{maximumFractionDigits:0})}원<br>Clicks: ${(dv.clicks||0).toLocaleString()}<br>Impr: ${(dv.impressions||0).toLocaleString()}<br>CPC: ${cpc}원 · CTR: ${ctr}%${convLine}`;
         } else {
           tooltip.innerHTML = `<strong>${camp.name||'N/A'}</strong><br><span style="color:var(--t2)">${hoverDate}</span><br>데이터 없음`;
         }
