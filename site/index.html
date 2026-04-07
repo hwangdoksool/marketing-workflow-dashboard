@@ -298,9 +298,9 @@ select.form-input{cursor:pointer;}
 
   <!-- Main Tabs -->
   <nav class="main-tabs">
-    <button class="main-tab active" data-tab="briefs">📋 워크플로우</button>
+    <button class="main-tab active" data-tab="analysis">📊 분석/리포트</button>
+    <button class="main-tab" data-tab="briefs">📋 워크플로우</button>
     <button class="main-tab" data-tab="meeting">🤝 미팅</button>
-    <button class="main-tab" data-tab="analysis">📊 분석/리포트</button>
     <button class="main-tab" data-tab="creative">🎨 소재</button>
     <button class="main-tab" data-tab="settings">⚙️ 더보기</button>
     <button class="main-tab" data-tab="feel">🏋️ 체험신청</button>
@@ -374,13 +374,13 @@ select.form-input{cursor:pointer;}
   <!-- TAB: 분석 (그룹) -->
   <div class="tab-content" id="tab-analysis" style="display:none;">
     <nav class="report-nav" id="analysisNav" style="margin-bottom:14px;">
-      <button class="report-btn active" data-sub="weekly" onclick="switchAnalysisSub('weekly')">📊 주간 리포트</button>
+      <button class="report-btn active" data-sub="daily" onclick="switchAnalysisSub('daily')">📅 일별 지표</button>
+      <button class="report-btn" data-sub="weekly" onclick="switchAnalysisSub('weekly')">📊 주간 리포트</button>
       <button class="report-btn" data-sub="reports" onclick="switchAnalysisSub('reports')">📄 리포트</button>
       <button class="report-btn" data-sub="signals" onclick="switchAnalysisSub('signals')">💡 시그널</button>
       <button class="report-btn" data-sub="learn" onclick="switchAnalysisSub('learn')">📚 Learn</button>
-      <button class="report-btn" data-sub="daily" onclick="switchAnalysisSub('daily')">📅 일별 지표</button>
     </nav>
-    <div id="analysis-sub-weekly"></div>
+    <div id="analysis-sub-weekly" style="display:none;"></div>
     <div id="analysis-sub-reports" style="display:none;">
       <div style="margin-bottom:12px;">
         <h2 style="font-size:1rem;font-weight:700;">📄 비정기 리포트</h2>
@@ -391,7 +391,7 @@ select.form-input{cursor:pointer;}
     </div>
     <div id="analysis-sub-signals" style="display:none;"></div>
     <div id="analysis-sub-learn" style="display:none;"></div>
-    <div id="analysis-sub-daily" style="display:none;padding:0 16px;"></div>
+    <div id="analysis-sub-daily" style="padding:0 16px;"></div>
   </div>
 
   <!-- TAB: 소재 (그룹) -->
@@ -1454,7 +1454,7 @@ function activateMainTab(tabName, skipHash) {
   const target = document.getElementById('tab-' + tabName);
   if (target) target.style.display = 'block';
   if (!skipHash) {
-    const sub = tabName === 'analysis' ? '/weekly' : tabName === 'creative' ? '/schema' : '';
+    const sub = tabName === 'analysis' ? '/daily' : tabName === 'creative' ? '/schema' : '';
     window.history.replaceState(null, '', '#' + tabName + sub);
   }
   // Auto-load data for feel/leads/daily tabs
@@ -1464,7 +1464,7 @@ function activateMainTab(tabName, skipHash) {
 
 function routeFromHash() {
   const hash = (window.location.hash || '').replace('#','');
-  if (!hash) { activateMainTab('briefs', true); return; }
+  if (!hash) { activateMainTab('analysis', true); setTimeout(() => switchAnalysisSub('daily'), 50); return; }
   const [main, sub] = hash.split('/');
   const validMains = ['briefs','meeting','analysis','creative','settings','feel','leads'];
   if (validMains.includes(main)) {
@@ -1475,7 +1475,8 @@ function routeFromHash() {
     if (main === 'feel') setTimeout(() => loadBookings(), 50);
     if (main === 'leads') setTimeout(() => loadLeads(), 50);
   } else {
-    activateMainTab('briefs', true);
+    activateMainTab('analysis', true);
+    setTimeout(() => switchAnalysisSub('daily'), 50);
   }
 }
 
@@ -1596,7 +1597,7 @@ async function loadReports(){
       const h = location.hash.replace('#','').toLowerCase();
       if(h && h.startsWith('w')){
         const fi = reports.findIndex(r => r.id.startsWith(h));
-        if(fi >= 0){ activateMainTab('analysis');setTimeout(()=>{switchAnalysisSub('weekly');selectReport(fi, false);},50); }
+        if(fi >= 0){ activateMainTab('analysis');setTimeout(()=>{switchAnalysisSub('daily');selectReport(fi, false);},50); }
       }
     });
     // 해시 라우팅: #w13 → 해당 주차 선택
@@ -3669,7 +3670,7 @@ function moveTabInner(fromId, toId) {
 // 그룹 탭 초기화 — 메인 탭 클릭 시
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('[data-tab="analysis"]')?.addEventListener('click', () => {
-    switchAnalysisSub('weekly');
+    switchAnalysisSub('daily');
   });
   document.querySelector('[data-tab="creative"]')?.addEventListener('click', () => {
     switchCreativeSub('schema');
