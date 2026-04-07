@@ -4897,22 +4897,20 @@ function renderDailyView(data, container) {
   const avgBounce = (totals.bounceSum / rows.length * 100).toFixed(1);
   const revManwon = (totals.revenue / 10000).toLocaleString();
 
-  // KPI cards
+  // KPI cards — compact
   const kpiHtml = `
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px;">
-      <div class="kpi-card"><div class="label">총 세션</div><div class="value">${totals.sessions.toLocaleString()}</div></div>
-      <div class="kpi-card"><div class="label">총 유저</div><div class="value">${totals.users.toLocaleString()}</div></div>
-      <div class="kpi-card"><div class="label">총 주문</div><div class="value">${totals.orders.toLocaleString()}</div></div>
-      <div class="kpi-card"><div class="label">총 매출</div><div class="value">${revManwon}만원</div></div>
-      <div class="kpi-card"><div class="label">평균 이탈률</div><div class="value">${avgBounce}%</div></div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px;">
+      <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">총 세션</div><div class="value" style="font-size:1rem;">${totals.sessions.toLocaleString()}</div></div>
+      <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">총 유저</div><div class="value" style="font-size:1rem;">${totals.users.toLocaleString()}</div></div>
+      <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">총 주문</div><div class="value" style="font-size:1rem;">${totals.orders.toLocaleString()}</div></div>
+      <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">총 매출</div><div class="value" style="font-size:1rem;">${revManwon}만원</div></div>
+      <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">평균 이탈률</div><div class="value" style="font-size:1rem;">${avgBounce}%</div></div>
     </div>`;
 
-  // Chart containers
+  // Chart containers — 2 compact charts
   const chartsHtml = `
-    <div class="card" style="margin-bottom:12px;"><div class="card-title">세션 & 유저</div><canvas id="dailyChart-sessionsUsers"></canvas></div>
-    <div class="card" style="margin-bottom:12px;"><div class="card-title">전환: 주문건수 & 본체판매대수</div><canvas id="dailyChart-conversion"></canvas></div>
-    <div class="card" style="margin-bottom:12px;"><div class="card-title">매출 (만원)</div><canvas id="dailyChart-revenue"></canvas></div>
-    <div class="card" style="margin-bottom:12px;"><div class="card-title">이탈률 & 세션시간</div><canvas id="dailyChart-bounceTime"></canvas></div>`;
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">트래픽 + 전환</div><canvas id="dailyChart-trafficConv" style="height:150px;"></canvas></div>
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">효율: 이탈률 + 매출</div><canvas id="dailyChart-effRevenue" style="height:150px;"></canvas></div>`;
 
   container.insertAdjacentHTML('beforeend', kpiHtml + chartsHtml);
 
@@ -4923,62 +4921,89 @@ function renderDailyView(data, container) {
   const yColor = getComputedStyle(document.documentElement).getPropertyValue('--y').trim();
   const rColor = getComputedStyle(document.documentElement).getPropertyValue('--r').trim();
 
-  const commonOpts = { responsive:true, plugins:{ legend:{ labels:{ color:'#8b90a0', font:{size:11} } } }, scales:{ x:{ ticks:{color:'#8b90a0',font:{size:10}}, grid:{color:'rgba(255,255,255,.05)'} } } };
+  const sessionDurations = rows.map(r => r.avg_session_duration || 0);
 
-  // 1. Sessions & Users
-  new Chart(document.getElementById('dailyChart-sessionsUsers'), {
+  const commonOpts = {
+    responsive:true, maintainAspectRatio:false,
+    interaction:{ mode:'index', intersect:false },
+    plugins:{
+      legend:{ labels:{ color:'#8b90a0', font:{size:10}, usePointStyle:true, pointStyle:'circle', padding:12 } }
+    },
+    scales:{
+      x:{ ticks:{color:'#8b90a0',font:{size:9},maxRotation:0}, grid:{color:'rgba(255,255,255,.05)'} }
+    }
+  };
+
+  // Chart 1: Traffic (line, left Y) + Conversion (bar, right Y)
+  new Chart(document.getElementById('dailyChart-trafficConv'), {
     type:'line',
     data:{
       labels,
       datasets:[
-        { label:'세션', data:rows.map(r=>r.sessions), borderColor:acColor, backgroundColor:acColor+'33', tension:.3, fill:false, pointRadius:2 },
-        { label:'유저', data:rows.map(r=>r.users), borderColor:blColor, backgroundColor:blColor+'33', tension:.3, fill:false, pointRadius:2 }
-      ]
-    },
-    options:{ ...commonOpts, scales:{ ...commonOpts.scales, y:{ ticks:{color:'#8b90a0'}, grid:{color:'rgba(255,255,255,.05)'} } } }
-  });
-
-  // 2. Conversion
-  new Chart(document.getElementById('dailyChart-conversion'), {
-    type:'bar',
-    data:{
-      labels,
-      datasets:[
-        { label:'주문건수', data:rows.map(r=>r.orders||0), backgroundColor:gColor+'cc' },
-        { label:'본체판매대수', data:rows.map(r=>r.body_units||0), backgroundColor:yColor+'cc' }
-      ]
-    },
-    options:{ ...commonOpts, scales:{ ...commonOpts.scales, y:{ ticks:{color:'#8b90a0'}, grid:{color:'rgba(255,255,255,.05)'} } } }
-  });
-
-  // 3. Revenue
-  new Chart(document.getElementById('dailyChart-revenue'), {
-    type:'bar',
-    data:{
-      labels,
-      datasets:[
-        { label:'매출(만원)', data:rows.map(r=>Math.round((r.revenue||0)/10000)), backgroundColor:acColor+'cc' }
-      ]
-    },
-    options:{ ...commonOpts, scales:{ ...commonOpts.scales, y:{ ticks:{color:'#8b90a0', callback:v=>v.toLocaleString()+'만'}, grid:{color:'rgba(255,255,255,.05)'} } } }
-  });
-
-  // 4. Bounce rate & session duration (dual Y)
-  new Chart(document.getElementById('dailyChart-bounceTime'), {
-    type:'line',
-    data:{
-      labels,
-      datasets:[
-        { label:'이탈률(%)', data:rows.map(r=>((r.bounce_rate||0)*100).toFixed(1)), borderColor:rColor, tension:.3, fill:false, pointRadius:2, yAxisID:'y' },
-        { label:'세션시간(초)', data:rows.map(r=>r.avg_session_duration||0), borderColor:blColor, tension:.3, fill:false, pointRadius:2, yAxisID:'y1' }
+        { label:'세션', data:rows.map(r=>r.sessions), borderColor:acColor, backgroundColor:acColor+'33', tension:.3, fill:false, pointRadius:2, yAxisID:'y', order:1 },
+        { label:'유저', data:rows.map(r=>r.users), borderColor:blColor, backgroundColor:blColor+'33', tension:.3, fill:false, pointRadius:2, yAxisID:'y', order:2 },
+        { label:'주문건수', type:'bar', data:rows.map(r=>r.orders||0), backgroundColor:gColor+'99', yAxisID:'y1', order:3 },
+        { label:'본체판매', type:'bar', data:rows.map(r=>r.body_units||0), backgroundColor:yColor+'99', yAxisID:'y1', order:4 }
       ]
     },
     options:{
       ...commonOpts,
+      plugins:{
+        ...commonOpts.plugins,
+        tooltip:{
+          callbacks:{
+            afterBody: function(items) {
+              const idx = items[0].dataIndex;
+              return '세션시간: ' + sessionDurations[idx].toFixed(0) + '초';
+            },
+            label: function(ctx) {
+              const v = ctx.parsed.y;
+              if (ctx.dataset.label === '세션' || ctx.dataset.label === '유저') return ctx.dataset.label + ': ' + v.toLocaleString();
+              return ctx.dataset.label + ': ' + v.toLocaleString() + '건';
+            }
+          }
+        }
+      },
       scales:{
         x: commonOpts.scales.x,
-        y:{ type:'linear', position:'left', ticks:{color:rColor, callback:v=>v+'%'}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true, text:'이탈률(%)', color:rColor} },
-        y1:{ type:'linear', position:'right', ticks:{color:blColor, callback:v=>v+'초'}, grid:{drawOnChartArea:false}, title:{display:true, text:'세션시간(초)', color:blColor} }
+        y:{ type:'linear', position:'left', ticks:{color:'#8b90a0',font:{size:9},callback:v=>v.toLocaleString()}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'세션/유저',color:'#8b90a0',font:{size:10}} },
+        y1:{ type:'linear', position:'right', ticks:{color:gColor,font:{size:9}}, grid:{drawOnChartArea:false}, title:{display:true,text:'주문/본체',color:gColor,font:{size:10}} }
+      }
+    }
+  });
+
+  // Chart 2: Bounce rate (line, left Y) + Revenue bar (right Y)
+  new Chart(document.getElementById('dailyChart-effRevenue'), {
+    type:'line',
+    data:{
+      labels,
+      datasets:[
+        { label:'이탈률(%)', data:rows.map(r=>((r.bounce_rate||0)*100).toFixed(1)), borderColor:rColor, tension:.3, fill:false, pointRadius:2, yAxisID:'y', order:1 },
+        { label:'매출(만원)', type:'bar', data:rows.map(r=>Math.round((r.revenue||0)/10000)), backgroundColor:acColor+'99', yAxisID:'y1', order:2 }
+      ]
+    },
+    options:{
+      ...commonOpts,
+      plugins:{
+        ...commonOpts.plugins,
+        tooltip:{
+          callbacks:{
+            afterBody: function(items) {
+              const idx = items[0].dataIndex;
+              return '세션시간: ' + sessionDurations[idx].toFixed(0) + '초';
+            },
+            label: function(ctx) {
+              const v = ctx.parsed.y;
+              if (ctx.dataset.label === '이탈률(%)') return '이탈률: ' + v + '%';
+              return '매출: ' + Number(v).toLocaleString() + '만원';
+            }
+          }
+        }
+      },
+      scales:{
+        x: commonOpts.scales.x,
+        y:{ type:'linear', position:'left', ticks:{color:rColor,font:{size:9},callback:v=>v+'%'}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'이탈률(%)',color:rColor,font:{size:10}} },
+        y1:{ type:'linear', position:'right', ticks:{color:acColor,font:{size:9},callback:v=>v.toLocaleString()+'만'}, grid:{drawOnChartArea:false}, title:{display:true,text:'매출(만원)',color:acColor,font:{size:10}} }
       }
     }
   });
@@ -5046,14 +5071,26 @@ function renderCampaignGantt(dailyDates, campData, container) {
 
     row.innerHTML = `<div class="gantt-label"><span class="arrow">▶</span>${campName}</div><div class="gantt-track" style="position:relative;">${trackHtml}<div class="gantt-bar" style="left:${(barStart/totalCols*100).toFixed(2)}%;width:${((barEnd-barStart+1)/totalCols*100).toFixed(2)}%;background:var(--ac);"></div></div>`;
 
-    // Hover tooltip
-    row.addEventListener('mouseenter', e => {
-      tooltip.innerHTML = `<strong>${camp.name||'N/A'}</strong><br>Spend: ${totalSpend.toLocaleString(undefined,{maximumFractionDigits:0})}원<br>Clicks: ${totalClicks.toLocaleString()}<br>Impressions: ${totalImpressions.toLocaleString()}`;
-      tooltip.style.display = 'block';
-    });
+    // Hover tooltip — daily data based on mouse position
+    row.addEventListener('mouseenter', e => { tooltip.style.display = 'block'; });
     row.addEventListener('mousemove', e => {
       tooltip.style.top = (e.clientY + 12) + 'px';
       tooltip.style.left = (e.clientX + 12) + 'px';
+      const track = row.querySelector('.gantt-track');
+      if (track) {
+        const rect = track.getBoundingClientRect();
+        const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        const di = Math.min(dates.length - 1, Math.floor(pct * dates.length));
+        const hoverDate = dates[di];
+        const dv = daily[hoverDate];
+        if (dv) {
+          const cpc = dv.clicks ? (dv.spend / dv.clicks).toFixed(0) : '-';
+          const ctr = dv.impressions ? ((dv.clicks / dv.impressions) * 100).toFixed(2) : '-';
+          tooltip.innerHTML = `<strong>${camp.name||'N/A'}</strong><br><span style="color:var(--t2)">${hoverDate}</span><br>Spend: ${(dv.spend||0).toLocaleString(undefined,{maximumFractionDigits:0})}원<br>Clicks: ${(dv.clicks||0).toLocaleString()}<br>Impr: ${(dv.impressions||0).toLocaleString()}<br>CPC: ${cpc}원 · CTR: ${ctr}%`;
+        } else {
+          tooltip.innerHTML = `<strong>${camp.name||'N/A'}</strong><br><span style="color:var(--t2)">${hoverDate}</span><br>데이터 없음`;
+        }
+      }
     });
     row.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
 
@@ -5110,6 +5147,30 @@ function renderCampaignGantt(dailyDates, campData, container) {
         const sparkSvg = `<svg class="gantt-sparkline" viewBox="0 0 ${svgW} ${svgH}" preserveAspectRatio="none"><polyline points="${polyPoints}" fill="none" stroke="var(--bl)" stroke-width="1" opacity=".7"/></svg>`;
 
         adRow.innerHTML = `<div class="gantt-label">${adName}</div><div class="gantt-track" style="position:relative;">${adTrackHtml}<div class="gantt-bar" style="left:${(adBarStart/totalCols*100).toFixed(2)}%;width:${((adBarEnd-adBarStart+1)/totalCols*100).toFixed(2)}%;background:var(--bl);opacity:.7;"></div>${sparkSvg}</div>`;
+
+        // Ad row hover — daily data
+        adRow.addEventListener('mouseenter', () => { tooltip.style.display = 'block'; });
+        adRow.addEventListener('mousemove', e => {
+          tooltip.style.top = (e.clientY + 12) + 'px';
+          tooltip.style.left = (e.clientX + 12) + 'px';
+          const track = adRow.querySelector('.gantt-track');
+          if (track) {
+            const rect = track.getBoundingClientRect();
+            const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            const di = Math.min(dates.length - 1, Math.floor(pct * dates.length));
+            const hoverDate = dates[di];
+            const dv = adDaily[hoverDate];
+            if (dv) {
+              const cpc = dv.clicks ? (dv.spend / dv.clicks).toFixed(0) : '-';
+              const ctr = dv.impressions ? ((dv.clicks / dv.impressions) * 100).toFixed(2) : '-';
+              tooltip.innerHTML = `<strong>${ad.name||adKey}</strong><br><span style="color:var(--t2)">${hoverDate}</span><br>Spend: ${(dv.spend||0).toLocaleString(undefined,{maximumFractionDigits:0})}원<br>Clicks: ${(dv.clicks||0).toLocaleString()}<br>Impr: ${(dv.impressions||0).toLocaleString()}<br>CPC: ${cpc}원 · CTR: ${ctr}%`;
+            } else {
+              tooltip.innerHTML = `<strong>${ad.name||adKey}</strong><br><span style="color:var(--t2)">${hoverDate}</span><br>데이터 없음`;
+            }
+          }
+        });
+        adRow.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+
         subWrap.appendChild(adRow);
 
         // Summary row
