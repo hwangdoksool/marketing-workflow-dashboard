@@ -268,6 +268,14 @@ select.form-input{cursor:pointer;}
 .gantt-sub-rows .gantt-row{background:var(--s);cursor:default;}
 .gantt-sub-rows .gantt-row:hover{background:var(--s2);}
 .gantt-sub-rows .gantt-label{font-weight:400;font-size:.73rem;color:var(--t2);padding-left:24px;}
+.gantt-sub-rows .gantt-row.ad-row{cursor:pointer;}
+.gantt-sub-rows .gantt-row.ad-row:hover{background:var(--s2);}
+.gantt-sub-rows .gantt-row.ad-row.ad-active{background:var(--s2);border-left:3px solid var(--ac);}
+.gantt-sub-rows .gantt-row.ad-row.ad-active .gantt-label{padding-left:21px;}
+.ad-arrow{font-size:.6rem;color:var(--t2);margin-right:4px;display:inline-block;transition:transform .15s;}
+.ad-chart-hint{font-size:.6rem;color:var(--t2);opacity:0;margin-left:auto;padding-left:4px;transition:opacity .15s;white-space:nowrap;}
+.gantt-sub-rows .gantt-row.ad-row:hover .ad-chart-hint{opacity:1;}
+.gantt-sub-rows .gantt-row.ad-row.ad-active .ad-chart-hint{opacity:0;}
 .gantt-sparkline{position:absolute;bottom:2px;left:0;width:100%;height:16px;pointer-events:none;}
 .gantt-summary{font-size:.68rem;color:var(--t2);padding:4px 10px 4px 24px;display:flex;gap:12px;flex-wrap:wrap;}
 .gantt-summary span{white-space:nowrap;}
@@ -5111,10 +5119,12 @@ function renderDailyView(data, container) {
 }
 
 const _adChartInstances = {};
+const _campChartInstances = {};
 
 function renderCampaignGantt(dailyDates, campData, container) {
-  // Destroy any leftover ad chart instances
+  // Destroy any leftover chart instances
   Object.keys(_adChartInstances).forEach(k => { try { _adChartInstances[k].destroy(); } catch(e){} delete _adChartInstances[k]; });
+  Object.keys(_campChartInstances).forEach(k => { try { _campChartInstances[k].destroy(); } catch(e){} delete _campChartInstances[k]; });
 
   const campaigns = campData.campaigns || [];
   if (!campaigns.length || !dailyDates.length) return;
@@ -5199,26 +5209,103 @@ function renderCampaignGantt(dailyDates, campData, container) {
     });
     row.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
 
-    // Click to expand
+    // Build expandable wrapper (campaign chart + sub-rows)
+    const adsObj = camp.ads || {};
+    const adKeys = Object.keys(adsObj);
+    const expandWrap = document.createElement('div');
+    expandWrap.className = 'gantt-sub-rows';
+
+    // --- Campaign summary chart ---
+    const campChartId = 'camp_' + ci + '_chart';
+    const campChartWrap = document.createElement('div');
+    campChartWrap.id = campChartId;
+    campChartWrap.style.cssText = 'background:rgba(0,0,0,0.1);border-radius:6px;margin:4px 8px 6px;padding:8px 10px 6px;';
+
+    // Campaign summary line
+    const campCtr = totalImpressions ? ((totalClicks/totalImpressions)*100).toFixed(2) : '0';
+    const campCpc = totalClicks ? (totalSpend/totalClicks).toFixed(0) : '0';
+    const campSumLine = document.createElement('div');
+    campSumLine.style.cssText = 'font-size:.7rem;color:var(--t2);margin-bottom:4px;display:flex;gap:12px;flex-wrap:wrap;';
+    campSumLine.innerHTML = `<span>Spend: <b style="color:var(--ac)">${totalSpend.toLocaleString(undefined,{maximumFractionDigits:0})}원</b></span><span>Clicks: <b style="color:var(--bl)">${totalClicks.toLocaleString()}</b></span><span>Impr: <b>${totalImpressions.toLocaleString()}</b></span><span>CTR: <b style="color:var(--g)">${campCtr}%</b></span><span>CPC: <b>${campCpc}원</b></span>`;
+    campChartWrap.appendChild(campSumLine);
+
+    // Campaign chart canvas
+    const campCanvasWrap = document.createElement('div');
+    campCanvasWrap.style.cssText = 'position:relative;height:130px;';
+    const campCanvas = document.createElement('canvas');
+    campCanvasWrap.appendChild(campCanvas);
+    campChartWrap.appendChild(campCanvasWrap);
+    expandWrap.appendChild(campChartWrap);
+
+    // Click to expand — create/destroy campaign chart
     row.addEventListener('click', () => {
+      const isExpanding = !row.classList.contains('expanded');
       row.classList.toggle('expanded');
+      if (isExpanding) {
+        // Create campaign chart
+        const spendData = [], clicksData = [], ctrData = [];
+        dates.forEach(d => {
+          const v = daily[d];
+          spendData.push(v ? (v.spend||0) : 0);
+          clicksData.push(v ? (v.clicks||0) : 0);
+          ctrData.push(v && v.impressions ? +((v.clicks/v.impressions)*100).toFixed(2) : 0);
+        });
+        const cs = getComputedStyle(document.documentElement);
+        const colAc = cs.getPropertyValue('--ac').trim() || '#6c5ce7';
+        const colBl = cs.getPropertyValue('--bl').trim() || '#74b9ff';
+        const colG  = cs.getPropertyValue('--g').trim()  || '#00b894';
+
+        const chart = new Chart(campCanvas, {
+          type: 'line',
+          data: {
+            labels: dates,
+            datasets: [
+              { label: 'Spend', data: spendData, borderColor: colAc, backgroundColor: colAc + '33', borderWidth: 1.5, pointRadius: 0, tension: 0.3, yAxisID: 'y', fill: false },
+              { label: 'Clicks', data: clicksData, borderColor: colBl, backgroundColor: colBl + '33', borderWidth: 1.5, pointRadius: 0, tension: 0.3, yAxisID: 'y', fill: false },
+              { label: 'CTR %', data: ctrData, borderColor: colG, backgroundColor: colG + '33', borderWidth: 1.5, pointRadius: 0, tension: 0.3, yAxisID: 'y1', fill: false }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: { legend: { display: true, labels: { boxWidth: 8, font: { size: 9 }, color: cs.getPropertyValue('--t1').trim() || '#ccc' } } },
+            scales: {
+              x: { display: true, ticks: { font: { size: 8 }, color: cs.getPropertyValue('--t2').trim() || '#999', maxRotation: 0, autoSkip: true, maxTicksLimit: 10 }, grid: { display: false } },
+              y: { position: 'left', display: true, ticks: { font: { size: 8 }, color: cs.getPropertyValue('--t2').trim() || '#999', callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v }, grid: { color: 'rgba(255,255,255,0.05)' } },
+              y1: { position: 'right', display: true, ticks: { font: { size: 8 }, color: colG, callback: v => v + '%' }, grid: { display: false } }
+            }
+          }
+        });
+        _campChartInstances[campChartId] = chart;
+      } else {
+        // Destroy campaign chart on collapse
+        if (_campChartInstances[campChartId]) { try { _campChartInstances[campChartId].destroy(); } catch(e){} delete _campChartInstances[campChartId]; }
+        // Also destroy any open ad charts inside
+        expandWrap.querySelectorAll('canvas').forEach(c => {
+          const ci2 = Chart.getChart(c);
+          if (ci2) { try { ci2.destroy(); } catch(e){} }
+        });
+        Object.keys(_adChartInstances).forEach(k => {
+          if (document.getElementById(k) && expandWrap.contains(document.getElementById(k))) {
+            try { _adChartInstances[k].destroy(); } catch(e){} delete _adChartInstances[k];
+          }
+        });
+        // Reset ad row active states
+        expandWrap.querySelectorAll('.gantt-row.ad-active').forEach(r => r.classList.remove('ad-active'));
+      }
     });
 
     wrap.appendChild(row);
 
     // Sub-rows for ads
-    const adsObj = camp.ads || {};
-    const adKeys = Object.keys(adsObj);
     if (adKeys.length) {
-      const subWrap = document.createElement('div');
-      subWrap.className = 'gantt-sub-rows';
-
       adKeys.forEach(adKey => {
         const ad = adsObj[adKey];
         const adName = (ad.name || adKey).length > 18 ? (ad.name || adKey).slice(0,18) + '…' : (ad.name || adKey);
 
         const adRow = document.createElement('div');
-        adRow.className = 'gantt-row';
+        adRow.className = 'gantt-row ad-row';
 
         // Ad totals
         const adDaily = ad.daily || {};
@@ -5242,7 +5329,7 @@ function renderCampaignGantt(dailyDates, campData, container) {
           adTrackHtml += `<div class="gantt-cell${cls}" style="${bg}"></div>`;
         });
 
-        adRow.innerHTML = `<div class="gantt-label">${adName}</div><div class="gantt-track">${adTrackHtml}</div>`;
+        adRow.innerHTML = `<div class="gantt-label"><span class="ad-arrow">▸</span>${adName}<span class="ad-chart-hint">차트 보기</span></div><div class="gantt-track">${adTrackHtml}</div>`;
 
         // Ad row hover — daily data
         adRow.addEventListener('mouseenter', () => { tooltip.style.display = 'block'; });
@@ -5276,8 +5363,14 @@ function renderCampaignGantt(dailyDates, campData, container) {
           if (existing) {
             if (_adChartInstances[chartId]) { try { _adChartInstances[chartId].destroy(); } catch(e){} delete _adChartInstances[chartId]; }
             existing.remove();
+            adRow.classList.remove('ad-active');
+            adRow.querySelector('.ad-arrow').textContent = '▸';
             return;
           }
+          // Mark active
+          adRow.classList.add('ad-active');
+          adRow.querySelector('.ad-arrow').textContent = '▾';
+
           // Build chart container
           const chartWrap = document.createElement('div');
           chartWrap.id = chartId;
@@ -5339,17 +5432,17 @@ function renderCampaignGantt(dailyDates, campData, container) {
           _adChartInstances[chartId] = chart;
         });
 
-        subWrap.appendChild(adRow);
+        expandWrap.appendChild(adRow);
 
         // Summary row
         const sumRow = document.createElement('div');
         sumRow.className = 'gantt-summary';
         sumRow.innerHTML = `<span>Spend: ${adSpend.toLocaleString(undefined,{maximumFractionDigits:0})}원</span><span>Clicks: ${adClicks.toLocaleString()}</span><span>CTR: ${adCtr}%</span><span>CPC: ${adCpc}원</span>`;
-        subWrap.appendChild(sumRow);
+        expandWrap.appendChild(sumRow);
       });
-
-      wrap.appendChild(subWrap);
     }
+
+    wrap.appendChild(expandWrap);
   });
 
   container.appendChild(wrap);
