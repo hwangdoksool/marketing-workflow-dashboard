@@ -5052,7 +5052,7 @@ function renderDailyView(data, container) {
       <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">총 세션</div><div class="value" style="font-size:1rem;">${totals.sessions.toLocaleString()}</div></div>
       <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">총 유저</div><div class="value" style="font-size:1rem;">${totals.users.toLocaleString()}</div></div>
       <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">총 주문</div><div class="value" style="font-size:1rem;">${totals.orders.toLocaleString()}</div></div>
-      <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">총 매출</div><div class="value" style="font-size:1rem;">${revManwon}만원</div></div>
+      <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">판매 매출</div><div class="value" style="font-size:1rem;">${revManwon}만원</div></div>
       <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">평균 이탈률</div><div class="value" style="font-size:1rem;">${avgBounce}%</div></div>
     </div>`;
 
@@ -5144,7 +5144,7 @@ function renderDailyView(data, container) {
             label: function(ctx) {
               const v = ctx.parsed.y;
               if (ctx.dataset.label === '이탈률(%)') return '이탈률: ' + v + '%';
-              return '매출: ' + Number(v).toLocaleString() + '만원';
+              return '판매매출: ' + Number(v).toLocaleString() + '만원';
             }
           }
         }
@@ -5152,7 +5152,7 @@ function renderDailyView(data, container) {
       scales:{
         x: commonOpts.scales.x,
         y:{ type:'linear', position:'left', ticks:{color:rColor,font:{size:9},callback:v=>v+'%'}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'이탈률(%)',color:rColor,font:{size:10}} },
-        y1:{ type:'linear', position:'right', ticks:{color:acColor,font:{size:9},callback:v=>v.toLocaleString()+'만'}, grid:{drawOnChartArea:false}, title:{display:true,text:'매출(만원)',color:acColor,font:{size:10}} }
+        y1:{ type:'linear', position:'right', ticks:{color:acColor,font:{size:9},callback:v=>v.toLocaleString()+'만'}, grid:{drawOnChartArea:false}, title:{display:true,text:'판매매출(만원)',color:acColor,font:{size:10}} }
       }
     }
   });

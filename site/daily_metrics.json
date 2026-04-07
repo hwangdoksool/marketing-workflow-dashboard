@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-07T22:46:39.943971+09:00",
+  "updated_at": "2026-04-07T22:48:37.942348+09:00",
   "daily": [
     {
       "date": "2026-01-01",
@@ -11,6 +11,8 @@
       "new_users": 15,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -23,6 +25,8 @@
       "new_users": 16,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -35,6 +39,8 @@
       "new_users": 17,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -47,6 +53,8 @@
       "new_users": 16,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -59,6 +67,8 @@
       "new_users": 13,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -71,6 +81,8 @@
       "new_users": 33,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -83,6 +95,8 @@
       "new_users": 17,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -95,6 +109,8 @@
       "new_users": 21,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -107,6 +123,8 @@
       "new_users": 29,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -119,6 +137,8 @@
       "new_users": 17,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -131,6 +151,8 @@
       "new_users": 20,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -143,6 +165,8 @@
       "new_users": 24,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -155,6 +179,8 @@
       "new_users": 61,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -167,6 +193,8 @@
       "new_users": 55,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -179,6 +207,8 @@
       "new_users": 59,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -191,6 +221,8 @@
       "new_users": 56,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -203,6 +235,8 @@
       "new_users": 15,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -215,6 +249,8 @@
       "new_users": 20,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -227,6 +263,8 @@
       "new_users": 250,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -239,6 +277,8 @@
       "new_users": 161,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -251,6 +291,8 @@
       "new_users": 94,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -263,6 +305,8 @@
       "new_users": 133,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -275,6 +319,8 @@
       "new_users": 143,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -287,6 +333,8 @@
       "new_users": 122,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -299,6 +347,8 @@
       "new_users": 229,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -311,6 +361,8 @@
       "new_users": 145,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -323,6 +375,8 @@
       "new_users": 119,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -335,6 +389,8 @@
       "new_users": 208,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -347,6 +403,8 @@
       "new_users": 211,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -359,6 +417,8 @@
       "new_users": 132,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -371,6 +431,8 @@
       "new_users": 212,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -383,6 +445,8 @@
       "new_users": 204,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -395,6 +459,8 @@
       "new_users": 126,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -407,6 +473,8 @@
       "new_users": 120,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -419,6 +487,8 @@
       "new_users": 151,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -431,6 +501,8 @@
       "new_users": 134,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -443,6 +515,8 @@
       "new_users": 118,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -455,6 +529,8 @@
       "new_users": 125,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -467,6 +543,8 @@
       "new_users": 149,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -479,6 +557,8 @@
       "new_users": 137,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -491,6 +571,8 @@
       "new_users": 101,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -503,6 +585,8 @@
       "new_users": 164,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -515,6 +599,8 @@
       "new_users": 309,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -527,6 +613,8 @@
       "new_users": 293,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -539,6 +627,8 @@
       "new_users": 418,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -551,6 +641,8 @@
       "new_users": 737,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -563,6 +655,8 @@
       "new_users": 132,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -575,6 +669,8 @@
       "new_users": 273,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -587,6 +683,8 @@
       "new_users": 324,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -599,6 +697,8 @@
       "new_users": 351,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -611,6 +711,8 @@
       "new_users": 349,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -623,6 +725,8 @@
       "new_users": 398,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -635,6 +739,8 @@
       "new_users": 508,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -647,6 +753,8 @@
       "new_users": 666,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -659,6 +767,8 @@
       "new_users": 378,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -671,7 +781,9 @@
       "new_users": 706,
       "orders": 2,
       "body_units": 0,
-      "revenue": 3460000
+      "body_revenue": 0,
+      "accessory_revenue": 0,
+      "revenue": 0
     },
     {
       "date": "2026-02-26",
@@ -683,7 +795,9 @@
       "new_users": 625,
       "orders": 1,
       "body_units": 1,
-      "revenue": 3880000
+      "body_revenue": 3480000,
+      "accessory_revenue": 500000,
+      "revenue": 3980000
     },
     {
       "date": "2026-02-27",
@@ -695,6 +809,8 @@
       "new_users": 726,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -707,6 +823,8 @@
       "new_users": 503,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -719,6 +837,8 @@
       "new_users": 423,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -731,7 +851,9 @@
       "new_users": 429,
       "orders": 1,
       "body_units": 1,
-      "revenue": 3880000
+      "body_revenue": 3480000,
+      "accessory_revenue": 500000,
+      "revenue": 3980000
     },
     {
       "date": "2026-03-03",
@@ -743,7 +865,9 @@
       "new_users": 446,
       "orders": 3,
       "body_units": 2,
-      "revenue": 7760000
+      "body_revenue": 7460000,
+      "accessory_revenue": 500000,
+      "revenue": 7960000
     },
     {
       "date": "2026-03-04",
@@ -755,6 +879,8 @@
       "new_users": 590,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -767,6 +893,8 @@
       "new_users": 672,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -779,6 +907,8 @@
       "new_users": 500,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -791,6 +921,8 @@
       "new_users": 922,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -803,7 +935,9 @@
       "new_users": 714,
       "orders": 1,
       "body_units": 1,
-      "revenue": 3880000
+      "body_revenue": 3980000,
+      "accessory_revenue": 0,
+      "revenue": 3980000
     },
     {
       "date": "2026-03-09",
@@ -815,6 +949,8 @@
       "new_users": 421,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -827,6 +963,8 @@
       "new_users": 549,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -839,6 +977,8 @@
       "new_users": 645,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -851,7 +991,9 @@
       "new_users": 772,
       "orders": 2,
       "body_units": 2,
-      "revenue": 7710000
+      "body_revenue": 7960000,
+      "accessory_revenue": 0,
+      "revenue": 7960000
     },
     {
       "date": "2026-03-13",
@@ -863,6 +1005,8 @@
       "new_users": 865,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -875,6 +1019,8 @@
       "new_users": 1133,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -887,6 +1033,8 @@
       "new_users": 1320,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -899,7 +1047,9 @@
       "new_users": 1659,
       "orders": 1,
       "body_units": 1,
-      "revenue": 3980000
+      "body_revenue": 4080000,
+      "accessory_revenue": 0,
+      "revenue": 4080000
     },
     {
       "date": "2026-03-17",
@@ -911,6 +1061,8 @@
       "new_users": 863,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -923,6 +1075,8 @@
       "new_users": 1307,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -935,7 +1089,9 @@
       "new_users": 1485,
       "orders": 1,
       "body_units": 1,
-      "revenue": 3980000
+      "body_revenue": 4080000,
+      "accessory_revenue": 0,
+      "revenue": 4080000
     },
     {
       "date": "2026-03-20",
@@ -947,6 +1103,8 @@
       "new_users": 1391,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -959,6 +1117,8 @@
       "new_users": 1519,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -971,6 +1131,8 @@
       "new_users": 1618,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -983,6 +1145,8 @@
       "new_users": 1298,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -995,6 +1159,8 @@
       "new_users": 1297,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -1007,6 +1173,8 @@
       "new_users": 737,
       "orders": 2,
       "body_units": 1,
+      "body_revenue": 3580000,
+      "accessory_revenue": 500000,
       "revenue": 4080000
     },
     {
@@ -1019,6 +1187,8 @@
       "new_users": 209,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -1031,6 +1201,8 @@
       "new_users": 351,
       "orders": 1,
       "body_units": 1,
+      "body_revenue": 3480000,
+      "accessory_revenue": 0,
       "revenue": 3480000
     },
     {
@@ -1043,6 +1215,8 @@
       "new_users": 456,
       "orders": 1,
       "body_units": 1,
+      "body_revenue": 3230000,
+      "accessory_revenue": 0,
       "revenue": 3230000
     },
     {
@@ -1055,6 +1229,8 @@
       "new_users": 352,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -1067,6 +1243,8 @@
       "new_users": 220,
       "orders": 1,
       "body_units": 1,
+      "body_revenue": 3580000,
+      "accessory_revenue": 500000,
       "revenue": 4080000
     },
     {
@@ -1079,6 +1257,8 @@
       "new_users": 369,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -1091,6 +1271,8 @@
       "new_users": 261,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -1103,6 +1285,8 @@
       "new_users": 315,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -1115,6 +1299,8 @@
       "new_users": 359,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -1127,6 +1313,8 @@
       "new_users": 234,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     },
     {
@@ -1139,6 +1327,8 @@
       "new_users": 115,
       "orders": 0,
       "body_units": 0,
+      "body_revenue": 0,
+      "accessory_revenue": 0,
       "revenue": 0
     }
   ]
