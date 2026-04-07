@@ -4875,6 +4875,7 @@ fetch(`${SB_URL}/rest/v1/business_leads?select=*&order=created_at.desc`,{
 let dailyChartsLoaded = false;
 let dailyRawData = null;
 let campRawData = null;
+let actionsRawData = null;
 let dailySelectedPreset = '30';  // '7','14','30','all','custom'
 let dailyCustomStart = '';
 let dailyCustomEnd = '';
@@ -4888,11 +4889,13 @@ function loadDailyMetricsInto(container) {
   container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--t2);">로딩 중...</div>';
   Promise.all([
     fetch('daily_metrics.json').then(r => r.ok ? r.json() : Promise.reject('daily_metrics fetch failed')),
-    fetch('campaigns_daily.json').then(r => r.ok ? r.json() : Promise.reject('campaigns_daily fetch failed'))
-  ]).then(([dailyData, campData]) => {
+    fetch('campaigns_daily.json').then(r => r.ok ? r.json() : Promise.reject('campaigns_daily fetch failed')),
+    fetch('daily_actions.json').then(r => r.ok ? r.json() : Promise.reject('daily_actions fetch failed'))
+  ]).then(([dailyData, campData, actionsData]) => {
     dailyChartsLoaded = true;
     dailyRawData = dailyData;
     campRawData = campData;
+    actionsRawData = actionsData;
     filterAndRender();
   }).catch(err => {
     container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--r);">데이터를 불러올 수 없습니다. (${err})</div>`;
@@ -4985,6 +4988,7 @@ function filterAndRender() {
 
   // 2) KPI + Charts
   requestAnimationFrame(() => {
+    renderActionTimeline(filteredDates, actionsRawData, container);
     renderDailyView({ daily: filteredRows }, container);
     renderCampaignGantt(filteredDates, campRawData, container);
     requestAnimationFrame(() => {
@@ -4994,6 +4998,37 @@ function filterAndRender() {
       });
     });
   });
+}
+
+function renderActionTimeline(filteredDates, actionsData, container) {
+  if (!actionsData || !filteredDates || !filteredDates.length) return;
+  const byDate = actionsData.by_date || {};
+  const inRange = (actionsData.actions || []).filter(a => a.date >= filteredDates[0] && a.date <= filteredDates[filteredDates.length-1]);
+  if (!inRange.length) return;
+
+  let strip = '<div class="card" style="margin-bottom:10px;"><div class="card-title">콘텐츠 마케팅 액션</div>';
+  strip += '<div style="display:grid;grid-template-columns:repeat(' + filteredDates.length + ',minmax(22px,1fr));gap:4px;margin-bottom:10px;align-items:end;">';
+  filteredDates.forEach(d => {
+    const day = byDate[d] || {instagram:0,youtube:0,blog:0};
+    const total = (day.instagram||0) + (day.youtube||0) + (day.blog||0);
+    const bg = total ? 'var(--s2)' : 'transparent';
+    const border = total ? '1px solid var(--b)' : '1px dashed rgba(255,255,255,.04)';
+    const dots = `${day.instagram?'<span style="color:var(--ac)">●</span>':''}${day.youtube?'<span style="color:var(--r)">●</span>':''}${day.blog?'<span style="color:var(--g)">●</span>':''}`;
+    strip += `<div title="${d} | IG ${day.instagram||0} / YT ${day.youtube||0} / Blog ${day.blog||0}" style="background:${bg};border:${border};border-radius:6px;min-height:44px;padding:4px 2px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;font-size:.62rem;">${total?`<div style="font-weight:700;color:var(--t);line-height:1;">${total}</div><div style="font-size:.55rem;line-height:1.1;">${dots||'•'}</div>`:`<div style="color:var(--t2)">·</div>`}<div style="margin-top:3px;color:var(--t2);">${d.slice(8)}</div></div>`;
+  });
+  strip += '</div>';
+
+  const recent = [...inRange].sort((a,b) => (a.date < b.date ? 1 : -1)).slice(0, 18);
+  strip += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;font-size:.7rem;color:var(--t2);"><span><span style="color:var(--ac)">●</span> 인스타</span><span><span style="color:var(--r)">●</span> 유튜브</span><span><span style="color:var(--g)">●</span> 블로그</span></div>';
+  strip += '<div style="display:grid;gap:6px;">';
+  recent.forEach(a => {
+    const color = a.channel === 'instagram' ? 'var(--ac)' : (a.channel === 'youtube' ? 'var(--r)' : 'var(--g)');
+    const label = a.channel === 'instagram' ? 'IG' : (a.channel === 'youtube' ? 'YT' : 'BLOG');
+    const link = a.url ? `<a href="${a.url}" target="_blank" style="color:var(--t2);text-decoration:none;">열기 ↗</a>` : '';
+    strip += `<div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-top:1px solid rgba(255,255,255,.05);"><div style="min-width:72px;color:var(--t2);font-size:.68rem;">${a.date.slice(5)}</div><div style="min-width:46px;color:${color};font-weight:700;font-size:.68rem;">${label}</div><div style="flex:1;font-size:.78rem;line-height:1.35;">${a.title || '(제목 없음)'}</div><div style="font-size:.68rem;">${link}</div></div>`;
+  });
+  strip += '</div></div>';
+  container.insertAdjacentHTML('beforeend', strip);
 }
 
 function renderDailyView(data, container) {
