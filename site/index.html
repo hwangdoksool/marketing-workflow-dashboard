@@ -5065,7 +5065,8 @@ function renderDailyView(data, container) {
   // Chart containers — 2 compact charts
   const chartsHtml = `
     <div class="card" style="margin-bottom:10px;"><div class="card-title">트래픽 + 전환 + 광고비</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-trafficConv"></canvas></div></div>
-    <div class="card" style="margin-bottom:10px;"><div class="card-title">효율: 이탈률 + 판매매출 + 광고비</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-effRevenue"></canvas></div></div>`;
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">효율: 이탈률 + 판매매출 + 광고비</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-effRevenue"></canvas></div></div>
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">콘텐츠 마케팅 액션</div><div style="position:relative;width:100%;height:160px;"><canvas id="dailyChart-actions"></canvas></div></div>`;
 
   const actionSummary = Object.values(actionsByDate).reduce((a,b)=>a+((b.instagram||0)+(b.youtube||0)+(b.blog||0)),0);
   const actionPanelHtml = `
@@ -5109,10 +5110,7 @@ function renderDailyView(data, container) {
         { label:'유저', data:rows.map(r=>r.users), borderColor:blColor, backgroundColor:blColor+'33', tension:.3, fill:false, pointRadius:2, yAxisID:'y', order:2 },
         { label:'광고비', data:spendData, borderColor:'#ff9f40', backgroundColor:'#ff9f4033', tension:.25, fill:false, pointRadius:2, borderDash:[5,3], yAxisID:'y2', order:2 },
         { label:'주문건수', type:'bar', data:rows.map(r=>r.orders||0), backgroundColor:gColor+'99', yAxisID:'y1', order:3 },
-        { label:'본체판매', type:'bar', data:rows.map(r=>r.body_units||0), backgroundColor:yColor+'99', yAxisID:'y1', order:4 },
-        { label:'IG 업로드', data:igActions, borderColor:'#9b59b6', backgroundColor:'#9b59b655', tension:0, fill:false, pointRadius:3, showLine:false, yAxisID:'y1', order:5 },
-        { label:'YT 업로드', data:ytActions, borderColor:'#e74c3c', backgroundColor:'#e74c3c55', tension:0, fill:false, pointRadius:3, showLine:false, yAxisID:'y1', order:5 },
-        { label:'블로그 업로드', data:blogActions, borderColor:'#2ecc71', backgroundColor:'#2ecc7155', tension:0, fill:false, pointRadius:3, showLine:false, yAxisID:'y1', order:5 }
+        { label:'본체판매', type:'bar', data:rows.map(r=>r.body_units||0), backgroundColor:yColor+'99', yAxisID:'y1', order:4 }
       ]
     },
     options:{
@@ -5152,10 +5150,7 @@ function renderDailyView(data, container) {
       datasets:[
         { label:'이탈률(%)', data:rows.map(r=>((r.bounce_rate||0)*100).toFixed(1)), borderColor:rColor, tension:.3, fill:false, pointRadius:2, yAxisID:'y', order:1 },
         { label:'판매매출(만원)', type:'bar', data:rows.map(r=>Math.round((r.revenue||0)/10000)), backgroundColor:acColor+'99', yAxisID:'y1', order:2 },
-        { label:'광고비', data:spendData.map(v=>Math.round(v/10000)), borderColor:'#ff9f40', backgroundColor:'#ff9f4033', tension:.25, fill:false, pointRadius:2, borderDash:[5,3], yAxisID:'y1', order:1 },
-        { label:'IG 업로드', data:igActions, borderColor:'#9b59b6', backgroundColor:'#9b59b655', tension:0, fill:false, pointRadius:3, showLine:false, yAxisID:'y2', order:5 },
-        { label:'YT 업로드', data:ytActions, borderColor:'#e74c3c', backgroundColor:'#e74c3c55', tension:0, fill:false, pointRadius:3, showLine:false, yAxisID:'y2', order:5 },
-        { label:'블로그 업로드', data:blogActions, borderColor:'#2ecc71', backgroundColor:'#2ecc7155', tension:0, fill:false, pointRadius:3, showLine:false, yAxisID:'y2', order:5 }
+        { label:'광고비', data:spendData.map(v=>Math.round(v/10000)), borderColor:'#ff9f40', backgroundColor:'#ff9f4033', tension:.25, fill:false, pointRadius:2, borderDash:[5,3], yAxisID:'y1', order:1 }
       ]
     },
     options:{
@@ -5181,9 +5176,28 @@ function renderDailyView(data, container) {
       scales:{
         x: commonOpts.scales.x,
         y:{ type:'linear', position:'left', ticks:{color:rColor,font:{size:9},callback:v=>v+'%'}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'이탈률(%)',color:rColor,font:{size:10}} },
-        y1:{ type:'linear', position:'right', ticks:{color:acColor,font:{size:9},callback:v=>v.toLocaleString()+'만'}, grid:{drawOnChartArea:false}, title:{display:true,text:'판매매출/광고비(만원)',color:acColor,font:{size:10}} },
-        y2:{ type:'linear', position:'right', offset:true, ticks:{color:'#9b59b6',font:{size:9}}, grid:{drawOnChartArea:false}, title:{display:true,text:'업로드 수',color:'#9b59b6',font:{size:10}} }
+        y1:{ type:'linear', position:'right', ticks:{color:acColor,font:{size:9},callback:v=>v.toLocaleString()+'만'}, grid:{drawOnChartArea:false}, title:{display:true,text:'판매매출(만원)',color:acColor,font:{size:10}} },
+        y2:{ type:'linear', position:'right', offset:true, ticks:{color:'#ff9f40',font:{size:9},callback:v=>v.toLocaleString()+'만'}, grid:{drawOnChartArea:false}, title:{display:true,text:'광고비(만원)',color:'#ff9f40',font:{size:10}} }
       }
+    }
+  });
+
+  new Chart(document.getElementById('dailyChart-actions'), {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        { label:'IG 업로드', data:igActions, backgroundColor:'#9b59b6aa', stack:'actions' },
+        { label:'YT 업로드', data:ytActions, backgroundColor:'#e74c3caa', stack:'actions' },
+        { label:'블로그 업로드', data:blogActions, backgroundColor:'#2ecc71aa', stack:'actions' }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{ mode:'index', intersect:false },
+      plugins:{ legend:{ labels:{ color:'#8b90a0', font:{size:10}, usePointStyle:true, pointStyle:'circle', padding:12 } },
+        tooltip:{ callbacks:{ afterBody: function(items){ const idx=items[0].dataIndex; const r=rows[idx]; const dayActions=(actionsByDate[r.date]?.items||[]); return dayActions.map(a=>`[${a.channel}] ${a.title}`); } } } },
+      scales:{ x:{ ticks:{color:'#8b90a0',font:{size:9},maxRotation:0}, grid:{color:'rgba(255,255,255,.05)'}, stacked:true }, y:{ ticks:{color:'#8b90a0',font:{size:9},precision:0}, grid:{color:'rgba(255,255,255,.05)'}, stacked:true, title:{display:true,text:'업로드 수',color:'#8b90a0',font:{size:10}} } }
     }
   });
 
