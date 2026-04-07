@@ -247,6 +247,33 @@ select.form-input{cursor:pointer;}
 
 /* ── Status dropdown ── */
 .status-select{padding:4px 8px;border-radius:6px;font-size:.75rem;font-weight:600;border:1px solid var(--b);background:var(--s2);color:var(--t);cursor:pointer;font-family:inherit;}
+
+/* ── Gantt chart ── */
+.gantt-wrap{overflow-x:auto;margin-top:16px;}
+.gantt-header{display:flex;position:sticky;top:0;z-index:2;background:var(--s);border-bottom:2px solid var(--b);}
+.gantt-row{display:flex;border-bottom:1px solid var(--b);align-items:stretch;cursor:pointer;transition:background .1s;}
+.gantt-row:hover{background:var(--s2);}
+.gantt-row.expanded{background:var(--s2);}
+.gantt-label{min-width:180px;max-width:180px;padding:8px 10px;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:6px;border-right:1px solid var(--b);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gantt-label .arrow{font-size:.6rem;color:var(--t2);transition:transform .15s;}
+.gantt-row.expanded .gantt-label .arrow{transform:rotate(90deg);}
+.gantt-track{display:flex;flex:1;position:relative;}
+.gantt-cell{flex:1;min-width:28px;border-right:1px solid var(--b);position:relative;}
+.gantt-cell.weekend{background:rgba(255,255,255,.02);}
+.gantt-bar{position:absolute;top:25%;height:50%;border-radius:4px;z-index:1;min-width:4px;transition:opacity .15s;}
+.gantt-bar:hover{opacity:.85;}
+.gantt-tooltip{position:fixed;z-index:999;background:var(--s);border:1px solid var(--b);border-radius:8px;padding:10px 14px;font-size:.75rem;line-height:1.6;box-shadow:0 4px 16px rgba(0,0,0,.3);pointer-events:none;max-width:280px;}
+.gantt-sub-rows{display:none;}
+.gantt-row.expanded+.gantt-sub-rows{display:block;}
+.gantt-sub-rows .gantt-row{background:var(--s);cursor:default;}
+.gantt-sub-rows .gantt-row:hover{background:var(--s2);}
+.gantt-sub-rows .gantt-label{font-weight:400;font-size:.73rem;color:var(--t2);padding-left:24px;}
+.gantt-sparkline{position:absolute;bottom:2px;left:0;width:100%;height:16px;pointer-events:none;}
+.gantt-summary{font-size:.68rem;color:var(--t2);padding:4px 10px 4px 24px;display:flex;gap:12px;flex-wrap:wrap;}
+.gantt-summary span{white-space:nowrap;}
+.gantt-header-label{min-width:180px;max-width:180px;padding:6px 10px;font-size:.7rem;font-weight:700;color:var(--t2);border-right:1px solid var(--b);}
+.gantt-header-dates{display:flex;flex:1;}
+.gantt-header-dates .gantt-cell{font-size:.6rem;color:var(--t2);text-align:center;padding:4px 0;font-weight:500;}
 </style>
 </head>
 <body>
@@ -269,6 +296,7 @@ select.form-input{cursor:pointer;}
     <button class="main-tab" data-tab="settings">⚙️ 더보기</button>
     <button class="main-tab" data-tab="feel">🏋️ 체험신청</button>
     <button class="main-tab" data-tab="leads">🤝 B2B 리드 <span id="leads-badge" class="badge" style="display:none;margin-left:4px;background:var(--g);color:#fff;">0</span></button>
+    <button class="main-tab" data-tab="daily">📅 일별</button>
   </nav>
 
   <!-- ═══════════════════════════════════════════ -->
@@ -1264,6 +1292,11 @@ select.form-input{cursor:pointer;}
   <div id="leads-view"></div>
 </div>
 
+<!-- ═══════════════════════════════════════════ -->
+<!-- TAB: 일별 추이 (Daily) -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tab-content" id="tab-daily" style="display:none;"></div>
+
 <!-- Shared modal for Feel/Leads detail views -->
 <div class="modal-bg" id="feelLeadsModal">
   <div class="modal" id="feelLeadsModalContent"></div>
@@ -1402,7 +1435,7 @@ function toggleTheme(){
    Tab Navigation
    ═══════════════════════════════════════════════════ */
 // 전역 탭 라우팅
-const mainTabIds = ['tab-briefs','tab-meeting','tab-analysis','tab-creative','tab-settings','tab-feel','tab-leads'];
+const mainTabIds = ['tab-briefs','tab-meeting','tab-analysis','tab-creative','tab-settings','tab-feel','tab-leads','tab-daily'];
 
 function activateMainTab(tabName, skipHash) {
   document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
@@ -1415,16 +1448,17 @@ function activateMainTab(tabName, skipHash) {
     const sub = tabName === 'analysis' ? '/weekly' : tabName === 'creative' ? '/schema' : '';
     window.history.replaceState(null, '', '#' + tabName + sub);
   }
-  // Auto-load data for feel/leads tabs
+  // Auto-load data for feel/leads/daily tabs
   if (tabName === 'feel') loadBookings();
   if (tabName === 'leads') loadLeads();
+  if (tabName === 'daily') loadDailyMetrics();
 }
 
 function routeFromHash() {
   const hash = (window.location.hash || '').replace('#','');
   if (!hash) { activateMainTab('briefs', true); return; }
   const [main, sub] = hash.split('/');
-  const validMains = ['briefs','meeting','analysis','creative','settings','feel','leads'];
+  const validMains = ['briefs','meeting','analysis','creative','settings','feel','leads','daily'];
   if (validMains.includes(main)) {
     activateMainTab(main, true);
     if (main === 'analysis' && sub) setTimeout(() => switchAnalysisSub(sub), 50);
@@ -1432,6 +1466,7 @@ function routeFromHash() {
     if (main === 'meeting') setTimeout(() => renderMeetingTab(), 50);
     if (main === 'feel') setTimeout(() => loadBookings(), 50);
     if (main === 'leads') setTimeout(() => loadLeads(), 50);
+    if (main === 'daily') setTimeout(() => loadDailyMetrics(), 50);
   } else {
     activateMainTab('briefs', true);
   }
@@ -3690,24 +3725,8 @@ function getDefaultMeetings() {
 }
 
 function seedDefaultAgendas() {
-  const agendas = getAgendas();
-  const defaults = [
-    { meetingId: 'mtg-w14', title: '🔴 캠페인 운영 개선', category: 'decision', detail: 'ASC 종료(3/25) 후 온라인 본체 구매 9일간 0건. 현 캠페인은 관심·문의↑ 구매 전환 실패.\n\n논의: 현재 캠페인 구조 문제점, ASC 학습 데이터 활용, 2555남성 구매 허들, 소재별 예산 재배분', reports: [{title:'캠페인 타임라인', url:'https://wspn-images.wespion.workers.dev/reports/meta-campaign-analysis-20260405.html'},{title:'메타광고 심층 리뷰', url:'https://wspn-images.wespion.workers.dev/reports/meta-ads-review-2026.html'}], briefId: '', createdAt: '2026-04-05T12:57:00Z' },
-    { meetingId: 'mtg-w14', title: '워크플로우 도구 소개 + 첫 실험 설계', category: 'discussion', detail: '대시보드 라이브 데모 → 시그널 등록 → 설계서 작성 실습', briefId: '', createdAt: '2026-04-04T05:31:00Z' },
-    { meetingId: 'mtg-w14', title: '역할 분담 + 주간 루틴 합의', category: 'decision', detail: '마케터/리더/AI 역할, 주간 리뷰 요일/시간 확정', briefId: '', createdAt: '2026-04-04T05:32:00Z' },
-  ];
-  // 이미 안건이 있으면 새 항목만 merge
-  if (agendas.some(a => a.meetingId === 'mtg-w14')) {
-    let changed = false;
-    for (const d of defaults) {
-      if (!agendas.some(a => a.title === d.title && a.meetingId === d.meetingId)) {
-        agendas.push(d); changed = true;
-      }
-    }
-    if (changed) saveAgendas(agendas);
-    return;
-  }
-  saveAgendas([...agendas, ...defaults]);
+  // KV is source of truth — no more hardcoded defaults
+  // syncMeetingsFromKV() handles loading from KV on startup
 }
 
 let currentMeetingId = null;
@@ -4838,6 +4857,273 @@ fetch(`${SB_URL}/rest/v1/business_leads?select=*&order=created_at.desc`,{
   updateLeadsBadge();
   if(window.location.hash==='#leads') switchMainTab('leads');
 }).catch(()=>{});
+
+/* ═══════════════════════════════════════════════════
+   Daily Metrics Tab
+   ═══════════════════════════════════════════════════ */
+let dailyChartsLoaded = false;
+
+function loadDailyMetrics() {
+  if (dailyChartsLoaded) return;
+  const container = document.getElementById('tab-daily');
+  container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--t2);">로딩 중...</div>';
+  Promise.all([
+    fetch('daily_metrics.json').then(r => r.ok ? r.json() : Promise.reject('daily_metrics fetch failed')),
+    fetch('campaigns_daily.json').then(r => r.ok ? r.json() : Promise.reject('campaigns_daily fetch failed'))
+  ]).then(([dailyData, campData]) => {
+    dailyChartsLoaded = true;
+    container.innerHTML = '';
+    renderDailyView(dailyData, container);
+    const dates = (dailyData.daily || []).map(d => d.date);
+    renderCampaignGantt(dates, campData, container);
+  }).catch(err => {
+    container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--r);">데이터를 불러올 수 없습니다. (${err})</div>`;
+  });
+}
+
+function renderDailyView(data, container) {
+  const rows = data.daily || [];
+  if (!rows.length) { container.innerHTML = '<div style="padding:20px;color:var(--t2);">일별 데이터 없음</div>'; return; }
+
+  const totals = rows.reduce((acc, r) => {
+    acc.sessions += r.sessions || 0;
+    acc.users += r.users || 0;
+    acc.orders += r.orders || 0;
+    acc.revenue += r.revenue || 0;
+    acc.bounceSum += (r.bounce_rate || 0);
+    return acc;
+  }, { sessions:0, users:0, orders:0, revenue:0, bounceSum:0 });
+  const avgBounce = (totals.bounceSum / rows.length * 100).toFixed(1);
+  const revManwon = (totals.revenue / 10000).toLocaleString();
+
+  // KPI cards
+  const kpiHtml = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px;">
+      <div class="kpi-card"><div class="label">총 세션</div><div class="value">${totals.sessions.toLocaleString()}</div></div>
+      <div class="kpi-card"><div class="label">총 유저</div><div class="value">${totals.users.toLocaleString()}</div></div>
+      <div class="kpi-card"><div class="label">총 주문</div><div class="value">${totals.orders.toLocaleString()}</div></div>
+      <div class="kpi-card"><div class="label">총 매출</div><div class="value">${revManwon}만원</div></div>
+      <div class="kpi-card"><div class="label">평균 이탈률</div><div class="value">${avgBounce}%</div></div>
+    </div>`;
+
+  // Chart containers
+  const chartsHtml = `
+    <div class="card" style="margin-bottom:12px;"><div class="card-title">세션 & 유저</div><canvas id="dailyChart-sessionsUsers"></canvas></div>
+    <div class="card" style="margin-bottom:12px;"><div class="card-title">전환: 주문건수 & 본체판매대수</div><canvas id="dailyChart-conversion"></canvas></div>
+    <div class="card" style="margin-bottom:12px;"><div class="card-title">매출 (만원)</div><canvas id="dailyChart-revenue"></canvas></div>
+    <div class="card" style="margin-bottom:12px;"><div class="card-title">이탈률 & 세션시간</div><canvas id="dailyChart-bounceTime"></canvas></div>`;
+
+  container.insertAdjacentHTML('beforeend', kpiHtml + chartsHtml);
+
+  const labels = rows.map(r => r.date.slice(5));
+  const acColor = getComputedStyle(document.documentElement).getPropertyValue('--ac').trim();
+  const blColor = getComputedStyle(document.documentElement).getPropertyValue('--bl').trim();
+  const gColor = getComputedStyle(document.documentElement).getPropertyValue('--g').trim();
+  const yColor = getComputedStyle(document.documentElement).getPropertyValue('--y').trim();
+  const rColor = getComputedStyle(document.documentElement).getPropertyValue('--r').trim();
+
+  const commonOpts = { responsive:true, plugins:{ legend:{ labels:{ color:'#8b90a0', font:{size:11} } } }, scales:{ x:{ ticks:{color:'#8b90a0',font:{size:10}}, grid:{color:'rgba(255,255,255,.05)'} } } };
+
+  // 1. Sessions & Users
+  new Chart(document.getElementById('dailyChart-sessionsUsers'), {
+    type:'line',
+    data:{
+      labels,
+      datasets:[
+        { label:'세션', data:rows.map(r=>r.sessions), borderColor:acColor, backgroundColor:acColor+'33', tension:.3, fill:false, pointRadius:2 },
+        { label:'유저', data:rows.map(r=>r.users), borderColor:blColor, backgroundColor:blColor+'33', tension:.3, fill:false, pointRadius:2 }
+      ]
+    },
+    options:{ ...commonOpts, scales:{ ...commonOpts.scales, y:{ ticks:{color:'#8b90a0'}, grid:{color:'rgba(255,255,255,.05)'} } } }
+  });
+
+  // 2. Conversion
+  new Chart(document.getElementById('dailyChart-conversion'), {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        { label:'주문건수', data:rows.map(r=>r.orders||0), backgroundColor:gColor+'cc' },
+        { label:'본체판매대수', data:rows.map(r=>r.body_units||0), backgroundColor:yColor+'cc' }
+      ]
+    },
+    options:{ ...commonOpts, scales:{ ...commonOpts.scales, y:{ ticks:{color:'#8b90a0'}, grid:{color:'rgba(255,255,255,.05)'} } } }
+  });
+
+  // 3. Revenue
+  new Chart(document.getElementById('dailyChart-revenue'), {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        { label:'매출(만원)', data:rows.map(r=>Math.round((r.revenue||0)/10000)), backgroundColor:acColor+'cc' }
+      ]
+    },
+    options:{ ...commonOpts, scales:{ ...commonOpts.scales, y:{ ticks:{color:'#8b90a0', callback:v=>v.toLocaleString()+'만'}, grid:{color:'rgba(255,255,255,.05)'} } } }
+  });
+
+  // 4. Bounce rate & session duration (dual Y)
+  new Chart(document.getElementById('dailyChart-bounceTime'), {
+    type:'line',
+    data:{
+      labels,
+      datasets:[
+        { label:'이탈률(%)', data:rows.map(r=>((r.bounce_rate||0)*100).toFixed(1)), borderColor:rColor, tension:.3, fill:false, pointRadius:2, yAxisID:'y' },
+        { label:'세션시간(초)', data:rows.map(r=>r.avg_session_duration||0), borderColor:blColor, tension:.3, fill:false, pointRadius:2, yAxisID:'y1' }
+      ]
+    },
+    options:{
+      ...commonOpts,
+      scales:{
+        x: commonOpts.scales.x,
+        y:{ type:'linear', position:'left', ticks:{color:rColor, callback:v=>v+'%'}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true, text:'이탈률(%)', color:rColor} },
+        y1:{ type:'linear', position:'right', ticks:{color:blColor, callback:v=>v+'초'}, grid:{drawOnChartArea:false}, title:{display:true, text:'세션시간(초)', color:blColor} }
+      }
+    }
+  });
+}
+
+function renderCampaignGantt(dailyDates, campData, container) {
+  const campaigns = campData.campaigns || [];
+  if (!campaigns.length || !dailyDates.length) return;
+
+  const dates = [...dailyDates].sort();
+  const dateSet = new Set(dates);
+  const dateIdx = {};
+  dates.forEach((d,i) => dateIdx[d] = i);
+
+  // Title
+  container.insertAdjacentHTML('beforeend', '<div class="card-title" style="margin:20px 0 8px;">캠페인 가동 현황</div>');
+
+  // Build gantt
+  const wrap = document.createElement('div');
+  wrap.className = 'gantt-wrap card';
+  wrap.style.padding = '0';
+
+  // Header
+  let headerHtml = '<div class="gantt-header"><div class="gantt-header-label">캠페인</div><div class="gantt-header-dates">';
+  dates.forEach(d => {
+    const day = d.slice(8);
+    const wd = new Date(d).getDay();
+    const cls = (wd === 0 || wd === 6) ? ' weekend' : '';
+    headerHtml += `<div class="gantt-cell${cls}" title="${d}">${day}</div>`;
+  });
+  headerHtml += '</div></div>';
+  wrap.innerHTML = headerHtml;
+
+  // Tooltip element
+  const tooltip = document.createElement('div');
+  tooltip.className = 'gantt-tooltip';
+  tooltip.style.display = 'none';
+  document.body.appendChild(tooltip);
+
+  campaigns.forEach((camp, ci) => {
+    const campName = (camp.name || '').length > 20 ? camp.name.slice(0,20) + '…' : (camp.name || 'N/A');
+
+    // Campaign row
+    const row = document.createElement('div');
+    row.className = 'gantt-row';
+    row.dataset.idx = ci;
+
+    let trackHtml = '';
+    dates.forEach((d, di) => {
+      const wd = new Date(d).getDay();
+      const cls = (wd === 0 || wd === 6) ? ' weekend' : '';
+      trackHtml += `<div class="gantt-cell${cls}" data-di="${di}"></div>`;
+    });
+
+    const startI = dateIdx[camp.start_date];
+    const endI = dateIdx[camp.end_date];
+    const barStart = startI !== undefined ? startI : 0;
+    const barEnd = endI !== undefined ? endI : dates.length - 1;
+    const totalCols = dates.length;
+
+    // Compute totals for tooltip
+    const daily = camp.daily || {};
+    let totalSpend=0, totalClicks=0, totalImpressions=0;
+    Object.values(daily).forEach(v => { totalSpend += v.spend||0; totalClicks += v.clicks||0; totalImpressions += v.impressions||0; });
+
+    row.innerHTML = `<div class="gantt-label"><span class="arrow">▶</span>${campName}</div><div class="gantt-track" style="position:relative;">${trackHtml}<div class="gantt-bar" style="left:${(barStart/totalCols*100).toFixed(2)}%;width:${((barEnd-barStart+1)/totalCols*100).toFixed(2)}%;background:var(--ac);"></div></div>`;
+
+    // Hover tooltip
+    row.addEventListener('mouseenter', e => {
+      tooltip.innerHTML = `<strong>${camp.name||'N/A'}</strong><br>Spend: ${totalSpend.toLocaleString(undefined,{maximumFractionDigits:0})}원<br>Clicks: ${totalClicks.toLocaleString()}<br>Impressions: ${totalImpressions.toLocaleString()}`;
+      tooltip.style.display = 'block';
+    });
+    row.addEventListener('mousemove', e => {
+      tooltip.style.top = (e.clientY + 12) + 'px';
+      tooltip.style.left = (e.clientX + 12) + 'px';
+    });
+    row.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+
+    // Click to expand
+    row.addEventListener('click', () => {
+      row.classList.toggle('expanded');
+    });
+
+    wrap.appendChild(row);
+
+    // Sub-rows for ads
+    const adsObj = camp.ads || {};
+    const adKeys = Object.keys(adsObj);
+    if (adKeys.length) {
+      const subWrap = document.createElement('div');
+      subWrap.className = 'gantt-sub-rows';
+
+      adKeys.forEach(adKey => {
+        const ad = adsObj[adKey];
+        const adName = (ad.name || adKey).length > 18 ? (ad.name || adKey).slice(0,18) + '…' : (ad.name || adKey);
+
+        const adRow = document.createElement('div');
+        adRow.className = 'gantt-row';
+
+        let adTrackHtml = '';
+        dates.forEach((d, di) => {
+          const wd = new Date(d).getDay();
+          const cls = (wd === 0 || wd === 6) ? ' weekend' : '';
+          adTrackHtml += `<div class="gantt-cell${cls}"></div>`;
+        });
+
+        const adStartI = dateIdx[ad.start_date];
+        const adEndI = dateIdx[ad.end_date];
+        const adBarStart = adStartI !== undefined ? adStartI : 0;
+        const adBarEnd = adEndI !== undefined ? adEndI : dates.length - 1;
+
+        // Ad totals
+        const adDaily = ad.daily || {};
+        let adSpend=0, adClicks=0, adImps=0;
+        const spendArr = [];
+        dates.forEach(d => {
+          const v = adDaily[d];
+          spendArr.push(v ? (v.spend||0) : 0);
+          if (v) { adSpend += v.spend||0; adClicks += v.clicks||0; adImps += v.impressions||0; }
+        });
+        const adCtr = adImps ? ((adClicks/adImps)*100).toFixed(2) : '0';
+        const adCpc = adClicks ? (adSpend/adClicks).toFixed(0) : '0';
+
+        // Sparkline SVG
+        const maxSpend = Math.max(...spendArr, 1);
+        const svgW = dates.length * 4;
+        const svgH = 16;
+        let polyPoints = spendArr.map((s,i) => `${i*(svgW/(spendArr.length-1||1))},${svgH - (s/maxSpend)*svgH}`).join(' ');
+        const sparkSvg = `<svg class="gantt-sparkline" viewBox="0 0 ${svgW} ${svgH}" preserveAspectRatio="none"><polyline points="${polyPoints}" fill="none" stroke="var(--bl)" stroke-width="1" opacity=".7"/></svg>`;
+
+        adRow.innerHTML = `<div class="gantt-label">${adName}</div><div class="gantt-track" style="position:relative;">${adTrackHtml}<div class="gantt-bar" style="left:${(adBarStart/totalCols*100).toFixed(2)}%;width:${((adBarEnd-adBarStart+1)/totalCols*100).toFixed(2)}%;background:var(--bl);opacity:.7;"></div>${sparkSvg}</div>`;
+        subWrap.appendChild(adRow);
+
+        // Summary row
+        const sumRow = document.createElement('div');
+        sumRow.className = 'gantt-summary';
+        sumRow.innerHTML = `<span>Spend: ${adSpend.toLocaleString(undefined,{maximumFractionDigits:0})}원</span><span>Clicks: ${adClicks.toLocaleString()}</span><span>CTR: ${adCtr}%</span><span>CPC: ${adCpc}원</span>`;
+        subWrap.appendChild(sumRow);
+      });
+
+      wrap.appendChild(subWrap);
+    }
+  });
+
+  container.appendChild(wrap);
+}
 
 </script>
 </body>

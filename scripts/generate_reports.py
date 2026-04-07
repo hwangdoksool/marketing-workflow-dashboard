@@ -141,7 +141,8 @@ def extract_ga4_week(ga4_full, start, end):
     dates = set(date_range(start, end))
     daily = [r for r in ga4_full["daily"] if r["date"] in dates]
     channels = [r for r in ga4_full["channels"] if r["date"] in dates]
-    pages = [r for r in ga4_full.get("pages", []) if r.get("date") in dates]
+    pages_raw = [r for r in ga4_full.get("pages", []) if r.get("date") in dates]
+    funnel_raw = [r for r in ga4_full.get("funnel", []) if r.get("date") in dates]
     
     if not daily:
         return None
@@ -173,10 +174,45 @@ def extract_ga4_week(ga4_full, start, end):
             "bounce_rate": v["bounce_rate_weighted"] / max(v["sessions"], 1),
         })
     
+    # Aggregate pages (일별 → 주간 합산, top 20 by views)
+    page_agg = {}
+    for p in pages_raw:
+        pg = p.get("page", "")
+        if pg not in page_agg:
+            page_agg[pg] = {"views": 0, "users": 0, "avg_duration_weighted": 0}
+        page_agg[pg]["views"] += p.get("views", 0)
+        page_agg[pg]["users"] += p.get("users", 0)
+        page_agg[pg]["avg_duration_weighted"] += p.get("avg_duration", 0) * p.get("views", 0)
+    
+    top_pages = []
+    for pg, v in sorted(page_agg.items(), key=lambda x: -x[1]["views"])[:20]:
+        top_pages.append({
+            "page": pg,
+            "views": v["views"],
+            "users": v["users"],
+            "avg_duration": v["avg_duration_weighted"] / max(v["views"], 1),
+        })
+    
+    # Aggregate funnel events (일별 → 주간 합산)
+    funnel_agg = {}
+    for f in funnel_raw:
+        evt = f.get("event", "")
+        if evt not in funnel_agg:
+            funnel_agg[evt] = {"count": 0, "users": 0}
+        funnel_agg[evt]["count"] += f.get("count", 0)
+        funnel_agg[evt]["users"] += f.get("users", 0)
+    
+    funnel = {}
+    for evt in ["view_item", "begin_checkout", "add_payment_info", "purchase"]:
+        if evt in funnel_agg:
+            funnel[evt] = funnel_agg[evt]
+    
     return {
         "overview": overview,
         "traffic_sources": traffic_sources,
         "daily_sessions": daily,
+        "top_pages": top_pages,
+        "funnel": funnel,
     }
 
 
