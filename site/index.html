@@ -4909,8 +4909,8 @@ function renderDailyView(data, container) {
 
   // Chart containers — 2 compact charts
   const chartsHtml = `
-    <div class="card" style="margin-bottom:10px;"><div class="card-title">트래픽 + 전환</div><div style="position:relative;height:180px;max-height:180px;"><canvas id="dailyChart-trafficConv"></canvas></div></div>
-    <div class="card" style="margin-bottom:10px;"><div class="card-title">효율: 이탈률 + 매출</div><div style="position:relative;height:180px;max-height:180px;"><canvas id="dailyChart-effRevenue"></canvas></div></div>`;
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">트래픽 + 전환</div><canvas id="dailyChart-trafficConv"></canvas></div>
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">효율: 이탈률 + 매출</div><canvas id="dailyChart-effRevenue"></canvas></div>`;
 
   container.insertAdjacentHTML('beforeend', kpiHtml + chartsHtml);
 
@@ -4924,7 +4924,7 @@ function renderDailyView(data, container) {
   const sessionDurations = rows.map(r => r.avg_session_duration || 0);
 
   const commonOpts = {
-    responsive:true, maintainAspectRatio:false,
+    responsive:true, maintainAspectRatio:true, aspectRatio:4,
     interaction:{ mode:'index', intersect:false },
     plugins:{
       legend:{ labels:{ color:'#8b90a0', font:{size:10}, usePointStyle:true, pointStyle:'circle', padding:12 } }
