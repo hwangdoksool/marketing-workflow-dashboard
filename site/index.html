@@ -5110,7 +5110,12 @@ function renderDailyView(data, container) {
   });
 }
 
+const _adChartInstances = {};
+
 function renderCampaignGantt(dailyDates, campData, container) {
+  // Destroy any leftover ad chart instances
+  Object.keys(_adChartInstances).forEach(k => { try { _adChartInstances[k].destroy(); } catch(e){} delete _adChartInstances[k]; });
+
   const campaigns = campData.campaigns || [];
   if (!campaigns.length || !dailyDates.length) return;
 
@@ -5261,6 +5266,78 @@ function renderCampaignGantt(dailyDates, campData, container) {
           }
         });
         adRow.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+
+        // Click to toggle ad daily chart accordion
+        adRow.style.cursor = 'pointer';
+        const chartId = 'ad_' + adKey.replace(/[^a-zA-Z0-9]/g,'_') + '_chart';
+        adRow.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const existing = document.getElementById(chartId);
+          if (existing) {
+            if (_adChartInstances[chartId]) { try { _adChartInstances[chartId].destroy(); } catch(e){} delete _adChartInstances[chartId]; }
+            existing.remove();
+            return;
+          }
+          // Build chart container
+          const chartWrap = document.createElement('div');
+          chartWrap.id = chartId;
+          chartWrap.style.cssText = 'background:rgba(0,0,0,0.1);border-radius:6px;margin:0 0 4px 0;padding:8px 10px 6px;';
+
+          // Summary line
+          const sumLine = document.createElement('div');
+          sumLine.style.cssText = 'font-size:.7rem;color:var(--t2);margin-bottom:4px;display:flex;gap:12px;flex-wrap:wrap;';
+          sumLine.innerHTML = `<span>Spend: <b style="color:var(--ac)">${adSpend.toLocaleString(undefined,{maximumFractionDigits:0})}원</b></span><span>Clicks: <b style="color:var(--bl)">${adClicks.toLocaleString()}</b></span><span>CTR: <b style="color:var(--g)">${adCtr}%</b></span><span>CPC: <b>${adCpc}원</b></span>`;
+          chartWrap.appendChild(sumLine);
+
+          // Canvas wrapper
+          const canvasWrap = document.createElement('div');
+          canvasWrap.style.cssText = 'position:relative;height:120px;';
+          const canvas = document.createElement('canvas');
+          canvasWrap.appendChild(canvas);
+          chartWrap.appendChild(canvasWrap);
+
+          // Insert after adRow
+          adRow.parentNode.insertBefore(chartWrap, adRow.nextSibling);
+
+          // Prepare data arrays
+          const spendData = [], clicksData = [], ctrData = [];
+          dates.forEach(d => {
+            const v = adDaily[d];
+            spendData.push(v ? (v.spend||0) : 0);
+            clicksData.push(v ? (v.clicks||0) : 0);
+            ctrData.push(v && v.impressions ? +((v.clicks/v.impressions)*100).toFixed(2) : 0);
+          });
+
+          // Resolve CSS variables
+          const cs = getComputedStyle(document.documentElement);
+          const colAc = cs.getPropertyValue('--ac').trim() || '#6c5ce7';
+          const colBl = cs.getPropertyValue('--bl').trim() || '#74b9ff';
+          const colG  = cs.getPropertyValue('--g').trim()  || '#00b894';
+
+          const chart = new Chart(canvas, {
+            type: 'line',
+            data: {
+              labels: dates,
+              datasets: [
+                { label: 'Spend', data: spendData, borderColor: colAc, backgroundColor: colAc + '33', borderWidth: 1.5, pointRadius: 0, tension: 0.3, yAxisID: 'y', fill: false },
+                { label: 'Clicks', data: clicksData, borderColor: colBl, backgroundColor: colBl + '33', borderWidth: 1.5, pointRadius: 0, tension: 0.3, yAxisID: 'y', fill: false },
+                { label: 'CTR %', data: ctrData, borderColor: colG, backgroundColor: colG + '33', borderWidth: 1.5, pointRadius: 0, tension: 0.3, yAxisID: 'y1', fill: false }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: { mode: 'index', intersect: false },
+              plugins: { legend: { display: true, labels: { boxWidth: 8, font: { size: 9 }, color: cs.getPropertyValue('--t1').trim() || '#ccc' } } },
+              scales: {
+                x: { display: true, ticks: { font: { size: 8 }, color: cs.getPropertyValue('--t2').trim() || '#999', maxRotation: 0, autoSkip: true, maxTicksLimit: 10 }, grid: { display: false } },
+                y: { position: 'left', display: true, ticks: { font: { size: 8 }, color: cs.getPropertyValue('--t2').trim() || '#999', callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                y1: { position: 'right', display: true, ticks: { font: { size: 8 }, color: colG, callback: v => v + '%' }, grid: { display: false } }
+              }
+            }
+          });
+          _adChartInstances[chartId] = chart;
+        });
 
         subWrap.appendChild(adRow);
 
