@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-07T22:46:40.550281+09:00",
+  "updated_at": "2026-04-07T23:02:34.560834+09:00",
   "actions": [
     {
       "date": "2026-02-11",
@@ -37,6 +37,13 @@
       "url": ""
     },
     {
+      "date": "2026-02-24",
+      "channel": "youtube",
+      "kind": "content_publish",
+      "title": "내가 이제 헬스장 안가는 이유",
+      "url": "https://youtube.com/watch?v=xrMcWSNPg_c"
+    },
+    {
       "date": "2026-02-26",
       "channel": "blog",
       "kind": "content_publish",
@@ -49,6 +56,13 @@
       "kind": "content_publish",
       "title": "헬창이면 공감 많이 된다. 자기 전에 생각 많이 날거야.",
       "url": ""
+    },
+    {
+      "date": "2026-02-26",
+      "channel": "youtube",
+      "kind": "content_publish",
+      "title": "헬창이랑 여행갈 때 특",
+      "url": "https://youtube.com/watch?v=ddBQLkLzF0c"
     },
     {
       "date": "2026-03-02",
@@ -65,11 +79,25 @@
       "url": ""
     },
     {
+      "date": "2026-03-02",
+      "channel": "youtube",
+      "kind": "content_publish",
+      "title": "상위 1% 헬창이 제일 좋아한다는 미친 어깨 운동 3가지",
+      "url": "https://youtube.com/watch?v=yfTMuBwFHyw"
+    },
+    {
       "date": "2026-03-05",
       "channel": "instagram",
       "kind": "content_publish",
       "title": "테슬라급 모터가 웨이트 머신에 적용되면 벌어지는 일",
       "url": ""
+    },
+    {
+      "date": "2026-03-05",
+      "channel": "youtube",
+      "kind": "content_publish",
+      "title": "홈짐계의 테슬라",
+      "url": "https://youtube.com/watch?v=zjn0wUB3I0w"
     },
     {
       "date": "2026-03-06",
@@ -177,6 +205,13 @@
       "url": ""
     },
     {
+      "date": "2026-03-25",
+      "channel": "youtube",
+      "kind": "content_publish",
+      "title": "AI에게 내 운동 분석을 시켜봤다",
+      "url": "https://youtube.com/watch?v=gPCjmGtSo7w"
+    },
+    {
       "date": "2026-03-26",
       "channel": "instagram",
       "kind": "content_publish",
@@ -257,7 +292,7 @@
     },
     "2026-02-24": {
       "instagram": 1,
-      "youtube": 0,
+      "youtube": 1,
       "blog": 0,
       "items": [
         {
@@ -266,12 +301,19 @@
           "kind": "content_publish",
           "title": "내가 이제 헬스장 안가는 이유",
           "url": ""
+        },
+        {
+          "date": "2026-02-24",
+          "channel": "youtube",
+          "kind": "content_publish",
+          "title": "내가 이제 헬스장 안가는 이유",
+          "url": "https://youtube.com/watch?v=xrMcWSNPg_c"
         }
       ]
     },
     "2026-02-26": {
       "instagram": 1,
-      "youtube": 0,
+      "youtube": 1,
       "blog": 1,
       "items": [
         {
@@ -287,12 +329,19 @@
           "kind": "content_publish",
           "title": "헬창이면 공감 많이 된다. 자기 전에 생각 많이 날거야.",
           "url": ""
+        },
+        {
+          "date": "2026-02-26",
+          "channel": "youtube",
+          "kind": "content_publish",
+          "title": "헬창이랑 여행갈 때 특",
+          "url": "https://youtube.com/watch?v=ddBQLkLzF0c"
         }
       ]
     },
     "2026-03-02": {
       "instagram": 1,
-      "youtube": 0,
+      "youtube": 1,
       "blog": 1,
       "items": [
         {
@@ -308,12 +357,19 @@
           "kind": "content_publish",
           "title": "상위 1% 헬창이 제일 좋아한다는 미친 어깨 운동 3가지",
           "url": ""
+        },
+        {
+          "date": "2026-03-02",
+          "channel": "youtube",
+          "kind": "content_publish",
+          "title": "상위 1% 헬창이 제일 좋아한다는 미친 어깨 운동 3가지",
+          "url": "https://youtube.com/watch?v=yfTMuBwFHyw"
         }
       ]
     },
     "2026-03-05": {
       "instagram": 1,
-      "youtube": 0,
+      "youtube": 1,
       "blog": 0,
       "items": [
         {
@@ -322,6 +378,13 @@
           "kind": "content_publish",
           "title": "테슬라급 모터가 웨이트 머신에 적용되면 벌어지는 일",
           "url": ""
+        },
+        {
+          "date": "2026-03-05",
+          "channel": "youtube",
+          "kind": "content_publish",
+          "title": "홈짐계의 테슬라",
+          "url": "https://youtube.com/watch?v=zjn0wUB3I0w"
         }
       ]
     },
@@ -502,7 +565,7 @@
     },
     "2026-03-25": {
       "instagram": 1,
-      "youtube": 0,
+      "youtube": 1,
       "blog": 0,
       "items": [
         {
@@ -511,6 +574,13 @@
           "kind": "content_publish",
           "title": "룸핏만의 초정밀 센서로 측정한 정확한 VBT 분석. 내일부터 시작되는 스포엑스에서 무료로 체험해보세요 📊🏋",
           "url": ""
+        },
+        {
+          "date": "2026-03-25",
+          "channel": "youtube",
+          "kind": "content_publish",
+          "title": "AI에게 내 운동 분석을 시켜봤다",
+          "url": "https://youtube.com/watch?v=gPCjmGtSo7w"
         }
       ]
     },
