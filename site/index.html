@@ -4989,7 +4989,11 @@ function filterAndRender() {
   // 2) KPI + Charts
   requestAnimationFrame(() => {
     renderActionTimeline(filteredDates, actionsRawData, container);
-    renderDailyView({ daily: filteredRows }, container);
+    const spendByDate = {};
+    (campRawData?.campaigns || []).forEach(c => Object.entries(c.daily || {}).forEach(([d,v]) => { if (d >= startDate && d <= endDate) spendByDate[d] = (spendByDate[d] || 0) + (v.spend || 0); }));
+    const actionsByDate = {};
+    Object.entries(actionsRawData?.by_date || {}).forEach(([d,v]) => { if (d >= startDate && d <= endDate) actionsByDate[d] = v; });
+    renderDailyView({ daily: filteredRows, spendByDate, actionsByDate }, container);
     renderCampaignGantt(filteredDates, campRawData, container);
     requestAnimationFrame(() => {
       container.querySelectorAll('canvas').forEach(c => {
@@ -5033,6 +5037,8 @@ function renderActionTimeline(filteredDates, actionsData, container) {
 
 function renderDailyView(data, container) {
   const rows = data.daily || [];
+  const spendByDate = data.spendByDate || {};
+  const actionsByDate = data.actionsByDate || {};
   if (!rows.length) { container.innerHTML = '<div style="padding:20px;color:var(--t2);">일별 데이터 없음</div>'; return; }
 
   const totals = rows.reduce((acc, r) => {
@@ -5058,10 +5064,16 @@ function renderDailyView(data, container) {
 
   // Chart containers — 2 compact charts
   const chartsHtml = `
-    <div class="card" style="margin-bottom:10px;"><div class="card-title">트래픽 + 전환</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-trafficConv"></canvas></div></div>
-    <div class="card" style="margin-bottom:10px;"><div class="card-title">효율: 이탈률 + 매출</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-effRevenue"></canvas></div></div>`;
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">트래픽 + 전환 + 광고비</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-trafficConv"></canvas></div></div>
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">효율: 이탈률 + 판매매출 + 광고비</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-effRevenue"></canvas></div></div>`;
 
-  container.insertAdjacentHTML('beforeend', kpiHtml + chartsHtml);
+  const actionSummary = Object.values(actionsByDate).reduce((a,b)=>a+((b.instagram||0)+(b.youtube||0)+(b.blog||0)),0);
+  const actionPanelHtml = `
+    <details style="margin:0 0 12px 0;">
+      <summary style="cursor:pointer;color:var(--t2);font-size:.78rem;">콘텐츠 마케팅 액션 비교 보기 (${actionSummary}건)</summary>
+      <div id="contentActionDetail" style="margin-top:8px;"></div>
+    </details>`;
+  container.insertAdjacentHTML('beforeend', kpiHtml + chartsHtml + actionPanelHtml);
 
   const labels = rows.map(r => r.date.slice(5));
   const acColor = getComputedStyle(document.documentElement).getPropertyValue('--ac').trim();
@@ -5071,6 +5083,10 @@ function renderDailyView(data, container) {
   const rColor = getComputedStyle(document.documentElement).getPropertyValue('--r').trim();
 
   const sessionDurations = rows.map(r => r.avg_session_duration || 0);
+  const spendData = rows.map(r => Math.round(spendByDate[r.date] || 0));
+  const igActions = rows.map(r => (actionsByDate[r.date]?.instagram || 0));
+  const ytActions = rows.map(r => (actionsByDate[r.date]?.youtube || 0));
+  const blogActions = rows.map(r => (actionsByDate[r.date]?.blog || 0));
 
   const commonOpts = {
     responsive:true, maintainAspectRatio:false,
@@ -5091,8 +5107,12 @@ function renderDailyView(data, container) {
       datasets:[
         { label:'세션', data:rows.map(r=>r.sessions), borderColor:acColor, backgroundColor:acColor+'33', tension:.3, fill:false, pointRadius:2, yAxisID:'y', order:1 },
         { label:'유저', data:rows.map(r=>r.users), borderColor:blColor, backgroundColor:blColor+'33', tension:.3, fill:false, pointRadius:2, yAxisID:'y', order:2 },
+        { label:'광고비', data:spendData, borderColor:'#ff9f40', backgroundColor:'#ff9f4033', tension:.25, fill:false, pointRadius:2, borderDash:[5,3], yAxisID:'y2', order:2 },
         { label:'주문건수', type:'bar', data:rows.map(r=>r.orders||0), backgroundColor:gColor+'99', yAxisID:'y1', order:3 },
-        { label:'본체판매', type:'bar', data:rows.map(r=>r.body_units||0), backgroundColor:yColor+'99', yAxisID:'y1', order:4 }
+        { label:'본체판매', type:'bar', data:rows.map(r=>r.body_units||0), backgroundColor:yColor+'99', yAxisID:'y1', order:4 },
+        { label:'IG 업로드', data:igActions, borderColor:'#9b59b6', backgroundColor:'#9b59b655', tension:0, fill:false, pointRadius:3, showLine:false, yAxisID:'y1', order:5 },
+        { label:'YT 업로드', data:ytActions, borderColor:'#e74c3c', backgroundColor:'#e74c3c55', tension:0, fill:false, pointRadius:3, showLine:false, yAxisID:'y1', order:5 },
+        { label:'블로그 업로드', data:blogActions, borderColor:'#2ecc71', backgroundColor:'#2ecc7155', tension:0, fill:false, pointRadius:3, showLine:false, yAxisID:'y1', order:5 }
       ]
     },
     options:{
@@ -5108,6 +5128,8 @@ function renderDailyView(data, container) {
             label: function(ctx) {
               const v = ctx.parsed.y;
               if (ctx.dataset.label === '세션' || ctx.dataset.label === '유저') return ctx.dataset.label + ': ' + v.toLocaleString();
+              if (ctx.dataset.label === '광고비') return '광고비: ' + Number(v).toLocaleString() + '원';
+              if (ctx.dataset.label.includes('업로드')) return ctx.dataset.label + ': ' + v.toLocaleString() + '건';
               return ctx.dataset.label + ': ' + v.toLocaleString() + '건';
             }
           }
@@ -5116,7 +5138,8 @@ function renderDailyView(data, container) {
       scales:{
         x: commonOpts.scales.x,
         y:{ type:'linear', position:'left', ticks:{color:'#8b90a0',font:{size:9},callback:v=>v.toLocaleString()}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'세션/유저',color:'#8b90a0',font:{size:10}} },
-        y1:{ type:'linear', position:'right', ticks:{color:gColor,font:{size:9}}, grid:{drawOnChartArea:false}, title:{display:true,text:'주문/본체',color:gColor,font:{size:10}} }
+        y1:{ type:'linear', position:'right', ticks:{color:gColor,font:{size:9}}, grid:{drawOnChartArea:false}, title:{display:true,text:'주문/본체/업로드',color:gColor,font:{size:10}} },
+        y2:{ type:'linear', position:'right', offset:true, ticks:{color:'#ff9f40',font:{size:9},callback:v=>Number(v).toLocaleString()}, grid:{drawOnChartArea:false}, title:{display:true,text:'광고비(원)',color:'#ff9f40',font:{size:10}} }
       }
     }
   });
@@ -5128,7 +5151,11 @@ function renderDailyView(data, container) {
       labels,
       datasets:[
         { label:'이탈률(%)', data:rows.map(r=>((r.bounce_rate||0)*100).toFixed(1)), borderColor:rColor, tension:.3, fill:false, pointRadius:2, yAxisID:'y', order:1 },
-        { label:'매출(만원)', type:'bar', data:rows.map(r=>Math.round((r.revenue||0)/10000)), backgroundColor:acColor+'99', yAxisID:'y1', order:2 }
+        { label:'판매매출(만원)', type:'bar', data:rows.map(r=>Math.round((r.revenue||0)/10000)), backgroundColor:acColor+'99', yAxisID:'y1', order:2 },
+        { label:'광고비', data:spendData.map(v=>Math.round(v/10000)), borderColor:'#ff9f40', backgroundColor:'#ff9f4033', tension:.25, fill:false, pointRadius:2, borderDash:[5,3], yAxisID:'y1', order:1 },
+        { label:'IG 업로드', data:igActions, borderColor:'#9b59b6', backgroundColor:'#9b59b655', tension:0, fill:false, pointRadius:3, showLine:false, yAxisID:'y2', order:5 },
+        { label:'YT 업로드', data:ytActions, borderColor:'#e74c3c', backgroundColor:'#e74c3c55', tension:0, fill:false, pointRadius:3, showLine:false, yAxisID:'y2', order:5 },
+        { label:'블로그 업로드', data:blogActions, borderColor:'#2ecc71', backgroundColor:'#2ecc7155', tension:0, fill:false, pointRadius:3, showLine:false, yAxisID:'y2', order:5 }
       ]
     },
     options:{
@@ -5144,6 +5171,8 @@ function renderDailyView(data, container) {
             label: function(ctx) {
               const v = ctx.parsed.y;
               if (ctx.dataset.label === '이탈률(%)') return '이탈률: ' + v + '%';
+              if (ctx.dataset.label === '광고비') return '광고비: ' + Number(v).toLocaleString() + '만원';
+              if (ctx.dataset.label.includes('업로드')) return ctx.dataset.label + ': ' + v.toLocaleString() + '건';
               return '판매매출: ' + Number(v).toLocaleString() + '만원';
             }
           }
@@ -5152,10 +5181,20 @@ function renderDailyView(data, container) {
       scales:{
         x: commonOpts.scales.x,
         y:{ type:'linear', position:'left', ticks:{color:rColor,font:{size:9},callback:v=>v+'%'}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'이탈률(%)',color:rColor,font:{size:10}} },
-        y1:{ type:'linear', position:'right', ticks:{color:acColor,font:{size:9},callback:v=>v.toLocaleString()+'만'}, grid:{drawOnChartArea:false}, title:{display:true,text:'판매매출(만원)',color:acColor,font:{size:10}} }
+        y1:{ type:'linear', position:'right', ticks:{color:acColor,font:{size:9},callback:v=>v.toLocaleString()+'만'}, grid:{drawOnChartArea:false}, title:{display:true,text:'판매매출/광고비(만원)',color:acColor,font:{size:10}} },
+        y2:{ type:'linear', position:'right', offset:true, ticks:{color:'#9b59b6',font:{size:9}}, grid:{drawOnChartArea:false}, title:{display:true,text:'업로드 수',color:'#9b59b6',font:{size:10}} }
       }
     }
   });
+
+  const detail = container.querySelector('#contentActionDetail');
+  if (detail) {
+    const actionRows = rows.map(r => ({date:r.date, ...(actionsByDate[r.date] || {instagram:0,youtube:0,blog:0,items:[]})})).filter(x => (x.instagram+x.youtube+x.blog) > 0);
+    if (!actionRows.length) { detail.innerHTML = '<div style="color:var(--t2);font-size:.72rem;">선택 기간 내 콘텐츠 액션 없음</div>'; }
+    else {
+      detail.innerHTML = actionRows.map(x => `<div style="display:flex;gap:10px;padding:5px 0;border-top:1px solid rgba(255,255,255,.05);font-size:.72rem;"><div style="min-width:64px;color:var(--t2);">${x.date.slice(5)}</div><div style="min-width:120px;"><span style="color:#9b59b6">IG ${x.instagram||0}</span> · <span style="color:#e74c3c">YT ${x.youtube||0}</span> · <span style="color:#2ecc71">BLOG ${x.blog||0}</span></div><div style="flex:1;color:var(--t2);">${(x.items||[]).map(i=>`[${i.channel}] ${i.title}`).join(' / ')}</div></div>`).join('');
+    }
+  }
 }
 
 const _adChartInstances = {};
