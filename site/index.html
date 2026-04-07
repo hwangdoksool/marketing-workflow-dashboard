@@ -5059,25 +5059,24 @@ function renderCampaignGantt(dailyDates, campData, container) {
     row.className = 'gantt-row';
     row.dataset.idx = ci;
 
-    let trackHtml = '';
-    dates.forEach((d, di) => {
-      const wd = new Date(d).getDay();
-      const cls = (wd === 0 || wd === 6) ? ' weekend' : '';
-      trackHtml += `<div class="gantt-cell${cls}" data-di="${di}"></div>`;
-    });
-
-    const startI = dateIdx[camp.start_date];
-    const endI = dateIdx[camp.end_date];
-    const barStart = startI !== undefined ? startI : 0;
-    const barEnd = endI !== undefined ? endI : dates.length - 1;
-    const totalCols = dates.length;
-
-    // Compute totals for tooltip
     const daily = camp.daily || {};
     let totalSpend=0, totalClicks=0, totalImpressions=0;
     Object.values(daily).forEach(v => { totalSpend += v.spend||0; totalClicks += v.clicks||0; totalImpressions += v.impressions||0; });
 
-    row.innerHTML = `<div class="gantt-label"><span class="arrow">▶</span>${campName} <span style="font-size:.55rem;color:${c.status==='ACTIVE'?'var(--g)':'var(--t2)'};">${c.status==='ACTIVE'?'●':'⏸'}</span></div><div class="gantt-track" style="position:relative;">${trackHtml}<div class="gantt-bar" style="left:${(barStart/totalCols*100).toFixed(2)}%;width:${((barEnd-barStart+1)/totalCols*100).toFixed(2)}%;background:${c.status==='ACTIVE'?'var(--ac)':'var(--t2)'};opacity:${c.status==='ACTIVE'?'0.85':'0.35'};"></div></div>`;
+    // 일별 가동 셀: spend>0인 날만 색칠
+    const barColor = c.status==='ACTIVE' ? 'var(--ac)' : 'var(--t2)';
+    const barOpacity = c.status==='ACTIVE' ? 0.85 : 0.5;
+    let trackHtml = '';
+    dates.forEach((d, di) => {
+      const wd = new Date(d).getDay();
+      const cls = (wd === 0 || wd === 6) ? ' weekend' : '';
+      const hasData = daily[d] && daily[d].spend > 0;
+      const bg = hasData ? `background:${barColor};opacity:${barOpacity};border-radius:2px;` : '';
+      trackHtml += `<div class="gantt-cell${cls}" data-di="${di}" style="${bg}"></div>`;
+    });
+
+    const statusDot = c.status==='ACTIVE' ? '<span style="font-size:.55rem;color:var(--g);">●</span>' : '<span style="font-size:.55rem;color:var(--t2);">⏸</span>';
+    row.innerHTML = `<div class="gantt-label"><span class="arrow">▶</span>${campName} ${statusDot}</div><div class="gantt-track">${trackHtml}</div>`;
 
     // Hover tooltip — daily data based on mouse position
     row.addEventListener('mouseenter', e => { tooltip.style.display = 'block'; });
@@ -5123,18 +5122,6 @@ function renderCampaignGantt(dailyDates, campData, container) {
         const adRow = document.createElement('div');
         adRow.className = 'gantt-row';
 
-        let adTrackHtml = '';
-        dates.forEach((d, di) => {
-          const wd = new Date(d).getDay();
-          const cls = (wd === 0 || wd === 6) ? ' weekend' : '';
-          adTrackHtml += `<div class="gantt-cell${cls}"></div>`;
-        });
-
-        const adStartI = dateIdx[ad.start_date];
-        const adEndI = dateIdx[ad.end_date];
-        const adBarStart = adStartI !== undefined ? adStartI : 0;
-        const adBarEnd = adEndI !== undefined ? adEndI : dates.length - 1;
-
         // Ad totals
         const adDaily = ad.daily || {};
         let adSpend=0, adClicks=0, adImps=0;
@@ -5147,14 +5134,17 @@ function renderCampaignGantt(dailyDates, campData, container) {
         const adCtr = adImps ? ((adClicks/adImps)*100).toFixed(2) : '0';
         const adCpc = adClicks ? (adSpend/adClicks).toFixed(0) : '0';
 
-        // Sparkline SVG
-        const maxSpend = Math.max(...spendArr, 1);
-        const svgW = dates.length * 4;
-        const svgH = 16;
-        let polyPoints = spendArr.map((s,i) => `${i*(svgW/(spendArr.length-1||1))},${svgH - (s/maxSpend)*svgH}`).join(' ');
-        const sparkSvg = `<svg class="gantt-sparkline" viewBox="0 0 ${svgW} ${svgH}" preserveAspectRatio="none"><polyline points="${polyPoints}" fill="none" stroke="var(--bl)" stroke-width="1" opacity=".7"/></svg>`;
+        // 일별 가동 셀: spend>0인 날만 색칠
+        let adTrackHtml = '';
+        dates.forEach((d, di) => {
+          const wd = new Date(d).getDay();
+          const cls = (wd === 0 || wd === 6) ? ' weekend' : '';
+          const hasData = adDaily[d] && adDaily[d].spend > 0;
+          const bg = hasData ? 'background:var(--bl);opacity:.7;border-radius:2px;' : '';
+          adTrackHtml += `<div class="gantt-cell${cls}" style="${bg}"></div>`;
+        });
 
-        adRow.innerHTML = `<div class="gantt-label">${adName}</div><div class="gantt-track" style="position:relative;">${adTrackHtml}<div class="gantt-bar" style="left:${(adBarStart/totalCols*100).toFixed(2)}%;width:${((adBarEnd-adBarStart+1)/totalCols*100).toFixed(2)}%;background:var(--bl);opacity:.7;"></div>${sparkSvg}</div>`;
+        adRow.innerHTML = `<div class="gantt-label">${adName}</div><div class="gantt-track">${adTrackHtml}</div>`;
 
         // Ad row hover — daily data
         adRow.addEventListener('mouseenter', () => { tooltip.style.display = 'block'; });
