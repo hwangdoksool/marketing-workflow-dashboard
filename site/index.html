@@ -4909,8 +4909,8 @@ function renderDailyView(data, container) {
 
   // Chart containers — 2 compact charts
   const chartsHtml = `
-    <div class="card" style="margin-bottom:10px;"><div class="card-title">트래픽 + 전환</div><canvas id="dailyChart-trafficConv" style="height:150px;"></canvas></div>
-    <div class="card" style="margin-bottom:10px;"><div class="card-title">효율: 이탈률 + 매출</div><canvas id="dailyChart-effRevenue" style="height:150px;"></canvas></div>`;
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">트래픽 + 전환</div><div style="position:relative;height:180px;max-height:180px;"><canvas id="dailyChart-trafficConv"></canvas></div></div>
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">효율: 이탈률 + 매출</div><div style="position:relative;height:180px;max-height:180px;"><canvas id="dailyChart-effRevenue"></canvas></div></div>`;
 
   container.insertAdjacentHTML('beforeend', kpiHtml + chartsHtml);
 
