@@ -4863,6 +4863,11 @@ fetch(`${SB_URL}/rest/v1/business_leads?select=*&order=created_at.desc`,{
    Daily Metrics Tab
    ═══════════════════════════════════════════════════ */
 let dailyChartsLoaded = false;
+let dailyRawData = null;
+let campRawData = null;
+let dailySelectedPreset = '30';  // '7','14','30','all','custom'
+let dailyCustomStart = '';
+let dailyCustomEnd = '';
 
 function loadDailyMetrics() {
   if (dailyChartsLoaded) return;
@@ -4873,20 +4878,108 @@ function loadDailyMetrics() {
     fetch('campaigns_daily.json').then(r => r.ok ? r.json() : Promise.reject('campaigns_daily fetch failed'))
   ]).then(([dailyData, campData]) => {
     dailyChartsLoaded = true;
-    container.innerHTML = '';
-    requestAnimationFrame(() => {
-      renderDailyView(dailyData, container);
-      const dates = (dailyData.daily || []).map(d => d.date);
-      renderCampaignGantt(dates, campData, container);
-      requestAnimationFrame(() => {
-        document.querySelectorAll('#tab-daily canvas').forEach(c => {
-          const ci = Chart.getChart(c);
-          if (ci) ci.resize();
-        });
-      });
-    });
+    dailyRawData = dailyData;
+    campRawData = campData;
+    filterAndRender();
   }).catch(err => {
     container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--r);">데이터를 불러올 수 없습니다. (${err})</div>`;
+  });
+}
+
+function renderDatePicker(container, allDates) {
+  const presets = [
+    { label: '7일', value: '7' },
+    { label: '14일', value: '14' },
+    { label: '30일', value: '30' },
+    { label: '전체', value: 'all' }
+  ];
+  const minDate = allDates[0] || '';
+  const maxDate = allDates[allDates.length - 1] || '';
+
+  let html = '<div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;flex-wrap:wrap;">';
+  presets.forEach(p => {
+    const active = (dailySelectedPreset === p.value) ? ' primary' : '';
+    html += `<button class="btn${active}" data-preset="${p.value}" style="padding:4px 10px;font-size:.72rem;">${p.label}</button>`;
+  });
+  html += '<span style="color:var(--t2);font-size:.72rem;margin:0 4px;">|</span>';
+  html += `<input type="date" id="daily-start" value="${dailyCustomStart || minDate}" min="${minDate}" max="${maxDate}" style="background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:6px;padding:3px 6px;font-size:.72rem;font-family:inherit;">`;
+  html += '<span style="color:var(--t2);font-size:.72rem;">~</span>';
+  html += `<input type="date" id="daily-end" value="${dailyCustomEnd || maxDate}" min="${minDate}" max="${maxDate}" style="background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:6px;padding:3px 6px;font-size:.72rem;font-family:inherit;">`;
+  html += `<button class="btn${dailySelectedPreset === 'custom' ? ' primary' : ''}" id="daily-custom-apply" style="padding:4px 10px;font-size:.72rem;">적용</button>`;
+  html += '</div>';
+
+  container.insertAdjacentHTML('beforeend', html);
+
+  // Preset button clicks
+  container.querySelectorAll('[data-preset]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      dailySelectedPreset = btn.dataset.preset;
+      dailyCustomStart = '';
+      dailyCustomEnd = '';
+      filterAndRender();
+    });
+  });
+
+  // Custom apply
+  container.querySelector('#daily-custom-apply').addEventListener('click', () => {
+    const s = container.querySelector('#daily-start').value;
+    const e = container.querySelector('#daily-end').value;
+    if (s && e && s <= e) {
+      dailySelectedPreset = 'custom';
+      dailyCustomStart = s;
+      dailyCustomEnd = e;
+      filterAndRender();
+    }
+  });
+}
+
+function filterAndRender() {
+  if (!dailyRawData) return;
+  const container = document.getElementById('tab-daily');
+  const allRows = dailyRawData.daily || [];
+  if (!allRows.length) { container.innerHTML = '<div style="padding:20px;color:var(--t2);">일별 데이터 없음</div>'; return; }
+
+  const allDates = allRows.map(r => r.date).sort();
+  let startDate, endDate;
+
+  if (dailySelectedPreset === 'custom' && dailyCustomStart && dailyCustomEnd) {
+    startDate = dailyCustomStart;
+    endDate = dailyCustomEnd;
+  } else if (dailySelectedPreset === 'all') {
+    startDate = allDates[0];
+    endDate = allDates[allDates.length - 1];
+  } else {
+    const days = parseInt(dailySelectedPreset) || 30;
+    endDate = allDates[allDates.length - 1];
+    const d = new Date(endDate);
+    d.setDate(d.getDate() - days + 1);
+    startDate = d.toISOString().slice(0, 10);
+  }
+
+  const filteredRows = allRows.filter(r => r.date >= startDate && r.date <= endDate);
+  const filteredDates = filteredRows.map(r => r.date);
+
+  // Destroy existing Chart.js instances
+  container.querySelectorAll('canvas').forEach(c => {
+    const ci = Chart.getChart(c);
+    if (ci) ci.destroy();
+  });
+
+  container.innerHTML = '';
+
+  // 1) Date picker
+  renderDatePicker(container, allDates);
+
+  // 2) KPI + Charts
+  requestAnimationFrame(() => {
+    renderDailyView({ daily: filteredRows }, container);
+    renderCampaignGantt(filteredDates, campRawData, container);
+    requestAnimationFrame(() => {
+      container.querySelectorAll('canvas').forEach(c => {
+        const ci = Chart.getChart(c);
+        if (ci) ci.resize();
+      });
+    });
   });
 }
 
