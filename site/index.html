@@ -5077,7 +5077,7 @@ function renderCampaignGantt(dailyDates, campData, container) {
     let totalSpend=0, totalClicks=0, totalImpressions=0;
     Object.values(daily).forEach(v => { totalSpend += v.spend||0; totalClicks += v.clicks||0; totalImpressions += v.impressions||0; });
 
-    row.innerHTML = `<div class="gantt-label"><span class="arrow">▶</span>${campName}</div><div class="gantt-track" style="position:relative;">${trackHtml}<div class="gantt-bar" style="left:${(barStart/totalCols*100).toFixed(2)}%;width:${((barEnd-barStart+1)/totalCols*100).toFixed(2)}%;background:var(--ac);"></div></div>`;
+    row.innerHTML = `<div class="gantt-label"><span class="arrow">▶</span>${campName} <span style="font-size:.55rem;color:${c.status==='ACTIVE'?'var(--g)':'var(--t2)'};">${c.status==='ACTIVE'?'●':'⏸'}</span></div><div class="gantt-track" style="position:relative;">${trackHtml}<div class="gantt-bar" style="left:${(barStart/totalCols*100).toFixed(2)}%;width:${((barEnd-barStart+1)/totalCols*100).toFixed(2)}%;background:${c.status==='ACTIVE'?'var(--ac)':'var(--t2)'};opacity:${c.status==='ACTIVE'?'0.85':'0.35'};"></div></div>`;
 
     // Hover tooltip — daily data based on mouse position
     row.addEventListener('mouseenter', e => { tooltip.style.display = 'block'; });
