@@ -4,9 +4,19 @@
 
 | 항목 | 값 |
 |------|---|
-| **URL** | TBD (CF Pages 배포 후) |
-| **GitHub** | hwangdoksool/marketing-workflow-dashboard |
+| **URL** | https://rf-marketing-dashboard.pages.dev |
+| **Cloudflare Pages 프로젝트명** | `rf-marketing-dashboard` |
+| **GitHub / 소스 정본** | `hwangdoksool/marketing-workflow-dashboard` |
 | **시작일** | 2026-04-01 |
+
+## 🔴 배포 단일 기준
+
+이번 혼선 방지용으로 아래를 **정본**으로 고정합니다.
+
+- **수정할 레포:** `marketing-workflow-dashboard`
+- **배포할 Pages 프로젝트:** `rf-marketing-dashboard`
+- **배포 명령:** `./scripts/deploy_pages.sh`
+- 다른 폴더/과거 대시보드는 **참조용 또는 아카이브**로 보고, 여기서만 수정/배포합니다.
 
 ## 구조
 

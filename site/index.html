@@ -216,6 +216,10 @@ select.form-input{cursor:pointer;}
 .guide-checklist{list-style:none;padding:0;margin:8px 0;}
 .guide-checklist li{padding:4px 0;font-size:.8rem;}
 .guide-checklist li::before{content:'☐ ';color:var(--ac);}
+.app-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px;}
+.app-meta-badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:.64rem;font-weight:700;border:1px solid var(--b);background:var(--s2);color:var(--t2);}
+.app-meta-badge.primary{background:rgba(108,92,231,.14);color:var(--ac2);border-color:rgba(108,92,231,.28);}
+.app-meta-badge.warn{background:rgba(253,203,110,.10);color:var(--y);border-color:rgba(253,203,110,.25);}
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar{width:6px;height:6px;}
@@ -289,7 +293,14 @@ select.form-input{cursor:pointer;}
 <div class="app">
   <!-- Header -->
   <header class="hdr">
-    <h1>마케팅 워크플로우 <span>Marketing Ops Dashboard v2</span></h1>
+    <div>
+      <h1>마케팅 워크플로우 <span>Marketing Ops Dashboard v2</span></h1>
+      <div class="app-meta">
+        <span class="app-meta-badge primary">repo: marketing-workflow-dashboard</span>
+        <span class="app-meta-badge">pages: rf-marketing-dashboard</span>
+        <span class="app-meta-badge warn">single source of truth</span>
+      </div>
+    </div>
     <div class="hdr-r">
       <button class="btn" onclick="openGuide()">❓ 사용 가이드</button>
       <button class="btn" onclick="toggleTheme()" id="themeBtn">라이트 모드</button>
