@@ -4996,6 +4996,31 @@ function filterAndRender() {
     renderDailyView({ daily: filteredRows, spendByDate, actionsByDate }, container);
     const dailyByDate = {}; filteredRows.forEach(r => dailyByDate[r.date] = r);
     renderCampaignGantt(filteredDates, campRawData, dailyByDate, container);
+    // 세부 차트는 간트 아래에 토글로 삽입 — DOM 끝에 추가
+    const detailDiv = document.createElement('div');
+    detailDiv.id = 'detail-charts-area';
+    container.appendChild(detailDiv);
+    const placeholder = detailDiv;
+    if (placeholder) {
+      placeholder.innerHTML = `<details style="margin-top:16px;">
+        <summary style="cursor:pointer;color:var(--t2);font-size:.85rem;font-weight:600;padding:8px 0;">📊 세부 분석 (체류시간 상세 · 참여율 · 채널별 · 신규/재방문)</summary>
+        <div style="margin-top:8px;">
+          <div class="card" style="margin-bottom:10px;"><div class="card-title">🔍 체류시간 상세 — 참여 세션 vs 이탈 세션</div><div style="font-size:.72rem;color:var(--t2);margin:-4px 0 6px;">참여 세션 = 10초 이상 체류 또는 전환/2페이지+ 방문. 노랑선 = 참여자만의 평균 체류시간.</div><div style="position:relative;width:100%;height:220px;"><canvas id="dailyChart-durationDetail"></canvas></div></div>
+          <div class="card" style="margin-bottom:10px;"><div class="card-title">참여율 + 페이지/세션 + 체류시간</div><div style="position:relative;width:100%;height:180px;"><canvas id="dailyChart-engagement"></canvas></div></div>
+          <div class="card" style="margin-bottom:10px;"><div class="card-title">채널별 평균 체류시간</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-channelDuration"></canvas></div></div>
+          <div class="card" style="margin-bottom:10px;"><div class="card-title">신규 vs 재방문 세션</div><div style="position:relative;width:100%;height:180px;"><canvas id="dailyChart-newReturn"></canvas></div></div>
+        </div>
+      </details>`;
+      // 토글 열릴 때 차트 렌더
+      const det = placeholder.querySelector('details');
+      let detailRendered = false;
+      det.addEventListener('toggle', () => {
+        if (det.open && !detailRendered) {
+          detailRendered = true;
+          renderDetailCharts(container);
+        }
+      });
+    }
     requestAnimationFrame(() => {
       container.querySelectorAll('canvas').forEach(c => {
         const ci = Chart.getChart(c);
@@ -5022,6 +5047,13 @@ function renderDailyView(data, container) {
   const avgBounce = (totals.bounceSum / rows.length * 100).toFixed(1);
   const revManwon = (totals.revenue / 10000).toLocaleString();
 
+  // Header with guide button
+  const headerHtml = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h2 style="font-size:1rem;font-weight:700;">📅 일별 지표</h2>
+      <button class="btn" onclick="openDailyMetricsGuide()" style="font-size:.75rem;">📖 지표 가이드</button>
+    </div>`;
+
   // KPI cards — compact
   const kpiHtml = `
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px;">
@@ -5029,16 +5061,17 @@ function renderDailyView(data, container) {
       <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">총 유저</div><div class="value" style="font-size:1rem;">${totals.users.toLocaleString()}</div></div>
       <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">총 주문</div><div class="value" style="font-size:1rem;">${totals.orders.toLocaleString()}</div></div>
       <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">판매 매출</div><div class="value" style="font-size:1rem;">${revManwon}만원</div></div>
-      <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">평균 이탈률</div><div class="value" style="font-size:1rem;">${avgBounce}%</div></div>
+      <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">평균 체류시간</div><div class="value" style="font-size:1rem;">${Math.round(rows.reduce((acc,r)=>acc+(r.avg_session_duration||0),0)/Math.max(rows.length,1))}초</div></div>
     </div>`;
 
   // Chart containers — 2 compact charts
   const chartsHtml = `
     <div class="card" style="margin-bottom:10px;"><div class="card-title">트래픽 + 전환 + 광고비</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-trafficConv"></canvas></div></div>
-    <div class="card" style="margin-bottom:10px;"><div class="card-title">효율: 이탈률 + 판매매출 + 광고비</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-effRevenue"></canvas></div></div>
-    <div class="card" style="margin-bottom:10px;"><div class="card-title">콘텐츠 마케팅 액션</div><div style="position:relative;width:100%;height:160px;"><canvas id="dailyChart-actions"></canvas></div><details style="margin-top:10px;"><summary style="cursor:pointer;color:var(--t2);font-size:.78rem;">상세 리스트 보기</summary><div id="contentActionDetail" style="margin-top:8px;"></div></details></div>`;
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">체류시간 + 판매매출 + 광고비</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-effRevenue"></canvas></div></div>
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">콘텐츠 마케팅 액션</div><div style="position:relative;width:100%;height:160px;"><canvas id="dailyChart-actions"></canvas></div><details style="margin-top:10px;"><summary style="cursor:pointer;color:var(--t2);font-size:.78rem;">상세 리스트 보기</summary><div id="contentActionDetail" style="margin-top:8px;"></div></details></div>
+    <div id="detail-charts-placeholder"></div>`;
 
-  container.insertAdjacentHTML('beforeend', kpiHtml + chartsHtml);
+  container.insertAdjacentHTML('beforeend', headerHtml + kpiHtml + chartsHtml);
 
   const labels = rows.map(r => r.date.slice(5));
   const acColor = getComputedStyle(document.documentElement).getPropertyValue('--ac').trim();
@@ -5074,7 +5107,8 @@ function renderDailyView(data, container) {
         { label:'유저', data:rows.map(r=>r.users), borderColor:blColor, backgroundColor:blColor+'33', tension:.3, fill:false, pointRadius:2, yAxisID:'y', order:2 },
         { label:'광고비', data:spendData, borderColor:'#ff9f40', backgroundColor:'#ff9f4033', tension:.25, fill:false, pointRadius:2, borderDash:[5,3], yAxisID:'y2', order:2 },
         { label:'주문건수', type:'bar', data:rows.map(r=>r.orders||0), backgroundColor:gColor+'99', yAxisID:'y1', order:3 },
-        { label:'본체판매', type:'bar', data:rows.map(r=>r.body_units||0), backgroundColor:yColor+'99', yAxisID:'y1', order:4 }
+        { label:'본체판매', type:'bar', data:rows.map(r=>r.body_units||0), backgroundColor:yColor+'99', yAxisID:'y1', order:4 },
+        { label:'체험신청', type:'bar', data:rows.map(r=>r.feel_bookings||0), backgroundColor:'#2ecc7199', yAxisID:'y1', order:5 }
       ]
     },
     options:{
@@ -5112,9 +5146,9 @@ function renderDailyView(data, container) {
     data:{
       labels,
       datasets:[
-        { label:'이탈률(%)', data:rows.map(r=>((r.bounce_rate||0)*100).toFixed(1)), borderColor:rColor, tension:.3, fill:false, pointRadius:2, yAxisID:'y', order:1 },
+        { label:'체류시간(초)', data:rows.map(r=>Math.round(r.avg_session_duration||0)), borderColor:blColor, tension:.3, fill:false, pointRadius:2, yAxisID:'y', order:1 },
         { label:'판매매출(만원)', type:'bar', data:rows.map(r=>Math.round((r.revenue||0)/10000)), backgroundColor:acColor+'99', yAxisID:'y1', order:2 },
-        { label:'광고비', data:spendData.map(v=>Math.round(v/10000)), borderColor:'#ff9f40', backgroundColor:'#ff9f4033', tension:.25, fill:false, pointRadius:2, borderDash:[5,3], yAxisID:'y1', order:1 }
+        { label:'광고비', data:spendData.map(v=>Math.round(v/10000)), borderColor:'#ff9f40', backgroundColor:'#ff9f4033', tension:.25, fill:false, pointRadius:2, borderDash:[5,3], yAxisID:'y2', order:1 }
       ]
     },
     options:{
@@ -5129,9 +5163,8 @@ function renderDailyView(data, container) {
             },
             label: function(ctx) {
               const v = ctx.parsed.y;
-              if (ctx.dataset.label === '이탈률(%)') return '이탈률: ' + v + '%';
+              if (ctx.dataset.label === '체류시간(초)') return '체류시간: ' + v + '초';
               if (ctx.dataset.label === '광고비') return '광고비: ' + Number(v).toLocaleString() + '만원';
-              if (ctx.dataset.label.includes('업로드')) return ctx.dataset.label + ': ' + v.toLocaleString() + '건';
               return '판매매출: ' + Number(v).toLocaleString() + '만원';
             }
           }
@@ -5139,7 +5172,7 @@ function renderDailyView(data, container) {
       },
       scales:{
         x: commonOpts.scales.x,
-        y:{ type:'linear', position:'left', ticks:{color:rColor,font:{size:9},callback:v=>v+'%'}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'이탈률(%)',color:rColor,font:{size:10}} },
+        y:{ type:'linear', position:'left', ticks:{color:blColor,font:{size:9},callback:v=>v+'초'}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'체류시간(초)',color:blColor,font:{size:10}} },
         y1:{ type:'linear', position:'right', ticks:{color:acColor,font:{size:9},callback:v=>v.toLocaleString()+'만'}, grid:{drawOnChartArea:false}, title:{display:true,text:'판매매출(만원)',color:acColor,font:{size:10}} },
         y2:{ type:'linear', position:'right', offset:true, ticks:{color:'#ff9f40',font:{size:9},callback:v=>v.toLocaleString()+'만'}, grid:{drawOnChartArea:false}, title:{display:true,text:'광고비(만원)',color:'#ff9f40',font:{size:10}} }
       }
@@ -5160,23 +5193,180 @@ function renderDailyView(data, container) {
       responsive:true, maintainAspectRatio:false,
       interaction:{ mode:'index', intersect:false },
       plugins:{ legend:{ labels:{ color:'#8b90a0', font:{size:10}, usePointStyle:true, pointStyle:'circle', padding:12 } },
-        tooltip:{ callbacks:{ afterBody: function(items){ const idx=items[0].dataIndex; const r=rows[idx]; const dayActions=(actionsByDate[r.date]?.items||[]); return dayActions.map(a=>`[${a.channel}] ${a.title}`); } } } },
+        tooltip:{ callbacks:{ afterBody: function(items){ const idx=items[0].dataIndex; const r=rows[idx]; const dayActions=(actionsByDate[r.date]?.items||[]); return dayActions.map(a=>`${a.format_label || a.channel} · ${a.title}`); } } } },
       scales:{ x:{ ticks:{color:'#8b90a0',font:{size:9},maxRotation:0}, grid:{color:'rgba(255,255,255,.05)'}, stacked:true }, y:{ ticks:{color:'#8b90a0',font:{size:9},precision:0}, grid:{color:'rgba(255,255,255,.05)'}, stacked:true, title:{display:true,text:'업로드 수',color:'#8b90a0',font:{size:10}} } }
     }
   });
 
   const detail = container.querySelector('#contentActionDetail');
   if (detail) {
-    const actionRows = rows.map(r => ({date:r.date, ...(actionsByDate[r.date] || {instagram:0,youtube:0,blog:0,items:[]})})).filter(x => (x.instagram+x.youtube+x.blog) > 0);
-    if (!actionRows.length) { detail.innerHTML = '<div style="color:var(--t2);font-size:.72rem;">선택 기간 내 콘텐츠 액션 없음</div>'; }
+    const actionItems = rows.flatMap(r => ((actionsByDate[r.date]?.items || []).map(item => ({ date:r.date, ...item }))));
+    if (!actionItems.length) { detail.innerHTML = '<div style="color:var(--t2);font-size:.72rem;">선택 기간 내 콘텐츠 액션 없음</div>'; }
     else {
-      detail.innerHTML = actionRows.map(x => `<div style="display:flex;gap:10px;padding:5px 0;border-top:1px solid rgba(255,255,255,.05);font-size:.72rem;"><div style="min-width:64px;color:var(--t2);">${x.date.slice(5)}</div><div style="min-width:120px;"><span style="color:#9b59b6">IG ${x.instagram||0}</span> · <span style="color:#e74c3c">YT ${x.youtube||0}</span> · <span style="color:#2ecc71">BLOG ${x.blog||0}</span></div><div style="flex:1;color:var(--t2);">${(x.items||[]).map(i=>`[${i.channel}] ${i.title}`).join(' / ')}</div></div>`).join('');
+      detail.innerHTML = actionItems.map(x => {
+        const label = x.format_label || ({instagram:'IG',youtube:'YT',blog:'BLOG'}[x.channel] || x.channel);
+        const color = x.channel === 'instagram' ? '#9b59b6' : (x.channel === 'youtube' ? '#e74c3c' : '#2ecc71');
+        const titleHtml = x.url ? `<a href="${x.url}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;">${x.title}</a>` : x.title;
+        return `<div style="display:flex;gap:10px;padding:6px 0;border-top:1px solid rgba(255,255,255,.05);font-size:.72rem;align-items:flex-start;"><div style="min-width:64px;color:var(--t2);">${x.date.slice(5)}</div><div style="min-width:96px;color:${color};font-weight:600;">${label}</div><div style="flex:1;color:var(--t2);line-height:1.45;">${titleHtml}</div></div>`;
+      }).join('');
     }
+  }
+}
+
+// === 세부 분석 차트 (ga4_detail.json) ===
+async function renderDetailCharts(container) {
+  let detail;
+  try { detail = await fetch('ga4_detail.json').then(r=>r.json()); } catch(e) { return; }
+  const cs = getComputedStyle(document.documentElement);
+  const acColor = cs.getPropertyValue('--ac').trim();
+  const blColor = cs.getPropertyValue('--bl').trim();
+  const gColor = cs.getPropertyValue('--g').trim();
+  const yColor = cs.getPropertyValue('--y').trim();
+  const rColor = cs.getPropertyValue('--r').trim();
+  const commonX = { ticks:{color:'#8b90a0',font:{size:9},maxRotation:0}, grid:{color:'rgba(255,255,255,.05)'} };
+
+  // 0. 체류시간 상세: 참여 세션 vs 이탈 세션 + 참여자 평균 체류시간
+  const eng = (detail.daily_engagement||[]).sort((a,b)=>a.date.localeCompare(b.date));
+  if (eng.length && document.getElementById('dailyChart-durationDetail')) {
+    const labels = eng.map(r=>r.date.slice(4).replace(/(\d{2})(\d{2})/,'$1-$2'));
+    new Chart(document.getElementById('dailyChart-durationDetail'), {
+      type:'bar',
+      data:{ labels, datasets:[
+        { label:'참여 세션', data:eng.map(r=>r.engaged_sessions||0), backgroundColor:gColor+'cc', stack:'s', order:2 },
+        { label:'이탈 세션', data:eng.map(r=>r.bounced_sessions||0), backgroundColor:rColor+'66', stack:'s', order:2 },
+        { label:'참여자 평균 체류(초)', data:eng.map(r=>r.engaged_avg_duration||0), type:'line', borderColor:yColor, backgroundColor:yColor+'33', tension:.3, fill:false, pointRadius:2, borderWidth:2, yAxisID:'y1', order:1 },
+        { label:'전체 평균 체류(초)', data:eng.map(r=>r.overall_avg_duration||0), type:'line', borderColor:'#8b90a0', tension:.3, fill:false, pointRadius:1, borderWidth:1, borderDash:[4,2], yAxisID:'y1', order:1 },
+      ]},
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        interaction:{ mode:'index', intersect:false },
+        plugins:{
+          legend:{ labels:{ color:'#8b90a0', font:{size:9}, usePointStyle:true, padding:8 } },
+          tooltip:{
+            callbacks:{
+              afterBody: function(items) {
+                const idx = items[0].dataIndex;
+                const r = eng[idx];
+                const rate = r.sessions > 0 ? ((r.engaged_sessions / r.sessions) * 100).toFixed(1) : '0';
+                return `참여율: ${rate}% (${r.engaged_sessions}/${r.sessions}명)\n참여자 체류: ${(r.engaged_avg_duration||0).toFixed(0)}초 vs 전체: ${(r.overall_avg_duration||0).toFixed(0)}초`;
+              }
+            }
+          }
+        },
+        scales:{
+          x: commonX,
+          y:{ stacked:true, position:'left', ticks:{color:'#8b90a0',font:{size:9}}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'세션 수',color:'#8b90a0',font:{size:9}} },
+          y1:{ position:'right', ticks:{color:yColor,font:{size:9},callback:v=>v+'초'}, grid:{drawOnChartArea:false}, title:{display:true,text:'체류시간(초)',color:yColor,font:{size:9}} },
+        }
+      }
+    });
+  }
+
+  // 1. Engagement Rate + Pages/Session
+  if (eng.length) {
+    const labels = eng.map(r=>r.date.slice(4).replace(/(\d{2})(\d{2})/,'$1-$2'));
+    new Chart(document.getElementById('dailyChart-engagement'), {
+      type:'line',
+      data:{ labels, datasets:[
+        { label:'참여율(%)', data:eng.map(r=>+(r.engagement_rate*100).toFixed(1)), borderColor:gColor, tension:.3, fill:false, pointRadius:1, yAxisID:'y' },
+        { label:'페이지/세션', data:eng.map(r=>+r.pages_per_session.toFixed(2)), borderColor:blColor, tension:.3, fill:false, pointRadius:1, yAxisID:'y1' },
+        { label:'체류시간(초)', data:eng.map(r=>Math.round(r.overall_avg_duration||0)), borderColor:acColor, tension:.3, fill:false, pointRadius:1, borderDash:[4,2], yAxisID:'y2' },
+      ]},
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        interaction:{ mode:'index', intersect:false },
+        plugins:{ legend:{ labels:{ color:'#8b90a0', font:{size:10}, usePointStyle:true, padding:10 } } },
+        scales:{
+          x: commonX,
+          y:{ position:'left', ticks:{color:gColor,font:{size:9},callback:v=>v+'%'}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'참여율',color:gColor,font:{size:9}} },
+          y1:{ position:'right', ticks:{color:blColor,font:{size:9}}, grid:{drawOnChartArea:false}, title:{display:true,text:'페이지/세션',color:blColor,font:{size:9}} },
+          y2:{ position:'right', offset:true, ticks:{color:acColor,font:{size:9},callback:v=>v+'초'}, grid:{drawOnChartArea:false}, title:{display:true,text:'체류(초)',color:acColor,font:{size:9}} },
+        }
+      }
+    });
+  }
+
+  // 2. Channel duration — top channels stacked area
+  const chRows = (detail.daily_channels||[]).sort((a,b)=>a.date.localeCompare(b.date));
+  if (chRows.length) {
+    const chDates = [...new Set(chRows.map(r=>r.date))].sort();
+    const chLabels = chDates.map(d=>d.slice(4).replace(/(\d{2})(\d{2})/,'$1-$2'));
+    // find top 5 channels by total sessions
+    const chTotals = {};
+    chRows.forEach(r => { chTotals[r.channel] = (chTotals[r.channel]||0) + r.sessions; });
+    const topCh = Object.entries(chTotals).sort((a,b)=>b[1]-a[1]).slice(0,5).map(x=>x[0]);
+    const chColors = [acColor, blColor, gColor, yColor, rColor];
+    const chByDateCh = {};
+    chRows.forEach(r => { chByDateCh[r.date+'|'+r.channel] = r; });
+    const datasets = topCh.map((ch, i) => ({
+      label: ch,
+      data: chDates.map(d => Math.round((chByDateCh[d+'|'+ch]||{}).avg_duration||0)),
+      borderColor: chColors[i%5],
+      backgroundColor: chColors[i%5]+'33',
+      tension:.3, fill:true, pointRadius:0, borderWidth:1.5,
+    }));
+    new Chart(document.getElementById('dailyChart-channelDuration'), {
+      type:'line',
+      data:{ labels: chLabels, datasets },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        interaction:{ mode:'index', intersect:false },
+        plugins:{ legend:{ labels:{ color:'#8b90a0', font:{size:9}, usePointStyle:true, padding:8 } },
+          tooltip:{ callbacks:{ label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y + '초' } }
+        },
+        scales:{
+          x: commonX,
+          y:{ ticks:{color:'#8b90a0',font:{size:9},callback:v=>v+'초'}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'평균체류(초)',color:'#8b90a0',font:{size:9}} },
+        }
+      }
+    });
+  }
+
+  // 3. New vs Returning sessions
+  const nrRows = (detail.daily_new_returning||[]).sort((a,b)=>a.date.localeCompare(b.date));
+  if (nrRows.length) {
+    const nrDates = [...new Set(nrRows.map(r=>r.date))].sort();
+    const nrLabels = nrDates.map(d=>d.slice(4).replace(/(\d{2})(\d{2})/,'$1-$2'));
+    const byDateType = {};
+    nrRows.forEach(r => { byDateType[r.date+'|'+r.type] = r; });
+    new Chart(document.getElementById('dailyChart-newReturn'), {
+      type:'bar',
+      data:{ labels: nrLabels, datasets:[
+        { label:'신규', data:nrDates.map(d=>(byDateType[d+'|new']||{}).sessions||0), backgroundColor:acColor+'99', stack:'s' },
+        { label:'재방문', data:nrDates.map(d=>(byDateType[d+'|returning']||{}).sessions||0), backgroundColor:gColor+'99', stack:'s' },
+      ]},
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        interaction:{ mode:'index', intersect:false },
+        plugins:{ legend:{ labels:{ color:'#8b90a0', font:{size:10}, usePointStyle:true, padding:10 } } },
+        scales:{
+          x: commonX,
+          y:{ stacked:true, ticks:{color:'#8b90a0',font:{size:9}}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'세션',color:'#8b90a0',font:{size:9}} },
+        }
+      }
+    });
   }
 }
 
 const _adChartInstances = {};
 const _campChartInstances = {};
+
+function renderConversionMarkers(convMap) {
+  const entries = Object.entries(convMap || {}).map(([key, v]) => ({ key, label: v.label || key, value: v.value || 0 })).filter(x => x.value > 0);
+  if (!entries.length) return '';
+  const priority = ['purchase','lead','complete_registration','initiate_checkout','add_payment_info','add_to_cart','view_content','custom_conversion'];
+  entries.sort((a,b) => priority.indexOf(a.key) - priority.indexOf(b.key));
+  const top = entries.slice(0,3);
+  const symbol = { purchase:'P', lead:'L', complete_registration:'R', initiate_checkout:'IC', add_payment_info:'$', add_to_cart:'A', custom_conversion:'*' };
+  const colors = { purchase:'#ff6b6b', lead:'#ffd43b', complete_registration:'#51cf66', initiate_checkout:'#74b9ff', add_payment_info:'#ff9f40', add_to_cart:'#a29bfe', custom_conversion:'#dfe6e9' };
+  return `<span style="position:absolute;top:1px;right:1px;display:flex;gap:1px;align-items:center;">${top.map(x => `<span style="min-width:${(symbol[x.key]||'*').length > 1 ? '16' : '11'}px;height:11px;border-radius:999px;background:${colors[x.key]||'var(--y)'};color:#111;font-size:.5rem;line-height:11px;text-align:center;font-weight:700;box-shadow:0 0 0 1px rgba(0,0,0,.18);padding:0 2px;">${symbol[x.key] || '*'}</span>`).join('')}</span>`;
+}
+
+function renderConversionTooltip(convMap) {
+  const entries = Object.entries(convMap || {}).map(([key, v]) => ({ key, label: v.label || key, value: v.value || 0 })).filter(x => x.value > 0);
+  if (!entries.length) return '';
+  return '<br><span style="color:var(--y)">' + entries.map(x => `${x.label} ${Number(x.value).toLocaleString()}`).join(' · ') + '</span>';
+}
 
 function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
   // Destroy any leftover chart instances
@@ -5192,7 +5382,7 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
   dates.forEach((d,i) => dateIdx[d] = i);
 
   // Title
-  container.insertAdjacentHTML('beforeend', '<div class="card-title" style="margin:20px 0 8px;">캠페인 / 소재 상세 데이터 <span style="font-size:.72rem;color:var(--t2);font-weight:500;">· 노란 점 = 해당 날짜 실제 전환</span></div>');
+  container.insertAdjacentHTML('beforeend', '<div class="card-title" style="margin:20px 0 8px;">캠페인 / 소재 상세 데이터 <span style="font-size:.72rem;color:var(--t2);font-weight:500;">· <span style="color:#ff6b6b">P</span> Purchase · <span style="color:#ffd43b">L</span> Lead · <span style="color:#51cf66">R</span> Registration · <span style="color:#74b9ff">IC</span> InitiateCheckout</span></div>');
 
   // Build gantt
   const wrap = document.createElement('div');
@@ -5237,9 +5427,7 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
       const cls = (wd === 0 || wd === 6) ? ' weekend' : '';
       const hasData = daily[d] && daily[d].spend > 0;
       const bg = hasData ? `background:${barColor};opacity:${barOpacity};border-radius:2px;position:relative;` : 'position:relative;';
-      const conv = dailyByDate?.[d];
-      const hasConv = conv && ((conv.orders||0) > 0 || (conv.body_units||0) > 0 || (conv.revenue||0) > 0);
-      const marker = hasConv ? `<span style="position:absolute;top:1px;right:1px;min-width:11px;height:11px;border-radius:999px;background:var(--y);color:#111;font-size:.52rem;line-height:11px;text-align:center;font-weight:700;box-shadow:0 0 0 1px rgba(0,0,0,.18);">${(conv.body_units||conv.orders||1)}</span>` : '';
+      const marker = renderConversionMarkers((daily[d]||{}).conversions);
       trackHtml += `<div class="gantt-cell${cls}" data-di="${di}" style="${bg}">${marker}</div>`;
     });
 
@@ -5261,8 +5449,7 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
         if (dv) {
           const cpc = dv.clicks ? (dv.spend / dv.clicks).toFixed(0) : '-';
           const ctr = dv.impressions ? ((dv.clicks / dv.impressions) * 100).toFixed(2) : '-';
-          const conv = dailyByDate?.[hoverDate];
-          const convLine = conv ? `<br><span style="color:var(--y)">주문 ${conv.orders||0} · 본체 ${conv.body_units||0} · 매출 ${((conv.revenue||0)/10000).toLocaleString()}만</span>` : '';
+          const convLine = renderConversionTooltip(dv.conversions);
           tooltip.innerHTML = `<strong>${camp.name||'N/A'}</strong><br><span style="color:var(--t2)">${hoverDate}</span><br>Spend: ${(dv.spend||0).toLocaleString(undefined,{maximumFractionDigits:0})}원<br>Clicks: ${(dv.clicks||0).toLocaleString()}<br>Impr: ${(dv.impressions||0).toLocaleString()}<br>CPC: ${cpc}원 · CTR: ${ctr}%${convLine}`;
         } else {
           tooltip.innerHTML = `<strong>${camp.name||'N/A'}</strong><br><span style="color:var(--t2)">${hoverDate}</span><br>데이터 없음`;
@@ -5387,8 +5574,9 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
           const wd = new Date(d).getDay();
           const cls = (wd === 0 || wd === 6) ? ' weekend' : '';
           const hasData = adDaily[d] && adDaily[d].spend > 0;
-          const bg = hasData ? 'background:var(--bl);opacity:.7;border-radius:2px;' : '';
-          adTrackHtml += `<div class="gantt-cell${cls}" style="${bg}"></div>`;
+          const bg = hasData ? 'background:var(--bl);opacity:.7;border-radius:2px;position:relative;' : 'position:relative;';
+          const marker = renderConversionMarkers((adDaily[d]||{}).conversions);
+          adTrackHtml += `<div class="gantt-cell${cls}" style="${bg}">${marker}</div>`;
         });
 
         adRow.innerHTML = `<div class="gantt-label"><span class="ad-arrow">▸</span>${adName}<span class="ad-chart-hint">차트 보기</span></div><div class="gantt-track">${adTrackHtml}</div>`;
@@ -5408,7 +5596,8 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
             if (dv) {
               const cpc = dv.clicks ? (dv.spend / dv.clicks).toFixed(0) : '-';
               const ctr = dv.impressions ? ((dv.clicks / dv.impressions) * 100).toFixed(2) : '-';
-              tooltip.innerHTML = `<strong>${ad.name||adKey}</strong><br><span style="color:var(--t2)">${hoverDate}</span><br>Spend: ${(dv.spend||0).toLocaleString(undefined,{maximumFractionDigits:0})}원<br>Clicks: ${(dv.clicks||0).toLocaleString()}<br>Impr: ${(dv.impressions||0).toLocaleString()}<br>CPC: ${cpc}원 · CTR: ${ctr}%`;
+              const convLine = renderConversionTooltip(dv.conversions);
+              tooltip.innerHTML = `<strong>${ad.name||adKey}</strong><br><span style="color:var(--t2)">${hoverDate}</span><br>Spend: ${(dv.spend||0).toLocaleString(undefined,{maximumFractionDigits:0})}원<br>Clicks: ${(dv.clicks||0).toLocaleString()}<br>Impr: ${(dv.impressions||0).toLocaleString()}<br>CPC: ${cpc}원 · CTR: ${ctr}%${convLine}`;
             } else {
               tooltip.innerHTML = `<strong>${ad.name||adKey}</strong><br><span style="color:var(--t2)">${hoverDate}</span><br>데이터 없음`;
             }
@@ -5509,6 +5698,79 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
 
   container.appendChild(wrap);
 }
+
+// 일별 지표 가이드 모달
+function openDailyMetricsGuide() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-bg guide-modal open';
+  modal.id = 'dailyMetricsGuideModal';
+  modal.innerHTML = `
+    <div class="modal" style="max-width:800px;max-height:85vh;overflow-y:auto;">
+      <button class="close" onclick="document.getElementById('dailyMetricsGuideModal').remove()">×</button>
+      <h2>📊 일별 지표 해석 가이드</h2>
+      
+      <div class="guide-tip" style="margin-bottom:16px;">
+        <strong>핵심 원칙:</strong> 판매/매출은 <strong>아임웹 정본만</strong> 사용합니다. Meta 픽셀, GA4 이벤트는 참고치일 뿐 전환/CPA 계산 근거로 사용 금지합니다.
+      </div>
+      
+      <h3>📈 트래픽 지표 (GA4)</h3>
+      <table class="guide-table">
+        <tr><th>지표</th><th>정의</th><th>활용</th></tr>
+        <tr><td><strong>Sessions</strong></td><td>30분간 활동 없을 때까지의 방문 단위</td><td>마케팅 활동의 트래픽 발생 효과</td></tr>
+        <tr><td><strong>Users</strong></td><td>고유 사용자 수</td><td>실제 도달(reach) 규모</td></tr>
+        <tr><td><strong>New Users</strong></td><td>처음 방문한 사용자</td><td>신규 유입 채널 효과</td></tr>
+        <tr><td><strong>Bounce Rate</strong></td><td>단일 페이지 방문 후 이탈 비율</td><td>정상: 30-60%, 랜딩 품질 진단</td></tr>
+        <tr><td><strong>Avg Session Duration</strong></td><td>세션당 평균 체류 시간</td><td>정상: 60-180초, 콘텐츠 몰입도</td></tr>
+      </table>
+      
+      <h3>🛒 판매 지표 (아임웹 정본)</h3>
+      <table class="guide-table">
+        <tr><th>지표</th><th>정의</th><th>주의사항</th></tr>
+        <tr><td><strong>Orders</strong></td><td>결제 완료 주문 수</td><td>취소/환불 제외, 체험 예약금 제외</td></tr>
+        <tr><td><strong>Body Units</strong></td><td>룸핏 본체 판매 대수</td><td>복수 구매는 대수로 집계</td></tr>
+        <tr><td><strong>Revenue</strong></td><td>본체 + 액세서리 매출</td><td>체험 예약금 미포함</td></tr>
+        <tr><td><strong>Feel Bookings</strong></td><td>체험 신청 접수 수</td><td>결제 상태 무관 전체 집계</td></tr>
+      </table>
+      
+      <h3>📢 캠페인 지표 (Meta/Naver)</h3>
+      <table class="guide-table">
+        <tr><th>지표</th><th>정의</th><th>정상 범위</th></tr>
+        <tr><td><strong>CTR</strong></td><td>클릭 ÷ 노출 × 100</td><td>Meta: 0.5-2%, Naver: 3-15%</td></tr>
+        <tr><td><strong>CPC</strong></td><td>광고비 ÷ 클릭</td><td>Meta: 500-2000원, Naver: 300-1500원</td></tr>
+        <tr><td><strong>CPM</strong></td><td>천회 노출당 비용</td><td>Meta: 3,000-10,000원</td></tr>
+        <tr><td><strong>ROAS</strong></td><td>매출 ÷ 광고비 × 100</td><td>300%+ 우수, 200-300% 양호</td></tr>
+      </table>
+      
+      <h3>⚠️ 데이터 한계 및 주의사항</h3>
+      <ul>
+        <li><strong>시간 차이:</strong> GA4(실시간~24h 지연), 아임웹(익일 06:00 업데이트), 광고(1-2h 지연)</li>
+        <li><strong>누락 가능성:</strong> 애드블록, ITP로 인한 GA4 누락 10-30%</li>
+        <li><strong>채널 분류:</strong> Direct(북마크/직접입력), Unassigned(미분류)는 실제 채널과 다를 수 있음</li>
+        <li><strong>전환 기여:</strong> 마지막 클릭 기준으로 실제 여러 채널 거친 구매도 마지막 채널에 귀속</li>
+      </ul>
+      
+      <h3>🎯 이상 징후 판단</h3>
+      <table class="guide-table">
+        <tr><th>증상</th><th>가능한 원인</th><th>조치</th></tr>
+        <tr><td>트래픽↓ + 매출↓</td><td>광고 중단 또는 효과 감소</td><td>광고 상태/예산 확인</td></tr>
+        <tr><td>트래픽↑ + 매출↓</td><td>트래픽 품질 저하</td><td>랜딩 페이지 점검</td></tr>
+        <tr><td>CTR↓</td><td>크리에이티브 피로도</td><td>소재 교체/타겟 조정</td></tr>
+        <tr><td>이탈률↑</td><td>페이지 로딩/UX 문제</td><td>기술적 오류 확인</td></tr>
+      </table>
+      
+      <div class="guide-tip">
+        <strong>💡 팁:</strong> WoW(주간 비교)는 해당 일자 vs 7일 전 동일 요일을 비교합니다. 요일 효과(주중/주말)를 고려해 해석하세요.
+      </div>
+      
+      <p style="font-size:.72rem;color:var(--t2);margin-top:16px;">
+        전체 가이드: <code>docs/daily-metrics-guide.md</code> | 마지막 업데이트: 2026-04-09
+      </p>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+</script>}
 
 </script>
 </body>
