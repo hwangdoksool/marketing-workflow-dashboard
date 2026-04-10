@@ -4888,6 +4888,7 @@ let dailyChartsLoaded = false;
 let dailyRawData = null;
 let campRawData = null;
 let actionsRawData = null;
+let funnelRawData = null;
 let dailySelectedPreset = '30';  // '7','14','30','all','custom'
 let dailyCustomStart = '';
 let dailyCustomEnd = '';
@@ -4902,12 +4903,14 @@ function loadDailyMetricsInto(container) {
   Promise.all([
     fetch('daily_metrics.json').then(r => r.ok ? r.json() : Promise.reject('daily_metrics fetch failed')),
     fetch('campaigns_daily.json').then(r => r.ok ? r.json() : Promise.reject('campaigns_daily fetch failed')),
-    fetch('daily_actions.json').then(r => r.ok ? r.json() : Promise.reject('daily_actions fetch failed'))
-  ]).then(([dailyData, campData, actionsData]) => {
+    fetch('daily_actions.json').then(r => r.ok ? r.json() : Promise.reject('daily_actions fetch failed')),
+    fetch('daily_funnel_events.json').then(r => r.ok ? r.json() : Promise.reject('daily_funnel_events fetch failed'))
+  ]).then(([dailyData, campData, actionsData, funnelData]) => {
     dailyChartsLoaded = true;
     dailyRawData = dailyData;
     campRawData = campData;
     actionsRawData = actionsData;
+    funnelRawData = funnelData;
     filterAndRender();
   }).catch(err => {
     container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--r);">데이터를 불러올 수 없습니다. (${err})</div>`;
@@ -5004,7 +5007,9 @@ function filterAndRender() {
     (campRawData?.campaigns || []).forEach(c => Object.entries(c.daily || {}).forEach(([d,v]) => { if (d >= startDate && d <= endDate) spendByDate[d] = (spendByDate[d] || 0) + (v.spend || 0); }));
     const actionsByDate = {};
     Object.entries(actionsRawData?.by_date || {}).forEach(([d,v]) => { if (d >= startDate && d <= endDate) actionsByDate[d] = v; });
-    renderDailyView({ daily: filteredRows, spendByDate, actionsByDate }, container);
+    const funnelByDate = {};
+    (funnelRawData?.daily || []).forEach(r => { if (r.date >= startDate && r.date <= endDate) funnelByDate[r.date] = r; });
+    renderDailyView({ daily: filteredRows, spendByDate, actionsByDate, funnelByDate, funnelNotes: funnelRawData?.notes || {} }, container);
     const dailyByDate = {}; filteredRows.forEach(r => dailyByDate[r.date] = r);
     renderCampaignGantt(filteredDates, campRawData, dailyByDate, container);
     // 세부 차트는 간트 아래에 토글로 삽입 — DOM 끝에 추가
@@ -5045,6 +5050,8 @@ function renderDailyView(data, container) {
   const rows = data.daily || [];
   const spendByDate = data.spendByDate || {};
   const actionsByDate = data.actionsByDate || {};
+  const funnelByDate = data.funnelByDate || {};
+  const funnelNotes = data.funnelNotes || {};
   if (!rows.length) { container.innerHTML = '<div style="padding:20px;color:var(--t2);">일별 데이터 없음</div>'; return; }
 
   const totals = rows.reduce((acc, r) => {
@@ -5078,6 +5085,7 @@ function renderDailyView(data, container) {
   // Chart containers — 2 compact charts
   const chartsHtml = `
     <div class="card" style="margin-bottom:10px;"><div class="card-title">트래픽 + 전환 + 광고비</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-trafficConv"></canvas></div></div>
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">일자별 퍼널 전환</div><div style="font-size:.72rem;color:var(--t2);margin:-4px 0 8px;line-height:1.5;">중간단계 전환 발생일을 한눈에 보기 위한 차트입니다. 현재 연결: 체험신청 · 결제시작 · 결제정보입력 · 구매이벤트 · 본체판매 <span id="dailyFunnelNoteMissing"></span></div><div style="position:relative;width:100%;height:220px;"><canvas id="dailyChart-funnel"></canvas></div></div>
     <div class="card" style="margin-bottom:10px;"><div class="card-title">체류시간 + 판매매출 + 광고비</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-effRevenue"></canvas></div></div>
     <div class="card" style="margin-bottom:10px;"><div class="card-title">콘텐츠 마케팅 액션</div><div style="position:relative;width:100%;height:160px;"><canvas id="dailyChart-actions"></canvas></div><details style="margin-top:10px;"><summary style="cursor:pointer;color:var(--t2);font-size:.78rem;">상세 리스트 보기</summary><div id="contentActionDetail" style="margin-top:8px;"></div></details></div>
     <div id="detail-charts-placeholder"></div>`;
@@ -5096,6 +5104,17 @@ function renderDailyView(data, container) {
   const igActions = rows.map(r => (actionsByDate[r.date]?.instagram || 0));
   const ytActions = rows.map(r => (actionsByDate[r.date]?.youtube || 0));
   const blogActions = rows.map(r => (actionsByDate[r.date]?.blog || 0));
+  const funnelRows = rows.map(r => ({
+    date: r.date,
+    signups: funnelByDate[r.date]?.signups || 0,
+    kakao_inquiries: funnelByDate[r.date]?.kakao_inquiries || 0,
+    feel_bookings: funnelByDate[r.date]?.feel_bookings ?? (r.feel_bookings || 0),
+    begin_checkout: funnelByDate[r.date]?.begin_checkout || 0,
+    add_payment_info: funnelByDate[r.date]?.add_payment_info || 0,
+    purchase: funnelByDate[r.date]?.purchase || 0,
+    body_units: funnelByDate[r.date]?.body_units ?? (r.body_units || 0),
+    view_item_users: funnelByDate[r.date]?.view_item_users || 0
+  }));
 
   const commonOpts = {
     responsive:true, maintainAspectRatio:false,
@@ -5147,6 +5166,62 @@ function renderDailyView(data, container) {
         y:{ type:'linear', position:'left', ticks:{color:'#8b90a0',font:{size:9},callback:v=>v.toLocaleString()}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'세션/유저',color:'#8b90a0',font:{size:10}} },
         y1:{ type:'linear', position:'right', ticks:{color:gColor,font:{size:9}}, grid:{drawOnChartArea:false}, title:{display:true,text:'주문/본체/업로드',color:gColor,font:{size:10}} },
         y2:{ type:'linear', position:'right', offset:true, ticks:{color:'#ff9f40',font:{size:9},callback:v=>Number(v).toLocaleString()}, grid:{drawOnChartArea:false}, title:{display:true,text:'광고비(원)',color:'#ff9f40',font:{size:10}} }
+      }
+    }
+  });
+
+  const missingNotes = [];
+  if (funnelNotes.signups) missingNotes.push(`회원가입: ${funnelNotes.signups}`);
+  if (funnelNotes.kakao_inquiries) missingNotes.push(`카카오문의: ${funnelNotes.kakao_inquiries}`);
+  const missingNoteEl = document.getElementById('dailyFunnelNoteMissing');
+  if (missingNoteEl && missingNotes.length) {
+    missingNoteEl.textContent = `· 미연동: ${missingNotes.join(' / ')}`;
+  }
+
+  new Chart(document.getElementById('dailyChart-funnel'), {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        { label:'체험신청', data:funnelRows.map(r=>r.feel_bookings), backgroundColor:'#2ecc71aa', stack:'funnel', order:3 },
+        { label:'결제시작', data:funnelRows.map(r=>r.begin_checkout), backgroundColor:acColor+'bb', stack:'funnel', order:3 },
+        { label:'결제정보입력', data:funnelRows.map(r=>r.add_payment_info), backgroundColor:'#74b9ffaa', stack:'funnel', order:3 },
+        { label:'구매이벤트', data:funnelRows.map(r=>r.purchase), backgroundColor:'#fdcb6eaa', stack:'funnel', order:3 },
+        { label:'본체판매', data:funnelRows.map(r=>r.body_units), type:'line', borderColor:gColor, backgroundColor:gColor+'22', tension:.25, fill:false, pointRadius:2, borderWidth:2, yAxisID:'y1', order:1 },
+        { label:'상품조회(참고)', data:funnelRows.map(r=>r.view_item_users), type:'line', borderColor:'#8b90a0', backgroundColor:'#8b90a033', tension:.25, fill:false, pointRadius:1, borderDash:[4,3], yAxisID:'y', order:2, hidden:true }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{ labels:{ color:'#8b90a0', font:{size:10}, usePointStyle:true, pointStyle:'circle', padding:12 } },
+        tooltip:{
+          callbacks:{
+            afterBody: function(items) {
+              const idx = items[0].dataIndex;
+              const r = funnelRows[idx];
+              return [
+                `체험신청: ${r.feel_bookings}건`,
+                `결제시작: ${r.begin_checkout}명`,
+                `결제정보입력: ${r.add_payment_info}명`,
+                `구매이벤트(GA4): ${r.purchase}명`,
+                `본체판매(아임웹): ${r.body_units}대`
+              ];
+            },
+            label: function(ctx) {
+              const v = ctx.parsed.y;
+              if (ctx.dataset.label === '본체판매') return '본체판매: ' + v.toLocaleString() + '대';
+              if (ctx.dataset.label === '상품조회(참고)') return '상품조회: ' + v.toLocaleString() + '명';
+              return ctx.dataset.label + ': ' + v.toLocaleString() + (ctx.dataset.label.includes('결제') || ctx.dataset.label.includes('구매') ? '명' : '건');
+            }
+          }
+        }
+      },
+      scales:{
+        x:{ ticks:{color:'#8b90a0',font:{size:9},maxRotation:0}, grid:{color:'rgba(255,255,255,.05)'}, stacked:true },
+        y:{ stacked:true, position:'left', ticks:{color:'#8b90a0',font:{size:9},precision:0}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'중간 전환(건/명)',color:'#8b90a0',font:{size:10}} },
+        y1:{ position:'right', ticks:{color:gColor,font:{size:9},precision:0}, grid:{drawOnChartArea:false}, title:{display:true,text:'본체판매(대)',color:gColor,font:{size:10}} }
       }
     }
   });
