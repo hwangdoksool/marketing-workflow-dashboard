@@ -280,7 +280,7 @@ related: [[일별지표]]
 1. **체험신청** — Supabase `feel_bookings` 일별 건수
 2. **결제시작** — GA4 `begin_checkout` 유저 수
 3. **결제정보입력** — GA4 `add_payment_info` 유저 수
-4. **본체판매 연동 구매이벤트** — GA4 `purchase` 유저 수 중, **아임웹 본체판매가 실제 발생한 날짜에만 유지**한 값
+4. **유효 판매전환** — 아임웹 본체판매 주문 기준 일별 판매전환 건수
 5. **본체판매** — 아임웹 정본 본체 판매 대수
 
 ### 차트 해석 의도
@@ -300,7 +300,8 @@ related: [[일별지표]]
 ### 구현 메모
 - 차트 데이터 파일: `site/daily_funnel_events.json`
 - 렌더 반영: `site/index.html`
-- **필터 규칙:** GA4 `purchase`는 아임웹 `body_units > 0`인 날짜에만 유지, 그 외 날짜는 전부 0 처리
+- **유효 판매전환 규칙:** `marketing-pipeline/data/imweb_body_sales.json`의 본체판매 주문(`completed` + `in_progress`, `internal=false`)을 일자별 집계해 사용
+- 원본 GA4 `purchase`는 검사용 보조선으로만 남기고 기본 숨김 처리
 - 배포 완료: `rf-marketing-dashboard`
 
 ### 다음 확장 후보

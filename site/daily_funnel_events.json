@@ -6,7 +6,8 @@
     "feel_bookings": "Supabase feel_bookings 일별 건수",
     "begin_checkout": "GA4 begin_checkout 유저 수",
     "add_payment_info": "GA4 add_payment_info 유저 수",
-    "purchase": "GA4 purchase 유저 수 (참고치)",
+    "purchase": "원본 GA4 purchase 유저 수(검사용)",
+    "valid_sales_conversions": "아임웹 본체판매 주문 기준 일별 유효 판매전환 건수",
     "body_units": "아임웹 정본 본체 판매 대수"
   },
   "daily": [
@@ -18,6 +19,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 0
@@ -30,6 +32,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 0
@@ -42,6 +45,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 0
@@ -54,6 +58,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 0
@@ -66,6 +71,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 0
@@ -78,6 +84,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 8
@@ -90,6 +97,7 @@
       "begin_checkout": 1,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 9
@@ -102,6 +110,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 10
@@ -114,6 +123,7 @@
       "begin_checkout": 3,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 12
@@ -126,6 +136,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 7
@@ -138,6 +149,7 @@
       "begin_checkout": 2,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 11
@@ -150,6 +162,7 @@
       "begin_checkout": 1,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 11
@@ -162,6 +175,7 @@
       "begin_checkout": 6,
       "add_payment_info": 1,
       "purchase": 1,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 17
@@ -174,6 +188,7 @@
       "begin_checkout": 1,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 13
@@ -186,6 +201,7 @@
       "begin_checkout": 1,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 10
@@ -198,6 +214,7 @@
       "begin_checkout": 1,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 12
@@ -210,6 +227,7 @@
       "begin_checkout": 2,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 10
@@ -222,6 +240,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 9
@@ -234,6 +253,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 42
@@ -246,6 +266,7 @@
       "begin_checkout": 1,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 72
@@ -258,6 +279,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 54
@@ -270,6 +292,7 @@
       "begin_checkout": 2,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 70
@@ -282,6 +305,7 @@
       "begin_checkout": 2,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 83
@@ -294,6 +318,7 @@
       "begin_checkout": 4,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 75
@@ -306,6 +331,7 @@
       "begin_checkout": 5,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 133
@@ -318,6 +344,7 @@
       "begin_checkout": 3,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 62
@@ -330,6 +357,7 @@
       "begin_checkout": 1,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 50
@@ -342,6 +370,7 @@
       "begin_checkout": 4,
       "add_payment_info": 2,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 141
@@ -354,6 +383,7 @@
       "begin_checkout": 1,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 165
@@ -366,6 +396,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 108
@@ -378,6 +409,7 @@
       "begin_checkout": 0,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 154
@@ -390,6 +422,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 140
@@ -402,6 +435,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 64
@@ -414,6 +448,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 74
@@ -426,6 +461,7 @@
       "begin_checkout": 4,
       "add_payment_info": 2,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 75
@@ -438,6 +474,7 @@
       "begin_checkout": 4,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 66
@@ -450,6 +487,7 @@
       "begin_checkout": 2,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 49
@@ -462,6 +500,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 65
@@ -474,6 +513,7 @@
       "begin_checkout": 2,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 60
@@ -486,6 +526,7 @@
       "begin_checkout": 1,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 68
@@ -498,6 +539,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 52
@@ -510,6 +552,7 @@
       "begin_checkout": 3,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 117
@@ -522,6 +565,7 @@
       "begin_checkout": 4,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 205
@@ -534,6 +578,7 @@
       "begin_checkout": 2,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 204
@@ -546,6 +591,7 @@
       "begin_checkout": 4,
       "add_payment_info": 3,
       "purchase": 2,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 206
@@ -558,6 +604,7 @@
       "begin_checkout": 7,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 338
@@ -570,6 +617,7 @@
       "begin_checkout": 0,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 85
@@ -582,6 +630,7 @@
       "begin_checkout": 2,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 153
@@ -594,6 +643,7 @@
       "begin_checkout": 1,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 169
@@ -606,6 +656,7 @@
       "begin_checkout": 5,
       "add_payment_info": 2,
       "purchase": 1,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 192
@@ -618,6 +669,7 @@
       "begin_checkout": 7,
       "add_payment_info": 3,
       "purchase": 6,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 206
@@ -630,6 +682,7 @@
       "begin_checkout": 1,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 206
@@ -642,6 +695,7 @@
       "begin_checkout": 7,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 289
@@ -654,6 +708,7 @@
       "begin_checkout": 4,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 340
@@ -666,6 +721,7 @@
       "begin_checkout": 3,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 219
@@ -678,6 +734,7 @@
       "begin_checkout": 6,
       "add_payment_info": 1,
       "purchase": 1,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 2,
       "view_item_users": 355
@@ -690,6 +747,7 @@
       "begin_checkout": 7,
       "add_payment_info": 2,
       "purchase": 1,
+      "valid_sales_conversions": 1,
       "body_units": 1,
       "orders": 1,
       "view_item_users": 305
@@ -702,6 +760,7 @@
       "begin_checkout": 4,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 361
@@ -714,6 +773,7 @@
       "begin_checkout": 2,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 259
@@ -726,6 +786,7 @@
       "begin_checkout": 7,
       "add_payment_info": 2,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 213
@@ -738,6 +799,7 @@
       "begin_checkout": 3,
       "add_payment_info": 2,
       "purchase": 1,
+      "valid_sales_conversions": 1,
       "body_units": 1,
       "orders": 1,
       "view_item_users": 260
@@ -750,6 +812,7 @@
       "begin_checkout": 5,
       "add_payment_info": 4,
       "purchase": 3,
+      "valid_sales_conversions": 2,
       "body_units": 2,
       "orders": 3,
       "view_item_users": 234
@@ -762,6 +825,7 @@
       "begin_checkout": 7,
       "add_payment_info": 0,
       "purchase": 1,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 282
@@ -774,6 +838,7 @@
       "begin_checkout": 5,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 342
@@ -786,6 +851,7 @@
       "begin_checkout": 2,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 258
@@ -798,6 +864,7 @@
       "begin_checkout": 4,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 443
@@ -810,6 +877,7 @@
       "begin_checkout": 3,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 1,
       "body_units": 1,
       "orders": 1,
       "view_item_users": 363
@@ -822,6 +890,7 @@
       "begin_checkout": 5,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 235
@@ -834,6 +903,7 @@
       "begin_checkout": 4,
       "add_payment_info": 1,
       "purchase": 1,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 271
@@ -846,6 +916,7 @@
       "begin_checkout": 8,
       "add_payment_info": 2,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 297
@@ -858,6 +929,7 @@
       "begin_checkout": 11,
       "add_payment_info": 6,
       "purchase": 3,
+      "valid_sales_conversions": 2,
       "body_units": 2,
       "orders": 2,
       "view_item_users": 338
@@ -870,6 +942,7 @@
       "begin_checkout": 6,
       "add_payment_info": 3,
       "purchase": 2,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 381
@@ -882,6 +955,7 @@
       "begin_checkout": 9,
       "add_payment_info": 4,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 480
@@ -894,6 +968,7 @@
       "begin_checkout": 5,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 544
@@ -906,6 +981,7 @@
       "begin_checkout": 9,
       "add_payment_info": 1,
       "purchase": 1,
+      "valid_sales_conversions": 1,
       "body_units": 1,
       "orders": 1,
       "view_item_users": 771
@@ -918,6 +994,7 @@
       "begin_checkout": 3,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 416
@@ -930,6 +1007,7 @@
       "begin_checkout": 5,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 641
@@ -942,6 +1020,7 @@
       "begin_checkout": 4,
       "add_payment_info": 2,
       "purchase": 2,
+      "valid_sales_conversions": 1,
       "body_units": 1,
       "orders": 1,
       "view_item_users": 677
@@ -954,6 +1033,7 @@
       "begin_checkout": 7,
       "add_payment_info": 2,
       "purchase": 1,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 696
@@ -966,6 +1046,7 @@
       "begin_checkout": 13,
       "add_payment_info": 3,
       "purchase": 2,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 779
@@ -978,6 +1059,7 @@
       "begin_checkout": 9,
       "add_payment_info": 1,
       "purchase": 1,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 793
@@ -990,6 +1072,7 @@
       "begin_checkout": 7,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 638
@@ -1002,6 +1085,7 @@
       "begin_checkout": 5,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 603
@@ -1014,6 +1098,7 @@
       "begin_checkout": 8,
       "add_payment_info": 4,
       "purchase": 2,
+      "valid_sales_conversions": 1,
       "body_units": 1,
       "orders": 2,
       "view_item_users": 355
@@ -1026,6 +1111,7 @@
       "begin_checkout": 8,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 277
@@ -1038,6 +1124,7 @@
       "begin_checkout": 7,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 159
@@ -1050,6 +1137,7 @@
       "begin_checkout": 11,
       "add_payment_info": 3,
       "purchase": 1,
+      "valid_sales_conversions": 1,
       "body_units": 1,
       "orders": 1,
       "view_item_users": 247
@@ -1062,6 +1150,7 @@
       "begin_checkout": 5,
       "add_payment_info": 3,
       "purchase": 1,
+      "valid_sales_conversions": 1,
       "body_units": 1,
       "orders": 1,
       "view_item_users": 307
@@ -1074,6 +1163,7 @@
       "begin_checkout": 8,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 217
@@ -1086,6 +1176,7 @@
       "begin_checkout": 6,
       "add_payment_info": 1,
       "purchase": 1,
+      "valid_sales_conversions": 1,
       "body_units": 1,
       "orders": 1,
       "view_item_users": 123
@@ -1098,6 +1189,7 @@
       "begin_checkout": 4,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 194
@@ -1110,6 +1202,7 @@
       "begin_checkout": 4,
       "add_payment_info": 1,
       "purchase": 1,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 157
@@ -1122,6 +1215,7 @@
       "begin_checkout": 5,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 178
@@ -1134,6 +1228,7 @@
       "begin_checkout": 5,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 190
@@ -1146,6 +1241,7 @@
       "begin_checkout": 4,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 127
@@ -1158,6 +1254,7 @@
       "begin_checkout": 2,
       "add_payment_info": 0,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 65
@@ -1170,6 +1267,7 @@
       "begin_checkout": 3,
       "add_payment_info": 2,
       "purchase": 1,
+      "valid_sales_conversions": 0,
       "body_units": 1,
       "orders": 1,
       "view_item_users": 51
@@ -1182,6 +1280,7 @@
       "begin_checkout": 3,
       "add_payment_info": 0,
       "purchase": 1,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 121
@@ -1194,6 +1293,7 @@
       "begin_checkout": 1,
       "add_payment_info": 1,
       "purchase": 0,
+      "valid_sales_conversions": 0,
       "body_units": 0,
       "orders": 0,
       "view_item_users": 272
