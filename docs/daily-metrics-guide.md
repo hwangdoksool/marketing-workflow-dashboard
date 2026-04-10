@@ -300,7 +300,7 @@ related: [[일별지표]]
 ### 구현 메모
 - 차트 데이터 파일: `site/daily_funnel_events.json`
 - 렌더 반영: `site/index.html`
-- **유효 판매전환 규칙:** `marketing-pipeline/data/imweb_body_sales.json`의 본체판매 주문(`completed` + `in_progress`, `internal=false`)을 일자별 집계해 사용
+- **유효 판매전환 규칙:** `marketing-pipeline/data/imweb_orders.json`에서 `classification.is_body_sale=true` 이고 `body_units > 0`인 주문의 일별 건수를 사용
 - 원본 GA4 `purchase`는 검사용 보조선으로만 남기고 기본 숨김 처리
 - 배포 완료: `rf-marketing-dashboard`
 

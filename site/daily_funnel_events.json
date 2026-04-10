@@ -7,7 +7,7 @@
     "begin_checkout": "GA4 begin_checkout 유저 수",
     "add_payment_info": "GA4 add_payment_info 유저 수",
     "purchase": "원본 GA4 purchase 유저 수(검사용)",
-    "valid_sales_conversions": "아임웹 본체판매 주문 기준 일별 유효 판매전환 건수",
+    "valid_sales_conversions": "imweb_orders.json 에서 classification.is_body_sale=true 인 주문의 일별 건수",
     "body_units": "아임웹 정본 본체 판매 대수"
   },
   "daily": [
@@ -1267,7 +1267,7 @@
       "begin_checkout": 3,
       "add_payment_info": 2,
       "purchase": 1,
-      "valid_sales_conversions": 0,
+      "valid_sales_conversions": 1,
       "body_units": 1,
       "orders": 1,
       "view_item_users": 51
