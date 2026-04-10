@@ -5085,7 +5085,7 @@ function renderDailyView(data, container) {
   // Chart containers — 2 compact charts
   const chartsHtml = `
     <div class="card" style="margin-bottom:10px;"><div class="card-title">트래픽 + 전환 + 광고비</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-trafficConv"></canvas></div></div>
-    <div class="card" style="margin-bottom:10px;"><div class="card-title">일자별 퍼널 전환</div><div style="font-size:.72rem;color:var(--t2);margin:-4px 0 8px;line-height:1.5;">중간단계 전환 발생일을 한눈에 보기 위한 차트입니다. 현재 연결: 체험신청 · 결제시작 · 결제정보입력 · 유효 판매전환 · 본체판매 <span id="dailyFunnelNoteMissing"></span></div><div style="position:relative;width:100%;height:220px;"><canvas id="dailyChart-funnel"></canvas></div></div>
+    <div class="card" style="margin-bottom:10px;"><div class="card-title">일자별 퍼널 전환</div><div style="font-size:.72rem;color:var(--t2);margin:-4px 0 8px;line-height:1.5;">체험신청부터 유효 판매전환까지, 날짜별 전환 흐름만 보이도록 정리한 차트입니다.</div><div style="position:relative;width:100%;height:220px;"><canvas id="dailyChart-funnel"></canvas></div></div>
     <div class="card" style="margin-bottom:10px;"><div class="card-title">체류시간 + 판매매출 + 광고비</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-effRevenue"></canvas></div></div>
     <div class="card" style="margin-bottom:10px;"><div class="card-title">콘텐츠 마케팅 액션</div><div style="position:relative;width:100%;height:160px;"><canvas id="dailyChart-actions"></canvas></div><details style="margin-top:10px;"><summary style="cursor:pointer;color:var(--t2);font-size:.78rem;">상세 리스트 보기</summary><div id="contentActionDetail" style="margin-top:8px;"></div></details></div>
     <div id="detail-charts-placeholder"></div>`;
@@ -5176,14 +5176,6 @@ function renderDailyView(data, container) {
     }
   });
 
-  const missingNotes = [];
-  if (funnelNotes.signups) missingNotes.push(`회원가입: ${funnelNotes.signups}`);
-  if (funnelNotes.kakao_inquiries) missingNotes.push(`카카오문의: ${funnelNotes.kakao_inquiries}`);
-  const missingNoteEl = document.getElementById('dailyFunnelNoteMissing');
-  if (missingNoteEl && missingNotes.length) {
-    missingNoteEl.textContent = `· 미연동: ${missingNotes.join(' / ')}`;
-  }
-
   new Chart(document.getElementById('dailyChart-funnel'), {
     type:'bar',
     data:{
@@ -5193,9 +5185,7 @@ function renderDailyView(data, container) {
         { label:'결제시작', data:funnelRows.map(r=>r.begin_checkout), backgroundColor:acColor+'bb', stack:'funnel', order:3 },
         { label:'결제정보입력', data:funnelRows.map(r=>r.add_payment_info), backgroundColor:'#74b9ffaa', stack:'funnel', order:3 },
         { label:'유효 판매전환', data:funnelRows.map(r=>r.valid_sales_conversions), backgroundColor:'#fdcb6eaa', stack:'funnel', order:3 },
-        { label:'본체판매', data:funnelRows.map(r=>r.body_units), type:'line', borderColor:gColor, backgroundColor:gColor+'22', tension:.25, fill:false, pointRadius:2, borderWidth:2, yAxisID:'y1', order:1 },
-        { label:'원본 구매이벤트(검사용)', data:funnelRows.map(r=>r.purchase), type:'line', borderColor:'#b2bec3', backgroundColor:'#b2bec333', tension:.25, fill:false, pointRadius:1, borderDash:[3,3], yAxisID:'y', order:2, hidden:true },
-        { label:'상품조회(참고)', data:funnelRows.map(r=>r.view_item_users), type:'line', borderColor:'#8b90a0', backgroundColor:'#8b90a033', tension:.25, fill:false, pointRadius:1, borderDash:[4,3], yAxisID:'y', order:2, hidden:true }
+        { label:'본체판매', data:funnelRows.map(r=>r.body_units), type:'line', borderColor:gColor, backgroundColor:gColor+'22', tension:.25, fill:false, pointRadius:2, borderWidth:2, yAxisID:'y1', order:1 }
       ]
     },
     options:{
@@ -5213,8 +5203,7 @@ function renderDailyView(data, container) {
                 `결제시작: ${r.begin_checkout}명`,
                 `결제정보입력: ${r.add_payment_info}명`,
                 `유효 판매전환: ${r.valid_sales_conversions}건`,
-                `본체판매(아임웹): ${r.body_units}대`,
-                `원본 GA4 purchase(검사용): ${r.raw_purchase}명`
+                `본체판매: ${r.body_units}대`
               ];
             },
             label: function(ctx) {
