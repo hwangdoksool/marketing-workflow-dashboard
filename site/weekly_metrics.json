@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generated": "2026-04-04T16:24:55",
+    "generated": "2026-04-27T08:00:02",
     "sources": [
       "ga4_full.json",
       "meta_full.json",
       "naver_full.json",
       "imweb_body_sales.json"
     ],
-    "weekCount": 121
+    "weekCount": 124
   },
   "weeks": {
     "2023-W50": {
@@ -4237,28 +4237,28 @@
     "2026-W14": {
       "period": "2026-03-30~2026-04-05",
       "ga4": {
-        "sessions": 2339,
-        "users": 2177,
-        "newUsers": 1517,
-        "pageviews": 4194,
-        "engagedSessions": 53,
-        "bounceRate": 0.9774,
-        "avgDuration": 159.4
+        "sessions": 3152,
+        "users": 2952,
+        "newUsers": 2110,
+        "pageviews": 5706,
+        "engagedSessions": 66,
+        "bounceRate": 0.9795,
+        "avgDuration": 163.3
       },
       "meta": {
-        "impressions": 39027,
-        "clicks": 1999,
-        "adSpend": 473399,
-        "ctr": 5.12,
-        "cpc": 237,
+        "impressions": 51428,
+        "clicks": 2700,
+        "adSpend": 633218,
+        "ctr": 5.25,
+        "cpc": 235,
         "pixelPurchases": 0
       },
       "naver": {
-        "impressions": 1039,
-        "clicks": 118,
-        "spend": 9487,
-        "ctr": 11.36,
-        "cpc": 80
+        "impressions": 1319,
+        "clicks": 157,
+        "spend": 12776,
+        "ctr": 11.9,
+        "cpc": 81
       },
       "imweb": {
         "bodySales": 1,
@@ -4266,19 +4266,151 @@
         "feelBookings": 1
       },
       "summary": {
-        "sessions": 2339,
-        "users": 2177,
-        "newUsers": 1517,
-        "totalAdSpend": 482886,
-        "metaSpend": 473399,
-        "naverSpend": 9487,
-        "impressions": 40066,
-        "clicks": 2117,
+        "sessions": 3152,
+        "users": 2952,
+        "newUsers": 2110,
+        "totalAdSpend": 645994,
+        "metaSpend": 633218,
+        "naverSpend": 12776,
+        "impressions": 52747,
+        "clicks": 2857,
         "bodySales": 1,
         "feelBookings": 1,
         "revenue": 4080000,
-        "cpa": 241443,
-        "roas": 844.9,
+        "cpa": 322997,
+        "roas": 631.6,
+        "pixelPurchases": 0
+      }
+    },
+    "2026-W15": {
+      "period": "2026-04-06~2026-04-12",
+      "ga4": {
+        "sessions": 3022,
+        "users": 2794,
+        "newUsers": 2094,
+        "pageviews": 4963,
+        "engagedSessions": 257,
+        "bounceRate": 0.9271,
+        "avgDuration": 202.6
+      },
+      "meta": {
+        "impressions": 43570,
+        "clicks": 2223,
+        "adSpend": 524661,
+        "ctr": 5.1,
+        "cpc": 236,
+        "pixelPurchases": 0
+      },
+      "naver": {
+        "impressions": 1617,
+        "clicks": 161,
+        "spend": 13800,
+        "ctr": 9.96,
+        "cpc": 86
+      },
+      "imweb": {},
+      "summary": {
+        "sessions": 3022,
+        "users": 2794,
+        "newUsers": 2094,
+        "totalAdSpend": 538461,
+        "metaSpend": 524661,
+        "naverSpend": 13800,
+        "impressions": 45187,
+        "clicks": 2384,
+        "bodySales": 0,
+        "feelBookings": 0,
+        "revenue": 0,
+        "cpa": null,
+        "roas": 0.0,
+        "pixelPurchases": 0
+      }
+    },
+    "2026-W16": {
+      "period": "2026-04-13~2026-04-19",
+      "ga4": {
+        "sessions": 5084,
+        "users": 4792,
+        "newUsers": 3636,
+        "pageviews": 8467,
+        "engagedSessions": 108,
+        "bounceRate": 0.9798,
+        "avgDuration": 138.0
+      },
+      "meta": {
+        "impressions": 76582,
+        "clicks": 4436,
+        "adSpend": 808964,
+        "ctr": 5.79,
+        "cpc": 182,
+        "pixelPurchases": 0
+      },
+      "naver": {
+        "impressions": 1970,
+        "clicks": 186,
+        "spend": 17016,
+        "ctr": 9.44,
+        "cpc": 91
+      },
+      "imweb": {},
+      "summary": {
+        "sessions": 5084,
+        "users": 4792,
+        "newUsers": 3636,
+        "totalAdSpend": 825980,
+        "metaSpend": 808964,
+        "naverSpend": 17016,
+        "impressions": 78552,
+        "clicks": 4622,
+        "bodySales": 0,
+        "feelBookings": 0,
+        "revenue": 0,
+        "cpa": null,
+        "roas": 0.0,
+        "pixelPurchases": 0
+      }
+    },
+    "2026-W17": {
+      "period": "2026-04-20~2026-04-26",
+      "ga4": {
+        "sessions": 6655,
+        "users": 6366,
+        "newUsers": 5043,
+        "pageviews": 10415,
+        "engagedSessions": 58,
+        "bounceRate": 0.9901,
+        "avgDuration": 98.7
+      },
+      "meta": {
+        "impressions": 103389,
+        "clicks": 5894,
+        "adSpend": 844127,
+        "ctr": 5.7,
+        "cpc": 143,
+        "pixelPurchases": 0
+      },
+      "naver": {
+        "impressions": 1635,
+        "clicks": 218,
+        "spend": 17606,
+        "ctr": 13.33,
+        "cpc": 81
+      },
+      "imweb": {},
+      "summary": {
+        "sessions": 6655,
+        "users": 6366,
+        "newUsers": 5043,
+        "totalAdSpend": 861733,
+        "metaSpend": 844127,
+        "naverSpend": 17606,
+        "impressions": 105024,
+        "clicks": 6112,
+        "bodySales": 0,
+        "feelBookings": 0,
+        "revenue": 0,
+        "cpa": null,
+        "roas": 0.0,
         "pixelPurchases": 0
       }
     }
