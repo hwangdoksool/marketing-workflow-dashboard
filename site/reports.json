@@ -1,25 +1,25 @@
 [
   {
-    "id": "w19-2026",
-    "title": "W19 · 5월 1주차",
-    "period": "05-04 ~ 05-10",
-    "publishedAt": "2026-05-10",
+    "id": "w20-2026",
+    "title": "W20 · 5월 2주차",
+    "period": "05-11 ~ 05-17",
+    "publishedAt": "2026-05-17",
     "kpi": {
       "sessions": {
         "value": 0,
-        "prev": 3989
+        "prev": 4468
       },
       "users": {
         "value": 0,
-        "prev": 3786
+        "prev": 4181
       },
       "newUsers": {
         "value": 0,
-        "prev": 2902
+        "prev": 3220
       },
       "adSpend": {
         "value": 0,
-        "prev": 507804,
+        "prev": 536710,
         "unit": "₩",
         "note": "Meta ₩0 + 네이버 ₩0"
       },
@@ -110,9 +110,9 @@
         "type": "funnel",
         "content": {},
         "prev": {
-          "view_item": 3048,
-          "begin_checkout": 27,
-          "add_payment_info": 7,
+          "view_item": 3923,
+          "begin_checkout": 42,
+          "add_payment_info": 12,
           "purchase": 5
         }
       },
@@ -138,6 +138,299 @@
         "title": "📄 페이지별 트래픽",
         "type": "metrics",
         "content": []
+      }
+    ]
+  },
+  {
+    "id": "w19-2026",
+    "title": "W19 · 5월 1주차",
+    "period": "05-04 ~ 05-10",
+    "publishedAt": "2026-05-10",
+    "kpi": {
+      "sessions": {
+        "value": 4468,
+        "prev": 3989
+      },
+      "users": {
+        "value": 4181,
+        "prev": 3786
+      },
+      "newUsers": {
+        "value": 3220,
+        "prev": 2902
+      },
+      "adSpend": {
+        "value": 536710,
+        "prev": 507804,
+        "unit": "₩",
+        "note": "Meta ₩522,980 + 네이버 ₩13,730"
+      },
+      "impressions": {
+        "value": 73952,
+        "prev": null,
+        "note": "Meta 67,484 + 네이버 6,468"
+      },
+      "clicks": {
+        "value": 4068,
+        "prev": null,
+        "note": "Meta 3,927 + 네이버 141"
+      },
+      "purchases_ga4": {
+        "value": 5,
+        "prev": 5,
+        "note": "GA4 purchase 이벤트"
+      },
+      "cpc": {
+        "value": 132,
+        "prev": null,
+        "unit": "₩"
+      },
+      "ctr": {
+        "value": 5.5,
+        "prev": null,
+        "unit": "%"
+      },
+      "cpa": {
+        "value": 107342,
+        "prev": null,
+        "unit": "₩",
+        "note": "광고비/GA4구매건수"
+      },
+      "convRate": {
+        "value": 0.112,
+        "prev": null,
+        "unit": "%",
+        "note": "구매/세션"
+      }
+    },
+    "abstract": "세션 4,468, 유저 4,181명. 총 광고비 ₩536,710. GA4 구매 5건. 세션 전주 대비 ▲12.0%.",
+    "actions": [],
+    "sections": [
+      {
+        "title": "📋 미팅 어젠다",
+        "type": "agenda",
+        "content": "• 📊 세션 전주 대비 급증 (+12.0%) — 원인 논의\n• 🛒 GA4 구매 5건 — 전환 경로 리뷰\n• 💡 시그널 발견 사항 공유 — 각자 1개씩\n• 📝 진행 중 실험 상태 업데이트\n• 🎯 다음 주 실험 1개 선정 + 설계서 작성",
+        "items": [
+          "📊 세션 전주 대비 급증 (+12.0%) — 원인 논의",
+          "🛒 GA4 구매 5건 — 전환 경로 리뷰",
+          "💡 시그널 발견 사항 공유 — 각자 1개씩",
+          "📝 진행 중 실험 상태 업데이트",
+          "🎯 다음 주 실험 1개 선정 + 설계서 작성"
+        ]
+      },
+      {
+        "title": "🛒 전환 건별 상세 (GA4 기준)",
+        "type": "insights",
+        "content": [
+          "📦 구매 완료: 5건",
+          "🛒 결제 시작: 42건",
+          "💳 결제정보 입력: 12건",
+          "결제시작→구매 전환율: 11.9%"
+        ]
+      },
+      {
+        "title": "━━ Part 1: 관계 분석 ━━",
+        "type": "text",
+        "content": "이번 주 액션과 지표 변화의 관계"
+      },
+      {
+        "title": "📋 1-1. 이번 주 액션 × 지표 변화",
+        "type": "insights",
+        "content": [
+          "이번 주 기록된 마케팅 액션 없음"
+        ]
+      },
+      {
+        "title": "🔗 1-2. 전환 건 ↔ 액션 매칭",
+        "type": "insights",
+        "content": [
+          "GA4 구매 5건 — 이번 주 별도 액션 없음 (기존 소재/구조 효과 지속)"
+        ]
+      },
+      {
+        "title": "❓ 1-3. 매칭 안 되는 변화",
+        "type": "insights",
+        "content": [
+          "전주 대비 큰 괴리 없음 (또는 비교 데이터 부족)"
+        ]
+      },
+      {
+        "title": "⏱️ 1-4. 시차 매칭 (1~2주 전 액션의 지연 효과)",
+        "type": "insights",
+        "content": [
+          "소급 리포트 — 과거 데이터 기반 시차 분석은 전체 기간 종합 리뷰에서 수행"
+        ]
+      },
+      {
+        "title": "━━ Part 2: 지표 현황 ━━",
+        "type": "text",
+        "content": "상세 데이터 (참조용)"
+      },
+      {
+        "title": "📊 채널별 트래픽",
+        "type": "metrics",
+        "content": [
+          {
+            "metric": "Paid Social",
+            "w12": 2981,
+            "w11": 2417,
+            "note": "유저 2,838명, 이탈 99% (▲23%)"
+          },
+          {
+            "metric": "Unassigned",
+            "w12": 2704,
+            "w11": 2337,
+            "note": "유저 2,588명, 이탈 100% (▲16%)"
+          },
+          {
+            "metric": "Direct",
+            "w12": 647,
+            "w11": 651,
+            "note": "유저 628명, 이탈 100% (▼1%)"
+          },
+          {
+            "metric": "Organic Search",
+            "w12": 203,
+            "w11": 197,
+            "note": "유저 172명, 이탈 95% (▲3%)"
+          },
+          {
+            "metric": "Organic Social",
+            "w12": 140,
+            "w11": 157,
+            "note": "유저 130명, 이탈 99% (▼11%)"
+          },
+          {
+            "metric": "Paid Search",
+            "w12": 104,
+            "w11": 167,
+            "note": "유저 89명, 이탈 95% (▼38%)"
+          },
+          {
+            "metric": "Referral",
+            "w12": 21,
+            "w11": 22,
+            "note": "유저 18명, 이탈 100% (▼5%)"
+          },
+          {
+            "metric": "Organic Shopping",
+            "w12": 7,
+            "w11": 3,
+            "note": "유저 7명, 이탈 100% (▲133%)"
+          }
+        ]
+      },
+      {
+        "title": "🎯 전환 퍼널 (GA4)",
+        "type": "funnel",
+        "content": {
+          "view_item": 3923,
+          "begin_checkout": 42,
+          "add_payment_info": 12,
+          "purchase": 5
+        },
+        "prev": {
+          "view_item": 3048,
+          "begin_checkout": 27,
+          "add_payment_info": 7,
+          "purchase": 5
+        }
+      },
+      {
+        "title": "💰 Meta 캠페인별",
+        "type": "metrics",
+        "content": [
+          {
+            "metric": "[전환] 메인페이지 랜딩_리타겟팅_260423",
+            "w12": "₩522,980",
+            "w11": "imp 67,484",
+            "note": "clicks 3,927"
+          }
+        ]
+      },
+      {
+        "title": "🔍 네이버 검색광고",
+        "type": "metrics",
+        "content": [
+          {
+            "metric": "합계",
+            "w12": "₩13,730",
+            "w11": "imp 6,468",
+            "note": "clicks 141, CTR 2.2%, CPC ₩97"
+          }
+        ],
+        "note": "⚠️ 키워드별 데이터는 네이버 API 추가 수집 필요"
+      },
+      {
+        "title": "📄 페이지별 트래픽",
+        "type": "metrics",
+        "content": [
+          {
+            "metric": "/",
+            "w12": "3,942뷰 (52.6%)",
+            "w11": "3,182뷰",
+            "note": "체류 46초, 유저 3,370 ▲24%"
+          },
+          {
+            "metric": "/funding/",
+            "w12": "1,866뷰 (24.9%)",
+            "w11": "1,618뷰",
+            "note": "체류 57초, 유저 1,852 ▲15%"
+          },
+          {
+            "metric": "/community/",
+            "w12": "642뷰 (8.6%)",
+            "w11": "454뷰",
+            "note": "체류 347초, 유저 268 ▲41%"
+          },
+          {
+            "metric": "/community",
+            "w12": "298뷰 (4.0%)",
+            "w11": "220뷰",
+            "note": "체류 114초, 유저 119 ▲35%"
+          },
+          {
+            "metric": "/feel",
+            "w12": "162뷰 (2.2%)",
+            "w11": "155뷰",
+            "note": "체류 67초, 유저 147 ▲5%"
+          },
+          {
+            "metric": "/links",
+            "w12": "129뷰 (1.7%)",
+            "w11": "151뷰",
+            "note": "체류 39초, 유저 70 ▼15%"
+          },
+          {
+            "metric": "/reviews/",
+            "w12": "106뷰 (1.4%)",
+            "w11": "90뷰",
+            "note": "체류 262초, 유저 66 ▲18%"
+          },
+          {
+            "metric": "/login",
+            "w12": "53뷰 (0.7%)",
+            "w11": "45뷰",
+            "note": "체류 78초, 유저 49 ▲18%"
+          },
+          {
+            "metric": "/shop_mypage/",
+            "w12": "39뷰 (0.5%)",
+            "w11": "19뷰",
+            "note": "체류 232초, 유저 16 ▲105%"
+          },
+          {
+            "metric": "/shop_view/",
+            "w12": "38뷰 (0.5%)",
+            "w11": "42뷰",
+            "note": "체류 175초, 유저 32 ▼10%"
+          }
+        ],
+        "anomalies": [
+          "/community/: 뷰 ▲41% (전주 454→642)",
+          "/community: 뷰 ▲35% (전주 220→298)",
+          "/shop_mypage/: 뷰 ▲105% (전주 19→39)"
+        ]
       }
     ]
   },
