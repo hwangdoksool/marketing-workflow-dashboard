@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generated": "2026-07-20T10:00:05",
+    "generated": "2026-07-27T08:00:02",
     "sources": [
       "ga4_full.json",
       "meta_full.json",
       "naver_full.json",
       "imweb_body_sales.json"
     ],
-    "weekCount": 136
+    "weekCount": 137
   },
   "weeks": {
     "2023-W50": {
@@ -4940,6 +4940,50 @@
         "cpa": null,
         "roas": 0.0,
         "pixelPurchases": 3
+      }
+    },
+    "2026-W30": {
+      "period": "2026-07-20~2026-07-26",
+      "ga4": {
+        "sessions": 2243,
+        "users": 2165,
+        "newUsers": 1531,
+        "pageviews": 3270,
+        "engagedSessions": 22,
+        "bounceRate": 0.9898,
+        "avgDuration": 90.9
+      },
+      "meta": {
+        "impressions": 22890,
+        "clicks": 956,
+        "adSpend": 375958,
+        "ctr": 4.18,
+        "cpc": 393,
+        "pixelPurchases": 0
+      },
+      "naver": {
+        "impressions": 11875,
+        "clicks": 75,
+        "spend": 21088,
+        "ctr": 0.63,
+        "cpc": 281
+      },
+      "imweb": {},
+      "summary": {
+        "sessions": 2243,
+        "users": 2165,
+        "newUsers": 1531,
+        "totalAdSpend": 397046,
+        "metaSpend": 375958,
+        "naverSpend": 21088,
+        "impressions": 34765,
+        "clicks": 1031,
+        "bodySales": 0,
+        "feelBookings": 0,
+        "revenue": 0,
+        "cpa": null,
+        "roas": 0.0,
+        "pixelPurchases": 0
       }
     }
   }
