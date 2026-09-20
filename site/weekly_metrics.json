@@ -1,13 +1,14 @@
 {
   "meta": {
-    "generated": "2026-09-14T10:00:05",
+    "generated": "2026-09-21T08:00:04",
     "sources": [
       "ga4_full.json",
       "meta_full.json",
       "naver_full.json",
       "imweb_body_sales.json"
     ],
-    "weekCount": 144
+    "weekCount": 145,
+    "ga4BotFilter": "ga4.sessions/users/newUsers = 봇 제외(2026-01-01~), *Raw = 봇 포함 원값"
   },
   "weeks": {
     "2023-W50": {
@@ -19,7 +20,10 @@
         "pageviews": 1549,
         "engagedSessions": 351,
         "bounceRate": 0.3271,
-        "avgDuration": 140.9
+        "avgDuration": 140.9,
+        "sessionsRaw": 530,
+        "usersRaw": 493,
+        "newUsersRaw": 464
       },
       "meta": {},
       "naver": {},
@@ -28,6 +32,7 @@
         "sessions": 530,
         "users": 493,
         "newUsers": 464,
+        "sessionsRaw": 530,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -50,7 +55,10 @@
         "pageviews": 3255,
         "engagedSessions": 690,
         "bounceRate": 0.3499,
-        "avgDuration": 147.1
+        "avgDuration": 147.1,
+        "sessionsRaw": 1063,
+        "usersRaw": 956,
+        "newUsersRaw": 893
       },
       "meta": {},
       "naver": {},
@@ -59,6 +67,7 @@
         "sessions": 1063,
         "users": 956,
         "newUsers": 893,
+        "sessionsRaw": 1063,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -81,7 +90,10 @@
         "pageviews": 3376,
         "engagedSessions": 698,
         "bounceRate": 0.3246,
-        "avgDuration": 102.5
+        "avgDuration": 102.5,
+        "sessionsRaw": 1018,
+        "usersRaw": 946,
+        "newUsersRaw": 879
       },
       "meta": {},
       "naver": {},
@@ -90,6 +102,7 @@
         "sessions": 1018,
         "users": 946,
         "newUsers": 879,
+        "sessionsRaw": 1018,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -112,7 +125,10 @@
         "pageviews": 5825,
         "engagedSessions": 1430,
         "bounceRate": 0.2854,
-        "avgDuration": 100.5
+        "avgDuration": 100.5,
+        "sessionsRaw": 2009,
+        "usersRaw": 1898,
+        "newUsersRaw": 1785
       },
       "meta": {},
       "naver": {},
@@ -121,6 +137,7 @@
         "sessions": 2009,
         "users": 1898,
         "newUsers": 1785,
+        "sessionsRaw": 2009,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -143,7 +160,10 @@
         "pageviews": 4513,
         "engagedSessions": 1031,
         "bounceRate": 0.3075,
-        "avgDuration": 106.0
+        "avgDuration": 106.0,
+        "sessionsRaw": 1487,
+        "usersRaw": 1378,
+        "newUsersRaw": 1262
       },
       "meta": {},
       "naver": {},
@@ -152,6 +172,7 @@
         "sessions": 1487,
         "users": 1378,
         "newUsers": 1262,
+        "sessionsRaw": 1487,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -174,7 +195,10 @@
         "pageviews": 13950,
         "engagedSessions": 3302,
         "bounceRate": 0.2888,
-        "avgDuration": 118.7
+        "avgDuration": 118.7,
+        "sessionsRaw": 4351,
+        "usersRaw": 3909,
+        "newUsersRaw": 3678
       },
       "meta": {},
       "naver": {},
@@ -183,6 +207,7 @@
         "sessions": 4351,
         "users": 3909,
         "newUsers": 3678,
+        "sessionsRaw": 4351,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -205,7 +230,10 @@
         "pageviews": 11126,
         "engagedSessions": 2671,
         "bounceRate": 0.2908,
-        "avgDuration": 105.4
+        "avgDuration": 105.4,
+        "sessionsRaw": 3775,
+        "usersRaw": 3316,
+        "newUsersRaw": 2975
       },
       "meta": {},
       "naver": {},
@@ -214,6 +242,7 @@
         "sessions": 3775,
         "users": 3316,
         "newUsers": 2975,
+        "sessionsRaw": 3775,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -236,7 +265,10 @@
         "pageviews": 4436,
         "engagedSessions": 961,
         "bounceRate": 0.3418,
-        "avgDuration": 109.6
+        "avgDuration": 109.6,
+        "sessionsRaw": 1458,
+        "usersRaw": 1259,
+        "newUsersRaw": 1039
       },
       "meta": {},
       "naver": {},
@@ -245,6 +277,7 @@
         "sessions": 1458,
         "users": 1259,
         "newUsers": 1039,
+        "sessionsRaw": 1458,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -267,7 +300,10 @@
         "pageviews": 2811,
         "engagedSessions": 612,
         "bounceRate": 0.3303,
-        "avgDuration": 119.3
+        "avgDuration": 119.3,
+        "sessionsRaw": 915,
+        "usersRaw": 824,
+        "newUsersRaw": 672
       },
       "meta": {},
       "naver": {},
@@ -276,6 +312,7 @@
         "sessions": 915,
         "users": 824,
         "newUsers": 672,
+        "sessionsRaw": 915,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -298,7 +335,10 @@
         "pageviews": 2893,
         "engagedSessions": 566,
         "bounceRate": 0.2861,
-        "avgDuration": 129.0
+        "avgDuration": 129.0,
+        "sessionsRaw": 797,
+        "usersRaw": 715,
+        "newUsersRaw": 565
       },
       "meta": {},
       "naver": {},
@@ -307,6 +347,7 @@
         "sessions": 797,
         "users": 715,
         "newUsers": 565,
+        "sessionsRaw": 797,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -329,7 +370,10 @@
         "pageviews": 3603,
         "engagedSessions": 756,
         "bounceRate": 0.326,
-        "avgDuration": 106.1
+        "avgDuration": 106.1,
+        "sessionsRaw": 1120,
+        "usersRaw": 1011,
+        "newUsersRaw": 863
       },
       "meta": {},
       "naver": {},
@@ -338,6 +382,7 @@
         "sessions": 1120,
         "users": 1011,
         "newUsers": 863,
+        "sessionsRaw": 1120,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -360,7 +405,10 @@
         "pageviews": 2721,
         "engagedSessions": 509,
         "bounceRate": 0.3193,
-        "avgDuration": 105.8
+        "avgDuration": 105.8,
+        "sessionsRaw": 737,
+        "usersRaw": 648,
+        "newUsersRaw": 491
       },
       "meta": {},
       "naver": {},
@@ -369,6 +417,7 @@
         "sessions": 737,
         "users": 648,
         "newUsers": 491,
+        "sessionsRaw": 737,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -391,7 +440,10 @@
         "pageviews": 1649,
         "engagedSessions": 323,
         "bounceRate": 0.2931,
-        "avgDuration": 154.1
+        "avgDuration": 154.1,
+        "sessionsRaw": 463,
+        "usersRaw": 419,
+        "newUsersRaw": 283
       },
       "meta": {},
       "naver": {},
@@ -400,6 +452,7 @@
         "sessions": 463,
         "users": 419,
         "newUsers": 283,
+        "sessionsRaw": 463,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -422,7 +475,10 @@
         "pageviews": 1588,
         "engagedSessions": 347,
         "bounceRate": 0.3023,
-        "avgDuration": 91.5
+        "avgDuration": 91.5,
+        "sessionsRaw": 504,
+        "usersRaw": 444,
+        "newUsersRaw": 336
       },
       "meta": {},
       "naver": {},
@@ -431,6 +487,7 @@
         "sessions": 504,
         "users": 444,
         "newUsers": 336,
+        "sessionsRaw": 504,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -453,7 +510,10 @@
         "pageviews": 1277,
         "engagedSessions": 295,
         "bounceRate": 0.3045,
-        "avgDuration": 142.4
+        "avgDuration": 142.4,
+        "sessionsRaw": 423,
+        "usersRaw": 384,
+        "newUsersRaw": 288
       },
       "meta": {},
       "naver": {},
@@ -462,6 +522,7 @@
         "sessions": 423,
         "users": 384,
         "newUsers": 288,
+        "sessionsRaw": 423,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -484,7 +545,10 @@
         "pageviews": 1073,
         "engagedSessions": 255,
         "bounceRate": 0.2668,
-        "avgDuration": 138.8
+        "avgDuration": 138.8,
+        "sessionsRaw": 349,
+        "usersRaw": 324,
+        "newUsersRaw": 257
       },
       "meta": {},
       "naver": {},
@@ -493,6 +557,7 @@
         "sessions": 349,
         "users": 324,
         "newUsers": 257,
+        "sessionsRaw": 349,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -515,7 +580,10 @@
         "pageviews": 966,
         "engagedSessions": 227,
         "bounceRate": 0.3617,
-        "avgDuration": 122.4
+        "avgDuration": 122.4,
+        "sessionsRaw": 354,
+        "usersRaw": 330,
+        "newUsersRaw": 252
       },
       "meta": {},
       "naver": {},
@@ -524,6 +592,7 @@
         "sessions": 354,
         "users": 330,
         "newUsers": 252,
+        "sessionsRaw": 354,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -546,7 +615,10 @@
         "pageviews": 1076,
         "engagedSessions": 213,
         "bounceRate": 0.3146,
-        "avgDuration": 92.1
+        "avgDuration": 92.1,
+        "sessionsRaw": 312,
+        "usersRaw": 287,
+        "newUsersRaw": 213
       },
       "meta": {},
       "naver": {},
@@ -555,6 +627,7 @@
         "sessions": 312,
         "users": 287,
         "newUsers": 213,
+        "sessionsRaw": 312,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -577,7 +650,10 @@
         "pageviews": 1062,
         "engagedSessions": 212,
         "bounceRate": 0.2962,
-        "avgDuration": 124.7
+        "avgDuration": 124.7,
+        "sessionsRaw": 302,
+        "usersRaw": 274,
+        "newUsersRaw": 216
       },
       "meta": {},
       "naver": {},
@@ -586,6 +662,7 @@
         "sessions": 302,
         "users": 274,
         "newUsers": 216,
+        "sessionsRaw": 302,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -608,7 +685,10 @@
         "pageviews": 848,
         "engagedSessions": 170,
         "bounceRate": 0.3302,
-        "avgDuration": 100.8
+        "avgDuration": 100.8,
+        "sessionsRaw": 253,
+        "usersRaw": 221,
+        "newUsersRaw": 159
       },
       "meta": {},
       "naver": {},
@@ -617,6 +697,7 @@
         "sessions": 253,
         "users": 221,
         "newUsers": 159,
+        "sessionsRaw": 253,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -639,7 +720,10 @@
         "pageviews": 783,
         "engagedSessions": 169,
         "bounceRate": 0.2904,
-        "avgDuration": 87.8
+        "avgDuration": 87.8,
+        "sessionsRaw": 240,
+        "usersRaw": 220,
+        "newUsersRaw": 178
       },
       "meta": {},
       "naver": {},
@@ -648,6 +732,7 @@
         "sessions": 240,
         "users": 220,
         "newUsers": 178,
+        "sessionsRaw": 240,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -670,7 +755,10 @@
         "pageviews": 1012,
         "engagedSessions": 233,
         "bounceRate": 0.2856,
-        "avgDuration": 104.0
+        "avgDuration": 104.0,
+        "sessionsRaw": 331,
+        "usersRaw": 307,
+        "newUsersRaw": 250
       },
       "meta": {},
       "naver": {},
@@ -679,6 +767,7 @@
         "sessions": 331,
         "users": 307,
         "newUsers": 250,
+        "sessionsRaw": 331,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -701,7 +790,10 @@
         "pageviews": 1108,
         "engagedSessions": 222,
         "bounceRate": 0.3141,
-        "avgDuration": 135.8
+        "avgDuration": 135.8,
+        "sessionsRaw": 324,
+        "usersRaw": 283,
+        "newUsersRaw": 224
       },
       "meta": {},
       "naver": {},
@@ -710,6 +802,7 @@
         "sessions": 324,
         "users": 283,
         "newUsers": 224,
+        "sessionsRaw": 324,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -732,7 +825,10 @@
         "pageviews": 2235,
         "engagedSessions": 542,
         "bounceRate": 0.3788,
-        "avgDuration": 92.6
+        "avgDuration": 92.6,
+        "sessionsRaw": 857,
+        "usersRaw": 766,
+        "newUsersRaw": 678
       },
       "meta": {},
       "naver": {},
@@ -741,6 +837,7 @@
         "sessions": 857,
         "users": 766,
         "newUsers": 678,
+        "sessionsRaw": 857,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -763,7 +860,10 @@
         "pageviews": 1688,
         "engagedSessions": 371,
         "bounceRate": 0.3332,
-        "avgDuration": 82.7
+        "avgDuration": 82.7,
+        "sessionsRaw": 554,
+        "usersRaw": 502,
+        "newUsersRaw": 416
       },
       "meta": {},
       "naver": {},
@@ -772,6 +872,7 @@
         "sessions": 554,
         "users": 502,
         "newUsers": 416,
+        "sessionsRaw": 554,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -794,7 +895,10 @@
         "pageviews": 1764,
         "engagedSessions": 362,
         "bounceRate": 0.3279,
-        "avgDuration": 181.4
+        "avgDuration": 181.4,
+        "sessionsRaw": 536,
+        "usersRaw": 480,
+        "newUsersRaw": 384
       },
       "meta": {},
       "naver": {},
@@ -803,6 +907,7 @@
         "sessions": 536,
         "users": 480,
         "newUsers": 384,
+        "sessionsRaw": 536,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -825,7 +930,10 @@
         "pageviews": 2112,
         "engagedSessions": 455,
         "bounceRate": 0.3447,
-        "avgDuration": 126.4
+        "avgDuration": 126.4,
+        "sessionsRaw": 699,
+        "usersRaw": 607,
+        "newUsersRaw": 513
       },
       "meta": {},
       "naver": {},
@@ -834,6 +942,7 @@
         "sessions": 699,
         "users": 607,
         "newUsers": 513,
+        "sessionsRaw": 699,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -856,7 +965,10 @@
         "pageviews": 1454,
         "engagedSessions": 423,
         "bounceRate": 0.4144,
-        "avgDuration": 110.1
+        "avgDuration": 110.1,
+        "sessionsRaw": 726,
+        "usersRaw": 608,
+        "newUsersRaw": 513
       },
       "meta": {},
       "naver": {},
@@ -865,6 +977,7 @@
         "sessions": 726,
         "users": 608,
         "newUsers": 513,
+        "sessionsRaw": 726,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -887,7 +1000,10 @@
         "pageviews": 1165,
         "engagedSessions": 331,
         "bounceRate": 0.4382,
-        "avgDuration": 91.6
+        "avgDuration": 91.6,
+        "sessionsRaw": 590,
+        "usersRaw": 529,
+        "newUsersRaw": 443
       },
       "meta": {},
       "naver": {},
@@ -896,6 +1012,7 @@
         "sessions": 590,
         "users": 529,
         "newUsers": 443,
+        "sessionsRaw": 590,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -918,7 +1035,10 @@
         "pageviews": 1152,
         "engagedSessions": 312,
         "bounceRate": 0.3825,
-        "avgDuration": 114.9
+        "avgDuration": 114.9,
+        "sessionsRaw": 508,
+        "usersRaw": 427,
+        "newUsersRaw": 318
       },
       "meta": {},
       "naver": {},
@@ -927,6 +1047,7 @@
         "sessions": 508,
         "users": 427,
         "newUsers": 318,
+        "sessionsRaw": 508,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -949,7 +1070,10 @@
         "pageviews": 1357,
         "engagedSessions": 380,
         "bounceRate": 0.4016,
-        "avgDuration": 104.0
+        "avgDuration": 104.0,
+        "sessionsRaw": 642,
+        "usersRaw": 572,
+        "newUsersRaw": 449
       },
       "meta": {},
       "naver": {},
@@ -958,6 +1082,7 @@
         "sessions": 642,
         "users": 572,
         "newUsers": 449,
+        "sessionsRaw": 642,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -980,7 +1105,10 @@
         "pageviews": 2037,
         "engagedSessions": 549,
         "bounceRate": 0.4331,
-        "avgDuration": 116.2
+        "avgDuration": 116.2,
+        "sessionsRaw": 975,
+        "usersRaw": 882,
+        "newUsersRaw": 757
       },
       "meta": {},
       "naver": {},
@@ -989,6 +1117,7 @@
         "sessions": 975,
         "users": 882,
         "newUsers": 757,
+        "sessionsRaw": 975,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1011,7 +1140,10 @@
         "pageviews": 13903,
         "engagedSessions": 2350,
         "bounceRate": 0.2561,
-        "avgDuration": 322.8
+        "avgDuration": 322.8,
+        "sessionsRaw": 3095,
+        "usersRaw": 2493,
+        "newUsersRaw": 2020
       },
       "meta": {},
       "naver": {},
@@ -1024,6 +1156,7 @@
         "sessions": 3095,
         "users": 2493,
         "newUsers": 2020,
+        "sessionsRaw": 3095,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1046,7 +1179,10 @@
         "pageviews": 8324,
         "engagedSessions": 1826,
         "bounceRate": 0.327,
-        "avgDuration": 169.8
+        "avgDuration": 169.8,
+        "sessionsRaw": 2834,
+        "usersRaw": 2538,
+        "newUsersRaw": 2181
       },
       "meta": {},
       "naver": {},
@@ -1055,6 +1191,7 @@
         "sessions": 2834,
         "users": 2538,
         "newUsers": 2181,
+        "sessionsRaw": 2834,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1077,7 +1214,10 @@
         "pageviews": 10445,
         "engagedSessions": 2626,
         "bounceRate": 0.324,
-        "avgDuration": 151.1
+        "avgDuration": 151.1,
+        "sessionsRaw": 3830,
+        "usersRaw": 3504,
+        "newUsersRaw": 3064
       },
       "meta": {},
       "naver": {},
@@ -1090,6 +1230,7 @@
         "sessions": 3830,
         "users": 3504,
         "newUsers": 3064,
+        "sessionsRaw": 3830,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1112,7 +1253,10 @@
         "pageviews": 3043,
         "engagedSessions": 695,
         "bounceRate": 0.2981,
-        "avgDuration": 168.2
+        "avgDuration": 168.2,
+        "sessionsRaw": 982,
+        "usersRaw": 855,
+        "newUsersRaw": 628
       },
       "meta": {},
       "naver": {},
@@ -1125,6 +1269,7 @@
         "sessions": 982,
         "users": 855,
         "newUsers": 628,
+        "sessionsRaw": 982,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1147,7 +1292,10 @@
         "pageviews": 2856,
         "engagedSessions": 672,
         "bounceRate": 0.2893,
-        "avgDuration": 137.5
+        "avgDuration": 137.5,
+        "sessionsRaw": 944,
+        "usersRaw": 830,
+        "newUsersRaw": 664
       },
       "meta": {},
       "naver": {},
@@ -1156,6 +1304,7 @@
         "sessions": 944,
         "users": 830,
         "newUsers": 664,
+        "sessionsRaw": 944,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1178,7 +1327,10 @@
         "pageviews": 3519,
         "engagedSessions": 1006,
         "bounceRate": 0.2595,
-        "avgDuration": 224.4
+        "avgDuration": 224.4,
+        "sessionsRaw": 1340,
+        "usersRaw": 1208,
+        "newUsersRaw": 997
       },
       "meta": {},
       "naver": {},
@@ -1191,6 +1343,7 @@
         "sessions": 1340,
         "users": 1208,
         "newUsers": 997,
+        "sessionsRaw": 1340,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1213,7 +1366,10 @@
         "pageviews": 1541,
         "engagedSessions": 321,
         "bounceRate": 0.3172,
-        "avgDuration": 175.3
+        "avgDuration": 175.3,
+        "sessionsRaw": 473,
+        "usersRaw": 414,
+        "newUsersRaw": 273
       },
       "meta": {},
       "naver": {},
@@ -1222,6 +1378,7 @@
         "sessions": 473,
         "users": 414,
         "newUsers": 273,
+        "sessionsRaw": 473,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1244,7 +1401,10 @@
         "pageviews": 1373,
         "engagedSessions": 324,
         "bounceRate": 0.2698,
-        "avgDuration": 153.8
+        "avgDuration": 153.8,
+        "sessionsRaw": 445,
+        "usersRaw": 394,
+        "newUsersRaw": 267
       },
       "meta": {},
       "naver": {},
@@ -1253,6 +1413,7 @@
         "sessions": 445,
         "users": 394,
         "newUsers": 267,
+        "sessionsRaw": 445,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1275,7 +1436,10 @@
         "pageviews": 1182,
         "engagedSessions": 251,
         "bounceRate": 0.2697,
-        "avgDuration": 133.5
+        "avgDuration": 133.5,
+        "sessionsRaw": 342,
+        "usersRaw": 302,
+        "newUsersRaw": 231
       },
       "meta": {},
       "naver": {},
@@ -1284,6 +1448,7 @@
         "sessions": 342,
         "users": 302,
         "newUsers": 231,
+        "sessionsRaw": 342,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1306,7 +1471,10 @@
         "pageviews": 2045,
         "engagedSessions": 506,
         "bounceRate": 0.3177,
-        "avgDuration": 121.8
+        "avgDuration": 121.8,
+        "sessionsRaw": 680,
+        "usersRaw": 627,
+        "newUsersRaw": 483
       },
       "meta": {},
       "naver": {},
@@ -1315,6 +1483,7 @@
         "sessions": 680,
         "users": 627,
         "newUsers": 483,
+        "sessionsRaw": 680,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1337,7 +1506,10 @@
         "pageviews": 861,
         "engagedSessions": 176,
         "bounceRate": 0.3066,
-        "avgDuration": 156.8
+        "avgDuration": 156.8,
+        "sessionsRaw": 256,
+        "usersRaw": 235,
+        "newUsersRaw": 162
       },
       "meta": {},
       "naver": {},
@@ -1346,6 +1518,7 @@
         "sessions": 256,
         "users": 235,
         "newUsers": 162,
+        "sessionsRaw": 256,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1368,7 +1541,10 @@
         "pageviews": 1310,
         "engagedSessions": 299,
         "bounceRate": 0.277,
-        "avgDuration": 102.0
+        "avgDuration": 102.0,
+        "sessionsRaw": 414,
+        "usersRaw": 380,
+        "newUsersRaw": 301
       },
       "meta": {},
       "naver": {},
@@ -1377,6 +1553,7 @@
         "sessions": 414,
         "users": 380,
         "newUsers": 301,
+        "sessionsRaw": 414,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1399,7 +1576,10 @@
         "pageviews": 1928,
         "engagedSessions": 464,
         "bounceRate": 0.2069,
-        "avgDuration": 173.5
+        "avgDuration": 173.5,
+        "sessionsRaw": 585,
+        "usersRaw": 525,
+        "newUsersRaw": 437
       },
       "meta": {},
       "naver": {},
@@ -1412,6 +1592,7 @@
         "sessions": 585,
         "users": 525,
         "newUsers": 437,
+        "sessionsRaw": 585,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1434,7 +1615,10 @@
         "pageviews": 1667,
         "engagedSessions": 405,
         "bounceRate": 0.1982,
-        "avgDuration": 193.1
+        "avgDuration": 193.1,
+        "sessionsRaw": 504,
+        "usersRaw": 440,
+        "newUsersRaw": 353
       },
       "meta": {},
       "naver": {},
@@ -1447,6 +1631,7 @@
         "sessions": 504,
         "users": 440,
         "newUsers": 353,
+        "sessionsRaw": 504,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -1469,7 +1654,10 @@
         "pageviews": 2667,
         "engagedSessions": 1049,
         "bounceRate": 0.3395,
-        "avgDuration": 185.0
+        "avgDuration": 185.0,
+        "sessionsRaw": 1702,
+        "usersRaw": 1610,
+        "newUsersRaw": 1479
       },
       "meta": {
         "impressions": 17372,
@@ -1485,6 +1673,7 @@
         "sessions": 1702,
         "users": 1610,
         "newUsers": 1479,
+        "sessionsRaw": 1702,
         "totalAdSpend": 141286,
         "metaSpend": 141286,
         "naverSpend": 0,
@@ -1507,7 +1696,10 @@
         "pageviews": 2901,
         "engagedSessions": 933,
         "bounceRate": 0.356,
-        "avgDuration": 165.7
+        "avgDuration": 165.7,
+        "sessionsRaw": 1525,
+        "usersRaw": 1401,
+        "newUsersRaw": 1180
       },
       "meta": {
         "impressions": 12761,
@@ -1523,6 +1715,7 @@
         "sessions": 1525,
         "users": 1401,
         "newUsers": 1180,
+        "sessionsRaw": 1525,
         "totalAdSpend": 73905,
         "metaSpend": 73905,
         "naverSpend": 0,
@@ -1545,7 +1738,10 @@
         "pageviews": 4603,
         "engagedSessions": 1957,
         "bounceRate": 0.4369,
-        "avgDuration": 61.2
+        "avgDuration": 61.2,
+        "sessionsRaw": 3511,
+        "usersRaw": 3426,
+        "newUsersRaw": 3126
       },
       "meta": {
         "impressions": 43958,
@@ -1561,6 +1757,7 @@
         "sessions": 3511,
         "users": 3426,
         "newUsers": 3126,
+        "sessionsRaw": 3511,
         "totalAdSpend": 219278,
         "metaSpend": 219278,
         "naverSpend": 0,
@@ -1583,7 +1780,10 @@
         "pageviews": 4616,
         "engagedSessions": 1769,
         "bounceRate": 0.4626,
-        "avgDuration": 82.1
+        "avgDuration": 82.1,
+        "sessionsRaw": 3300,
+        "usersRaw": 3217,
+        "newUsersRaw": 2949
       },
       "meta": {
         "impressions": 50311,
@@ -1603,6 +1803,7 @@
         "sessions": 3300,
         "users": 3217,
         "newUsers": 2949,
+        "sessionsRaw": 3300,
         "totalAdSpend": 231938,
         "metaSpend": 231938,
         "naverSpend": 0,
@@ -1625,7 +1826,10 @@
         "pageviews": 4504,
         "engagedSessions": 1604,
         "bounceRate": 0.3282,
-        "avgDuration": 124.6
+        "avgDuration": 124.6,
+        "sessionsRaw": 2443,
+        "usersRaw": 2356,
+        "newUsersRaw": 2149
       },
       "meta": {
         "impressions": 34542,
@@ -1645,6 +1849,7 @@
         "sessions": 2443,
         "users": 2356,
         "newUsers": 2149,
+        "sessionsRaw": 2443,
         "totalAdSpend": 277824,
         "metaSpend": 277824,
         "naverSpend": 0,
@@ -1667,7 +1872,10 @@
         "pageviews": 7642,
         "engagedSessions": 3030,
         "bounceRate": 0.1945,
-        "avgDuration": 131.5
+        "avgDuration": 131.5,
+        "sessionsRaw": 3761,
+        "usersRaw": 3571,
+        "newUsersRaw": 3159
       },
       "meta": {
         "impressions": 66436,
@@ -1687,6 +1895,7 @@
         "sessions": 3761,
         "users": 3571,
         "newUsers": 3159,
+        "sessionsRaw": 3761,
         "totalAdSpend": 565276,
         "metaSpend": 565276,
         "naverSpend": 0,
@@ -1709,7 +1918,10 @@
         "pageviews": 9640,
         "engagedSessions": 4015,
         "bounceRate": 0.2119,
-        "avgDuration": 141.2
+        "avgDuration": 141.2,
+        "sessionsRaw": 5046,
+        "usersRaw": 4834,
+        "newUsersRaw": 4477
       },
       "meta": {
         "impressions": 96235,
@@ -1729,6 +1941,7 @@
         "sessions": 5046,
         "users": 4834,
         "newUsers": 4477,
+        "sessionsRaw": 5046,
         "totalAdSpend": 955400,
         "metaSpend": 955400,
         "naverSpend": 0,
@@ -1751,7 +1964,10 @@
         "pageviews": 11980,
         "engagedSessions": 5286,
         "bounceRate": 0.1964,
-        "avgDuration": 152.3
+        "avgDuration": 152.3,
+        "sessionsRaw": 6660,
+        "usersRaw": 6470,
+        "newUsersRaw": 6109
       },
       "meta": {
         "impressions": 152634,
@@ -1773,6 +1989,7 @@
         "sessions": 6660,
         "users": 6470,
         "newUsers": 6109,
+        "sessionsRaw": 6660,
         "totalAdSpend": 1105186,
         "metaSpend": 1086816,
         "naverSpend": 18370,
@@ -1795,7 +2012,10 @@
         "pageviews": 10870,
         "engagedSessions": 4357,
         "bounceRate": 0.2509,
-        "avgDuration": 166.5
+        "avgDuration": 166.5,
+        "sessionsRaw": 5935,
+        "usersRaw": 5722,
+        "newUsersRaw": 5147
       },
       "meta": {
         "impressions": 108609,
@@ -1821,6 +2041,7 @@
         "sessions": 5935,
         "users": 5722,
         "newUsers": 5147,
+        "sessionsRaw": 5935,
         "totalAdSpend": 560476,
         "metaSpend": 558100,
         "naverSpend": 2376,
@@ -1843,7 +2064,10 @@
         "pageviews": 9343,
         "engagedSessions": 3689,
         "bounceRate": 0.266,
-        "avgDuration": 139.5
+        "avgDuration": 139.5,
+        "sessionsRaw": 4960,
+        "usersRaw": 4748,
+        "newUsersRaw": 4394
       },
       "meta": {
         "impressions": 93808,
@@ -1863,6 +2087,7 @@
         "sessions": 4960,
         "users": 4748,
         "newUsers": 4394,
+        "sessionsRaw": 4960,
         "totalAdSpend": 453257,
         "metaSpend": 453257,
         "naverSpend": 0,
@@ -1885,7 +2110,10 @@
         "pageviews": 10032,
         "engagedSessions": 3805,
         "bounceRate": 0.2515,
-        "avgDuration": 150.5
+        "avgDuration": 150.5,
+        "sessionsRaw": 5094,
+        "usersRaw": 4860,
+        "newUsersRaw": 4620
       },
       "meta": {
         "impressions": 133267,
@@ -1905,6 +2133,7 @@
         "sessions": 5094,
         "users": 4860,
         "newUsers": 4620,
+        "sessionsRaw": 5094,
         "totalAdSpend": 1118865,
         "metaSpend": 1118865,
         "naverSpend": 0,
@@ -1927,7 +2156,10 @@
         "pageviews": 11060,
         "engagedSessions": 4741,
         "bounceRate": 0.2334,
-        "avgDuration": 138.5
+        "avgDuration": 138.5,
+        "sessionsRaw": 6166,
+        "usersRaw": 5945,
+        "newUsersRaw": 5470
       },
       "meta": {
         "impressions": 155777,
@@ -1947,6 +2179,7 @@
         "sessions": 6166,
         "users": 5945,
         "newUsers": 5470,
+        "sessionsRaw": 6166,
         "totalAdSpend": 1273077,
         "metaSpend": 1273077,
         "naverSpend": 0,
@@ -1969,7 +2202,10 @@
         "pageviews": 12447,
         "engagedSessions": 5642,
         "bounceRate": 0.2095,
-        "avgDuration": 147.1
+        "avgDuration": 147.1,
+        "sessionsRaw": 7134,
+        "usersRaw": 6845,
+        "newUsersRaw": 6194
       },
       "meta": {
         "impressions": 197630,
@@ -1985,6 +2221,7 @@
         "sessions": 7134,
         "users": 6845,
         "newUsers": 6194,
+        "sessionsRaw": 7134,
         "totalAdSpend": 1387403,
         "metaSpend": 1387403,
         "naverSpend": 0,
@@ -2007,7 +2244,10 @@
         "pageviews": 12357,
         "engagedSessions": 5329,
         "bounceRate": 0.1875,
-        "avgDuration": 182.2
+        "avgDuration": 182.2,
+        "sessionsRaw": 6567,
+        "usersRaw": 6306,
+        "newUsersRaw": 5609
       },
       "meta": {
         "impressions": 168869,
@@ -2027,6 +2267,7 @@
         "sessions": 6567,
         "users": 6306,
         "newUsers": 5609,
+        "sessionsRaw": 6567,
         "totalAdSpend": 1421800,
         "metaSpend": 1421800,
         "naverSpend": 0,
@@ -2049,7 +2290,10 @@
         "pageviews": 13591,
         "engagedSessions": 6265,
         "bounceRate": 0.1794,
-        "avgDuration": 145.7
+        "avgDuration": 145.7,
+        "sessionsRaw": 7642,
+        "usersRaw": 7376,
+        "newUsersRaw": 6860
       },
       "meta": {
         "impressions": 170994,
@@ -2069,6 +2313,7 @@
         "sessions": 7642,
         "users": 7376,
         "newUsers": 6860,
+        "sessionsRaw": 7642,
         "totalAdSpend": 1588238,
         "metaSpend": 1588238,
         "naverSpend": 0,
@@ -2091,7 +2336,10 @@
         "pageviews": 9804,
         "engagedSessions": 4607,
         "bounceRate": 0.1977,
-        "avgDuration": 162.8
+        "avgDuration": 162.8,
+        "sessionsRaw": 5728,
+        "usersRaw": 5557,
+        "newUsersRaw": 5295
       },
       "meta": {
         "impressions": 119566,
@@ -2111,6 +2359,7 @@
         "sessions": 5728,
         "users": 5557,
         "newUsers": 5295,
+        "sessionsRaw": 5728,
         "totalAdSpend": 924689,
         "metaSpend": 924689,
         "naverSpend": 0,
@@ -2133,7 +2382,10 @@
         "pageviews": 7297,
         "engagedSessions": 3035,
         "bounceRate": 0.2248,
-        "avgDuration": 138.3
+        "avgDuration": 138.3,
+        "sessionsRaw": 3893,
+        "usersRaw": 3744,
+        "newUsersRaw": 3521
       },
       "meta": {
         "impressions": 112332,
@@ -2153,6 +2405,7 @@
         "sessions": 3893,
         "users": 3744,
         "newUsers": 3521,
+        "sessionsRaw": 3893,
         "totalAdSpend": 609323,
         "metaSpend": 609323,
         "naverSpend": 0,
@@ -2175,7 +2428,10 @@
         "pageviews": 5468,
         "engagedSessions": 2330,
         "bounceRate": 0.2174,
-        "avgDuration": 126.0
+        "avgDuration": 126.0,
+        "sessionsRaw": 2962,
+        "usersRaw": 2811,
+        "newUsersRaw": 2521
       },
       "meta": {
         "impressions": 54209,
@@ -2195,6 +2451,7 @@
         "sessions": 2962,
         "users": 2811,
         "newUsers": 2521,
+        "sessionsRaw": 2962,
         "totalAdSpend": 647558,
         "metaSpend": 647558,
         "naverSpend": 0,
@@ -2217,7 +2474,10 @@
         "pageviews": 6950,
         "engagedSessions": 3297,
         "bounceRate": 0.209,
-        "avgDuration": 122.7
+        "avgDuration": 122.7,
+        "sessionsRaw": 4162,
+        "usersRaw": 4054,
+        "newUsersRaw": 3896
       },
       "meta": {
         "impressions": 90830,
@@ -2237,6 +2497,7 @@
         "sessions": 4162,
         "users": 4054,
         "newUsers": 3896,
+        "sessionsRaw": 4162,
         "totalAdSpend": 794010,
         "metaSpend": 794010,
         "naverSpend": 0,
@@ -2259,7 +2520,10 @@
         "pageviews": 3722,
         "engagedSessions": 1691,
         "bounceRate": 0.2382,
-        "avgDuration": 149.3
+        "avgDuration": 149.3,
+        "sessionsRaw": 2228,
+        "usersRaw": 2147,
+        "newUsersRaw": 1994
       },
       "meta": {
         "impressions": 39429,
@@ -2275,6 +2539,7 @@
         "sessions": 2228,
         "users": 2147,
         "newUsers": 1994,
+        "sessionsRaw": 2228,
         "totalAdSpend": 471259,
         "metaSpend": 471259,
         "naverSpend": 0,
@@ -2297,7 +2562,10 @@
         "pageviews": 4448,
         "engagedSessions": 1701,
         "bounceRate": 0.2912,
-        "avgDuration": 92.2
+        "avgDuration": 92.2,
+        "sessionsRaw": 2414,
+        "usersRaw": 2324,
+        "newUsersRaw": 1986
       },
       "meta": {
         "impressions": 32485,
@@ -2313,6 +2581,7 @@
         "sessions": 2414,
         "users": 2324,
         "newUsers": 1986,
+        "sessionsRaw": 2414,
         "totalAdSpend": 361602,
         "metaSpend": 361602,
         "naverSpend": 0,
@@ -2335,7 +2604,10 @@
         "pageviews": 7458,
         "engagedSessions": 2682,
         "bounceRate": 0.2873,
-        "avgDuration": 109.3
+        "avgDuration": 109.3,
+        "sessionsRaw": 3773,
+        "usersRaw": 3603,
+        "newUsersRaw": 3175
       },
       "meta": {
         "impressions": 49240,
@@ -2355,6 +2627,7 @@
         "sessions": 3773,
         "users": 3603,
         "newUsers": 3175,
+        "sessionsRaw": 3773,
         "totalAdSpend": 321626,
         "metaSpend": 321626,
         "naverSpend": 0,
@@ -2377,7 +2650,10 @@
         "pageviews": 4819,
         "engagedSessions": 1817,
         "bounceRate": 0.2941,
-        "avgDuration": 114.9
+        "avgDuration": 114.9,
+        "sessionsRaw": 2579,
+        "usersRaw": 2448,
+        "newUsersRaw": 1967
       },
       "meta": {
         "impressions": 45061,
@@ -2393,6 +2669,7 @@
         "sessions": 2579,
         "users": 2448,
         "newUsers": 1967,
+        "sessionsRaw": 2579,
         "totalAdSpend": 353062,
         "metaSpend": 353062,
         "naverSpend": 0,
@@ -2415,7 +2692,10 @@
         "pageviews": 5327,
         "engagedSessions": 2090,
         "bounceRate": 0.3043,
-        "avgDuration": 94.8
+        "avgDuration": 94.8,
+        "sessionsRaw": 2992,
+        "usersRaw": 2888,
+        "newUsersRaw": 2519
       },
       "meta": {
         "impressions": 63097,
@@ -2431,6 +2711,7 @@
         "sessions": 2992,
         "users": 2888,
         "newUsers": 2519,
+        "sessionsRaw": 2992,
         "totalAdSpend": 348899,
         "metaSpend": 348899,
         "naverSpend": 0,
@@ -2453,7 +2734,10 @@
         "pageviews": 4947,
         "engagedSessions": 1794,
         "bounceRate": 0.238,
-        "avgDuration": 195.3
+        "avgDuration": 195.3,
+        "sessionsRaw": 2350,
+        "usersRaw": 2207,
+        "newUsersRaw": 1676
       },
       "meta": {
         "impressions": 55772,
@@ -2469,6 +2753,7 @@
         "sessions": 2350,
         "users": 2207,
         "newUsers": 1676,
+        "sessionsRaw": 2350,
         "totalAdSpend": 346428,
         "metaSpend": 346428,
         "naverSpend": 0,
@@ -2491,7 +2776,10 @@
         "pageviews": 11595,
         "engagedSessions": 2665,
         "bounceRate": 0.1962,
-        "avgDuration": 238.5
+        "avgDuration": 238.5,
+        "sessionsRaw": 3249,
+        "usersRaw": 2754,
+        "newUsersRaw": 2173
       },
       "meta": {
         "impressions": 49563,
@@ -2507,6 +2795,7 @@
         "sessions": 3249,
         "users": 2754,
         "newUsers": 2173,
+        "sessionsRaw": 3249,
         "totalAdSpend": 365932,
         "metaSpend": 365932,
         "naverSpend": 0,
@@ -2529,7 +2818,10 @@
         "pageviews": 10618,
         "engagedSessions": 2725,
         "bounceRate": 0.1928,
-        "avgDuration": 144.5
+        "avgDuration": 144.5,
+        "sessionsRaw": 3361,
+        "usersRaw": 2913,
+        "newUsersRaw": 2291
       },
       "meta": {
         "impressions": 44882,
@@ -2545,6 +2837,7 @@
         "sessions": 3361,
         "users": 2913,
         "newUsers": 2291,
+        "sessionsRaw": 3361,
         "totalAdSpend": 333911,
         "metaSpend": 333911,
         "naverSpend": 0,
@@ -2567,7 +2860,10 @@
         "pageviews": 5686,
         "engagedSessions": 1396,
         "bounceRate": 0.2157,
-        "avgDuration": 216.2
+        "avgDuration": 216.2,
+        "sessionsRaw": 1764,
+        "usersRaw": 1447,
+        "newUsersRaw": 996
       },
       "meta": {
         "impressions": 19486,
@@ -2583,6 +2879,7 @@
         "sessions": 1764,
         "users": 1447,
         "newUsers": 996,
+        "sessionsRaw": 1764,
         "totalAdSpend": 135539,
         "metaSpend": 135539,
         "naverSpend": 0,
@@ -2605,7 +2902,10 @@
         "pageviews": 3567,
         "engagedSessions": 639,
         "bounceRate": 0.2348,
-        "avgDuration": 256.6
+        "avgDuration": 256.6,
+        "sessionsRaw": 824,
+        "usersRaw": 544,
+        "newUsersRaw": 218
       },
       "meta": {
         "impressions": 0,
@@ -2621,6 +2921,7 @@
         "sessions": 824,
         "users": 544,
         "newUsers": 218,
+        "sessionsRaw": 824,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -2643,7 +2944,10 @@
         "pageviews": 2918,
         "engagedSessions": 453,
         "bounceRate": 0.2402,
-        "avgDuration": 238.0
+        "avgDuration": 238.0,
+        "sessionsRaw": 597,
+        "usersRaw": 418,
+        "newUsersRaw": 150
       },
       "meta": {},
       "naver": {},
@@ -2652,6 +2956,7 @@
         "sessions": 597,
         "users": 418,
         "newUsers": 150,
+        "sessionsRaw": 597,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -2674,7 +2979,10 @@
         "pageviews": 3295,
         "engagedSessions": 486,
         "bounceRate": 0.2272,
-        "avgDuration": 248.6
+        "avgDuration": 248.6,
+        "sessionsRaw": 626,
+        "usersRaw": 435,
+        "newUsersRaw": 181
       },
       "meta": {},
       "naver": {},
@@ -2683,6 +2991,7 @@
         "sessions": 626,
         "users": 435,
         "newUsers": 181,
+        "sessionsRaw": 626,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -2705,7 +3014,10 @@
         "pageviews": 2521,
         "engagedSessions": 421,
         "bounceRate": 0.2306,
-        "avgDuration": 270.0
+        "avgDuration": 270.0,
+        "sessionsRaw": 552,
+        "usersRaw": 401,
+        "newUsersRaw": 204
       },
       "meta": {},
       "naver": {},
@@ -2714,6 +3026,7 @@
         "sessions": 552,
         "users": 401,
         "newUsers": 204,
+        "sessionsRaw": 552,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -2736,7 +3049,10 @@
         "pageviews": 2820,
         "engagedSessions": 405,
         "bounceRate": 0.2417,
-        "avgDuration": 266.1
+        "avgDuration": 266.1,
+        "sessionsRaw": 532,
+        "usersRaw": 394,
+        "newUsersRaw": 177
       },
       "meta": {},
       "naver": {},
@@ -2745,6 +3061,7 @@
         "sessions": 532,
         "users": 394,
         "newUsers": 177,
+        "sessionsRaw": 532,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -2767,7 +3084,10 @@
         "pageviews": 2926,
         "engagedSessions": 371,
         "bounceRate": 0.2543,
-        "avgDuration": 274.8
+        "avgDuration": 274.8,
+        "sessionsRaw": 495,
+        "usersRaw": 358,
+        "newUsersRaw": 192
       },
       "meta": {},
       "naver": {},
@@ -2776,6 +3096,7 @@
         "sessions": 495,
         "users": 358,
         "newUsers": 192,
+        "sessionsRaw": 495,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -2798,7 +3119,10 @@
         "pageviews": 2050,
         "engagedSessions": 441,
         "bounceRate": 0.35,
-        "avgDuration": 166.9
+        "avgDuration": 166.9,
+        "sessionsRaw": 657,
+        "usersRaw": 551,
+        "newUsersRaw": 411
       },
       "meta": {},
       "naver": {},
@@ -2807,6 +3131,7 @@
         "sessions": 657,
         "users": 551,
         "newUsers": 411,
+        "sessionsRaw": 657,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -2829,7 +3154,10 @@
         "pageviews": 1972,
         "engagedSessions": 316,
         "bounceRate": 0.2981,
-        "avgDuration": 275.4
+        "avgDuration": 275.4,
+        "sessionsRaw": 450,
+        "usersRaw": 338,
+        "newUsersRaw": 205
       },
       "meta": {},
       "naver": {},
@@ -2838,6 +3166,7 @@
         "sessions": 450,
         "users": 338,
         "newUsers": 205,
+        "sessionsRaw": 450,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -2860,7 +3189,10 @@
         "pageviews": 2205,
         "engagedSessions": 427,
         "bounceRate": 0.2898,
-        "avgDuration": 165.4
+        "avgDuration": 165.4,
+        "sessionsRaw": 604,
+        "usersRaw": 471,
+        "newUsersRaw": 309
       },
       "meta": {},
       "naver": {},
@@ -2869,6 +3201,7 @@
         "sessions": 604,
         "users": 471,
         "newUsers": 309,
+        "sessionsRaw": 604,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -2891,7 +3224,10 @@
         "pageviews": 2658,
         "engagedSessions": 947,
         "bounceRate": 0.2576,
-        "avgDuration": 116.1
+        "avgDuration": 116.1,
+        "sessionsRaw": 1255,
+        "usersRaw": 1172,
+        "newUsersRaw": 939
       },
       "meta": {
         "impressions": 16903,
@@ -2907,6 +3243,7 @@
         "sessions": 1255,
         "users": 1172,
         "newUsers": 939,
+        "sessionsRaw": 1255,
         "totalAdSpend": 166526,
         "metaSpend": 166526,
         "naverSpend": 0,
@@ -2929,7 +3266,10 @@
         "pageviews": 1298,
         "engagedSessions": 318,
         "bounceRate": 0.2859,
-        "avgDuration": 223.3
+        "avgDuration": 223.3,
+        "sessionsRaw": 427,
+        "usersRaw": 392,
+        "newUsersRaw": 273
       },
       "meta": {
         "impressions": 3133,
@@ -2945,6 +3285,7 @@
         "sessions": 427,
         "users": 392,
         "newUsers": 273,
+        "sessionsRaw": 427,
         "totalAdSpend": 33005,
         "metaSpend": 33005,
         "naverSpend": 0,
@@ -2967,7 +3308,10 @@
         "pageviews": 831,
         "engagedSessions": 188,
         "bounceRate": 0.2628,
-        "avgDuration": 196.8
+        "avgDuration": 196.8,
+        "sessionsRaw": 253,
+        "usersRaw": 212,
+        "newUsersRaw": 135
       },
       "meta": {},
       "naver": {},
@@ -2976,6 +3320,7 @@
         "sessions": 253,
         "users": 212,
         "newUsers": 135,
+        "sessionsRaw": 253,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -2998,7 +3343,10 @@
         "pageviews": 734,
         "engagedSessions": 152,
         "bounceRate": 0.3419,
-        "avgDuration": 132.8
+        "avgDuration": 132.8,
+        "sessionsRaw": 227,
+        "usersRaw": 201,
+        "newUsersRaw": 121
       },
       "meta": {},
       "naver": {},
@@ -3007,6 +3355,7 @@
         "sessions": 227,
         "users": 201,
         "newUsers": 121,
+        "sessionsRaw": 227,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3029,7 +3378,10 @@
         "pageviews": 1098,
         "engagedSessions": 192,
         "bounceRate": 0.3043,
-        "avgDuration": 212.6
+        "avgDuration": 212.6,
+        "sessionsRaw": 277,
+        "usersRaw": 229,
+        "newUsersRaw": 142
       },
       "meta": {},
       "naver": {},
@@ -3038,6 +3390,7 @@
         "sessions": 277,
         "users": 229,
         "newUsers": 142,
+        "sessionsRaw": 277,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3060,7 +3413,10 @@
         "pageviews": 1586,
         "engagedSessions": 262,
         "bounceRate": 0.341,
-        "avgDuration": 277.5
+        "avgDuration": 277.5,
+        "sessionsRaw": 388,
+        "usersRaw": 276,
+        "newUsersRaw": 167
       },
       "meta": {},
       "naver": {},
@@ -3069,6 +3425,7 @@
         "sessions": 388,
         "users": 276,
         "newUsers": 167,
+        "sessionsRaw": 388,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3091,7 +3448,10 @@
         "pageviews": 1058,
         "engagedSessions": 223,
         "bounceRate": 0.2866,
-        "avgDuration": 237.6
+        "avgDuration": 237.6,
+        "sessionsRaw": 305,
+        "usersRaw": 232,
+        "newUsersRaw": 147
       },
       "meta": {},
       "naver": {},
@@ -3100,6 +3460,7 @@
         "sessions": 305,
         "users": 232,
         "newUsers": 147,
+        "sessionsRaw": 305,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3122,7 +3483,10 @@
         "pageviews": 869,
         "engagedSessions": 195,
         "bounceRate": 0.3598,
-        "avgDuration": 122.7
+        "avgDuration": 122.7,
+        "sessionsRaw": 293,
+        "usersRaw": 248,
+        "newUsersRaw": 165
       },
       "meta": {},
       "naver": {},
@@ -3131,6 +3495,7 @@
         "sessions": 293,
         "users": 248,
         "newUsers": 165,
+        "sessionsRaw": 293,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3153,7 +3518,10 @@
         "pageviews": 1085,
         "engagedSessions": 193,
         "bounceRate": 0.3045,
-        "avgDuration": 307.3
+        "avgDuration": 307.3,
+        "sessionsRaw": 277,
+        "usersRaw": 229,
+        "newUsersRaw": 157
       },
       "meta": {},
       "naver": {},
@@ -3162,6 +3530,7 @@
         "sessions": 277,
         "users": 229,
         "newUsers": 157,
+        "sessionsRaw": 277,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3184,7 +3553,10 @@
         "pageviews": 2774,
         "engagedSessions": 1071,
         "bounceRate": 0.2506,
-        "avgDuration": 162.1
+        "avgDuration": 162.1,
+        "sessionsRaw": 1426,
+        "usersRaw": 1319,
+        "newUsersRaw": 1177
       },
       "meta": {
         "impressions": 10749,
@@ -3200,6 +3572,7 @@
         "sessions": 1426,
         "users": 1319,
         "newUsers": 1177,
+        "sessionsRaw": 1426,
         "totalAdSpend": 51137,
         "metaSpend": 51137,
         "naverSpend": 0,
@@ -3222,7 +3595,10 @@
         "pageviews": 2929,
         "engagedSessions": 1157,
         "bounceRate": 0.2956,
-        "avgDuration": 91.6
+        "avgDuration": 91.6,
+        "sessionsRaw": 1622,
+        "usersRaw": 1560,
+        "newUsersRaw": 1341
       },
       "meta": {
         "impressions": 18099,
@@ -3238,6 +3614,7 @@
         "sessions": 1622,
         "users": 1560,
         "newUsers": 1341,
+        "sessionsRaw": 1622,
         "totalAdSpend": 109492,
         "metaSpend": 109492,
         "naverSpend": 0,
@@ -3260,7 +3637,10 @@
         "pageviews": 1310,
         "engagedSessions": 329,
         "bounceRate": 0.507,
-        "avgDuration": 175.4
+        "avgDuration": 175.4,
+        "sessionsRaw": 687,
+        "usersRaw": 651,
+        "newUsersRaw": 556
       },
       "meta": {
         "impressions": 8161,
@@ -3276,6 +3656,7 @@
         "sessions": 687,
         "users": 651,
         "newUsers": 556,
+        "sessionsRaw": 687,
         "totalAdSpend": 42864,
         "metaSpend": 42864,
         "naverSpend": 0,
@@ -3298,7 +3679,10 @@
         "pageviews": 1262,
         "engagedSessions": 274,
         "bounceRate": 0.4525,
-        "avgDuration": 127.8
+        "avgDuration": 127.8,
+        "sessionsRaw": 551,
+        "usersRaw": 513,
+        "newUsersRaw": 416
       },
       "meta": {
         "impressions": 7177,
@@ -3314,6 +3698,7 @@
         "sessions": 551,
         "users": 513,
         "newUsers": 416,
+        "sessionsRaw": 551,
         "totalAdSpend": 36123,
         "metaSpend": 36123,
         "naverSpend": 0,
@@ -3336,7 +3721,10 @@
         "pageviews": 838,
         "engagedSessions": 230,
         "bounceRate": 0.393,
-        "avgDuration": 94.3
+        "avgDuration": 94.3,
+        "sessionsRaw": 377,
+        "usersRaw": 355,
+        "newUsersRaw": 271
       },
       "meta": {
         "impressions": 4375,
@@ -3352,6 +3740,7 @@
         "sessions": 377,
         "users": 355,
         "newUsers": 271,
+        "sessionsRaw": 377,
         "totalAdSpend": 32379,
         "metaSpend": 32379,
         "naverSpend": 0,
@@ -3374,7 +3763,10 @@
         "pageviews": 522,
         "engagedSessions": 113,
         "bounceRate": 0.2934,
-        "avgDuration": 182.7
+        "avgDuration": 182.7,
+        "sessionsRaw": 155,
+        "usersRaw": 131,
+        "newUsersRaw": 98
       },
       "meta": {},
       "naver": {},
@@ -3383,6 +3775,7 @@
         "sessions": 155,
         "users": 131,
         "newUsers": 98,
+        "sessionsRaw": 155,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3405,7 +3798,10 @@
         "pageviews": 495,
         "engagedSessions": 132,
         "bounceRate": 0.3646,
-        "avgDuration": 189.8
+        "avgDuration": 189.8,
+        "sessionsRaw": 206,
+        "usersRaw": 178,
+        "newUsersRaw": 127
       },
       "meta": {},
       "naver": {},
@@ -3414,6 +3810,7 @@
         "sessions": 206,
         "users": 178,
         "newUsers": 127,
+        "sessionsRaw": 206,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3436,7 +3833,10 @@
         "pageviews": 536,
         "engagedSessions": 109,
         "bounceRate": 0.3054,
-        "avgDuration": 237.9
+        "avgDuration": 237.9,
+        "sessionsRaw": 156,
+        "usersRaw": 132,
+        "newUsersRaw": 78
       },
       "meta": {},
       "naver": {},
@@ -3445,6 +3845,7 @@
         "sessions": 156,
         "users": 132,
         "newUsers": 78,
+        "sessionsRaw": 156,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3467,7 +3868,10 @@
         "pageviews": 602,
         "engagedSessions": 147,
         "bounceRate": 0.3265,
-        "avgDuration": 159.7
+        "avgDuration": 159.7,
+        "sessionsRaw": 224,
+        "usersRaw": 177,
+        "newUsersRaw": 102
       },
       "meta": {},
       "naver": {},
@@ -3476,6 +3880,7 @@
         "sessions": 224,
         "users": 177,
         "newUsers": 102,
+        "sessionsRaw": 224,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3498,7 +3903,10 @@
         "pageviews": 607,
         "engagedSessions": 118,
         "bounceRate": 0.294,
-        "avgDuration": 207.6
+        "avgDuration": 207.6,
+        "sessionsRaw": 166,
+        "usersRaw": 138,
+        "newUsersRaw": 78
       },
       "meta": {},
       "naver": {},
@@ -3507,6 +3915,7 @@
         "sessions": 166,
         "users": 138,
         "newUsers": 78,
+        "sessionsRaw": 166,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3529,7 +3938,10 @@
         "pageviews": 653,
         "engagedSessions": 131,
         "bounceRate": 0.3173,
-        "avgDuration": 284.6
+        "avgDuration": 284.6,
+        "sessionsRaw": 194,
+        "usersRaw": 156,
+        "newUsersRaw": 90
       },
       "meta": {},
       "naver": {},
@@ -3538,6 +3950,7 @@
         "sessions": 194,
         "users": 156,
         "newUsers": 90,
+        "sessionsRaw": 194,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3560,7 +3973,10 @@
         "pageviews": 594,
         "engagedSessions": 108,
         "bounceRate": 0.3003,
-        "avgDuration": 140.7
+        "avgDuration": 140.7,
+        "sessionsRaw": 155,
+        "usersRaw": 138,
+        "newUsersRaw": 83
       },
       "meta": {},
       "naver": {},
@@ -3569,6 +3985,7 @@
         "sessions": 155,
         "users": 138,
         "newUsers": 83,
+        "sessionsRaw": 155,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3591,7 +4008,10 @@
         "pageviews": 611,
         "engagedSessions": 110,
         "bounceRate": 0.263,
-        "avgDuration": 231.6
+        "avgDuration": 231.6,
+        "sessionsRaw": 149,
+        "usersRaw": 134,
+        "newUsersRaw": 87
       },
       "meta": {},
       "naver": {},
@@ -3600,6 +4020,7 @@
         "sessions": 149,
         "users": 134,
         "newUsers": 87,
+        "sessionsRaw": 149,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3622,7 +4043,10 @@
         "pageviews": 599,
         "engagedSessions": 120,
         "bounceRate": 0.3307,
-        "avgDuration": 147.6
+        "avgDuration": 147.6,
+        "sessionsRaw": 180,
+        "usersRaw": 138,
+        "newUsersRaw": 78
       },
       "meta": {},
       "naver": {},
@@ -3631,6 +4055,7 @@
         "sessions": 180,
         "users": 138,
         "newUsers": 78,
+        "sessionsRaw": 180,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3653,7 +4078,10 @@
         "pageviews": 1085,
         "engagedSessions": 158,
         "bounceRate": 0.3746,
-        "avgDuration": 231.9
+        "avgDuration": 231.9,
+        "sessionsRaw": 247,
+        "usersRaw": 184,
+        "newUsersRaw": 101
       },
       "meta": {},
       "naver": {},
@@ -3662,6 +4090,7 @@
         "sessions": 247,
         "users": 184,
         "newUsers": 101,
+        "sessionsRaw": 247,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3684,7 +4113,10 @@
         "pageviews": 866,
         "engagedSessions": 157,
         "bounceRate": 0.3229,
-        "avgDuration": 190.3
+        "avgDuration": 190.3,
+        "sessionsRaw": 231,
+        "usersRaw": 189,
+        "newUsersRaw": 110
       },
       "meta": {},
       "naver": {},
@@ -3693,6 +4125,7 @@
         "sessions": 231,
         "users": 189,
         "newUsers": 110,
+        "sessionsRaw": 231,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3709,21 +4142,25 @@
     "2026-W02": {
       "period": "2026-01-05~2026-01-11",
       "ga4": {
-        "sessions": 320,
-        "users": 245,
-        "newUsers": 150,
-        "pageviews": 1136,
-        "engagedSessions": 216,
-        "bounceRate": 0.3192,
-        "avgDuration": 268.2
+        "sessions": 302,
+        "users": 227,
+        "newUsers": 132,
+        "pageviews": 1118,
+        "engagedSessions": 213,
+        "bounceRate": 0.2849,
+        "avgDuration": 284.8,
+        "sessionsRaw": 320,
+        "usersRaw": 245,
+        "newUsersRaw": 150
       },
       "meta": {},
       "naver": {},
       "imweb": {},
       "summary": {
-        "sessions": 320,
-        "users": 245,
-        "newUsers": 150,
+        "sessions": 302,
+        "users": 227,
+        "newUsers": 132,
+        "sessionsRaw": 320,
         "totalAdSpend": 0,
         "metaSpend": 0,
         "naverSpend": 0,
@@ -3740,13 +4177,16 @@
     "2026-W03": {
       "period": "2026-01-12~2026-01-18",
       "ga4": {
-        "sessions": 438,
-        "users": 379,
-        "newUsers": 290,
-        "pageviews": 1185,
-        "engagedSessions": 268,
-        "bounceRate": 0.3581,
-        "avgDuration": 187.8
+        "sessions": 416,
+        "users": 357,
+        "newUsers": 268,
+        "pageviews": 1163,
+        "engagedSessions": 260,
+        "bounceRate": 0.3377,
+        "avgDuration": 198.0,
+        "sessionsRaw": 438,
+        "usersRaw": 379,
+        "newUsersRaw": 290
       },
       "meta": {},
       "naver": {
@@ -3758,9 +4198,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 438,
-        "users": 379,
-        "newUsers": 290,
+        "sessions": 416,
+        "users": 357,
+        "newUsers": 268,
+        "sessionsRaw": 438,
         "totalAdSpend": 2871,
         "metaSpend": 0,
         "naverSpend": 2871,
@@ -3777,13 +4218,16 @@
     "2026-W04": {
       "period": "2026-01-19~2026-01-25",
       "ga4": {
-        "sessions": 1473,
-        "users": 1359,
-        "newUsers": 1132,
-        "pageviews": 3360,
-        "engagedSessions": 960,
-        "bounceRate": 0.3282,
-        "avgDuration": 130.6
+        "sessions": 1432,
+        "users": 1318,
+        "newUsers": 1091,
+        "pageviews": 3319,
+        "engagedSessions": 952,
+        "bounceRate": 0.3153,
+        "avgDuration": 134.1,
+        "sessionsRaw": 1473,
+        "usersRaw": 1359,
+        "newUsersRaw": 1132
       },
       "meta": {
         "impressions": 11804,
@@ -3802,9 +4246,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 1473,
-        "users": 1359,
-        "newUsers": 1132,
+        "sessions": 1432,
+        "users": 1318,
+        "newUsers": 1091,
+        "sessionsRaw": 1473,
         "totalAdSpend": 134538,
         "metaSpend": 129797,
         "naverSpend": 4741,
@@ -3821,13 +4266,16 @@
     "2026-W05": {
       "period": "2026-01-26~2026-02-01",
       "ga4": {
-        "sessions": 1635,
-        "users": 1480,
-        "newUsers": 1231,
-        "pageviews": 3540,
-        "engagedSessions": 1012,
-        "bounceRate": 0.3777,
-        "avgDuration": 97.0
+        "sessions": 1604,
+        "users": 1449,
+        "newUsers": 1200,
+        "pageviews": 3509,
+        "engagedSessions": 1004,
+        "bounceRate": 0.3709,
+        "avgDuration": 98.9,
+        "sessionsRaw": 1635,
+        "usersRaw": 1480,
+        "newUsersRaw": 1231
       },
       "meta": {
         "impressions": 13139,
@@ -3846,9 +4294,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 1635,
-        "users": 1480,
-        "newUsers": 1231,
+        "sessions": 1604,
+        "users": 1449,
+        "newUsers": 1200,
+        "sessionsRaw": 1635,
         "totalAdSpend": 142767,
         "metaSpend": 139247,
         "naverSpend": 3520,
@@ -3865,13 +4314,16 @@
     "2026-W06": {
       "period": "2026-02-02~2026-02-08",
       "ga4": {
-        "sessions": 1180,
-        "users": 1089,
-        "newUsers": 923,
-        "pageviews": 2718,
-        "engagedSessions": 803,
-        "bounceRate": 0.3194,
-        "avgDuration": 113.7
+        "sessions": 1131,
+        "users": 1041,
+        "newUsers": 874,
+        "pageviews": 2668,
+        "engagedSessions": 789,
+        "bounceRate": 0.3027,
+        "avgDuration": 117.3,
+        "sessionsRaw": 1180,
+        "usersRaw": 1089,
+        "newUsersRaw": 923
       },
       "meta": {
         "impressions": 1537,
@@ -3890,9 +4342,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 1180,
-        "users": 1089,
-        "newUsers": 923,
+        "sessions": 1131,
+        "users": 1041,
+        "newUsers": 874,
+        "sessionsRaw": 1180,
         "totalAdSpend": 22679,
         "metaSpend": 17256,
         "naverSpend": 5423,
@@ -3909,13 +4362,16 @@
     "2026-W07": {
       "period": "2026-02-09~2026-02-15",
       "ga4": {
-        "sessions": 2796,
-        "users": 2636,
-        "newUsers": 2159,
-        "pageviews": 6869,
-        "engagedSessions": 1332,
-        "bounceRate": 0.4025,
-        "avgDuration": 133.1
+        "sessions": 2815,
+        "users": 2651,
+        "newUsers": 2184,
+        "pageviews": 6982,
+        "engagedSessions": 1837,
+        "bounceRate": 0.3142,
+        "avgDuration": 121.1,
+        "sessionsRaw": 2833,
+        "usersRaw": 2669,
+        "newUsersRaw": 2201
       },
       "meta": {
         "impressions": 31277,
@@ -3934,9 +4390,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 2796,
-        "users": 2636,
-        "newUsers": 2159,
+        "sessions": 2815,
+        "users": 2651,
+        "newUsers": 2184,
+        "sessionsRaw": 2833,
         "totalAdSpend": 254950,
         "metaSpend": 249901,
         "naverSpend": 5049,
@@ -3953,13 +4410,16 @@
     "2026-W08": {
       "period": "2026-02-16~2026-02-22",
       "ga4": {
-        "sessions": 3141,
-        "users": 2944,
-        "newUsers": 2335,
-        "pageviews": 6724,
-        "engagedSessions": 43,
-        "bounceRate": 0.9865,
-        "avgDuration": 372.2
+        "sessions": 3194,
+        "users": 2991,
+        "newUsers": 2465,
+        "pageviews": 7163,
+        "engagedSessions": 1578,
+        "bounceRate": 0.4967,
+        "avgDuration": 97.2,
+        "sessionsRaw": 3207,
+        "usersRaw": 3004,
+        "newUsersRaw": 2477
       },
       "meta": {
         "impressions": 43718,
@@ -3978,9 +4438,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 3141,
-        "users": 2944,
-        "newUsers": 2335,
+        "sessions": 3194,
+        "users": 2991,
+        "newUsers": 2465,
+        "sessionsRaw": 3207,
         "totalAdSpend": 303013,
         "metaSpend": 299130,
         "naverSpend": 3883,
@@ -3997,13 +4458,16 @@
     "2026-W09": {
       "period": "2026-02-23~2026-03-01",
       "ga4": {
-        "sessions": 4973,
-        "users": 4713,
-        "newUsers": 4027,
-        "pageviews": 9239,
-        "engagedSessions": 56,
-        "bounceRate": 0.9884,
-        "avgDuration": 136.4
+        "sessions": 5176,
+        "users": 4903,
+        "newUsers": 4279,
+        "pageviews": 9819,
+        "engagedSessions": 2324,
+        "bounceRate": 0.5508,
+        "avgDuration": 71.3,
+        "sessionsRaw": 5202,
+        "usersRaw": 4928,
+        "newUsersRaw": 4303
       },
       "meta": {
         "impressions": 71741,
@@ -4026,9 +4490,10 @@
         "feelBookings": 0
       },
       "summary": {
-        "sessions": 4973,
-        "users": 4713,
-        "newUsers": 4027,
+        "sessions": 5176,
+        "users": 4903,
+        "newUsers": 4279,
+        "sessionsRaw": 5202,
         "totalAdSpend": 502910,
         "metaSpend": 490469,
         "naverSpend": 12441,
@@ -4045,13 +4510,16 @@
     "2026-W10": {
       "period": "2026-03-02~2026-03-08",
       "ga4": {
-        "sessions": 5445,
-        "users": 5118,
-        "newUsers": 4273,
-        "pageviews": 9436,
-        "engagedSessions": 53,
-        "bounceRate": 0.9898,
-        "avgDuration": 230.3
+        "sessions": 5499,
+        "users": 5168,
+        "newUsers": 4571,
+        "pageviews": 10082,
+        "engagedSessions": 2624,
+        "bounceRate": 0.5238,
+        "avgDuration": 90.6,
+        "sessionsRaw": 5530,
+        "usersRaw": 5199,
+        "newUsersRaw": 4603
       },
       "meta": {
         "impressions": 73288,
@@ -4074,9 +4542,10 @@
         "feelBookings": 0
       },
       "summary": {
-        "sessions": 5445,
-        "users": 5118,
-        "newUsers": 4273,
+        "sessions": 5499,
+        "users": 5168,
+        "newUsers": 4571,
+        "sessionsRaw": 5530,
         "totalAdSpend": 629729,
         "metaSpend": 615055,
         "naverSpend": 14674,
@@ -4093,13 +4562,16 @@
     "2026-W11": {
       "period": "2026-03-09~2026-03-15",
       "ga4": {
-        "sessions": 7110,
-        "users": 6745,
-        "newUsers": 5705,
-        "pageviews": 11140,
-        "engagedSessions": 77,
-        "bounceRate": 0.9886,
-        "avgDuration": 115.7
+        "sessions": 7152,
+        "users": 6784,
+        "newUsers": 6077,
+        "pageviews": 11887,
+        "engagedSessions": 3026,
+        "bounceRate": 0.567,
+        "avgDuration": 80.7,
+        "sessionsRaw": 7198,
+        "usersRaw": 6825,
+        "newUsersRaw": 6113
       },
       "meta": {
         "impressions": 106984,
@@ -4122,9 +4594,10 @@
         "feelBookings": 1
       },
       "summary": {
-        "sessions": 7110,
-        "users": 6745,
-        "newUsers": 5705,
+        "sessions": 7152,
+        "users": 6784,
+        "newUsers": 6077,
+        "sessionsRaw": 7198,
         "totalAdSpend": 913596,
         "metaSpend": 891728,
         "naverSpend": 21868,
@@ -4141,13 +4614,16 @@
     "2026-W12": {
       "period": "2026-03-16~2026-03-22",
       "ga4": {
-        "sessions": 12147,
-        "users": 11618,
-        "newUsers": 9842,
-        "pageviews": 19203,
-        "engagedSessions": 85,
-        "bounceRate": 0.9928,
-        "avgDuration": 96.8
+        "sessions": 12164,
+        "users": 11595,
+        "newUsers": 10454,
+        "pageviews": 20497,
+        "engagedSessions": 5595,
+        "bounceRate": 0.5376,
+        "avgDuration": 68.9,
+        "sessionsRaw": 12302,
+        "usersRaw": 11730,
+        "newUsersRaw": 10591
       },
       "meta": {
         "impressions": 152940,
@@ -4170,9 +4646,10 @@
         "feelBookings": 3
       },
       "summary": {
-        "sessions": 12147,
-        "users": 11618,
-        "newUsers": 9842,
+        "sessions": 12164,
+        "users": 11595,
+        "newUsers": 10454,
+        "sessionsRaw": 12302,
         "totalAdSpend": 1374611,
         "metaSpend": 1344922,
         "naverSpend": 29689,
@@ -4189,13 +4666,16 @@
     "2026-W13": {
       "period": "2026-03-23~2026-03-29",
       "ga4": {
-        "sessions": 5928,
-        "users": 5606,
-        "newUsers": 4348,
-        "pageviews": 10077,
-        "engagedSessions": 70,
-        "bounceRate": 0.9856,
-        "avgDuration": 289.6
+        "sessions": 6417,
+        "users": 6043,
+        "newUsers": 4884,
+        "pageviews": 11600,
+        "engagedSessions": 3133,
+        "bounceRate": 0.4979,
+        "avgDuration": 83.6,
+        "sessionsRaw": 6630,
+        "usersRaw": 6257,
+        "newUsersRaw": 5094
       },
       "meta": {
         "impressions": 86228,
@@ -4206,10 +4686,10 @@
         "pixelPurchases": 1
       },
       "naver": {
-        "impressions": 1517,
-        "clicks": 215,
-        "spend": 18260,
-        "ctr": 14.17,
+        "impressions": 1707,
+        "clicks": 242,
+        "spend": 20548,
+        "ctr": 14.18,
         "cpc": 85
       },
       "imweb": {
@@ -4218,32 +4698,36 @@
         "feelBookings": 0
       },
       "summary": {
-        "sessions": 5928,
-        "users": 5606,
-        "newUsers": 4348,
-        "totalAdSpend": 951738,
+        "sessions": 6417,
+        "users": 6043,
+        "newUsers": 4884,
+        "sessionsRaw": 6630,
+        "totalAdSpend": 954026,
         "metaSpend": 933478,
-        "naverSpend": 18260,
-        "impressions": 87745,
-        "clicks": 5398,
+        "naverSpend": 20548,
+        "impressions": 87935,
+        "clicks": 5425,
         "bodySales": 3,
         "feelBookings": 0,
         "revenue": 10290000,
-        "cpa": 317246,
-        "roas": 1081.2,
+        "cpa": 318009,
+        "roas": 1078.6,
         "pixelPurchases": 1
       }
     },
     "2026-W14": {
       "period": "2026-03-30~2026-04-05",
       "ga4": {
-        "sessions": 3152,
-        "users": 2952,
-        "newUsers": 2110,
-        "pageviews": 5706,
-        "engagedSessions": 66,
-        "bounceRate": 0.9795,
-        "avgDuration": 163.3
+        "sessions": 3023,
+        "users": 2816,
+        "newUsers": 2078,
+        "pageviews": 5908,
+        "engagedSessions": 1540,
+        "bounceRate": 0.4875,
+        "avgDuration": 104.1,
+        "sessionsRaw": 3175,
+        "usersRaw": 2969,
+        "newUsersRaw": 2229
       },
       "meta": {
         "impressions": 51428,
@@ -4266,9 +4750,10 @@
         "feelBookings": 1
       },
       "summary": {
-        "sessions": 3152,
-        "users": 2952,
-        "newUsers": 2110,
+        "sessions": 3023,
+        "users": 2816,
+        "newUsers": 2078,
+        "sessionsRaw": 3175,
         "totalAdSpend": 645994,
         "metaSpend": 633218,
         "naverSpend": 12776,
@@ -4285,13 +4770,16 @@
     "2026-W15": {
       "period": "2026-04-06~2026-04-12",
       "ga4": {
-        "sessions": 3022,
-        "users": 2794,
-        "newUsers": 2094,
-        "pageviews": 4963,
-        "engagedSessions": 257,
-        "bounceRate": 0.9271,
-        "avgDuration": 202.6
+        "sessions": 2973,
+        "users": 2741,
+        "newUsers": 2210,
+        "pageviews": 5339,
+        "engagedSessions": 1301,
+        "bounceRate": 0.5466,
+        "avgDuration": 112.1,
+        "sessionsRaw": 3066,
+        "usersRaw": 2834,
+        "newUsersRaw": 2301
       },
       "meta": {
         "impressions": 43570,
@@ -4310,9 +4798,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 3022,
-        "users": 2794,
-        "newUsers": 2094,
+        "sessions": 2973,
+        "users": 2741,
+        "newUsers": 2210,
+        "sessionsRaw": 3066,
         "totalAdSpend": 538461,
         "metaSpend": 524661,
         "naverSpend": 13800,
@@ -4329,13 +4818,16 @@
     "2026-W16": {
       "period": "2026-04-13~2026-04-19",
       "ga4": {
-        "sessions": 5084,
-        "users": 4792,
-        "newUsers": 3636,
-        "pageviews": 8467,
-        "engagedSessions": 108,
-        "bounceRate": 0.9798,
-        "avgDuration": 138.0
+        "sessions": 5072,
+        "users": 4767,
+        "newUsers": 3940,
+        "pageviews": 9261,
+        "engagedSessions": 2443,
+        "bounceRate": 0.5297,
+        "avgDuration": 78.2,
+        "sessionsRaw": 5158,
+        "usersRaw": 4853,
+        "newUsersRaw": 4026
       },
       "meta": {
         "impressions": 76582,
@@ -4354,9 +4846,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 5084,
-        "users": 4792,
-        "newUsers": 3636,
+        "sessions": 5072,
+        "users": 4767,
+        "newUsers": 3940,
+        "sessionsRaw": 5158,
         "totalAdSpend": 825980,
         "metaSpend": 808964,
         "naverSpend": 17016,
@@ -4373,13 +4866,16 @@
     "2026-W17": {
       "period": "2026-04-20~2026-04-26",
       "ga4": {
-        "sessions": 6655,
-        "users": 6366,
-        "newUsers": 5043,
-        "pageviews": 10415,
-        "engagedSessions": 58,
-        "bounceRate": 0.9901,
-        "avgDuration": 98.7
+        "sessions": 6721,
+        "users": 6422,
+        "newUsers": 5474,
+        "pageviews": 11355,
+        "engagedSessions": 3225,
+        "bounceRate": 0.5093,
+        "avgDuration": 68.3,
+        "sessionsRaw": 6767,
+        "usersRaw": 6468,
+        "newUsersRaw": 5520
       },
       "meta": {
         "impressions": 103389,
@@ -4398,9 +4894,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 6655,
-        "users": 6366,
-        "newUsers": 5043,
+        "sessions": 6721,
+        "users": 6422,
+        "newUsers": 5474,
+        "sessionsRaw": 6767,
         "totalAdSpend": 861733,
         "metaSpend": 844127,
         "naverSpend": 17606,
@@ -4417,13 +4914,16 @@
     "2026-W18": {
       "period": "2026-04-27~2026-05-03",
       "ga4": {
-        "sessions": 3989,
-        "users": 3786,
-        "newUsers": 2902,
-        "pageviews": 6197,
-        "engagedSessions": 41,
-        "bounceRate": 0.9886,
-        "avgDuration": 126.5
+        "sessions": 3987,
+        "users": 3773,
+        "newUsers": 3172,
+        "pageviews": 6789,
+        "engagedSessions": 1913,
+        "bounceRate": 0.5156,
+        "avgDuration": 82.8,
+        "sessionsRaw": 4067,
+        "usersRaw": 3854,
+        "newUsersRaw": 3253
       },
       "meta": {
         "impressions": 54740,
@@ -4442,9 +4942,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 3989,
-        "users": 3786,
-        "newUsers": 2902,
+        "sessions": 3987,
+        "users": 3773,
+        "newUsers": 3172,
+        "sessionsRaw": 4067,
         "totalAdSpend": 507804,
         "metaSpend": 492824,
         "naverSpend": 14980,
@@ -4461,13 +4962,16 @@
     "2026-W19": {
       "period": "2026-05-04~2026-05-10",
       "ga4": {
-        "sessions": 4468,
-        "users": 4181,
-        "newUsers": 3220,
-        "pageviews": 7537,
-        "engagedSessions": 53,
-        "bounceRate": 0.9869,
-        "avgDuration": 112.9
+        "sessions": 4488,
+        "users": 4191,
+        "newUsers": 3469,
+        "pageviews": 8249,
+        "engagedSessions": 2300,
+        "bounceRate": 0.4862,
+        "avgDuration": 72.6,
+        "sessionsRaw": 4540,
+        "usersRaw": 4245,
+        "newUsersRaw": 3523
       },
       "meta": {
         "impressions": 67484,
@@ -4486,9 +4990,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 4468,
-        "users": 4181,
-        "newUsers": 3220,
+        "sessions": 4488,
+        "users": 4191,
+        "newUsers": 3469,
+        "sessionsRaw": 4540,
         "totalAdSpend": 536710,
         "metaSpend": 522980,
         "naverSpend": 13730,
@@ -4505,13 +5010,16 @@
     "2026-W20": {
       "period": "2026-05-11~2026-05-17",
       "ga4": {
-        "sessions": 3924,
-        "users": 3618,
-        "newUsers": 2670,
-        "pageviews": 6523,
-        "engagedSessions": 46,
-        "bounceRate": 0.9884,
-        "avgDuration": 107.3
+        "sessions": 3833,
+        "users": 3513,
+        "newUsers": 2751,
+        "pageviews": 6967,
+        "engagedSessions": 1907,
+        "bounceRate": 0.4994,
+        "avgDuration": 84.1,
+        "sessionsRaw": 3994,
+        "usersRaw": 3675,
+        "newUsersRaw": 2911
       },
       "meta": {
         "impressions": 55594,
@@ -4530,9 +5038,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 3924,
-        "users": 3618,
-        "newUsers": 2670,
+        "sessions": 3833,
+        "users": 3513,
+        "newUsers": 2751,
+        "sessionsRaw": 3994,
         "totalAdSpend": 553397,
         "metaSpend": 536452,
         "naverSpend": 16945,
@@ -4549,13 +5058,16 @@
     "2026-W21": {
       "period": "2026-05-18~2026-05-24",
       "ga4": {
-        "sessions": 4373,
-        "users": 4159,
-        "newUsers": 3272,
-        "pageviews": 6724,
-        "engagedSessions": 33,
-        "bounceRate": 0.9921,
-        "avgDuration": 74.8
+        "sessions": 4647,
+        "users": 4407,
+        "newUsers": 3751,
+        "pageviews": 7925,
+        "engagedSessions": 2293,
+        "bounceRate": 0.5043,
+        "avgDuration": 60.4,
+        "sessionsRaw": 4816,
+        "usersRaw": 4578,
+        "newUsersRaw": 3920
       },
       "meta": {
         "impressions": 63006,
@@ -4566,22 +5078,23 @@
         "pixelPurchases": 0
       },
       "naver": {
-        "impressions": 6359,
-        "clicks": 115,
-        "spend": 16637,
-        "ctr": 1.81,
-        "cpc": 145
+        "impressions": 7368,
+        "clicks": 123,
+        "spend": 17762,
+        "ctr": 1.67,
+        "cpc": 144
       },
       "imweb": {},
       "summary": {
-        "sessions": 4373,
-        "users": 4159,
-        "newUsers": 3272,
-        "totalAdSpend": 459052,
+        "sessions": 4647,
+        "users": 4407,
+        "newUsers": 3751,
+        "sessionsRaw": 4816,
+        "totalAdSpend": 460177,
         "metaSpend": 442415,
-        "naverSpend": 16637,
-        "impressions": 69365,
-        "clicks": 3463,
+        "naverSpend": 17762,
+        "impressions": 70374,
+        "clicks": 3471,
         "bodySales": 0,
         "feelBookings": 0,
         "revenue": 0,
@@ -4593,13 +5106,16 @@
     "2026-W22": {
       "period": "2026-05-25~2026-05-31",
       "ga4": {
-        "sessions": 4245,
-        "users": 4003,
-        "newUsers": 2988,
-        "pageviews": 6920,
-        "engagedSessions": 42,
-        "bounceRate": 0.9902,
-        "avgDuration": 121.6
+        "sessions": 4126,
+        "users": 3878,
+        "newUsers": 3160,
+        "pageviews": 7513,
+        "engagedSessions": 1970,
+        "bounceRate": 0.5241,
+        "avgDuration": 80.1,
+        "sessionsRaw": 4359,
+        "usersRaw": 4104,
+        "newUsersRaw": 3381
       },
       "meta": {
         "impressions": 63310,
@@ -4618,9 +5134,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 4245,
-        "users": 4003,
-        "newUsers": 2988,
+        "sessions": 4126,
+        "users": 3878,
+        "newUsers": 3160,
+        "sessionsRaw": 4359,
         "totalAdSpend": 517070,
         "metaSpend": 492991,
         "naverSpend": 24079,
@@ -4637,13 +5154,16 @@
     "2026-W23": {
       "period": "2026-06-01~2026-06-07",
       "ga4": {
-        "sessions": 3658,
-        "users": 3497,
-        "newUsers": 2828,
-        "pageviews": 5258,
-        "engagedSessions": 25,
-        "bounceRate": 0.9929,
-        "avgDuration": 83.0
+        "sessions": 3422,
+        "users": 3252,
+        "newUsers": 2794,
+        "pageviews": 5501,
+        "engagedSessions": 1426,
+        "bounceRate": 0.5774,
+        "avgDuration": 77.6,
+        "sessionsRaw": 3763,
+        "usersRaw": 3593,
+        "newUsersRaw": 3133
       },
       "meta": {
         "impressions": 55800,
@@ -4662,9 +5182,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 3658,
-        "users": 3497,
-        "newUsers": 2828,
+        "sessions": 3422,
+        "users": 3252,
+        "newUsers": 2794,
+        "sessionsRaw": 3763,
         "totalAdSpend": 391364,
         "metaSpend": 372368,
         "naverSpend": 18996,
@@ -4681,13 +5202,16 @@
     "2026-W24": {
       "period": "2026-06-08~2026-06-14",
       "ga4": {
-        "sessions": 3097,
-        "users": 2975,
-        "newUsers": 2495,
-        "pageviews": 4689,
-        "engagedSessions": 32,
-        "bounceRate": 0.9895,
-        "avgDuration": 118.6
+        "sessions": 2858,
+        "users": 2730,
+        "newUsers": 2397,
+        "pageviews": 4869,
+        "engagedSessions": 1138,
+        "bounceRate": 0.6016,
+        "avgDuration": 68.8,
+        "sessionsRaw": 3220,
+        "usersRaw": 3096,
+        "newUsersRaw": 2762
       },
       "meta": {
         "impressions": 55846,
@@ -4706,9 +5230,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 3097,
-        "users": 2975,
-        "newUsers": 2495,
+        "sessions": 2858,
+        "users": 2730,
+        "newUsers": 2397,
+        "sessionsRaw": 3220,
         "totalAdSpend": 315308,
         "metaSpend": 292347,
         "naverSpend": 22961,
@@ -4725,13 +5250,16 @@
     "2026-W25": {
       "period": "2026-06-15~2026-06-21",
       "ga4": {
-        "sessions": 3697,
-        "users": 3617,
-        "newUsers": 3054,
-        "pageviews": 5307,
-        "engagedSessions": 35,
-        "bounceRate": 0.9913,
-        "avgDuration": 52.3
+        "sessions": 3374,
+        "users": 3288,
+        "newUsers": 2898,
+        "pageviews": 5597,
+        "engagedSessions": 1415,
+        "bounceRate": 0.5824,
+        "avgDuration": 49.9,
+        "sessionsRaw": 4164,
+        "usersRaw": 4078,
+        "newUsersRaw": 3683
       },
       "meta": {
         "impressions": 51914,
@@ -4750,9 +5278,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 3697,
-        "users": 3617,
-        "newUsers": 3054,
+        "sessions": 3374,
+        "users": 3288,
+        "newUsers": 2898,
+        "sessionsRaw": 4164,
         "totalAdSpend": 348399,
         "metaSpend": 330195,
         "naverSpend": 18204,
@@ -4769,13 +5298,16 @@
     "2026-W26": {
       "period": "2026-06-22~2026-06-28",
       "ga4": {
-        "sessions": 4090,
-        "users": 3969,
-        "newUsers": 3310,
-        "pageviews": 6500,
-        "engagedSessions": 32,
-        "bounceRate": 0.9898,
-        "avgDuration": 91.2
+        "sessions": 3220,
+        "users": 3095,
+        "newUsers": 2652,
+        "pageviews": 6125,
+        "engagedSessions": 1823,
+        "bounceRate": 0.4436,
+        "avgDuration": 73.7,
+        "sessionsRaw": 4202,
+        "usersRaw": 4075,
+        "newUsersRaw": 3630
       },
       "meta": {
         "impressions": 43093,
@@ -4794,9 +5326,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 4090,
-        "users": 3969,
-        "newUsers": 3310,
+        "sessions": 3220,
+        "users": 3095,
+        "newUsers": 2652,
+        "sessionsRaw": 4202,
         "totalAdSpend": 343213,
         "metaSpend": 318234,
         "naverSpend": 24979,
@@ -4813,13 +5346,16 @@
     "2026-W27": {
       "period": "2026-06-29~2026-07-05",
       "ga4": {
-        "sessions": 2486,
-        "users": 2377,
-        "newUsers": 1980,
-        "pageviews": 3992,
-        "engagedSessions": 27,
-        "bounceRate": 0.9899,
-        "avgDuration": 94.8
+        "sessions": 1579,
+        "users": 1465,
+        "newUsers": 1132,
+        "pageviews": 3310,
+        "engagedSessions": 899,
+        "bounceRate": 0.4389,
+        "avgDuration": 77.9,
+        "sessionsRaw": 2564,
+        "usersRaw": 2450,
+        "newUsersRaw": 2108
       },
       "meta": {
         "impressions": 30348,
@@ -4838,9 +5374,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 2486,
-        "users": 2377,
-        "newUsers": 1980,
+        "sessions": 1579,
+        "users": 1465,
+        "newUsers": 1132,
+        "sessionsRaw": 2564,
         "totalAdSpend": 273484,
         "metaSpend": 250881,
         "naverSpend": 22603,
@@ -4857,13 +5394,16 @@
     "2026-W28": {
       "period": "2026-07-06~2026-07-12",
       "ga4": {
-        "sessions": 2359,
-        "users": 2275,
-        "newUsers": 1902,
-        "pageviews": 3848,
-        "engagedSessions": 37,
-        "bounceRate": 0.9835,
-        "avgDuration": 90.7
+        "sessions": 1390,
+        "users": 1301,
+        "newUsers": 1017,
+        "pageviews": 3102,
+        "engagedSessions": 821,
+        "bounceRate": 0.4065,
+        "avgDuration": 76.8,
+        "sessionsRaw": 2437,
+        "usersRaw": 2344,
+        "newUsersRaw": 2037
       },
       "meta": {
         "impressions": 25062,
@@ -4882,9 +5422,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 2359,
-        "users": 2275,
-        "newUsers": 1902,
+        "sessions": 1390,
+        "users": 1301,
+        "newUsers": 1017,
+        "sessionsRaw": 2437,
         "totalAdSpend": 308132,
         "metaSpend": 284636,
         "naverSpend": 23496,
@@ -4901,13 +5442,16 @@
     "2026-W29": {
       "period": "2026-07-13~2026-07-19",
       "ga4": {
-        "sessions": 3016,
-        "users": 2912,
-        "newUsers": 2200,
-        "pageviews": 4300,
-        "engagedSessions": 35,
-        "bounceRate": 0.9889,
-        "avgDuration": 105.8
+        "sessions": 1751,
+        "users": 1632,
+        "newUsers": 1238,
+        "pageviews": 3564,
+        "engagedSessions": 956,
+        "bounceRate": 0.4506,
+        "avgDuration": 85.5,
+        "sessionsRaw": 3227,
+        "usersRaw": 3102,
+        "newUsersRaw": 2447
       },
       "meta": {
         "impressions": 26252,
@@ -4926,9 +5470,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 3016,
-        "users": 2912,
-        "newUsers": 2200,
+        "sessions": 1751,
+        "users": 1632,
+        "newUsers": 1238,
+        "sessionsRaw": 3227,
         "totalAdSpend": 446626,
         "metaSpend": 414194,
         "naverSpend": 32432,
@@ -4945,13 +5490,16 @@
     "2026-W30": {
       "period": "2026-07-20~2026-07-26",
       "ga4": {
-        "sessions": 2243,
-        "users": 2165,
-        "newUsers": 1531,
-        "pageviews": 3270,
-        "engagedSessions": 22,
-        "bounceRate": 0.9898,
-        "avgDuration": 90.9
+        "sessions": 1401,
+        "users": 1317,
+        "newUsers": 1028,
+        "pageviews": 2905,
+        "engagedSessions": 747,
+        "bounceRate": 0.4686,
+        "avgDuration": 80.5,
+        "sessionsRaw": 2377,
+        "usersRaw": 2292,
+        "newUsersRaw": 1712
       },
       "meta": {
         "impressions": 22890,
@@ -4970,9 +5518,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 2243,
-        "users": 2165,
-        "newUsers": 1531,
+        "sessions": 1401,
+        "users": 1317,
+        "newUsers": 1028,
+        "sessionsRaw": 2377,
         "totalAdSpend": 397046,
         "metaSpend": 375958,
         "naverSpend": 21088,
@@ -4989,13 +5538,16 @@
     "2026-W31": {
       "period": "2026-07-27~2026-08-02",
       "ga4": {
-        "sessions": 1838,
-        "users": 1761,
-        "newUsers": 1240,
-        "pageviews": 2672,
-        "engagedSessions": 16,
-        "bounceRate": 0.9911,
-        "avgDuration": 109.9
+        "sessions": 881,
+        "users": 796,
+        "newUsers": 558,
+        "pageviews": 2174,
+        "engagedSessions": 508,
+        "bounceRate": 0.415,
+        "avgDuration": 118.8,
+        "sessionsRaw": 1940,
+        "usersRaw": 1855,
+        "newUsersRaw": 1351
       },
       "meta": {
         "impressions": 13393,
@@ -5014,9 +5566,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 1838,
-        "users": 1761,
-        "newUsers": 1240,
+        "sessions": 881,
+        "users": 796,
+        "newUsers": 558,
+        "sessionsRaw": 1940,
         "totalAdSpend": 225325,
         "metaSpend": 198235,
         "naverSpend": 27090,
@@ -5033,13 +5586,16 @@
     "2026-W32": {
       "period": "2026-08-03~2026-08-09",
       "ga4": {
-        "sessions": 1770,
-        "users": 1715,
-        "newUsers": 1139,
-        "pageviews": 2364,
-        "engagedSessions": 17,
-        "bounceRate": 0.99,
-        "avgDuration": 94.3
+        "sessions": 608,
+        "users": 548,
+        "newUsers": 333,
+        "pageviews": 1719,
+        "engagedSessions": 370,
+        "bounceRate": 0.3872,
+        "avgDuration": 122.3,
+        "sessionsRaw": 1878,
+        "usersRaw": 1819,
+        "newUsersRaw": 1235
       },
       "meta": {
         "impressions": 9042,
@@ -5058,9 +5614,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 1770,
-        "users": 1715,
-        "newUsers": 1139,
+        "sessions": 608,
+        "users": 548,
+        "newUsers": 333,
+        "sessionsRaw": 1878,
         "totalAdSpend": 175810,
         "metaSpend": 141921,
         "naverSpend": 33889,
@@ -5077,13 +5634,16 @@
     "2026-W33": {
       "period": "2026-08-10~2026-08-16",
       "ga4": {
-        "sessions": 1847,
-        "users": 1772,
-        "newUsers": 1308,
-        "pageviews": 2768,
-        "engagedSessions": 29,
-        "bounceRate": 0.984,
-        "avgDuration": 129.8
+        "sessions": 767,
+        "users": 686,
+        "newUsers": 440,
+        "pageviews": 2038,
+        "engagedSessions": 435,
+        "bounceRate": 0.4272,
+        "avgDuration": 115.7,
+        "sessionsRaw": 1928,
+        "usersRaw": 1849,
+        "newUsersRaw": 1456
       },
       "meta": {
         "impressions": 9881,
@@ -5102,9 +5662,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 1847,
-        "users": 1772,
-        "newUsers": 1308,
+        "sessions": 767,
+        "users": 686,
+        "newUsers": 440,
+        "sessionsRaw": 1928,
         "totalAdSpend": 188475,
         "metaSpend": 152935,
         "naverSpend": 35540,
@@ -5121,13 +5682,16 @@
     "2026-W34": {
       "period": "2026-08-17~2026-08-23",
       "ga4": {
-        "sessions": 2300,
-        "users": 2258,
-        "newUsers": 1795,
-        "pageviews": 3140,
-        "engagedSessions": 8,
-        "bounceRate": 0.9967,
-        "avgDuration": 65.5
+        "sessions": 858,
+        "users": 808,
+        "newUsers": 577,
+        "pageviews": 2058,
+        "engagedSessions": 514,
+        "bounceRate": 0.3931,
+        "avgDuration": 104.6,
+        "sessionsRaw": 2394,
+        "usersRaw": 2344,
+        "newUsersRaw": 2005
       },
       "meta": {
         "impressions": 12304,
@@ -5146,9 +5710,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 2300,
-        "users": 2258,
-        "newUsers": 1795,
+        "sessions": 858,
+        "users": 808,
+        "newUsers": 577,
+        "sessionsRaw": 2394,
         "totalAdSpend": 252653,
         "metaSpend": 218401,
         "naverSpend": 34252,
@@ -5165,13 +5730,16 @@
     "2026-W35": {
       "period": "2026-08-24~2026-08-30",
       "ga4": {
-        "sessions": 2199,
-        "users": 2161,
-        "newUsers": 1676,
-        "pageviews": 2625,
-        "engagedSessions": 15,
-        "bounceRate": 0.9929,
-        "avgDuration": 49.8
+        "sessions": 856,
+        "users": 800,
+        "newUsers": 595,
+        "pageviews": 1961,
+        "engagedSessions": 486,
+        "bounceRate": 0.4356,
+        "avgDuration": 84.3,
+        "sessionsRaw": 2999,
+        "usersRaw": 2942,
+        "newUsersRaw": 2450
       },
       "meta": {
         "impressions": 7875,
@@ -5182,22 +5750,23 @@
         "pixelPurchases": 0
       },
       "naver": {
-        "impressions": 7799,
-        "clicks": 40,
-        "spend": 11119,
-        "ctr": 0.51,
-        "cpc": 278
+        "impressions": 10744,
+        "clicks": 77,
+        "spend": 25023,
+        "ctr": 0.72,
+        "cpc": 325
       },
       "imweb": {},
       "summary": {
-        "sessions": 2199,
-        "users": 2161,
-        "newUsers": 1676,
-        "totalAdSpend": 159912,
+        "sessions": 856,
+        "users": 800,
+        "newUsers": 595,
+        "sessionsRaw": 2999,
+        "totalAdSpend": 173816,
         "metaSpend": 148793,
-        "naverSpend": 11119,
-        "impressions": 15674,
-        "clicks": 405,
+        "naverSpend": 25023,
+        "impressions": 18619,
+        "clicks": 442,
         "bodySales": 0,
         "feelBookings": 0,
         "revenue": 0,
@@ -5209,13 +5778,16 @@
     "2026-W36": {
       "period": "2026-08-31~2026-09-06",
       "ga4": {
-        "sessions": 3212,
-        "users": 3169,
-        "newUsers": 2543,
-        "pageviews": 3465,
-        "engagedSessions": 25,
-        "bounceRate": 0.9924,
-        "avgDuration": 46.7
+        "sessions": 731,
+        "users": 686,
+        "newUsers": 523,
+        "pageviews": 1698,
+        "engagedSessions": 417,
+        "bounceRate": 0.4221,
+        "avgDuration": 117.3,
+        "sessionsRaw": 3424,
+        "usersRaw": 3378,
+        "newUsersRaw": 2946
       },
       "meta": {
         "impressions": 9887,
@@ -5234,9 +5806,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 3212,
-        "users": 3169,
-        "newUsers": 2543,
+        "sessions": 731,
+        "users": 686,
+        "newUsers": 523,
+        "sessionsRaw": 3424,
         "totalAdSpend": 211395,
         "metaSpend": 181701,
         "naverSpend": 29694,
@@ -5253,13 +5826,16 @@
     "2026-W37": {
       "period": "2026-09-07~2026-09-13",
       "ga4": {
-        "sessions": 2866,
-        "users": 2823,
-        "newUsers": 2298,
-        "pageviews": 3616,
-        "engagedSessions": 13,
-        "bounceRate": 0.9957,
-        "avgDuration": 41.7
+        "sessions": 907,
+        "users": 860,
+        "newUsers": 564,
+        "pageviews": 2065,
+        "engagedSessions": 518,
+        "bounceRate": 0.4133,
+        "avgDuration": 90.7,
+        "sessionsRaw": 2993,
+        "usersRaw": 2944,
+        "newUsersRaw": 2557
       },
       "meta": {
         "impressions": 11675,
@@ -5278,9 +5854,10 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 2866,
-        "users": 2823,
-        "newUsers": 2298,
+        "sessions": 907,
+        "users": 860,
+        "newUsers": 564,
+        "sessionsRaw": 2993,
         "totalAdSpend": 223937,
         "metaSpend": 196154,
         "naverSpend": 27783,
@@ -5292,6 +5869,54 @@
         "cpa": null,
         "roas": 0.0,
         "pixelPurchases": 1
+      }
+    },
+    "2026-W38": {
+      "period": "2026-09-14~2026-09-20",
+      "ga4": {
+        "sessions": 1310,
+        "users": 1248,
+        "newUsers": 928,
+        "pageviews": 2566,
+        "engagedSessions": 597,
+        "bounceRate": 0.5544,
+        "avgDuration": 80.6,
+        "sessionsRaw": 2058,
+        "usersRaw": 1997,
+        "newUsersRaw": 1668
+      },
+      "meta": {
+        "impressions": 16046,
+        "clicks": 879,
+        "adSpend": 292719,
+        "ctr": 5.48,
+        "cpc": 333,
+        "pixelPurchases": 0
+      },
+      "naver": {
+        "impressions": 5367,
+        "clicks": 102,
+        "spend": 29439,
+        "ctr": 1.9,
+        "cpc": 289
+      },
+      "imweb": {},
+      "summary": {
+        "sessions": 1310,
+        "users": 1248,
+        "newUsers": 928,
+        "sessionsRaw": 2058,
+        "totalAdSpend": 322158,
+        "metaSpend": 292719,
+        "naverSpend": 29439,
+        "impressions": 21413,
+        "clicks": 981,
+        "bodySales": 0,
+        "feelBookings": 0,
+        "revenue": 0,
+        "cpa": null,
+        "roas": 0.0,
+        "pixelPurchases": 0
       }
     }
   }
