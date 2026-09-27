@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generated": "2026-09-21T10:00:05",
+    "generated": "2026-09-28T08:00:02",
     "sources": [
       "ga4_full.json",
       "meta_full.json",
       "naver_full.json",
       "imweb_body_sales.json"
     ],
-    "weekCount": 145,
+    "weekCount": 146,
     "ga4BotFilter": "ga4.sessions/users/newUsers = 봇 제외(2026-01-01~), *Raw = 봇 포함 원값"
   },
   "weeks": {
@@ -1148,8 +1148,8 @@
       "meta": {},
       "naver": {},
       "imweb": {
-        "bodySales": 42,
-        "revenue": 83160000,
+        "bodySales": 43,
+        "revenue": 85140000.0,
         "feelBookings": 0
       },
       "summary": {
@@ -1162,9 +1162,9 @@
         "naverSpend": 0,
         "impressions": 0,
         "clicks": 0,
-        "bodySales": 42,
+        "bodySales": 43,
         "feelBookings": 0,
-        "revenue": 83160000,
+        "revenue": 85140000.0,
         "cpa": 0,
         "roas": null,
         "pixelPurchases": 0
@@ -2171,8 +2171,8 @@
       },
       "naver": {},
       "imweb": {
-        "bodySales": 4,
-        "revenue": 11812400,
+        "bodySales": 3,
+        "revenue": 8790000,
         "feelBookings": 0
       },
       "summary": {
@@ -2185,11 +2185,11 @@
         "naverSpend": 0,
         "impressions": 155777,
         "clicks": 5124,
-        "bodySales": 4,
+        "bodySales": 3,
         "feelBookings": 0,
-        "revenue": 11812400,
-        "cpa": 318269,
-        "roas": 927.9,
+        "revenue": 8790000,
+        "cpa": 424359,
+        "roas": 690.5,
         "pixelPurchases": 4
       }
     },
@@ -2619,8 +2619,8 @@
       },
       "naver": {},
       "imweb": {
-        "bodySales": 3,
-        "revenue": 8890000,
+        "bodySales": 5,
+        "revenue": 14250000.0,
         "feelBookings": 0
       },
       "summary": {
@@ -2633,11 +2633,11 @@
         "naverSpend": 0,
         "impressions": 49240,
         "clicks": 2583,
-        "bodySales": 3,
+        "bodySales": 5,
         "feelBookings": 0,
-        "revenue": 8890000,
-        "cpa": 107209,
-        "roas": 2764.1,
+        "revenue": 14250000.0,
+        "cpa": 64325,
+        "roas": 4430.6,
         "pixelPurchases": 5
       }
     },
@@ -2664,7 +2664,11 @@
         "pixelPurchases": 1
       },
       "naver": {},
-      "imweb": {},
+      "imweb": {
+        "bodySales": 1,
+        "revenue": 2680000.0,
+        "feelBookings": 0
+      },
       "summary": {
         "sessions": 2579,
         "users": 2448,
@@ -2675,11 +2679,11 @@
         "naverSpend": 0,
         "impressions": 45061,
         "clicks": 1951,
-        "bodySales": 0,
+        "bodySales": 1,
         "feelBookings": 0,
-        "revenue": 0,
-        "cpa": null,
-        "roas": 0.0,
+        "revenue": 2680000.0,
+        "cpa": 353062,
+        "roas": 759.1,
         "pixelPurchases": 1
       }
     },
@@ -2748,7 +2752,11 @@
         "pixelPurchases": 10
       },
       "naver": {},
-      "imweb": {},
+      "imweb": {
+        "bodySales": 2,
+        "revenue": 6060000.0,
+        "feelBookings": 0
+      },
       "summary": {
         "sessions": 2350,
         "users": 2207,
@@ -2759,11 +2767,11 @@
         "naverSpend": 0,
         "impressions": 55772,
         "clicks": 1748,
-        "bodySales": 0,
+        "bodySales": 2,
         "feelBookings": 0,
-        "revenue": 0,
-        "cpa": null,
-        "roas": 0.0,
+        "revenue": 6060000.0,
+        "cpa": 173214,
+        "roas": 1749.3,
         "pixelPurchases": 10
       }
     },
@@ -2790,7 +2798,11 @@
         "pixelPurchases": 1
       },
       "naver": {},
-      "imweb": {},
+      "imweb": {
+        "bodySales": 1,
+        "revenue": 3080000.0,
+        "feelBookings": 0
+      },
       "summary": {
         "sessions": 3249,
         "users": 2754,
@@ -2801,11 +2813,11 @@
         "naverSpend": 0,
         "impressions": 49563,
         "clicks": 1523,
-        "bodySales": 0,
+        "bodySales": 1,
         "feelBookings": 0,
-        "revenue": 0,
-        "cpa": null,
-        "roas": 0.0,
+        "revenue": 3080000.0,
+        "cpa": 365932,
+        "roas": 841.7,
         "pixelPurchases": 1
       }
     },
@@ -3056,7 +3068,11 @@
       },
       "meta": {},
       "naver": {},
-      "imweb": {},
+      "imweb": {
+        "bodySales": 2,
+        "revenue": 7960000,
+        "feelBookings": 0
+      },
       "summary": {
         "sessions": 532,
         "users": 394,
@@ -3067,10 +3083,10 @@
         "naverSpend": 0,
         "impressions": 0,
         "clicks": 0,
-        "bodySales": 0,
+        "bodySales": 2,
         "feelBookings": 0,
-        "revenue": 0,
-        "cpa": null,
+        "revenue": 7960000,
+        "cpa": 0,
         "roas": null,
         "pixelPurchases": 0
       }
@@ -3196,7 +3212,11 @@
       },
       "meta": {},
       "naver": {},
-      "imweb": {},
+      "imweb": {
+        "bodySales": 1,
+        "revenue": 3930000,
+        "feelBookings": 0
+      },
       "summary": {
         "sessions": 604,
         "users": 471,
@@ -3207,10 +3227,10 @@
         "naverSpend": 0,
         "impressions": 0,
         "clicks": 0,
-        "bodySales": 0,
+        "bodySales": 1,
         "feelBookings": 0,
-        "revenue": 0,
-        "cpa": null,
+        "revenue": 3930000,
+        "cpa": 0,
         "roas": null,
         "pixelPurchases": 0
       }
@@ -3280,7 +3300,11 @@
         "pixelPurchases": 0
       },
       "naver": {},
-      "imweb": {},
+      "imweb": {
+        "bodySales": 1,
+        "revenue": 3480000,
+        "feelBookings": 0
+      },
       "summary": {
         "sessions": 427,
         "users": 392,
@@ -3291,11 +3315,11 @@
         "naverSpend": 0,
         "impressions": 3133,
         "clicks": 139,
-        "bodySales": 0,
+        "bodySales": 1,
         "feelBookings": 0,
-        "revenue": 0,
-        "cpa": null,
-        "roas": 0.0,
+        "revenue": 3480000,
+        "cpa": 33005,
+        "roas": 10543.9,
         "pixelPurchases": 0
       }
     },
@@ -3315,7 +3339,11 @@
       },
       "meta": {},
       "naver": {},
-      "imweb": {},
+      "imweb": {
+        "bodySales": 1,
+        "revenue": 3430000,
+        "feelBookings": 0
+      },
       "summary": {
         "sessions": 253,
         "users": 212,
@@ -3326,10 +3354,10 @@
         "naverSpend": 0,
         "impressions": 0,
         "clicks": 0,
-        "bodySales": 0,
+        "bodySales": 1,
         "feelBookings": 0,
-        "revenue": 0,
-        "cpa": null,
+        "revenue": 3430000,
+        "cpa": 0,
         "roas": null,
         "pixelPurchases": 0
       }
@@ -3420,7 +3448,11 @@
       },
       "meta": {},
       "naver": {},
-      "imweb": {},
+      "imweb": {
+        "bodySales": 1,
+        "revenue": 3930000,
+        "feelBookings": 0
+      },
       "summary": {
         "sessions": 388,
         "users": 276,
@@ -3431,10 +3463,10 @@
         "naverSpend": 0,
         "impressions": 0,
         "clicks": 0,
-        "bodySales": 0,
+        "bodySales": 1,
         "feelBookings": 0,
-        "revenue": 0,
-        "cpa": null,
+        "revenue": 3930000,
+        "cpa": 0,
         "roas": null,
         "pixelPurchases": 0
       }
@@ -3490,7 +3522,11 @@
       },
       "meta": {},
       "naver": {},
-      "imweb": {},
+      "imweb": {
+        "bodySales": 2,
+        "revenue": 7910000,
+        "feelBookings": 0
+      },
       "summary": {
         "sessions": 293,
         "users": 248,
@@ -3501,10 +3537,10 @@
         "naverSpend": 0,
         "impressions": 0,
         "clicks": 0,
-        "bodySales": 0,
+        "bodySales": 2,
         "feelBookings": 0,
-        "revenue": 0,
-        "cpa": null,
+        "revenue": 7910000,
+        "cpa": 0,
         "roas": null,
         "pixelPurchases": 0
       }
@@ -3567,7 +3603,11 @@
         "pixelPurchases": 0
       },
       "naver": {},
-      "imweb": {},
+      "imweb": {
+        "bodySales": 2,
+        "revenue": 7910000,
+        "feelBookings": 0
+      },
       "summary": {
         "sessions": 1426,
         "users": 1319,
@@ -3578,11 +3618,11 @@
         "naverSpend": 0,
         "impressions": 10749,
         "clicks": 776,
-        "bodySales": 0,
+        "bodySales": 2,
         "feelBookings": 0,
-        "revenue": 0,
-        "cpa": null,
-        "roas": 0.0,
+        "revenue": 7910000,
+        "cpa": 25568,
+        "roas": 15468.3,
         "pixelPurchases": 0
       }
     },
@@ -3693,7 +3733,11 @@
         "pixelPurchases": 3
       },
       "naver": {},
-      "imweb": {},
+      "imweb": {
+        "bodySales": 1,
+        "revenue": 3980000,
+        "feelBookings": 0
+      },
       "summary": {
         "sessions": 551,
         "users": 513,
@@ -3704,11 +3748,11 @@
         "naverSpend": 0,
         "impressions": 7177,
         "clicks": 357,
-        "bodySales": 0,
+        "bodySales": 1,
         "feelBookings": 0,
-        "revenue": 0,
-        "cpa": null,
-        "roas": 0.0,
+        "revenue": 3980000,
+        "cpa": 36123,
+        "roas": 11017.9,
         "pixelPurchases": 3
       }
     },
@@ -4196,7 +4240,11 @@
         "ctr": 1.2,
         "cpc": 144
       },
-      "imweb": {},
+      "imweb": {
+        "bodySales": 1,
+        "revenue": 3680000,
+        "feelBookings": 0
+      },
       "summary": {
         "sessions": 416,
         "users": 357,
@@ -4207,11 +4255,11 @@
         "naverSpend": 2871,
         "impressions": 1662,
         "clicks": 20,
-        "bodySales": 0,
+        "bodySales": 1,
         "feelBookings": 0,
-        "revenue": 0,
-        "cpa": null,
-        "roas": 0.0,
+        "revenue": 3680000,
+        "cpa": 2871,
+        "roas": 128178.3,
         "pixelPurchases": 0
       }
     },
@@ -4485,8 +4533,8 @@
         "cpc": 69
       },
       "imweb": {
-        "bodySales": 1,
-        "revenue": 3880000,
+        "bodySales": 2,
+        "revenue": 7340000,
         "feelBookings": 0
       },
       "summary": {
@@ -4499,11 +4547,11 @@
         "naverSpend": 12441,
         "impressions": 73625,
         "clicks": 4374,
-        "bodySales": 1,
+        "bodySales": 2,
         "feelBookings": 0,
-        "revenue": 3880000,
-        "cpa": 502910,
-        "roas": 771.5,
+        "revenue": 7340000,
+        "cpa": 251455,
+        "roas": 1459.5,
         "pixelPurchases": 3
       }
     },
@@ -5874,16 +5922,16 @@
     "2026-W38": {
       "period": "2026-09-14~2026-09-20",
       "ga4": {
-        "sessions": 1310,
-        "users": 1248,
-        "newUsers": 928,
-        "pageviews": 2566,
-        "engagedSessions": 597,
-        "bounceRate": 0.5544,
-        "avgDuration": 80.6,
-        "sessionsRaw": 2058,
-        "usersRaw": 1997,
-        "newUsersRaw": 1668
+        "sessions": 1325,
+        "users": 1262,
+        "newUsers": 945,
+        "pageviews": 2622,
+        "engagedSessions": 685,
+        "bounceRate": 0.4815,
+        "avgDuration": 73.3,
+        "sessionsRaw": 2073,
+        "usersRaw": 2011,
+        "newUsersRaw": 1687
       },
       "meta": {
         "impressions": 16046,
@@ -5902,15 +5950,63 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 1310,
-        "users": 1248,
-        "newUsers": 928,
-        "sessionsRaw": 2058,
+        "sessions": 1325,
+        "users": 1262,
+        "newUsers": 945,
+        "sessionsRaw": 2073,
         "totalAdSpend": 322158,
         "metaSpend": 292719,
         "naverSpend": 29439,
         "impressions": 21413,
         "clicks": 981,
+        "bodySales": 0,
+        "feelBookings": 0,
+        "revenue": 0,
+        "cpa": null,
+        "roas": 0.0,
+        "pixelPurchases": 0
+      }
+    },
+    "2026-W39": {
+      "period": "2026-09-21~2026-09-27",
+      "ga4": {
+        "sessions": 1728,
+        "users": 1691,
+        "newUsers": 1295,
+        "pageviews": 2869,
+        "engagedSessions": 401,
+        "bounceRate": 0.5797,
+        "avgDuration": 98.2,
+        "sessionsRaw": 2460,
+        "usersRaw": 2421,
+        "newUsersRaw": 1998
+      },
+      "meta": {
+        "impressions": 115555,
+        "clicks": 1414,
+        "adSpend": 364220,
+        "ctr": 1.22,
+        "cpc": 258,
+        "pixelPurchases": 0
+      },
+      "naver": {
+        "impressions": 4953,
+        "clicks": 67,
+        "spend": 25917,
+        "ctr": 1.35,
+        "cpc": 387
+      },
+      "imweb": {},
+      "summary": {
+        "sessions": 1728,
+        "users": 1691,
+        "newUsers": 1295,
+        "sessionsRaw": 2460,
+        "totalAdSpend": 390137,
+        "metaSpend": 364220,
+        "naverSpend": 25917,
+        "impressions": 120508,
+        "clicks": 1481,
         "bodySales": 0,
         "feelBookings": 0,
         "revenue": 0,
