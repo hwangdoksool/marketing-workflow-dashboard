@@ -421,6 +421,8 @@ BRIDGE_EVENTS = ['section_view', 'embed_scroll_depth', 'embed_engaged', 'detail_
 def classify_channel(source, medium):
     """유입 채널 분류 — 규칙은 이 함수 한 곳에만 둔다(화면 툴팁은 CHANNEL_RULES 문구)."""
     s, m = (source or '').lower().strip(), (medium or '').lower().strip()
+    if s in ('(data not available)', '(not set)') and m in ('', '(not set)'):
+        return 'pending'   # GA4 당일(처리 전) 세션은 유입 경로가 비어 온다 — '기타'와 섞지 않는다
     if m in ('paid', 'paid_social', 'cpc', 'cpm', 'ppc', 'display', 'ad', 'ads', 'paidsocial'):
         return 'ads'
     if 'instagram' in s or s == 'ig':
@@ -440,12 +442,13 @@ def classify_channel(source, medium):
 
 CHANNELS = [('ig', '인스타 오가닉'), ('naver_search', '네이버 자연검색'), ('naver_blog', '네이버 블로그·카페'),
             ('google', '구글 검색'), ('youtube', '유튜브'), ('direct', '직접 방문'), ('other', '기타'),
-            ('ads', '유료 광고 합계')]
+            ('ads', '유료 광고 합계'), ('pending', '미분류 (GA4 처리 전)')]
 CHANNEL_RULES = ('GA4 sessionSource/sessionMedium 기준(봇 제외). 유료 광고 = medium이 paid·paid_social·cpc 등 '
                  '(위 캠페인 행 합계, 캠페인 미매칭 포함) · 인스타 오가닉 = source에 instagram 또는 ig(광고 제외, '
                  'roomfit.kr/link 프로필 링크 포함) · 네이버 자연검색 = naver/organic 또는 search.naver 참조 · '
                  '네이버 블로그·카페 = blog.naver·cafe.naver 참조 · 구글 검색 = google/organic · '
-                 '유튜브 = source에 youtube(roomfit.kr/link-yt 포함) · 직접 방문 = (direct)/(none) · 기타 = 나머지')
+                 '유튜브 = source에 youtube(roomfit.kr/link-yt 포함) · 직접 방문 = (direct)/(none) · '
+                 '미분류 = GA4가 아직 유입 경로를 처리하지 않은 당일 세션((data not available)·(not set)) · 기타 = 나머지')
 
 
 def collect_ga4():
