@@ -285,6 +285,57 @@ select.form-input{cursor:pointer;}
 .gantt-summary span{white-space:nowrap;}
 .gantt-header-label{min-width:180px;max-width:180px;padding:6px 10px;font-size:.7rem;font-weight:700;color:var(--t2);border-right:1px solid var(--b);}
 .gantt-header-dates{display:flex;flex:1;}
+
+/* ── 캠페인 비교 (#analysis/compare) ── */
+:root,[data-theme="dark"]{--cc-brand:#8f8fff;--cc-brand-bg:rgba(82,82,250,.16);}
+[data-theme="light"]{--cc-brand:#5252FA;--cc-brand-bg:#eef0ff;}
+.cc-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;}
+.cc-bar .report-btn.active{background:#5252FA;border-color:#5252FA;}
+.cc-bar input[type=date]{background:var(--s);color:var(--t);border:1px solid var(--b);border-radius:6px;padding:4px 6px;font-size:.75rem;font-family:inherit;}
+.cc-bar select{background:var(--s);color:var(--t);border:1px solid var(--b);border-radius:6px;padding:4px 6px;font-size:.75rem;font-family:inherit;}
+.cc-bar label{font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:4px;cursor:pointer;}
+.cc-meta{font-size:.72rem;color:var(--t2);margin-bottom:10px;line-height:1.6;}
+.cc-warn{color:var(--r);}
+.cc-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:12px;}
+.cc-kpi{background:var(--s);border:1px solid var(--b);border-radius:10px;padding:10px 12px;}
+.cc-kpi .l{font-size:.7rem;color:var(--t2);}
+.cc-kpi .v{font-size:1.15rem;font-weight:700;margin-top:2px;}
+.cc-kpi .s{font-size:.68rem;color:var(--t2);margin-top:2px;}
+.cc-kpi.brand .v{color:var(--cc-brand);}
+.cc-wrap{overflow-x:auto;border:1px solid var(--b);border-radius:10px;background:var(--s);-webkit-overflow-scrolling:touch;}
+.cc-table{border-collapse:separate;border-spacing:0;width:100%;font-size:.78rem;min-width:1080px;}
+.cc-table th{background:var(--s2);color:var(--t2);font-weight:600;padding:8px;text-align:left;border-bottom:2px solid var(--b);white-space:nowrap;cursor:pointer;user-select:none;font-size:.72rem;}
+.cc-table th.g{background:var(--cc-brand-bg);color:var(--cc-brand);}
+.cc-table th.r{color:var(--t2);}
+.cc-table th .arr{font-size:.6rem;opacity:.8;}
+.cc-table td{padding:9px 7px;border-bottom:1px solid var(--b);vertical-align:top;line-height:1.4;}
+.cc-table td.n{text-align:right;white-space:nowrap;}
+.cc-table th.n{text-align:right;}
+.cc-table td.g{background:rgba(82,82,250,.05);}
+.cc-table td.g .k{font-weight:700;font-size:.95rem;color:var(--cc-brand);}
+.cc-table td.ref{color:var(--t2);}
+.cc-table .sub{color:var(--t2);font-size:.68rem;margin-top:2px;}
+.cc-table .pre{color:var(--t2);font-weight:400;}
+.cc-table .best{outline:2px solid var(--cc-brand);outline-offset:-2px;border-radius:4px;}
+.cc-table .c0{position:sticky;left:0;z-index:2;background:var(--s);min-width:150px;max-width:190px;border-right:1px solid var(--b);}
+.cc-table th.c0{z-index:3;background:var(--s2);}
+.cc-table tr.cc-row{cursor:pointer;}
+.cc-table tr.cc-row:hover td,.cc-table tr.cc-row:hover td.c0{background:var(--s2);}
+.cc-table tr.cc-row.open td,.cc-table tr.cc-row.open td.c0{background:var(--s2);}
+.cc-table tr.off td{color:var(--t2);}
+.cc-badge{display:inline-block;margin-top:4px;font-size:.65rem;padding:1px 7px;border-radius:10px;background:var(--s2);color:var(--t2);}
+.cc-badge.on{background:rgba(0,184,148,.15);color:var(--g);}
+.cc-plat{font-size:.7rem;padding:1px 6px;border-radius:4px;background:var(--s2);white-space:nowrap;}
+.cc-detail td{background:var(--bg);padding:10px 12px;}
+.cc-detail .c0{background:var(--bg);}
+.cc-dt{border-collapse:collapse;font-size:.72rem;min-width:560px;}
+.cc-dt th,.cc-dt td{padding:4px 8px;border-bottom:1px solid var(--b);text-align:right;white-space:nowrap;}
+.cc-dt th{color:var(--t2);font-weight:600;background:none;cursor:default;}
+.cc-dt td:first-child,.cc-dt th:first-child{text-align:left;}
+.cc-dt .bar{display:inline-block;height:8px;background:#5252FA;border-radius:2px;vertical-align:middle;margin-right:6px;opacity:.7;}
+.cc-foot{font-size:.72rem;color:var(--t2);line-height:1.7;margin:12px 0 24px;}
+.cc-foot b{color:var(--t);}
+@media (max-width:640px){.cc-table{font-size:.72rem;}.cc-table .c0{min-width:120px;max-width:140px;}.cc-kpi .v{font-size:1rem;}}
 .gantt-header-dates .gantt-cell{font-size:.6rem;color:var(--t2);text-align:center;padding:4px 0;font-weight:500;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
@@ -390,7 +441,9 @@ select.form-input{cursor:pointer;}
       <button class="report-btn" data-sub="reports" onclick="switchAnalysisSub('reports')">📄 리포트</button>
       <button class="report-btn" data-sub="signals" onclick="switchAnalysisSub('signals')">💡 시그널</button>
       <button class="report-btn" data-sub="learn" onclick="switchAnalysisSub('learn')">📚 Learn</button>
+      <button class="report-btn" data-sub="compare" onclick="switchAnalysisSub('compare')">⚖️ 캠페인 비교</button>
     </nav>
+    <div id="analysis-sub-compare" style="display:none;padding:0 16px;"></div>
     <div id="analysis-sub-weekly" style="display:none;"></div>
     <div id="analysis-sub-reports" style="display:none;">
       <div style="margin-bottom:12px;">
@@ -3631,7 +3684,7 @@ document.addEventListener('DOMContentLoaded', () => {
    ═══════════════════════════════════════════ */
 
 function switchAnalysisSub(sub) {
-  ['weekly','reports','signals','learn','daily'].forEach(s => {
+  ['weekly','reports','signals','learn','daily','compare'].forEach(s => {
     const el = document.getElementById('analysis-sub-' + s);
     if (el) el.style.display = s === sub ? '' : 'none';
   });
@@ -3651,6 +3704,7 @@ function switchAnalysisSub(sub) {
   if (sub === 'weekly' && typeof loadReports === 'function') loadReports();
   if (sub === 'learn' && typeof renderLearnTab === 'function') renderLearnTab();
   if (sub === 'reports') renderAdhocReports();
+  if (sub === 'compare') loadCampaignCompare();
 }
 
 function switchCreativeSub(sub) {
@@ -5855,6 +5909,268 @@ function openDailyMetricsGuide() {
 
 </script>}
 
+</script>
+<script>
+/* ═══════════════════════════════════════════
+   ⚖️ 캠페인 비교 (#analysis/compare) — 데이터: campaign_compare.json (매시 05분 갱신)
+   기획: docs/2026-09-30_campaign-compare-tab-spec.md
+   ═══════════════════════════════════════════ */
+const CC = { data: null, preset: '3', start: '', end: '', sort: { col: 'deepCost', dir: 1 },
+             status: 'all', plat: 'all', showIdle: false, open: new Set() };
+const CC_PRESETS = [['today','오늘'],['yesterday','어제'],['3','최근 3일'],['7','7일'],['14','14일'],['30','30일'],['custom','직접 지정']];
+const CC_KIND = [['feel','체험 페이지'],['checkout','결제 시작'],['detail_90s','상세 90초'],['detail_or_revisit','상세 90초·재방문'],['community','커뮤니티'],['revisit','재방문'],['other','기타']];
+const CC_STATUS = { ACTIVE: '켜짐', PAUSED: '꺼짐', CAMPAIGN_PAUSED: '꺼짐', ADSET_PAUSED: '꺼짐', IN_PROCESS: '검토 중',
+                    PENDING_REVIEW: '검토 중', WITH_ISSUES: '문제 있음', DISAPPROVED: '거부됨', ARCHIVED: '보관됨', DELETED: '삭제됨' };
+
+function ccKstToday() { return new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10); }
+function ccAddDays(d, n) { const t = new Date(d + 'T00:00:00Z'); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0, 10); }
+function ccMd(d) { return (+d.slice(5, 7)) + '/' + (+d.slice(8, 10)); }
+function ccWon(v) { return v == null || !isFinite(v) ? '-' : Math.round(v).toLocaleString('ko-KR') + '원'; }
+function ccNum(v) { return (v || 0).toLocaleString('ko-KR'); }
+function ccEsc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+function ccRange() {
+  const t = ccKstToday();
+  if (CC.preset === 'today') return [t, t];
+  if (CC.preset === 'yesterday') return [ccAddDays(t, -1), ccAddDays(t, -1)];
+  if (CC.preset === 'custom') {
+    const a = CC.start || ccAddDays(t, -3), b = CC.end || ccAddDays(t, -1);
+    return a <= b ? [a, b] : [b, a];
+  }
+  const n = +CC.preset;  // 최근 N일 = 어제까지 완결된 N일 (GA4 당일분은 처리 전)
+  return [ccAddDays(t, -n), ccAddDays(t, -1)];
+}
+
+function loadCampaignCompare(force) {
+  const el = document.getElementById('analysis-sub-compare');
+  if (!el) return;
+  if (CC.data && !force) { renderCampaignCompare(); return; }
+  el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--t2);">로딩 중...</div>';
+  fetch('campaign_compare.json?t=' + Date.now())
+    .then(r => r.ok ? r.json() : Promise.reject('HTTP ' + r.status))
+    .then(d => { CC.data = d; renderCampaignCompare(); })
+    .catch(err => { el.innerHTML = `<div style="text-align:center;padding:40px;color:var(--r);">캠페인 비교 데이터를 불러올 수 없습니다. (${ccEsc(err)})</div>`; });
+}
+
+function ccAggregate(c, a, b, since, today) {
+  const r = { spend: 0, lpv: 0, deepSpend: 0, deep: 0, kinds: {}, deepPrelim: false, deepMeta: 0, trial: 0, purchase: 0,
+              purchaseCheck: false, clSum: 0, clW: 0, days: [] };
+  for (const [d, v] of Object.entries(c.daily || {})) {
+    if (d < a || d > b) continue;
+    r.days.push([d, v]);
+    r.spend += v.spend || 0; r.lpv += v.lpv || 0; r.trial += v.trial || 0; r.purchase += v.purchase || 0;
+    r.deepMeta += v.deep_meta || 0;
+    if (v.purchase && v.purchase_src === 'purchase') r.purchaseCheck = true;
+    if (d >= since) {
+      r.deepSpend += v.spend || 0;
+      if (v.deep) {
+        r.deep += v.deep.total || 0;
+        for (const [k] of CC_KIND) if (v.deep[k]) r.kinds[k] = (r.kinds[k] || 0) + v.deep[k];
+      }
+      if (!v.ga4_final || d >= today) r.deepPrelim = true;
+    }
+    if (v.clarity_active_sec != null) { const w = v.clarity_sessions || 1; r.clSum += v.clarity_active_sec * w; r.clW += w; }
+  }
+  r.measured = b >= since;           // 기간이 깊은 관심 측정 시작일 이후를 포함하는가
+  r.partial = a < since && b >= since;
+  r.deepCost = r.measured && r.deep > 0 ? r.deepSpend / r.deep : null;
+  r.trialCost = r.trial > 0 ? r.spend / r.trial : null;
+  r.purchaseCost = r.purchase > 0 ? r.spend / r.purchase : null;
+  r.cpv = r.lpv > 0 ? r.spend / r.lpv : null;
+  r.clarity = r.clW > 0 ? r.clSum / r.clW : null;
+  return r;
+}
+
+function ccSortVal(row, col) {
+  const c = row.c, g = row.g;
+  switch (col) {
+    case 'key': return c.key;
+    case 'plat': return c.platform;
+    case 'creative': return c.settings.creative || '';
+    case 'target': return c.settings.target || '';
+    case 'opt': return c.settings.optimization || '';
+    case 'budget': return c.settings.daily_budget;
+    case 'start': return c.settings.start || '';
+    case 'deepCost': return g.deepCost;
+    case 'deep': return g.measured ? g.deep : null;
+    case 'trial': return g.trial;
+    case 'purchase': return g.purchase;
+    case 'spend': return g.spend;
+    case 'cpv': return g.cpv;
+    case 'clarity': return g.clarity;
+  }
+  return null;
+}
+
+function renderCampaignCompare() {
+  const el = document.getElementById('analysis-sub-compare');
+  const D = CC.data;
+  if (!el || !D) return;
+  const today = ccKstToday(), since = D.deep_interest_since || '2026-09-30';
+  const [a, b] = ccRange();
+  const nDays = Math.round((new Date(b) - new Date(a)) / 864e5) + 1;
+
+  let rows = (D.campaigns || []).map(c => ({ c, g: ccAggregate(c, a, b, since, today) }));
+  const all = rows;
+  rows = rows.filter(r => {
+    const on = r.c.status === 'ACTIVE';
+    if (CC.status === 'on' && !on) return false;
+    if (CC.status === 'off' && on) return false;
+    if (CC.plat !== 'all' && r.c.platform !== CC.plat) return false;
+    const st = r.c.settings.start || '';
+    const isNew = st >= a && st <= b;  // 기간 중 새로 시작한 캠페인은 지출 0이어도 표시
+    if (!CC.showIdle && r.g.spend <= 0 && !isNew && !(r.g.deep || r.g.trial)) return false;
+    return true;
+  });
+  const { col, dir } = CC.sort;
+  rows.sort((x, y) => {
+    const p = ccSortVal(x, col), q = ccSortVal(y, col);
+    if (p == null && q == null) return x.c.key.localeCompare(y.c.key);
+    if (p == null) return 1;
+    if (q == null) return -1;
+    return (typeof p === 'string' ? p.localeCompare(q) : p - q) * dir;
+  });
+  const hidden = all.length - rows.length;
+
+  // KPI (필터와 무관하게 전체 캠페인 합계)
+  let spend = 0, deep = 0, deepSpend = 0, prelim = false;
+  all.forEach(r => { spend += r.g.spend; deep += r.g.deep; deepSpend += r.g.deepSpend; prelim = prelim || r.g.deepPrelim; });
+  let trials = 0, sales = 0;
+  for (const [d, v] of Object.entries(D.account_daily || {})) if (d >= a && d <= b) { trials += v.trial_bookings || 0; sales += v.imweb_body_sales || 0; }
+  const measured = b >= since;
+  const bestDeep = Math.min(...rows.filter(r => r.g.deepCost != null && !r.g.deepPrelim).map(r => r.g.deepCost));
+
+  const upd = D.updated_at ? new Date(D.updated_at) : null;
+  const ageMin = upd ? Math.round((Date.now() - upd.getTime()) / 60000) : null;
+  const failed = Object.entries(D.sources || {}).filter(([, v]) => !v.ok).map(([k, v]) => `${k}: ${v.error || '실패'}`);
+  const stamp = upd ? upd.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
+
+  const presetBtns = CC_PRESETS.map(([k, l]) => `<button class="report-btn ${CC.preset === k ? 'active' : ''}" onclick="ccSetPreset('${k}')">${l}</button>`).join('');
+  const custom = CC.preset === 'custom'
+    ? `<input type="date" value="${a}" max="${today}" onchange="CC.start=this.value;renderCampaignCompare()"> ~ <input type="date" value="${b}" max="${today}" onchange="CC.end=this.value;renderCampaignCompare()">` : '';
+
+  const th = (key, label, cls = '') => {
+    const arr = CC.sort.col === key ? `<span class="arr">${CC.sort.dir > 0 ? '▲' : '▼'}</span>` : '';
+    return `<th class="${cls}" onclick="ccSortBy('${key}')">${label} ${arr}</th>`;
+  };
+
+  const deepCell = g => {
+    if (!g.measured) return `<td class="n g"><span class="pre">측정 전</span></td>`;
+    const pre = g.deepPrelim ? ' pre' : '';
+    const kinds = CC_KIND.filter(([k]) => g.kinds[k]).map(([k, l]) => `${l} ${g.kinds[k]}`).join(' · ');
+    const tip = g.deepPrelim ? '당일 GA4는 처리 전이라 캠페인 귀속이 덜 됐습니다(참고). 전날까지가 확정.' : '';
+    return `<td class="n g" title="${tip}"><div class="k${pre}">${g.deepCost != null ? ccWon(g.deepCost) : '-'}</div>`
+      + `<div class="sub${pre}">${ccNum(g.deep)}건${g.deepPrelim ? ' (참고)' : ''}${g.partial ? ` · ${ccMd(since)}부터` : ''}</div>`
+      + (kinds ? `<div class="sub">${kinds}</div>` : '')
+      + (g.deepMeta ? `<div class="sub">Meta 집계 ${ccNum(g.deepMeta)}건</div>` : '') + `</td>`;
+  };
+  const cntCell = (n, cost, extra = '') => `<td class="n g"><div class="k">${ccNum(n)}건</div><div class="sub">${n ? ccWon(cost) + ' / 건' : '-'}</div>${extra}</td>`;
+
+  const body = rows.map(({ c, g }) => {
+    const s = c.settings, on = c.status === 'ACTIVE';
+    const badge = `<span class="cc-badge ${on ? 'on' : ''}">${CC_STATUS[c.status] || c.status}</span>`;
+    const budget = s.daily_budget ? ccWon(s.daily_budget) : '-';
+    const isOpen = CC.open.has(c.key + c.id);
+    const isBest = g.deepCost != null && g.deepCost === bestDeep && rows.length > 1;
+    const purchaseCell = c.platform === 'meta'
+      ? cntCell(g.purchase, g.purchaseCost, g.purchaseCheck ? '<div class="sub cc-warn">purchase 사용 · 대조 필요</div>' : '')
+      : `<td class="n g"><span class="pre">-</span><div class="sub">매체 귀속 없음</div></td>`;
+    let html = `<tr class="cc-row ${on ? '' : 'off'} ${isOpen ? 'open' : ''}" onclick="ccToggle('${c.key + c.id}')">
+      <td class="c0" title="${ccEsc(c.name)}"><b>${ccEsc(c.key)}</b><div class="sub">${ccEsc(c.short)}</div>${badge}</td>
+      <td><span class="cc-plat">${c.platform === 'meta' ? 'Meta' : '네이버'}</span></td>
+      <td>${ccEsc(s.creative)}</td>
+      <td style="min-width:150px;">${ccEsc(s.target)}</td>
+      <td>${ccEsc(s.optimization)}</td>
+      <td class="n">${budget}${s.budget_note ? `<div class="sub">(${ccEsc(s.budget_note)})</div>` : ''}<div class="sub">${s.start ? ccMd(s.start) + ' 시작' : '-'}</div></td>
+      ${deepCell(g).replace('class="k', isBest ? 'class="best k' : 'class="k')}
+      ${cntCell(g.trial, g.trialCost)}
+      ${purchaseCell}
+      <td class="n ref">${ccWon(g.spend)}</td>
+      <td class="n ref">${ccWon(g.cpv)}<div class="sub">${c.platform === 'meta' ? '랜딩 조회' : '클릭'} ${ccNum(g.lpv)}</div></td>
+      <td class="n ref">${g.clarity != null ? Math.round(g.clarity) + '초' : '-'}</td>
+    </tr>`;
+    if (isOpen) html += ccDetailRow(c, g, since, today);
+    return html;
+  }).join('');
+
+  el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+      <div><h2 style="font-size:1rem;font-weight:700;">⚖️ 캠페인 비교</h2>
+        <div class="cc-meta">판단 기준 = 판매에 가까운 행동 1건당 비용 · 기간 ${ccMd(a)}~${ccMd(b)} (${nDays}일)</div></div>
+      <div class="cc-meta" style="text-align:right;">마지막 갱신 <b>${stamp}</b>${ageMin != null && ageMin > 120 ? ` <span class="cc-warn">(${Math.round(ageMin / 60)}시간 전 · 자동 갱신 확인 필요)</span>` : ''}
+        <button class="report-btn" style="margin-left:6px;" onclick="loadCampaignCompare(true)">새로고침</button></div>
+    </div>
+    ${failed.length ? `<div class="cc-meta cc-warn">⚠️ 일부 소스 갱신 실패 — 해당 값은 이전 수집값: ${ccEsc(failed.join(' / '))}</div>` : ''}
+    <div class="cc-bar">${presetBtns}${custom}</div>
+    <div class="cc-bar">
+      <select onchange="CC.status=this.value;renderCampaignCompare()">
+        <option value="all" ${CC.status === 'all' ? 'selected' : ''}>상태: 전체</option>
+        <option value="on" ${CC.status === 'on' ? 'selected' : ''}>켜짐</option>
+        <option value="off" ${CC.status === 'off' ? 'selected' : ''}>꺼짐</option></select>
+      <select onchange="CC.plat=this.value;renderCampaignCompare()">
+        <option value="all" ${CC.plat === 'all' ? 'selected' : ''}>매체: 전체</option>
+        <option value="meta" ${CC.plat === 'meta' ? 'selected' : ''}>Meta</option>
+        <option value="naver" ${CC.plat === 'naver' ? 'selected' : ''}>네이버</option></select>
+      <label><input type="checkbox" ${CC.showIdle ? 'checked' : ''} onchange="CC.showIdle=this.checked;renderCampaignCompare()"> 꺼짐 캠페인 보기 (기간 내 지출 없음)</label>
+      <span class="cc-meta" style="margin:0;">${rows.length}개 표시${hidden ? ` · ${hidden}개 숨김` : ''}</span>
+    </div>
+    <div class="cc-kpis">
+      <div class="cc-kpi"><div class="l">전체 지출</div><div class="v">${ccWon(spend)}</div><div class="s">Meta + 네이버</div></div>
+      <div class="cc-kpi brand"><div class="l">깊은 관심 (1건당)</div>
+        <div class="v">${measured ? ccNum(deep) + '건' : '측정 전'}</div>
+        <div class="s">${measured ? (deep ? ccWon(deepSpend / deep) + ' / 건' : '-') + (prelim ? ' · 당일분 참고' : '') : ccMd(since) + '부터 측정'}</div></div>
+      <div class="cc-kpi brand"><div class="l">체험 신청</div><div class="v">${ccNum(trials)}건</div><div class="s">${trials ? ccWon(spend / trials) + ' / 건 (전체 지출 기준)' : '취소·중복 제외'}</div></div>
+      <div class="cc-kpi brand"><div class="l">아임웹 실판매</div><div class="v">${ccNum(sales)}대</div><div class="s">기간 내 주문일 기준</div></div>
+    </div>
+    <div class="cc-wrap"><table class="cc-table">
+      <thead><tr>
+        ${th('key', '캠페인', 'c0')}${th('plat', '매체')}${th('creative', '소재')}${th('target', '타겟')}${th('opt', '학습 기준')}${th('budget', '하루 예산 · 시작', 'n')}
+        ${th('deepCost', '깊은 관심 1건당', 'g n')}${th('trial', '체험 신청', 'g n')}${th('purchase', '구매 (Meta 귀속)', 'g n')}
+        ${th('spend', '지출', 'r n')}${th('cpv', '방문 1회당', 'r n')}${th('clarity', '실제 체류', 'r n')}
+      </tr></thead>
+      <tbody>${body || `<tr><td colspan="12" style="text-align:center;padding:24px;color:var(--t2);">조건에 맞는 캠페인이 없습니다.</td></tr>`}</tbody>
+    </table></div>
+    <div class="cc-foot">
+      <b>읽는 법</b> · 파란 열(판단)은 1건당 비용이 낮을수록 좋음. 회색 열은 참고. 행을 누르면 날짜별 추이.<br>
+      <b>깊은 관심</b> · 체험 페이지·결제 시작·상세 90초·커뮤니티·재방문 (GA4, 봇 제외, ${ccMd(since)}부터). 1건당 비용은 측정 시작 이후 지출로 계산.
+      당일분은 GA4 처리 전이라 캠페인 귀속이 덜 된 참고치(회색), 전날까지가 확정. /funding 페이지의 상세 90초와 재방문은 GA4에서 구분되지 않아 합쳐서 표시.<br>
+      <b>체험 신청</b> · Supabase 신청(취소·중복 제외). 캠페인 칸은 utm_campaign이 붙은 신청만, 상단 합계는 전체.<br>
+      <b>구매</b> · Meta 귀속 본체 구매(Purchase ≥100만). 판매 정본은 상단 아임웹 실판매.<br>
+      <b>방문 1회당</b> · Meta = 랜딩 페이지 조회, 네이버 = 클릭. <b>실제 체류</b> · Clarity 캠페인별 평균 활성 시간(하루 1~2회 수집, 없으면 -).
+      “최근 N일”은 어제까지 N일.
+    </div>`;
+}
+
+function ccDetailRow(c, g, since, today) {
+  const days = g.days.slice().sort((x, y) => y[0].localeCompare(x[0]));
+  const max = Math.max(1, ...days.map(([, v]) => v.spend || 0));
+  const lines = days.map(([d, v]) => {
+    const measured = d >= since, dv = v.deep;
+    const prelim = measured && (!v.ga4_final || d >= today);
+    const deepTxt = !measured ? '<span class="pre">측정 전</span>' : `<span class="${prelim ? 'pre' : ''}">${ccNum(dv ? dv.total : 0)}${prelim ? ' (참고)' : ''}</span>`;
+    const cost = measured && dv && dv.total ? ccWon(v.spend / dv.total) : '-';
+    return `<tr><td>${ccMd(d)}</td><td><span class="bar" style="width:${Math.round((v.spend || 0) / max * 90)}px"></span>${ccWon(v.spend)}</td>
+      <td>${deepTxt}</td><td>${cost}</td><td>${ccNum(v.lpv)}</td><td>${ccNum(v.trial)}</td>
+      <td>${c.platform === 'meta' ? ccNum(v.purchase) : '-'}</td><td>${v.clarity_active_sec != null ? v.clarity_active_sec + '초' : '-'}</td></tr>`;
+  }).join('');
+  return `<tr class="cc-detail"><td colspan="12">
+    <div style="position:sticky;left:12px;display:inline-block;">
+      <div style="font-size:.72rem;font-weight:700;margin-bottom:6px;">${ccEsc(c.key)} 날짜별 추이 <span class="pre" style="font-weight:400;">${ccEsc(c.name)}</span></div>
+      <table class="cc-dt"><thead><tr><th>날짜</th><th>지출</th><th>깊은 관심</th><th>1건당</th><th>${c.platform === 'meta' ? '랜딩 조회' : '클릭'}</th><th>체험</th><th>구매</th><th>체류</th></tr></thead>
+      <tbody>${lines || '<tr><td colspan="8" style="text-align:center;color:var(--t2);">기간 내 데이터 없음</td></tr>'}</tbody></table>
+    </div></td></tr>`;
+}
+
+function ccSetPreset(p) {
+  if (p === 'custom' && CC.preset !== 'custom') { const [a, b] = ccRange(); CC.start = a; CC.end = b; }
+  CC.preset = p; renderCampaignCompare();
+}
+function ccSortBy(col) {
+  if (CC.sort.col === col) CC.sort.dir *= -1;
+  else CC.sort = { col, dir: ['spend', 'deep', 'trial', 'purchase', 'clarity', 'budget', 'start'].includes(col) ? -1 : 1 };
+  renderCampaignCompare();
+}
+function ccToggle(id) { CC.open.has(id) ? CC.open.delete(id) : CC.open.add(id); renderCampaignCompare(); }
 </script>
 </body>
 </html>
