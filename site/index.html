@@ -303,7 +303,8 @@ select.form-input{cursor:pointer;}
 .cc-kpi .s{font-size:.68rem;color:var(--t2);margin-top:2px;}
 .cc-kpi.brand .v{color:var(--cc-brand);}
 .cc-wrap{overflow-x:auto;border:1px solid var(--b);border-radius:10px;background:var(--s);-webkit-overflow-scrolling:touch;}
-.cc-table{border-collapse:separate;border-spacing:0;width:100%;font-size:.78rem;min-width:1080px;}
+.cc-table{border-collapse:separate;border-spacing:0;width:100%;font-size:.78rem;min-width:1320px;}
+.cc-table td.nw{white-space:nowrap;}
 .cc-table th{background:var(--s2);color:var(--t2);font-weight:600;padding:8px;text-align:left;border-bottom:2px solid var(--b);white-space:nowrap;cursor:pointer;user-select:none;font-size:.72rem;}
 .cc-table th.g{background:var(--cc-brand-bg);color:var(--cc-brand);}
 .cc-table th.r{color:var(--t2);}
@@ -6202,9 +6203,9 @@ function renderCampaignCompare() {
     let html = `<tr class="cc-row ${ch ? 'ch' : ''} ${on || ch ? '' : 'off'} ${isOpen ? 'open' : ''}" onclick="ccToggle('${c.key + c.id}')">
       <td class="c0" title="${ccEsc(c.name)}"><b>${ccEsc(ch ? c.name : c.key)}</b>${ch ? '' : `<div class="sub">${ccEsc(c.short)}</div>`}${badge}</td>
       <td><span class="cc-plat">${c.platform === 'meta' ? 'Meta' : c.platform === 'naver' ? '네이버' : '채널'}</span></td>
-      <td>${ccEsc(s.creative || '-')}</td>
-      <td style="min-width:150px;">${ccEsc(s.target || '-')}</td>
-      <td>${ccEsc(s.optimization || '-')}</td>
+      <td class="nw">${ccEsc(s.creative || '-')}</td>
+      <td style="min-width:170px;">${ccEsc(s.target || '-')}</td>
+      <td class="nw">${ccEsc(s.optimization || '-')}</td>
       <td class="n">${s.daily_budget ? ccWon(s.daily_budget) : '-'}${s.budget_note ? `<div class="sub">(${ccEsc(s.budget_note)})</div>` : ''}<div class="sub">${s.start ? ccMd(s.start) + ' 시작' : ''}</div></td>
       ${deepCell(g, c)}
       ${trialCell}
