@@ -111,6 +111,18 @@ class Meta:
             url = r.get('paging', {}).get('next')
         return out
 
+    def insights_daily(self, level, fields, days=7, limit=100):
+        """일별(time_increment=1) 인사이트를 7일 구간으로 나눠 받는다. 한 번에 30일치를 받으면
+        Meta가 1504044(Service temporarily unavailable)·code 1(unknown error)로 자주 실패한다."""
+        out = []
+        d, end = dt.date.fromisoformat(DATA_SINCE), dt.date.fromisoformat(TODAY)
+        while d <= end:
+            e = min(d + dt.timedelta(days=days - 1), end)
+            out += self.q(f'{self.act}/insights', level=level, time_increment=1, limit=limit, fields=fields,
+                          time_range=json.dumps({'since': d.isoformat(), 'until': e.isoformat()}))
+            d = e + dt.timedelta(days=1)
+        return out
+
 
 def meta_actions(row):
     return {a['action_type']: float(a['value']) for a in row.get('actions', []) or []}
@@ -196,11 +208,9 @@ def short_name(name, key):
 def collect_meta():
     m = Meta()
     tr = json.dumps({'since': DATA_SINCE, 'until': TODAY})
-    rows = m.q(f'{m.act}/insights', level='campaign', time_range=tr, time_increment=1, limit=500,
-               fields='campaign_id,campaign_name,spend,actions,date_start,impressions,reach,inline_link_clicks,'
-                      'video_play_actions,video_thruplay_watched_actions,video_avg_time_watched_actions')
-    ad_rows = m.q(f'{m.act}/insights', level='ad', time_range=tr, time_increment=1, limit=500,
-                  fields='ad_id,ad_name,campaign_id,spend,impressions,actions,date_start')
+    rows = m.insights_daily('campaign', 'campaign_id,campaign_name,spend,actions,date_start,impressions,reach,inline_link_clicks,'
+                                        'video_play_actions,video_thruplay_watched_actions,video_avg_time_watched_actions')
+    ad_rows = m.insights_daily('ad', 'ad_id,ad_name,campaign_id,spend,impressions,actions,date_start')
     acct = m.q(f'{m.act}/insights', level='account', time_range=tr, fields='spend')
     acct_spend = sum(float(x.get('spend', 0)) for x in acct)
     row_spend = sum(float(x.get('spend', 0)) for x in rows)
