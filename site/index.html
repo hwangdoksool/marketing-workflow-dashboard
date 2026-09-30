@@ -335,6 +335,19 @@ select.form-input{cursor:pointer;}
 .cc-dt .bar{display:inline-block;height:8px;background:#5252FA;border-radius:2px;vertical-align:middle;margin-right:6px;opacity:.7;}
 .cc-foot{font-size:.72rem;color:var(--t2);line-height:1.7;margin:12px 0 24px;}
 .cc-foot b{color:var(--t);}
+.cc-panel{background:var(--s);border:1px solid var(--b);border-radius:10px;padding:10px 12px;margin-bottom:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px 16px;}
+.cc-panel .grp{font-size:.72rem;}
+.cc-panel .grp>label{font-weight:700;color:var(--t);margin-bottom:4px;}
+.cc-panel label{display:flex;align-items:center;gap:5px;color:var(--t2);cursor:pointer;line-height:1.7;}
+.cc-table th.d{background:var(--s2);color:var(--t2);font-weight:500;border-top:2px solid var(--b);}
+.cc-table td.d{color:var(--t);font-size:.74rem;}
+.cc-na{color:var(--t2);cursor:help;border-bottom:1px dotted var(--t2);}
+.cc-table tr.cc-sep td{background:var(--s2);color:var(--t2);font-size:.72rem;font-weight:700;padding:6px 8px;cursor:help;}
+.cc-table tr.cc-sep td.c0{background:var(--s2);}
+.cc-table tr.ch td.c0 b{color:var(--bl);}
+.cc-sub-tables{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;}
+.cc-og-thumb{width:44px;height:44px;object-fit:cover;border-radius:6px;background:var(--s2);display:block;}
+.cc-og h3{font-size:.85rem;font-weight:700;margin:16px 0 6px;}
 @media (max-width:640px){.cc-table{font-size:.72rem;}.cc-table .c0{min-width:120px;max-width:140px;}.cc-kpi .v{font-size:1rem;}}
 .gantt-header-dates .gantt-cell{font-size:.6rem;color:var(--t2);text-align:center;padding:4px 0;font-weight:500;}
 </style>
@@ -442,8 +455,10 @@ select.form-input{cursor:pointer;}
       <button class="report-btn" data-sub="signals" onclick="switchAnalysisSub('signals')">💡 시그널</button>
       <button class="report-btn" data-sub="learn" onclick="switchAnalysisSub('learn')">📚 Learn</button>
       <button class="report-btn" data-sub="compare" onclick="switchAnalysisSub('compare')">⚖️ 캠페인 비교</button>
+      <button class="report-btn" data-sub="organic" onclick="switchAnalysisSub('organic')">🌱 오가닉 콘텐츠</button>
     </nav>
     <div id="analysis-sub-compare" style="display:none;padding:0 16px;"></div>
+    <div id="analysis-sub-organic" style="display:none;padding:0 16px;"></div>
     <div id="analysis-sub-weekly" style="display:none;"></div>
     <div id="analysis-sub-reports" style="display:none;">
       <div style="margin-bottom:12px;">
@@ -3684,7 +3699,7 @@ document.addEventListener('DOMContentLoaded', () => {
    ═══════════════════════════════════════════ */
 
 function switchAnalysisSub(sub) {
-  ['weekly','reports','signals','learn','daily','compare'].forEach(s => {
+  ['weekly','reports','signals','learn','daily','compare','organic'].forEach(s => {
     const el = document.getElementById('analysis-sub-' + s);
     if (el) el.style.display = s === sub ? '' : 'none';
   });
@@ -3705,6 +3720,7 @@ function switchAnalysisSub(sub) {
   if (sub === 'learn' && typeof renderLearnTab === 'function') renderLearnTab();
   if (sub === 'reports') renderAdhocReports();
   if (sub === 'compare') loadCampaignCompare();
+  if (sub === 'organic') loadCampaignCompare(false, 'organic');
 }
 
 function switchCreativeSub(sub) {
@@ -5912,22 +5928,30 @@ function openDailyMetricsGuide() {
 </script>
 <script>
 /* ═══════════════════════════════════════════
-   ⚖️ 캠페인 비교 (#analysis/compare) — 데이터: campaign_compare.json (매시 05분 갱신)
-   기획: docs/2026-09-30_campaign-compare-tab-spec.md
+   ⚖️ 캠페인 비교 (#analysis/compare) · 🌱 오가닉 콘텐츠 (#analysis/organic)
+   데이터: campaign_compare.json (매시 05분 갱신) · 기획: docs/2026-09-30_campaign-compare-tab-spec.md
    ═══════════════════════════════════════════ */
 const CC = { data: null, preset: '3', start: '', end: '', sort: { col: 'deepCost', dir: 1 },
-             status: 'all', plat: 'all', showIdle: false, open: new Set() };
+             status: 'all', plat: 'all', showIdle: false, open: new Set(), panel: false,
+             cols: new Set(ccLoadCols()), ogSort: { col: 'date', dir: -1 } };
 const CC_PRESETS = [['today','오늘'],['yesterday','어제'],['3','최근 3일'],['7','7일'],['14','14일'],['30','30일'],['custom','직접 지정']];
 const CC_KIND = [['feel','체험 페이지'],['checkout','결제 시작'],['detail_90s','상세 90초'],['detail_or_revisit','상세 90초·재방문'],['community','커뮤니티'],['revisit','재방문'],['other','기타']];
 const CC_STATUS = { ACTIVE: '켜짐', PAUSED: '꺼짐', CAMPAIGN_PAUSED: '꺼짐', ADSET_PAUSED: '꺼짐', IN_PROCESS: '검토 중',
                     PENDING_REVIEW: '검토 중', WITH_ISSUES: '문제 있음', DISAPPROVED: '거부됨', ARCHIVED: '보관됨', DELETED: '삭제됨' };
+const CC_SUM_FIELDS = ['spend','lpv','trial','purchase','deep_meta','impr','reach','link_clicks','v3s','thruplay','plays','watch_sec_total',
+  'saves','shares','comments','cc_view','initiate_checkout','trial_purchase_meta','sessions','engaged','eng_time','pv','rank_x_impr'];
 
+function ccLoadCols() { try { return JSON.parse(localStorage.getItem('cc_detail_cols_v1') || '[]'); } catch (e) { return []; } }
+function ccSaveCols() { try { localStorage.setItem('cc_detail_cols_v1', JSON.stringify([...CC.cols])); } catch (e) {} }
 function ccKstToday() { return new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10); }
 function ccAddDays(d, n) { const t = new Date(d + 'T00:00:00Z'); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0, 10); }
-function ccMd(d) { return (+d.slice(5, 7)) + '/' + (+d.slice(8, 10)); }
+function ccMd(d) { return d ? (+d.slice(5, 7)) + '/' + (+d.slice(8, 10)) : '-'; }
 function ccWon(v) { return v == null || !isFinite(v) ? '-' : Math.round(v).toLocaleString('ko-KR') + '원'; }
 function ccNum(v) { return (v || 0).toLocaleString('ko-KR'); }
+function ccPct(v, digits = 1) { return v == null || !isFinite(v) ? '-' : (v * 100).toFixed(digits) + '%'; }
 function ccEsc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+function ccNA(reason) { return `<span class="cc-na" title="${ccEsc(reason)}">-</span>`; }
+function ccDiv(a, b) { return b > 0 ? a / b : null; }
 
 function ccRange() {
   const t = ccKstToday();
@@ -5941,35 +5965,50 @@ function ccRange() {
   return [ccAddDays(t, -n), ccAddDays(t, -1)];
 }
 
-function loadCampaignCompare(force) {
-  const el = document.getElementById('analysis-sub-compare');
+function loadCampaignCompare(force, view) {
+  const id = view === 'organic' ? 'analysis-sub-organic' : 'analysis-sub-compare';
+  const el = document.getElementById(id);
   if (!el) return;
-  if (CC.data && !force) { renderCampaignCompare(); return; }
+  const render = () => view === 'organic' ? renderOrganic() : renderCampaignCompare();
+  if (CC.data && !force) { render(); return; }
   el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--t2);">로딩 중...</div>';
   fetch('campaign_compare.json?t=' + Date.now())
     .then(r => r.ok ? r.json() : Promise.reject('HTTP ' + r.status))
-    .then(d => { CC.data = d; renderCampaignCompare(); })
-    .catch(err => { el.innerHTML = `<div style="text-align:center;padding:40px;color:var(--r);">캠페인 비교 데이터를 불러올 수 없습니다. (${ccEsc(err)})</div>`; });
+    .then(d => { CC.data = d; render(); })
+    .catch(err => { el.innerHTML = `<div style="text-align:center;padding:40px;color:var(--r);">데이터를 불러올 수 없습니다. (${ccEsc(err)})</div>`; });
 }
 
+/* 기간 합산: 날짜별 값을 [a,b]로 더한다. 깊은 관심 관련 분자·분모는 측정 시작일(since) 이후만 쓴다. */
 function ccAggregate(c, a, b, since, today) {
-  const r = { spend: 0, lpv: 0, deepSpend: 0, deep: 0, kinds: {}, deepPrelim: false, deepMeta: 0, trial: 0, purchase: 0,
-              purchaseCheck: false, clSum: 0, clW: 0, days: [] };
+  const r = { deepSpend: 0, deep: 0, kinds: {}, deepPrelim: false, sessDeep: 0, purchaseCheck: false,
+              cl: { sec: [0, 0], scroll: [0, 0], dead_pct: [0, 0], rage_pct: [0, 0], quickback_pct: [0, 0] }, url: null,
+              bridge: {}, days: [], kw: {} };
+  CC_SUM_FIELDS.forEach(f => r[f] = 0);
+  r.hasSessions = false; r.hasClarity = false;
   for (const [d, v] of Object.entries(c.daily || {})) {
     if (d < a || d > b) continue;
     r.days.push([d, v]);
-    r.spend += v.spend || 0; r.lpv += v.lpv || 0; r.trial += v.trial || 0; r.purchase += v.purchase || 0;
-    r.deepMeta += v.deep_meta || 0;
+    CC_SUM_FIELDS.forEach(f => { if (v[f]) r[f] += v[f]; });
+    if (v.sessions != null) r.hasSessions = true;
     if (v.purchase && v.purchase_src === 'purchase') r.purchaseCheck = true;
+    if (v.bridge) for (const [k, n] of Object.entries(v.bridge)) r.bridge[k] = (r.bridge[k] || 0) + n;
+    if (v.kw) for (const [k, arr] of Object.entries(v.kw)) { const t = r.kw[k] || (r.kw[k] = [0, 0, 0]); arr.forEach((x, i) => t[i] += x); }
     if (d >= since) {
       r.deepSpend += v.spend || 0;
+      r.sessDeep += v.sessions || 0;
       if (v.deep) {
         r.deep += v.deep.total || 0;
         for (const [k] of CC_KIND) if (v.deep[k]) r.kinds[k] = (r.kinds[k] || 0) + v.deep[k];
       }
       if (!v.ga4_final || d >= today) r.deepPrelim = true;
     }
-    if (v.clarity_active_sec != null) { const w = v.clarity_sessions || 1; r.clSum += v.clarity_active_sec * w; r.clW += w; }
+    const cl = v.clarity;
+    if (cl) {
+      r.hasClarity = true;
+      const w = cl.sessions || 1;
+      for (const f of Object.keys(r.cl)) if (cl[f] != null) { r.cl[f][0] += cl[f] * w; r.cl[f][1] += w; }
+      if (cl.url) { r.url = r.url || {}; for (const [k, n] of Object.entries(cl.url)) r.url[k] = (r.url[k] || 0) + n; }
+    }
   }
   r.measured = b >= since;           // 기간이 깊은 관심 측정 시작일 이후를 포함하는가
   r.partial = a < since && b >= since;
@@ -5977,29 +6016,121 @@ function ccAggregate(c, a, b, since, today) {
   r.trialCost = r.trial > 0 ? r.spend / r.trial : null;
   r.purchaseCost = r.purchase > 0 ? r.spend / r.purchase : null;
   r.cpv = r.lpv > 0 ? r.spend / r.lpv : null;
-  r.clarity = r.clW > 0 ? r.clSum / r.clW : null;
+  r.clarity = r.cl.sec[1] > 0 ? r.cl.sec[0] / r.cl.sec[1] : null;
+  r.clAvg = f => r.cl[f][1] > 0 ? r.cl[f][0] / r.cl[f][1] : null;
+  r.per100Deep = r.measured && r.sessDeep > 0 ? r.deep / r.sessDeep * 100 : null;   // 분모도 측정 시작 이후 세션
+  r.per100Trial = r.sessions > 0 ? r.trial / r.sessions * 100 : null;
   return r;
+}
+
+/* 상세 지표 — 체크하면 표에 열이 추가된다(선택은 localStorage 저장). v: 정렬값, h: 표시 HTML */
+const CC_M = 'Meta 전용 지표', CC_NV = '네이버 전용 지표', CC_NOCL = 'Clarity 수집값 없음(하루 1~2회 수집, 캠페인별 utm이 있어야 집계)';
+const CC_DETAIL = [
+  { grp: 'Meta 노출·소재 반응', items: [
+    ['impr', '노출', (g, c) => c.platform !== 'meta' ? null : { v: g.impr, h: ccNum(g.impr) }, CC_M],
+    ['reach', '도달(일별 합)', (g, c) => c.platform !== 'meta' ? null : { v: g.reach, h: ccNum(g.reach), tip: '기간 도달은 중복 제거 불가 — 일별 도달의 합' }, CC_M],
+    ['freq', '빈도', (g, c) => c.platform !== 'meta' || !g.reach ? null : { v: g.impr / g.reach, h: (g.impr / g.reach).toFixed(2), tip: '노출 ÷ 일별 도달 합 (일평균 빈도)' }, CC_M],
+    ['cpm', 'CPM', (g, c) => c.platform !== 'meta' || !g.impr ? null : { v: g.spend / g.impr * 1000, h: ccWon(g.spend / g.impr * 1000) }, CC_M],
+    ['hook', '3초 조회율(훅)', (g, c) => c.platform !== 'meta' || !g.impr ? null : { v: g.v3s / g.impr, h: ccPct(g.v3s / g.impr) }, CC_M + ' · 영상 소재만'],
+    ['thru', 'ThruPlay율', (g, c) => c.platform !== 'meta' || !g.impr ? null : { v: g.thruplay / g.impr, h: ccPct(g.thruplay / g.impr) }, CC_M],
+    ['watch', '평균 재생 시간', (g, c) => c.platform !== 'meta' || !g.plays ? null : { v: g.watch_sec_total / g.plays, h: (g.watch_sec_total / g.plays).toFixed(1) + '초' }, CC_M + ' · 영상 재생 없음'],
+    ['ctr', '링크 클릭률', (g, c) => c.platform !== 'meta' || !g.impr ? null : { v: g.link_clicks / g.impr, h: ccPct(g.link_clicks / g.impr, 2) }, CC_M],
+    ['eng', '저장·공유·댓글', (g, c) => c.platform !== 'meta' ? null : { v: g.saves + g.shares + g.comments, h: `${g.saves}·${g.shares}·${g.comments}` }, CC_M],
+  ]},
+  { grp: '사이트 도착 품질', items: [
+    ['arrive', '랜딩 도착률', (g, c) => c.platform !== 'meta' || !g.link_clicks ? null : { v: g.lpv / g.link_clicks, h: ccPct(g.lpv / g.link_clicks), tip: '랜딩 페이지 조회 ÷ 링크 클릭' }, CC_M],
+    ['sess', 'GA4 세션', (g) => !g.hasSessions ? null : { v: g.sessions, h: ccNum(g.sessions) }, 'GA4 세션 없음(utm 미매칭)'],
+    ['engr', '참여 세션율', (g) => !g.sessions ? null : { v: g.engaged / g.sessions, h: ccPct(g.engaged / g.sessions) }, 'GA4 세션 없음'],
+    ['engt', '세션당 참여 시간', (g) => !g.sessions ? null : { v: g.eng_time / g.sessions, h: (g.eng_time / g.sessions).toFixed(1) + '초' }, 'GA4 세션 없음'],
+    ['pps', '페이지/세션', (g) => !g.sessions ? null : { v: g.pv / g.sessions, h: (g.pv / g.sessions).toFixed(2) }, 'GA4 세션 없음'],
+    ['bounce', '이탈 세션', (g) => !g.sessions ? null : { v: g.sessions - g.engaged, h: ccNum(g.sessions - g.engaged) + ` (${ccPct(1 - g.engaged / g.sessions, 0)})`, tip: 'GA4 참여하지 않은 세션' }, 'GA4 세션 없음'],
+  ]},
+  { grp: 'Clarity 행동', items: [
+    ['clsec', '활성 시간', (g) => g.clarity == null ? null : { v: g.clarity, h: Math.round(g.clarity) + '초' }, CC_NOCL],
+    ['scroll', '스크롤 깊이', (g) => g.clAvg('scroll') == null ? null : { v: g.clAvg('scroll'), h: g.clAvg('scroll').toFixed(0) + '%' }, CC_NOCL],
+    ['dead', '데드 클릭%', (g) => g.clAvg('dead_pct') == null ? null : { v: g.clAvg('dead_pct'), h: g.clAvg('dead_pct').toFixed(1) + '%' }, CC_NOCL],
+    ['rage', '레이지 클릭%', (g) => g.clAvg('rage_pct') == null ? null : { v: g.clAvg('rage_pct'), h: g.clAvg('rage_pct').toFixed(1) + '%' }, CC_NOCL],
+    ['quick', '빠른 이탈%', (g) => g.clAvg('quickback_pct') == null ? null : { v: g.clAvg('quickback_pct'), h: g.clAvg('quickback_pct').toFixed(1) + '%', tip: 'Clarity quickback click 비율' }, CC_NOCL],
+    ['url', 'URL 분포', (g) => { if (!g.url) return null; const t = Object.values(g.url).reduce((x, y) => x + y, 0) || 1;
+      return { v: (g.url.buy || 0) / t, h: `메인 ${ccPct((g.url.main || 0) / t, 0)} · 구매 ${ccPct((g.url.buy || 0) / t, 0)} · 체험 ${ccPct((g.url.feel || 0) / t, 0)} · 커뮤니티 ${ccPct((g.url.community || 0) / t, 0)}`,
+               tip: '캠페인 유입 세션이 본 페이지 비율(Clarity 오후 수집분). 정렬 = 구매 페이지 비율' }; }, 'URL 분포는 오후 수집분에만 있음'],
+  ]},
+  { grp: '사이트 안 깊이 (GA4 브리지)', items: [
+    ['sv', 'section_view', () => null, 'GA4에 section_view 이벤트가 수집되지 않음(2026-07 이후 0건)'],
+    ['esd', 'embed_scroll_depth', (g) => !g.hasSessions ? null : { v: g.bridge.embed_scroll_depth || 0, h: ccNum(g.bridge.embed_scroll_depth) }, 'GA4 세션 없음'],
+    ['ee', 'embed_engaged', (g) => !g.hasSessions ? null : { v: g.bridge.embed_engaged || 0, h: ccNum(g.bridge.embed_engaged) }, 'GA4 세션 없음'],
+    ['rs', '되돌려 보기', (g) => !g.hasSessions ? null : { v: g.bridge.detail_rescroll || 0, h: ccNum(g.bridge.detail_rescroll), tip: 'detail_rescroll: 상세 절반 이상 내려간 뒤 25% 이상 다시 올라감' }, 'GA4 세션 없음'],
+    ['kinds', '깊은 관심 종류별 (1건당)', (g) => !g.measured ? null : { v: g.deep, h: CC_KIND.filter(([k]) => g.kinds[k]).map(([k, l]) => `${l} ${g.kinds[k]}${g.deepSpend ? ` (${ccWon(g.deepSpend / g.kinds[k])})` : ''}`).join('<br>') || '0' }, '깊은 관심은 9/30부터 측정'],
+  ]},
+  { grp: 'Meta 전환 신호', items: [
+    ['ccv', '상세·체험 조회(CC)', (g, c) => c.platform !== 'meta' ? null : { v: g.cc_view, h: ccNum(g.cc_view) + (g.cc_view ? `<div class="sub">${ccWon(g.spend / g.cc_view)}/건</div>` : '') }, CC_M],
+    ['dm', '깊은 관심 v2(Meta)', (g, c) => c.platform !== 'meta' ? null : { v: g.deep_meta, h: ccNum(g.deep_meta) + (g.deep_meta ? `<div class="sub">${ccWon(g.spend / g.deep_meta)}/건</div>` : '') }, CC_M],
+    ['ic', '결제 시작', (g, c) => c.platform !== 'meta' ? null : { v: g.initiate_checkout, h: ccNum(g.initiate_checkout) }, CC_M],
+    ['tpm', '체험 결제 v2', (g, c) => c.platform !== 'meta' ? null : { v: g.trial_purchase_meta, h: ccNum(g.trial_purchase_meta) }, CC_M],
+  ]},
+  { grp: '네이버', items: [
+    ['nimp', '노출', (g, c) => c.platform !== 'naver' ? null : { v: g.impr, h: ccNum(g.impr) }, CC_NV],
+    ['nclk', '클릭', (g, c) => c.platform !== 'naver' ? null : { v: g.lpv, h: ccNum(g.lpv) }, CC_NV],
+    ['ncpc', 'CPC', (g, c) => c.platform !== 'naver' || !g.lpv ? null : { v: g.spend / g.lpv, h: ccWon(g.spend / g.lpv) }, CC_NV],
+    ['nrank', '평균 순위', (g, c) => c.platform !== 'naver' || !g.impr ? null : { v: g.rank_x_impr / g.impr, h: (g.rank_x_impr / g.impr).toFixed(1) + '위', tip: '노출 가중 평균' }, CC_NV],
+  ]},
+];
+const CC_DETAIL_MAP = {};
+CC_DETAIL.forEach(G => G.items.forEach(([id, label, fn, na]) => CC_DETAIL_MAP[id] = { id, label, fn, na, grp: G.grp }));
+function ccDetailCols() { return CC_DETAIL.flatMap(G => G.items.map(i => i[0])).filter(id => CC.cols.has(id)); }
+function ccDetailCell(id, g, c) {
+  const m = CC_DETAIL_MAP[id];
+  const r = c.platform === 'channel' && ['impr','reach','freq','cpm','hook','thru','watch','ctr','eng','arrive','ccv','dm','ic','tpm','nimp','nclk','ncpc','nrank'].includes(id)
+    ? null : m.fn(g, c);
+  if (!r) return `<td class="n d">${ccNA(c.platform === 'channel' && !['sv'].includes(id) ? '유입 채널 행에는 광고 지표 없음' : m.na)}</td>`;
+  return `<td class="n d"${r.tip ? ` title="${ccEsc(r.tip)}"` : ''}>${r.h}</td>`;
 }
 
 function ccSortVal(row, col) {
   const c = row.c, g = row.g;
+  if (CC_DETAIL_MAP[col]) { const r = CC_DETAIL_MAP[col].fn(g, c); return r ? r.v : null; }
   switch (col) {
     case 'key': return c.key;
     case 'plat': return c.platform;
-    case 'creative': return c.settings.creative || '';
-    case 'target': return c.settings.target || '';
-    case 'opt': return c.settings.optimization || '';
-    case 'budget': return c.settings.daily_budget;
-    case 'start': return c.settings.start || '';
+    case 'creative': return (c.settings || {}).creative || '';
+    case 'target': return (c.settings || {}).target || '';
+    case 'opt': return (c.settings || {}).optimization || '';
+    case 'budget': return (c.settings || {}).daily_budget;
+    case 'start': return (c.settings || {}).start || '';
     case 'deepCost': return g.deepCost;
     case 'deep': return g.measured ? g.deep : null;
-    case 'trial': return g.trial;
-    case 'purchase': return g.purchase;
-    case 'spend': return g.spend;
+    case 'trial': return c.platform === 'channel' ? null : g.trial;
+    case 'purchase': return c.platform === 'meta' ? g.purchase : null;
+    case 'p100d': return g.per100Deep;
+    case 'p100t': return c.platform === 'channel' ? null : g.per100Trial;
+    case 'spend': return c.platform === 'channel' ? null : g.spend;
     case 'cpv': return g.cpv;
     case 'clarity': return g.clarity;
   }
   return null;
+}
+function ccSortRows(rows) {
+  const { col, dir } = CC.sort;
+  return rows.sort((x, y) => {
+    const p = ccSortVal(x, col), q = ccSortVal(y, col);
+    if (p == null && q == null) return x.c.key.localeCompare(y.c.key);
+    if (p == null) return 1;
+    if (q == null) return -1;
+    return (typeof p === 'string' ? p.localeCompare(q) : p - q) * dir;
+  });
+}
+
+function ccPeriodBar(a, b, today, fn) {
+  const presetBtns = CC_PRESETS.map(([k, l]) => `<button class="report-btn ${CC.preset === k ? 'active' : ''}" onclick="ccSetPreset('${k}','${fn}')">${l}</button>`).join('');
+  const custom = CC.preset === 'custom'
+    ? `<input type="date" value="${a}" max="${today}" onchange="CC.start=this.value;${fn}()"> ~ <input type="date" value="${b}" max="${today}" onchange="CC.end=this.value;${fn}()">` : '';
+  return `<div class="cc-bar">${presetBtns}${custom}</div>`;
+}
+function ccStamp(D) {
+  const upd = D.updated_at ? new Date(D.updated_at) : null;
+  const ageMin = upd ? Math.round((Date.now() - upd.getTime()) / 60000) : null;
+  const stamp = upd ? upd.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
+  return `마지막 갱신 <b>${stamp}</b>${ageMin != null && ageMin > 120 ? ` <span class="cc-warn">(${Math.round(ageMin / 60)}시간 전 · 자동 갱신 확인 필요)</span>` : ''}`;
 }
 
 function renderCampaignCompare() {
@@ -6009,10 +6140,11 @@ function renderCampaignCompare() {
   const today = ccKstToday(), since = D.deep_interest_since || '2026-09-30';
   const [a, b] = ccRange();
   const nDays = Math.round((new Date(b) - new Date(a)) / 864e5) + 1;
+  const dcols = ccDetailCols();
+  const NCOL = 14 + dcols.length;
 
-  let rows = (D.campaigns || []).map(c => ({ c, g: ccAggregate(c, a, b, since, today) }));
-  const all = rows;
-  rows = rows.filter(r => {
+  const all = (D.campaigns || []).map(c => ({ c, g: ccAggregate(c, a, b, since, today) }));
+  let rows = all.filter(r => {
     const on = r.c.status === 'ACTIVE';
     if (CC.status === 'on' && !on) return false;
     if (CC.status === 'off' && on) return false;
@@ -6022,14 +6154,9 @@ function renderCampaignCompare() {
     if (!CC.showIdle && r.g.spend <= 0 && !isNew && !(r.g.deep || r.g.trial)) return false;
     return true;
   });
-  const { col, dir } = CC.sort;
-  rows.sort((x, y) => {
-    const p = ccSortVal(x, col), q = ccSortVal(y, col);
-    if (p == null && q == null) return x.c.key.localeCompare(y.c.key);
-    if (p == null) return 1;
-    if (q == null) return -1;
-    return (typeof p === 'string' ? p.localeCompare(q) : p - q) * dir;
-  });
+  rows = ccSortRows(rows);
+  const chRows = (CC.plat === 'all' || CC.plat === 'channel')
+    ? ccSortRows((D.channels || []).map(c => ({ c, g: ccAggregate(c, a, b, since, today) })).filter(r => r.g.sessions > 0 || r.g.deep > 0)) : [];
   const hidden = all.length - rows.length;
 
   // KPI (필터와 무관하게 전체 캠페인 합계)
@@ -6039,69 +6166,77 @@ function renderCampaignCompare() {
   for (const [d, v] of Object.entries(D.account_daily || {})) if (d >= a && d <= b) { trials += v.trial_bookings || 0; sales += v.imweb_body_sales || 0; }
   const measured = b >= since;
   const bestDeep = Math.min(...rows.filter(r => r.g.deepCost != null && !r.g.deepPrelim).map(r => r.g.deepCost));
-
-  const upd = D.updated_at ? new Date(D.updated_at) : null;
-  const ageMin = upd ? Math.round((Date.now() - upd.getTime()) / 60000) : null;
   const failed = Object.entries(D.sources || {}).filter(([, v]) => !v.ok).map(([k, v]) => `${k}: ${v.error || '실패'}`);
-  const stamp = upd ? upd.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
+  const notes = D.notes || {};
 
-  const presetBtns = CC_PRESETS.map(([k, l]) => `<button class="report-btn ${CC.preset === k ? 'active' : ''}" onclick="ccSetPreset('${k}')">${l}</button>`).join('');
-  const custom = CC.preset === 'custom'
-    ? `<input type="date" value="${a}" max="${today}" onchange="CC.start=this.value;renderCampaignCompare()"> ~ <input type="date" value="${b}" max="${today}" onchange="CC.end=this.value;renderCampaignCompare()">` : '';
-
-  const th = (key, label, cls = '') => {
+  const th = (key, label, cls = '', tip = '') => {
     const arr = CC.sort.col === key ? `<span class="arr">${CC.sort.dir > 0 ? '▲' : '▼'}</span>` : '';
-    return `<th class="${cls}" onclick="ccSortBy('${key}')">${label} ${arr}</th>`;
+    return `<th class="${cls}" onclick="ccSortBy('${key}')"${tip ? ` title="${ccEsc(tip)}"` : ''}>${label} ${arr}</th>`;
   };
 
-  const deepCell = g => {
-    if (!g.measured) return `<td class="n g"><span class="pre">측정 전</span></td>`;
+  const deepCell = (g, c) => {
+    if (!g.measured) return `<td class="n g"><span class="pre" title="깊은 관심은 ${ccMd(since)}부터 측정">측정 전</span></td>`;
     const pre = g.deepPrelim ? ' pre' : '';
     const kinds = CC_KIND.filter(([k]) => g.kinds[k]).map(([k, l]) => `${l} ${g.kinds[k]}`).join(' · ');
     const tip = g.deepPrelim ? '당일 GA4는 처리 전이라 캠페인 귀속이 덜 됐습니다(참고). 전날까지가 확정.' : '';
-    return `<td class="n g" title="${tip}"><div class="k${pre}">${g.deepCost != null ? ccWon(g.deepCost) : '-'}</div>`
+    const best = g.deepCost != null && g.deepCost === bestDeep && rows.length > 1 ? ' best' : '';
+    const costTxt = c.platform === 'channel' ? ccNA('유입 채널은 비용 없음') : (g.deepCost != null ? ccWon(g.deepCost) : '-');
+    return `<td class="n g" title="${tip}"><div class="k${pre}${best}">${costTxt}</div>`
       + `<div class="sub${pre}">${ccNum(g.deep)}건${g.deepPrelim ? ' (참고)' : ''}${g.partial ? ` · ${ccMd(since)}부터` : ''}</div>`
       + (kinds ? `<div class="sub">${kinds}</div>` : '')
-      + (g.deepMeta ? `<div class="sub">Meta 집계 ${ccNum(g.deepMeta)}건</div>` : '') + `</td>`;
+      + (g.deep_meta ? `<div class="sub">Meta 집계 ${ccNum(g.deep_meta)}건</div>` : '') + `</td>`;
   };
   const cntCell = (n, cost, extra = '') => `<td class="n g"><div class="k">${ccNum(n)}건</div><div class="sub">${n ? ccWon(cost) + ' / 건' : '-'}</div>${extra}</td>`;
+  const p100Cell = (v, sess, na, prelim) => v == null ? `<td class="n g">${ccNA(na)}</td>`
+    : `<td class="n g"${prelim ? ' title="당일 GA4는 처리 전이라 캠페인·채널 귀속이 덜 됐습니다(참고)"' : ''}><div class="k${prelim ? ' pre' : ''}">${v.toFixed(2)}${prelim ? ' (참고)' : ''}</div><div class="sub">세션 ${ccNum(sess)}</div></td>`;
 
-  const body = rows.map(({ c, g }) => {
-    const s = c.settings, on = c.status === 'ACTIVE';
-    const badge = `<span class="cc-badge ${on ? 'on' : ''}">${CC_STATUS[c.status] || c.status}</span>`;
-    const budget = s.daily_budget ? ccWon(s.daily_budget) : '-';
+  const rowHtml = ({ c, g }) => {
+    const s = c.settings || {}, on = c.status === 'ACTIVE', ch = c.platform === 'channel';
+    const badge = ch ? `<span class="cc-badge">유입 채널</span>` : `<span class="cc-badge ${on ? 'on' : ''}">${CC_STATUS[c.status] || c.status}</span>`;
     const isOpen = CC.open.has(c.key + c.id);
-    const isBest = g.deepCost != null && g.deepCost === bestDeep && rows.length > 1;
     const purchaseCell = c.platform === 'meta'
       ? cntCell(g.purchase, g.purchaseCost, g.purchaseCheck ? '<div class="sub cc-warn">purchase 사용 · 대조 필요</div>' : '')
-      : `<td class="n g"><span class="pre">-</span><div class="sub">매체 귀속 없음</div></td>`;
-    let html = `<tr class="cc-row ${on ? '' : 'off'} ${isOpen ? 'open' : ''}" onclick="ccToggle('${c.key + c.id}')">
-      <td class="c0" title="${ccEsc(c.name)}"><b>${ccEsc(c.key)}</b><div class="sub">${ccEsc(c.short)}</div>${badge}</td>
-      <td><span class="cc-plat">${c.platform === 'meta' ? 'Meta' : '네이버'}</span></td>
-      <td>${ccEsc(s.creative)}</td>
-      <td style="min-width:150px;">${ccEsc(s.target)}</td>
-      <td>${ccEsc(s.optimization)}</td>
-      <td class="n">${budget}${s.budget_note ? `<div class="sub">(${ccEsc(s.budget_note)})</div>` : ''}<div class="sub">${s.start ? ccMd(s.start) + ' 시작' : '-'}</div></td>
-      ${deepCell(g).replace('class="k', isBest ? 'class="best k' : 'class="k')}
-      ${cntCell(g.trial, g.trialCost)}
+      : `<td class="n g">${ccNA(ch ? '유입 채널은 매체 귀속 구매 없음 — 상단 아임웹 실판매 참고' : '네이버는 매체 귀속 구매 없음')}</td>`;
+    const trialCell = ch ? `<td class="n g">${ccNA('체험 신청에 유입 경로(utm)가 기록되지 않아 채널별로 나눌 수 없음')}</td>` : cntCell(g.trial, g.trialCost);
+    const noTrialUtm = '체험 신청에 utm이 기록되지 않아(9월 신청 전부 utm 없음) 캠페인별 체험 신청은 0으로 집계됨';
+    let html = `<tr class="cc-row ${ch ? 'ch' : ''} ${on || ch ? '' : 'off'} ${isOpen ? 'open' : ''}" onclick="ccToggle('${c.key + c.id}')">
+      <td class="c0" title="${ccEsc(c.name)}"><b>${ccEsc(ch ? c.name : c.key)}</b>${ch ? '' : `<div class="sub">${ccEsc(c.short)}</div>`}${badge}</td>
+      <td><span class="cc-plat">${c.platform === 'meta' ? 'Meta' : c.platform === 'naver' ? '네이버' : '채널'}</span></td>
+      <td>${ccEsc(s.creative || '-')}</td>
+      <td style="min-width:150px;">${ccEsc(s.target || '-')}</td>
+      <td>${ccEsc(s.optimization || '-')}</td>
+      <td class="n">${s.daily_budget ? ccWon(s.daily_budget) : '-'}${s.budget_note ? `<div class="sub">(${ccEsc(s.budget_note)})</div>` : ''}<div class="sub">${s.start ? ccMd(s.start) + ' 시작' : ''}</div></td>
+      ${deepCell(g, c)}
+      ${trialCell}
       ${purchaseCell}
-      <td class="n ref">${ccWon(g.spend)}</td>
-      <td class="n ref">${ccWon(g.cpv)}<div class="sub">${c.platform === 'meta' ? '랜딩 조회' : '클릭'} ${ccNum(g.lpv)}</div></td>
-      <td class="n ref">${g.clarity != null ? Math.round(g.clarity) + '초' : '-'}</td>
+      ${p100Cell(g.per100Deep, g.sessDeep, !g.measured ? '깊은 관심은 ' + ccMd(since) + '부터 측정' : 'GA4 세션 없음(utm 미매칭)', g.deepPrelim)}
+      ${ch ? `<td class="n g">${ccNA('체험 신청에 유입 경로(utm)가 기록되지 않아 채널별로 나눌 수 없음')}</td>` : p100Cell(g.per100Trial, g.sessions, 'GA4 세션 없음', b >= today).replace('<td class="n g">', `<td class="n g" title="${ccEsc(noTrialUtm)}">`)}
+      <td class="n ref">${ch ? ccNA('유입 채널은 비용 없음') : ccWon(g.spend)}</td>
+      <td class="n ref">${ch ? ccNA('유입 채널은 비용 없음') : ccWon(g.cpv) + `<div class="sub">${c.platform === 'meta' ? '랜딩 조회' : '클릭'} ${ccNum(g.lpv)}</div>`}</td>
+      <td class="n ref">${g.clarity != null ? Math.round(g.clarity) + '초' : ccNA(ch ? 'Clarity는 캠페인별로만 수집' : CC_NOCL)}</td>
+      ${dcols.map(id => ccDetailCell(id, g, c)).join('')}
     </tr>`;
-    if (isOpen) html += ccDetailRow(c, g, since, today);
+    if (isOpen) html += ccDetailRow(c, g, since, today, NCOL, dcols, a, b);
     return html;
-  }).join('');
+  };
+  const body = rows.map(rowHtml).join('');
+  const chBody = chRows.length ? `<tr class="cc-sep" title="${ccEsc(notes.channel_rule || '')}"><td class="c0">유입 채널 ⓘ</td><td colspan="${NCOL - 1}">비용 없음 · 방문 100명당으로 광고와 비교 · 분류 기준은 마우스를 올리면 보입니다</td></tr>` + chRows.map(rowHtml).join('') : '';
+
+  const panel = CC.panel ? `<div class="cc-panel">${CC_DETAIL.map(G => {
+      const ids = G.items.map(i => i[0]); const allOn = ids.every(id => CC.cols.has(id));
+      return `<div class="grp"><label><input type="checkbox" ${allOn ? 'checked' : ''} onchange="ccToggleGroup('${ccEsc(G.grp)}',this.checked)"> ${ccEsc(G.grp)}</label>`
+        + G.items.map(([id, label]) => `<label><input type="checkbox" ${CC.cols.has(id) ? 'checked' : ''} onchange="ccToggleCol('${id}',this.checked)"> ${ccEsc(label)}</label>`).join('') + `</div>`;
+    }).join('')}</div>` : '';
 
   el.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
       <div><h2 style="font-size:1rem;font-weight:700;">⚖️ 캠페인 비교</h2>
         <div class="cc-meta">판단 기준 = 판매에 가까운 행동 1건당 비용 · 기간 ${ccMd(a)}~${ccMd(b)} (${nDays}일)</div></div>
-      <div class="cc-meta" style="text-align:right;">마지막 갱신 <b>${stamp}</b>${ageMin != null && ageMin > 120 ? ` <span class="cc-warn">(${Math.round(ageMin / 60)}시간 전 · 자동 갱신 확인 필요)</span>` : ''}
+      <div class="cc-meta" style="text-align:right;">${ccStamp(D)}
         <button class="report-btn" style="margin-left:6px;" onclick="loadCampaignCompare(true)">새로고침</button></div>
     </div>
     ${failed.length ? `<div class="cc-meta cc-warn">⚠️ 일부 소스 갱신 실패 — 해당 값은 이전 수집값: ${ccEsc(failed.join(' / '))}</div>` : ''}
-    <div class="cc-bar">${presetBtns}${custom}</div>
+    ${ccPeriodBar(a, b, today, 'renderCampaignCompare')}
     <div class="cc-bar">
       <select onchange="CC.status=this.value;renderCampaignCompare()">
         <option value="all" ${CC.status === 'all' ? 'selected' : ''}>상태: 전체</option>
@@ -6110,10 +6245,13 @@ function renderCampaignCompare() {
       <select onchange="CC.plat=this.value;renderCampaignCompare()">
         <option value="all" ${CC.plat === 'all' ? 'selected' : ''}>매체: 전체</option>
         <option value="meta" ${CC.plat === 'meta' ? 'selected' : ''}>Meta</option>
-        <option value="naver" ${CC.plat === 'naver' ? 'selected' : ''}>네이버</option></select>
+        <option value="naver" ${CC.plat === 'naver' ? 'selected' : ''}>네이버</option>
+        <option value="channel" ${CC.plat === 'channel' ? 'selected' : ''}>유입 채널만</option></select>
       <label><input type="checkbox" ${CC.showIdle ? 'checked' : ''} onchange="CC.showIdle=this.checked;renderCampaignCompare()"> 꺼짐 캠페인 보기 (기간 내 지출 없음)</label>
+      <button class="report-btn ${CC.panel ? 'active' : ''}" onclick="CC.panel=!CC.panel;renderCampaignCompare()">상세 지표 ${dcols.length ? `(${dcols.length})` : ''} ${CC.panel ? '▴' : '▾'}</button>
       <span class="cc-meta" style="margin:0;">${rows.length}개 표시${hidden ? ` · ${hidden}개 숨김` : ''}</span>
     </div>
+    ${panel}
     <div class="cc-kpis">
       <div class="cc-kpi"><div class="l">전체 지출</div><div class="v">${ccWon(spend)}</div><div class="s">Meta + 네이버</div></div>
       <div class="cc-kpi brand"><div class="l">깊은 관심 (1건당)</div>
@@ -6126,51 +6264,172 @@ function renderCampaignCompare() {
       <thead><tr>
         ${th('key', '캠페인', 'c0')}${th('plat', '매체')}${th('creative', '소재')}${th('target', '타겟')}${th('opt', '학습 기준')}${th('budget', '하루 예산 · 시작', 'n')}
         ${th('deepCost', '깊은 관심 1건당', 'g n')}${th('trial', '체험 신청', 'g n')}${th('purchase', '구매 (Meta 귀속)', 'g n')}
+        ${th('p100d', '100명당 깊은 관심', 'g n', 'GA4 세션 100개당 깊은 관심 수 (분자·분모 모두 측정 시작 이후)')}${th('p100t', '100명당 체험', 'g n', 'GA4 세션 100개당 체험 신청 수')}
         ${th('spend', '지출', 'r n')}${th('cpv', '방문 1회당', 'r n')}${th('clarity', '실제 체류', 'r n')}
+        ${dcols.map(id => th(id, CC_DETAIL_MAP[id].label, 'd n', CC_DETAIL_MAP[id].grp)).join('')}
       </tr></thead>
-      <tbody>${body || `<tr><td colspan="12" style="text-align:center;padding:24px;color:var(--t2);">조건에 맞는 캠페인이 없습니다.</td></tr>`}</tbody>
+      <tbody>${body || `<tr><td colspan="${NCOL}" style="text-align:center;padding:24px;color:var(--t2);">조건에 맞는 캠페인이 없습니다.</td></tr>`}${chBody}</tbody>
     </table></div>
     <div class="cc-foot">
-      <b>읽는 법</b> · 파란 열(판단)은 1건당 비용이 낮을수록 좋음. 회색 열은 참고. 행을 누르면 날짜별 추이.<br>
+      <b>읽는 법</b> · 파란 열(판단)은 1건당 비용이 낮을수록, 100명당은 높을수록 좋음. 회색 열은 참고. 행을 누르면 날짜별 추이·소재별·키워드별 내역.<br>
       <b>깊은 관심</b> · 체험 페이지·결제 시작·상세 90초·커뮤니티·재방문 (GA4, 봇 제외, ${ccMd(since)}부터). 1건당 비용은 측정 시작 이후 지출로 계산.
       당일분은 GA4 처리 전이라 캠페인 귀속이 덜 된 참고치(회색), 전날까지가 확정. /funding 페이지의 상세 90초와 재방문은 GA4에서 구분되지 않아 합쳐서 표시.<br>
-      <b>체험 신청</b> · Supabase 신청(취소·중복 제외). 캠페인 칸은 utm_campaign이 붙은 신청만, 상단 합계는 전체.<br>
+      <b>체험 신청</b> · Supabase 신청(취소·중복 제외). 캠페인 칸은 utm_campaign이 붙은 신청만(현재 utm이 붙은 신청 ${ccNum(notes.trial_with_utm)}건), 상단 합계는 전체.<br>
       <b>구매</b> · Meta 귀속 본체 구매(Purchase ≥100만). 판매 정본은 상단 아임웹 실판매.<br>
       <b>방문 1회당</b> · Meta = 랜딩 페이지 조회, 네이버 = 클릭. <b>실제 체류</b> · Clarity 캠페인별 평균 활성 시간(하루 1~2회 수집, 없으면 -).
-      “최근 N일”은 어제까지 N일.
+      “최근 N일”은 어제까지 N일. “-”에 마우스를 올리면 값이 없는 이유가 보입니다.
     </div>`;
 }
 
-function ccDetailRow(c, g, since, today) {
+function ccDetailRow(c, g, since, today, ncol, dcols, a, b) {
   const days = g.days.slice().sort((x, y) => y[0].localeCompare(x[0]));
   const max = Math.max(1, ...days.map(([, v]) => v.spend || 0));
+  const ch = c.platform === 'channel';
   const lines = days.map(([d, v]) => {
-    const measured = d >= since, dv = v.deep;
+    const gd = ccAggregate(c, d, d, since, today);
+    const measured = d >= since;
     const prelim = measured && (!v.ga4_final || d >= today);
-    const deepTxt = !measured ? '<span class="pre">측정 전</span>' : `<span class="${prelim ? 'pre' : ''}">${ccNum(dv ? dv.total : 0)}${prelim ? ' (참고)' : ''}</span>`;
-    const cost = measured && dv && dv.total ? ccWon(v.spend / dv.total) : '-';
-    return `<tr><td>${ccMd(d)}</td><td><span class="bar" style="width:${Math.round((v.spend || 0) / max * 90)}px"></span>${ccWon(v.spend)}</td>
-      <td>${deepTxt}</td><td>${cost}</td><td>${ccNum(v.lpv)}</td><td>${ccNum(v.trial)}</td>
-      <td>${c.platform === 'meta' ? ccNum(v.purchase) : '-'}</td><td>${v.clarity_active_sec != null ? v.clarity_active_sec + '초' : '-'}</td></tr>`;
+    const deepTxt = !measured ? '<span class="pre">측정 전</span>' : `<span class="${prelim ? 'pre' : ''}">${ccNum(gd.deep)}${prelim ? ' (참고)' : ''}</span>`;
+    const cost = ch ? '-' : (gd.deepCost != null ? ccWon(gd.deepCost) : '-');
+    return `<tr><td>${ccMd(d)}</td><td>${ch ? '-' : `<span class="bar" style="width:${Math.round((v.spend || 0) / max * 90)}px"></span>${ccWon(v.spend)}`}</td>
+      <td>${deepTxt}</td><td>${cost}</td><td>${ch ? ccNum(v.sessions) : ccNum(v.lpv)}</td><td>${ch ? '-' : ccNum(v.trial)}</td>
+      <td>${c.platform === 'meta' ? ccNum(v.purchase) : '-'}</td><td>${v.clarity_active_sec != null ? v.clarity_active_sec + '초' : '-'}</td>
+      ${dcols.map(id => ccDetailCell(id, gd, c).replace('<td class="n d"', '<td')).join('')}</tr>`;
   }).join('');
-  return `<tr class="cc-detail"><td colspan="12">
+  let extra = '';
+  if (c.platform === 'meta' && c.ads) {
+    const ads = Object.entries(c.ads).map(([id, ad]) => {
+      const t = { spend: 0, impr: 0, v3s: 0, lpv: 0, deep_meta: 0, deep: 0 };
+      for (const [d, v] of Object.entries(ad.daily)) if (d >= a && d <= b) for (const k in t) t[k] += v[k] || 0;
+      return { id, name: ad.name, t };
+    }).filter(x => x.t.spend > 0 || x.t.deep > 0).sort((x, y) => y.t.spend - x.t.spend);
+    if (ads.length) extra += `<div><div style="font-size:.72rem;font-weight:700;margin-bottom:6px;">소재(광고)별 · 기간 합계</div>
+      <table class="cc-dt"><thead><tr><th>광고</th><th>지출</th><th>노출</th><th>훅률</th><th>랜딩 조회</th><th>깊은 관심(GA4)</th><th>1건당</th><th>Meta 깊은 관심</th></tr></thead><tbody>`
+      + ads.map(x => `<tr><td title="${ccEsc(x.id)}">${ccEsc(x.name).slice(0, 40)}</td><td>${ccWon(x.t.spend)}</td><td>${ccNum(x.t.impr)}</td>
+        <td>${x.t.impr ? ccPct(x.t.v3s / x.t.impr) : '-'}</td><td>${ccNum(x.t.lpv)}</td><td>${b >= since ? ccNum(x.t.deep) : '측정 전'}</td>
+        <td>${x.t.deep ? ccWon(x.t.spend / x.t.deep) : '-'}</td><td>${ccNum(x.t.deep_meta)}</td></tr>`).join('') + `</tbody></table></div>`;
+  }
+  if (c.platform === 'naver') {
+    const kws = Object.entries(g.kw).sort((x, y) => y[1][1] - x[1][1] || y[1][0] - x[1][0]).slice(0, 5);
+    extra += `<div><div style="font-size:.72rem;font-weight:700;margin-bottom:6px;">키워드 상위 5개 (클릭순) · 기간 합계</div>
+      <table class="cc-dt"><thead><tr><th>키워드</th><th>노출</th><th>클릭</th><th>비용</th><th>CPC</th></tr></thead><tbody>`
+      + (kws.length ? kws.map(([k, [imp, clk, cost]]) => `<tr><td>${ccEsc(k)}</td><td>${ccNum(imp)}</td><td>${ccNum(clk)}</td><td>${ccWon(cost)}</td><td>${clk ? ccWon(cost / clk) : '-'}</td></tr>`).join('')
+        : '<tr><td colspan="5" style="text-align:center;color:var(--t2);">기간 내 키워드 성과 없음</td></tr>') + `</tbody></table></div>`;
+  }
+  return `<tr class="cc-detail"><td colspan="${ncol}">
     <div style="position:sticky;left:12px;display:inline-block;">
-      <div style="font-size:.72rem;font-weight:700;margin-bottom:6px;">${ccEsc(c.key)} 날짜별 추이 <span class="pre" style="font-weight:400;">${ccEsc(c.name)}</span></div>
-      <table class="cc-dt"><thead><tr><th>날짜</th><th>지출</th><th>깊은 관심</th><th>1건당</th><th>${c.platform === 'meta' ? '랜딩 조회' : '클릭'}</th><th>체험</th><th>구매</th><th>체류</th></tr></thead>
-      <tbody>${lines || '<tr><td colspan="8" style="text-align:center;color:var(--t2);">기간 내 데이터 없음</td></tr>'}</tbody></table>
+      <div style="font-size:.72rem;font-weight:700;margin-bottom:6px;">${ccEsc(ch ? c.name : c.key)} 날짜별 추이 <span class="pre" style="font-weight:400;">${ch ? '' : ccEsc(c.name)}</span></div>
+      <div class="cc-sub-tables"><div><table class="cc-dt"><thead><tr><th>날짜</th><th>지출</th><th>깊은 관심</th><th>1건당</th><th>${ch ? 'GA4 세션' : c.platform === 'meta' ? '랜딩 조회' : '클릭'}</th><th>체험</th><th>구매</th><th>체류</th>
+        ${dcols.map(id => `<th>${ccEsc(CC_DETAIL_MAP[id].label)}</th>`).join('')}</tr></thead>
+      <tbody>${lines || `<tr><td colspan="${8 + dcols.length}" style="text-align:center;color:var(--t2);">기간 내 데이터 없음</td></tr>`}</tbody></table></div>${extra}</div>
     </div></td></tr>`;
 }
 
-function ccSetPreset(p) {
+function ccSetPreset(p, fn) {
   if (p === 'custom' && CC.preset !== 'custom') { const [a, b] = ccRange(); CC.start = a; CC.end = b; }
-  CC.preset = p; renderCampaignCompare();
+  CC.preset = p;
+  (fn === 'renderOrganic' ? renderOrganic : renderCampaignCompare)();
 }
 function ccSortBy(col) {
   if (CC.sort.col === col) CC.sort.dir *= -1;
-  else CC.sort = { col, dir: ['spend', 'deep', 'trial', 'purchase', 'clarity', 'budget', 'start'].includes(col) ? -1 : 1 };
+  else CC.sort = { col, dir: ['spend', 'deep', 'trial', 'purchase', 'clarity', 'budget', 'start', 'p100d', 'p100t'].includes(col) || CC_DETAIL_MAP[col] ? -1 : 1 };
   renderCampaignCompare();
 }
 function ccToggle(id) { CC.open.has(id) ? CC.open.delete(id) : CC.open.add(id); renderCampaignCompare(); }
+function ccToggleCol(id, on) { on ? CC.cols.add(id) : CC.cols.delete(id); ccSaveCols(); renderCampaignCompare(); }
+function ccToggleGroup(grp, on) {
+  const G = CC_DETAIL.find(x => x.grp === grp); if (!G) return;
+  G.items.forEach(([id]) => on ? CC.cols.add(id) : CC.cols.delete(id)); ccSaveCols(); renderCampaignCompare();
+}
+
+/* ── 🌱 오가닉 콘텐츠 ── 스냅샷(누적값)을 날짜별로 쌓아 기간 중 증가분을 계산한다 */
+function ogAt(daily, d) {  // d 이전(포함) 마지막 스냅샷
+  let best = null;
+  for (const k of Object.keys(daily || {}).sort()) if (k <= d) best = daily[k];
+  return best;
+}
+function ogDelta(daily, a, b, published, field) {
+  const end = ogAt(daily, b);
+  if (!end || end[field] == null) return null;
+  if (published >= a) return end[field];                // 기간 중 게시 → 게시 이후 전부
+  const start = ogAt(daily, ccAddDays(a, -1));
+  return start && start[field] != null ? end[field] - start[field] : null;  // 기간 시작 전 스냅샷이 없으면 계산 불가
+}
+function ogSortBy(col) { CC.ogSort = { col, dir: CC.ogSort.col === col ? -CC.ogSort.dir : -1 }; renderOrganic(); }
+
+function renderOrganic() {
+  const el = document.getElementById('analysis-sub-organic');
+  const D = CC.data;
+  if (!el || !D) return;
+  const O = D.organic || {};
+  const today = ccKstToday();
+  const [a, b] = ccRange();
+  const media = Object.entries((O.ig || {}).media || {}).map(([id, m]) => {
+    const last = ogAt(m.daily, '9999-12-31') || {};   // 누적값은 최신 스냅샷(현재)
+    return { id, m, last, dv: ogDelta(m.daily, a, b, m.date, 'views') };
+  }).filter(x => (x.m.date >= a && x.m.date <= b) || (x.dv != null && x.dv > 0));
+  const val = (x, col) => col === 'date' ? x.m.ts : col === 'dv' ? x.dv : col === 'ratio' ? (x.last.views ? ((x.last.saved || 0) + (x.last.shares || 0)) / x.last.views : null)
+    : col === 'h24' ? (x.m.h24 || {}).views : x.last[col];
+  const { col, dir } = CC.ogSort;
+  media.sort((x, y) => { const p = val(x, col), q = val(y, col); if (p == null) return 1; if (q == null) return -1; return (typeof p === 'string' ? p.localeCompare(q) : p - q) * dir; });
+  const na = r => ccNA(r);
+  const cell = (x, f, why) => x.last[f] == null ? na(why) : ccNum(x.last[f]);
+  const reelsNA = '릴스는 API가 프로필 방문·팔로우를 주지 않음';
+  const noSnap = '인스타 스냅샷 수집 전(하루 4회 06·12·18·23시 수집)';
+  const th = (k, l) => `<th onclick="ogSortBy('${k}')" style="cursor:pointer;">${l} ${col === k ? (dir > 0 ? '▲' : '▼') : ''}</th>`;
+  const igRows = media.map(x => `<tr>
+      <td>${ccMd(x.m.date)}<div class="sub">${ccEsc((x.m.ts || '').slice(11, 16))}</div></td>
+      <td><a href="${ccEsc(x.m.permalink)}" target="_blank" rel="noopener">${x.m.thumb ? `<img class="cc-og-thumb" src="${ccEsc(x.m.thumb)}" loading="lazy" alt="">` : '열기'}</a></td>
+      <td>${ccEsc(x.m.type)}<div class="sub" style="max-width:220px;white-space:normal;">${ccEsc(x.m.caption)}</div></td>
+      <td class="n">${cell(x, 'views', noSnap)}</td><td class="n">${cell(x, 'reach', noSnap)}</td><td class="n">${cell(x, 'saved', noSnap)}</td>
+      <td class="n">${cell(x, 'shares', noSnap)}</td><td class="n">${cell(x, 'comments', noSnap)}</td><td class="n">${cell(x, 'likes', noSnap)}</td>
+      <td class="n">${cell(x, 'profile_visits', x.m.type === '릴스' ? reelsNA : noSnap)}</td><td class="n">${cell(x, 'follows', x.m.type === '릴스' ? reelsNA : noSnap)}</td>
+      <td class="n">${x.last.views ? ccPct(((x.last.saved || 0) + (x.last.shares || 0)) / x.last.views) : na(noSnap)}</td>
+      <td class="n">${x.m.h24 ? ccNum(x.m.h24.views) + `<div class="sub">${x.m.h24.age_h}시간 시점</div>` : na('게시 후 24~31시간 사이 수집값이 없음(수집 시작 전 게시물)')}</td>
+      <td class="n">${x.dv == null ? na('기간 시작 전 스냅샷이 없어 증가분 계산 불가') : ccNum(x.dv)}</td></tr>`).join('');
+
+  const fol = O.followers || [];
+  const fAt = d => { let r = null; fol.forEach(x => { if (x.date <= d) r = x; }); return r; };
+  const fEnd = fAt(b), fStart = fAt(ccAddDays(a, -1));
+  const yt = Object.entries((O.youtube || {}).videos || {}).map(([id, v]) => ({ id, v, last: ogAt(v.daily, '9999-12-31') || {}, dv: ogDelta(v.daily, a, b, v.published, 'views') }))
+    .filter(x => (x.v.published >= a && x.v.published <= b) || (x.dv != null && x.dv > 0)).sort((x, y) => (y.v.published || '').localeCompare(x.v.published || ''));
+  const blog = ((O.blog || {}).posts || []).filter(p => p.date >= a && p.date <= b);
+  const igAt = (O.ig || {}).collected_at;
+
+  el.innerHTML = `<div class="cc-og">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+      <div><h2 style="font-size:1rem;font-weight:700;">🌱 오가닉 콘텐츠</h2>
+        <div class="cc-meta">기간 ${ccMd(a)}~${ccMd(b)} · 기간 안 게시물 + 기간 중 조회가 늘어난 게시물</div></div>
+      <div class="cc-meta" style="text-align:right;">${ccStamp(D)} · 인스타 수집 ${igAt ? new Date(igAt).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-'}
+        <button class="report-btn" style="margin-left:6px;" onclick="loadCampaignCompare(true,'organic')">새로고침</button></div>
+    </div>
+    ${ccPeriodBar(a, b, today, 'renderOrganic')}
+    <div class="cc-kpis">
+      <div class="cc-kpi"><div class="l">인스타 팔로워</div><div class="v">${fEnd ? ccNum(fEnd.followers) : '-'}</div>
+        <div class="s">${fEnd && fStart ? `기간 중 ${fEnd.followers - fStart.followers >= 0 ? '+' : ''}${fEnd.followers - fStart.followers}` : '기간 증감 계산 불가'} · ${fEnd ? ccMd(fEnd.date) + ' 기준' : ''}</div></div>
+      <div class="cc-kpi"><div class="l">기간 내 인스타 게시물</div><div class="v">${media.filter(x => x.m.date >= a && x.m.date <= b).length}개</div><div class="s">릴스 ${media.filter(x => x.m.date >= a && x.m.date <= b && x.m.type === '릴스').length}개</div></div>
+      <div class="cc-kpi"><div class="l">기간 내 유튜브 영상</div><div class="v">${yt.filter(x => x.v.published >= a && x.v.published <= b).length}개</div><div class="s">youtube_full.json 기준</div></div>
+      <div class="cc-kpi"><div class="l">기간 내 블로그 글</div><div class="v">${blog.length}개</div><div class="s">조회수는 수집 안 됨</div></div>
+    </div>
+    <div class="cc-meta">⚠️ 게시물별 사이트 행동은 연결 불가(프로필 링크 하나로 유입). 게시물별로 보려면 게시물마다 다른 링크가 필요. 사이트 유입 합계는 캠페인 비교 탭의 “인스타 오가닉” 채널 행 참고.</div>
+    <h3>인스타그램 게시물·릴스</h3>
+    <div class="cc-wrap"><table class="cc-table" style="min-width:1000px;"><thead><tr>
+      ${th('date', '게시일')}<th>썸네일</th><th>형식</th>${th('views', '조회')}${th('reach', '도달')}${th('saved', '저장')}${th('shares', '공유')}${th('comments', '댓글')}${th('likes', '좋아요')}
+      ${th('profile_visits', '프로필 방문')}${th('follows', '팔로우')}${th('ratio', '저장·공유/조회')}${th('h24', '24h 조회')}${th('dv', '기간 중 조회 증가')}
+    </tr></thead><tbody>${igRows || `<tr><td colspan="14" style="text-align:center;padding:20px;color:var(--t2);">기간 안 게시물 없음</td></tr>`}</tbody></table></div>
+    <div class="cc-meta" style="margin-top:6px;">조회~팔로우는 최신 수집 시점 누적(게시 이후 전체), ‘기간 중 조회 증가’만 기간 기준. 릴스는 24시간 시점 조회로 판정(대표님 9/29) — 24h 조회는 게시 후 24~31시간 사이 첫 수집값.</div>
+    <h3>유튜브</h3>
+    <div class="cc-wrap"><table class="cc-table" style="min-width:640px;"><thead><tr><th>게시일</th><th>제목</th><th class="n">조회</th><th class="n">좋아요</th><th class="n">댓글</th><th class="n">기간 중 조회 증가</th></tr></thead><tbody>
+      ${yt.map(x => `<tr><td>${ccMd(x.v.published)}</td><td><a href="https://www.youtube.com/watch?v=${ccEsc(x.id)}" target="_blank" rel="noopener">${ccEsc(x.v.title)}</a></td>
+        <td class="n">${ccNum(x.last.views)}</td><td class="n">${ccNum(x.last.likes)}</td><td class="n">${ccNum(x.last.comments)}</td>
+        <td class="n">${x.dv == null ? ccNA('기간 시작 전 스냅샷이 없어 증가분 계산 불가') : ccNum(x.dv)}</td></tr>`).join('') || `<tr><td colspan="6" style="text-align:center;padding:16px;color:var(--t2);">기간 안 영상 없음</td></tr>`}
+    </tbody></table></div>
+    <h3>네이버 블로그</h3>
+    <div class="cc-wrap"><table class="cc-table" style="min-width:480px;"><thead><tr><th>게시일</th><th>제목</th></tr></thead><tbody>
+      ${blog.map(p => `<tr><td>${ccMd(p.date)}</td><td><a href="${ccEsc(p.url)}" target="_blank" rel="noopener">${ccEsc(p.title)}</a></td></tr>`).join('') || `<tr><td colspan="2" style="text-align:center;padding:16px;color:var(--t2);">기간 안 글 없음 (최근 글 ${ccEsc(((O.blog || {}).posts || []).map(p => p.date).sort().slice(-1)[0] || '-')})</td></tr>`}
+    </tbody></table></div>
+  </div>`;
+}
 </script>
 </body>
 </html>
