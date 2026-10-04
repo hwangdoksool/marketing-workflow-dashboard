@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generated": "2026-09-28T10:00:05",
+    "generated": "2026-10-05T08:00:03",
     "sources": [
       "ga4_full.json",
       "meta_full.json",
       "naver_full.json",
       "imweb_body_sales.json"
     ],
-    "weekCount": 146,
+    "weekCount": 147,
     "ga4BotFilter": "ga4.sessions/users/newUsers = 봇 제외(2026-01-01~), *Raw = 봇 포함 원값"
   },
   "weeks": {
@@ -5970,16 +5970,16 @@
     "2026-W39": {
       "period": "2026-09-21~2026-09-27",
       "ga4": {
-        "sessions": 1728,
-        "users": 1691,
-        "newUsers": 1295,
-        "pageviews": 2869,
-        "engagedSessions": 401,
-        "bounceRate": 0.5797,
-        "avgDuration": 98.2,
-        "sessionsRaw": 2460,
-        "usersRaw": 2421,
-        "newUsersRaw": 1998
+        "sessions": 1698,
+        "users": 1660,
+        "newUsers": 1338,
+        "pageviews": 2999,
+        "engagedSessions": 987,
+        "bounceRate": 0.486,
+        "avgDuration": 96.7,
+        "sessionsRaw": 2481,
+        "usersRaw": 2442,
+        "newUsersRaw": 2079
       },
       "meta": {
         "impressions": 115555,
@@ -5998,15 +5998,63 @@
       },
       "imweb": {},
       "summary": {
-        "sessions": 1728,
-        "users": 1691,
-        "newUsers": 1295,
-        "sessionsRaw": 2460,
+        "sessions": 1698,
+        "users": 1660,
+        "newUsers": 1338,
+        "sessionsRaw": 2481,
         "totalAdSpend": 390137,
         "metaSpend": 364220,
         "naverSpend": 25917,
         "impressions": 120508,
         "clicks": 1481,
+        "bodySales": 0,
+        "feelBookings": 0,
+        "revenue": 0,
+        "cpa": null,
+        "roas": 0.0,
+        "pixelPurchases": 0
+      }
+    },
+    "2026-W40": {
+      "period": "2026-09-28~2026-10-04",
+      "ga4": {
+        "sessions": 6940,
+        "users": 6801,
+        "newUsers": 6006,
+        "pageviews": 11376,
+        "engagedSessions": 4192,
+        "bounceRate": 0.3765,
+        "avgDuration": 57.4,
+        "sessionsRaw": 7431,
+        "usersRaw": 7296,
+        "newUsersRaw": 6475
+      },
+      "meta": {
+        "impressions": 101795,
+        "clicks": 7246,
+        "adSpend": 662056,
+        "ctr": 7.12,
+        "cpc": 91,
+        "pixelPurchases": 0
+      },
+      "naver": {
+        "impressions": 6600,
+        "clicks": 142,
+        "spend": 45470,
+        "ctr": 2.15,
+        "cpc": 320
+      },
+      "imweb": {},
+      "summary": {
+        "sessions": 6940,
+        "users": 6801,
+        "newUsers": 6006,
+        "sessionsRaw": 7431,
+        "totalAdSpend": 707526,
+        "metaSpend": 662056,
+        "naverSpend": 45470,
+        "impressions": 108395,
+        "clicks": 7388,
         "bodySales": 0,
         "feelBookings": 0,
         "revenue": 0,
