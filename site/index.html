@@ -254,11 +254,15 @@ select.form-input{cursor:pointer;}
 
 /* ── Gantt chart ── */
 .gantt-wrap{overflow-x:auto;margin-top:16px;}
-.gantt-header{display:flex;position:sticky;top:0;z-index:2;background:var(--s);border-bottom:2px solid var(--b);}
+.gantt-header{display:flex;position:sticky;top:0;z-index:4;background:var(--s);border-bottom:2px solid var(--b);}
+.gantt-header .gantt-label{z-index:5;}
 .gantt-row{display:flex;border-bottom:1px solid var(--b);align-items:stretch;cursor:pointer;transition:background .1s;}
 .gantt-row:hover{background:var(--s2);}
 .gantt-row.expanded{background:var(--s2);}
-.gantt-label{min-width:180px;max-width:180px;padding:8px 10px;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:6px;border-right:1px solid var(--b);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gantt-row.expanded>.gantt-label{background:var(--s2);}
+.gantt-row:hover>.gantt-label{background:var(--s2);}
+.gantt-sub-rows .gantt-row.ad-row.ad-active>.gantt-label{background:var(--s2);}
+.gantt-label{min-width:180px;max-width:180px;padding:8px 10px;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:6px;border-right:1px solid var(--b);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;position:sticky;left:0;z-index:3;background:var(--s);}
 .gantt-label .arrow{font-size:.6rem;color:var(--t2);transition:transform .15s;}
 .gantt-row.expanded .gantt-label .arrow{transform:rotate(90deg);}
 .gantt-track{display:flex;flex:1;position:relative;}
@@ -271,7 +275,7 @@ select.form-input{cursor:pointer;}
 .gantt-row.expanded+.gantt-sub-rows{display:block;}
 .gantt-sub-rows .gantt-row{background:var(--s);cursor:default;}
 .gantt-sub-rows .gantt-row:hover{background:var(--s2);}
-.gantt-sub-rows .gantt-label{font-weight:400;font-size:.73rem;color:var(--t2);padding-left:24px;}
+.gantt-sub-rows .gantt-label{font-weight:400;font-size:.73rem;color:var(--t2);padding-left:24px;background:var(--s);}
 .gantt-sub-rows .gantt-row.ad-row{cursor:pointer;}
 .gantt-sub-rows .gantt-row.ad-row:hover{background:var(--s2);}
 .gantt-sub-rows .gantt-row.ad-row.ad-active{background:var(--s2);border-left:3px solid var(--ac);}
@@ -281,7 +285,7 @@ select.form-input{cursor:pointer;}
 .gantt-sub-rows .gantt-row.ad-row:hover .ad-chart-hint{opacity:1;}
 .gantt-sub-rows .gantt-row.ad-row.ad-active .ad-chart-hint{opacity:0;}
 .gantt-sparkline{position:absolute;bottom:2px;left:0;width:100%;height:16px;pointer-events:none;}
-.gantt-summary{font-size:.68rem;color:var(--t2);padding:4px 10px 4px 24px;display:flex;gap:12px;flex-wrap:wrap;}
+.gantt-summary{font-size:.68rem;color:var(--t2);padding:4px 10px 4px 24px;display:flex;gap:12px;flex-wrap:wrap;position:sticky;left:0;}
 .gantt-summary span{white-space:nowrap;}
 .gantt-header-label{min-width:180px;max-width:180px;padding:6px 10px;font-size:.7rem;font-weight:700;color:var(--t2);border-right:1px solid var(--b);}
 .gantt-header-dates{display:flex;flex:1;}
@@ -378,6 +382,7 @@ select.form-input{cursor:pointer;}
     <button class="main-tab" data-tab="briefs">📋 워크플로우</button>
     <button class="main-tab" data-tab="meeting">🤝 미팅</button>
     <button class="main-tab" data-tab="creative">🎨 소재</button>
+    <button class="main-tab" data-tab="meta">🧪 Meta 실험 DB</button>
     <button class="main-tab" data-tab="settings">⚙️ 더보기</button>
     <button class="main-tab" data-tab="feel">🏋️ 체험신청</button>
     <button class="main-tab" data-tab="leads">🤝 B2B 리드 <span id="leads-badge" class="badge" style="display:none;margin-left:4px;background:var(--g);color:#fff;">0</span></button>
@@ -482,6 +487,22 @@ select.form-input{cursor:pointer;}
     </nav>
     <div id="creative-sub-schema"></div>
     <div id="creative-sub-tagger" style="display:none;"></div>
+  </div>
+
+  <!-- TAB: Meta 캠페인 실험 DB -->
+  <div class="tab-content" id="tab-meta" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+      <div>
+        <h2 style="font-size:1rem;font-weight:700;">🧪 Meta 캠페인 실험 DB</h2>
+        <p style="font-size:.75rem;color:var(--t2);max-width:820px;line-height:1.6;">
+          2026년 Meta API 기준 캠페인, 광고세트, 광고 소재, 설정값, 성과 reference를 한곳에서 보는 리뷰용 DB입니다.
+          실제 전환 평가는 아임웹 본체 판매 + 체험신청 기준으로 별도 판정합니다.
+        </p>
+      </div>
+      <a class="btn" href="meta-experiments.html" target="_blank" style="text-decoration:none;">새 창으로 열기</a>
+    </div>
+    <div id="metaExperimentStatus" style="font-size:.75rem;color:var(--t2);margin-bottom:8px;">Meta 실험 DB를 불러오는 중입니다...</div>
+    <iframe id="metaExperimentFrame" title="Meta 캠페인 실험 DB" style="width:100%;height:calc(100vh - 210px);min-height:720px;border:1px solid var(--b);border-radius:10px;background:var(--s);" loading="lazy"></iframe>
   </div>
 
   <div class="tab-content" id="tab-weekly" style="display:none!important;">
@@ -1524,7 +1545,7 @@ function toggleTheme(){
    Tab Navigation
    ═══════════════════════════════════════════════════ */
 // 전역 탭 라우팅
-const mainTabIds = ['tab-briefs','tab-meeting','tab-analysis','tab-creative','tab-settings','tab-feel','tab-leads'];
+const mainTabIds = ['tab-briefs','tab-meeting','tab-analysis','tab-creative','tab-meta','tab-settings','tab-feel','tab-leads'];
 
 function activateMainTab(tabName, skipHash) {
   document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
@@ -1540,13 +1561,33 @@ function activateMainTab(tabName, skipHash) {
   // Auto-load data for feel/leads/daily tabs
   if (tabName === 'feel') loadBookings();
   if (tabName === 'leads') loadLeads();
+  if (tabName === 'meta') loadMetaExperimentFrame();
+}
+
+let metaExperimentFrameLoaded = false;
+function loadMetaExperimentFrame() {
+  if (metaExperimentFrameLoaded) return;
+  const frame = document.getElementById('metaExperimentFrame');
+  const status = document.getElementById('metaExperimentStatus');
+  if (!frame) return;
+  metaExperimentFrameLoaded = true;
+  fetch('meta-experiments.html')
+    .then(r => r.ok ? r.text() : Promise.reject(new Error(`HTTP ${r.status}`)))
+    .then(html => {
+      frame.srcdoc = html;
+      if (status) status.style.display = 'none';
+    })
+    .catch(err => {
+      metaExperimentFrameLoaded = false;
+      if (status) status.textContent = `Meta 실험 DB를 불러오지 못했습니다. 새 창으로 열기를 사용하세요. (${err.message})`;
+    });
 }
 
 function routeFromHash() {
   const hash = (window.location.hash || '').replace('#','');
   if (!hash) { activateMainTab('analysis', true); setTimeout(() => switchAnalysisSub('daily'), 50); return; }
   const [main, sub] = hash.split('/');
-  const validMains = ['briefs','meeting','analysis','creative','settings','feel','leads'];
+  const validMains = ['briefs','meeting','analysis','creative','meta','settings','feel','leads'];
   if (validMains.includes(main)) {
     activateMainTab(main, true);
     if (main === 'analysis' && sub) setTimeout(() => switchAnalysisSub(sub), 50);
@@ -4080,17 +4121,11 @@ let bookingsData = [];
 let bookingsFilter = 'all';
 
 async function loadBookings(){
+  // 2026-10-11: 이 대시보드는 로그인 없이 공개돼 있어 체험 신청자 개인정보(이름·연락처)를 보여주지 않는다.
+  // 공개 anon 키의 feel_bookings 조회·수정 권한도 제거됨 → 신청 관리는 Access 로그인이 필요한 체험 관리 대시보드에서.
   const fv = document.getElementById('feel-view');
-  fv.innerHTML='<div style="padding:40px;text-align:center;color:var(--t2);">체험 신청 데이터 불러오는 중...</div>';
-  try {
-    const res = await fetch(`${SB_URL}/rest/v1/feel_bookings?select=*&order=created_at.desc`, {
-      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
-    });
-    bookingsData = await res.json();
-    renderBookings();
-  } catch(e) {
-    fv.innerHTML='<div style="padding:40px;text-align:center;color:var(--r);">데이터를 불러올 수 없습니다.</div>';
-  }
+  bookingsData = [];
+  fv.innerHTML='<div style="padding:40px;text-align:center;color:var(--t2);line-height:1.7;">체험 신청 관리는 개인정보 보호를 위해 로그인 필요한 <a href="https://rf-feel-dashboard.pages.dev" target="_blank" style="color:var(--bl);">체험 관리 대시보드 ↗</a>로 옮겼습니다.</div>';
 }
 
 function renderBookings(){
@@ -4391,13 +4426,8 @@ function openBookingModal(bookingId){
 
 // ── Auto-save helpers ──
 async function patchBooking(bookingId, updates){
-  await fetch(`${SB_URL}/rest/v1/feel_bookings?id=eq.${bookingId}`, {
-    method:'PATCH',
-    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-    body:JSON.stringify(updates)
-  });
-  const b = bookingsData.find(x=>x.id===bookingId);
-  if(b) Object.assign(b, updates);
+  // 2026-10-11: 공개 페이지에서는 예약 수정 불가 (anon 수정 권한 제거) — 체험 관리 대시보드 사용
+  throw new Error('체험 신청 수정은 체험 관리 대시보드(rf-feel-dashboard.pages.dev)에서 해주세요');
 }
 
 async function updateBookingStatus(bookingId, status){
@@ -4960,6 +4990,7 @@ let dailyRawData = null;
 let campRawData = null;
 let actionsRawData = null;
 let funnelRawData = null;
+let adEngagementData = null;
 let dailySelectedPreset = '30';  // '7','14','30','all','custom'
 let dailyCustomStart = '';
 let dailyCustomEnd = '';
@@ -4975,12 +5006,14 @@ function loadDailyMetricsInto(container) {
     fetch('daily_metrics.json').then(r => r.ok ? r.json() : Promise.reject('daily_metrics fetch failed')),
     fetch('campaigns_daily.json').then(r => r.ok ? r.json() : Promise.reject('campaigns_daily fetch failed')),
     fetch('daily_actions.json').then(r => r.ok ? r.json() : Promise.reject('daily_actions fetch failed')),
-    fetch('daily_funnel_events.json').then(r => r.ok ? r.json() : Promise.reject('daily_funnel_events fetch failed'))
-  ]).then(([dailyData, campData, actionsData, funnelData]) => {
+    fetch('daily_funnel_events.json').then(r => r.ok ? r.json() : Promise.reject('daily_funnel_events fetch failed')),
+    fetch('ad_engagement.json').then(r => r.ok ? r.json() : null).catch(() => null)
+  ]).then(([dailyData, campData, actionsData, funnelData, adEngData]) => {
     dailyChartsLoaded = true;
     dailyRawData = dailyData;
     campRawData = campData;
     actionsRawData = actionsData;
+    adEngagementData = adEngData;
     funnelRawData = funnelData;
     filterAndRender();
   }).catch(err => {
@@ -5059,7 +5092,6 @@ function filterAndRender() {
   }
 
   const filteredRows = allRows.filter(r => r.date >= startDate && r.date <= endDate);
-  const filteredDates = filteredRows.map(r => r.date);
 
   // Destroy existing Chart.js instances
   container.querySelectorAll('canvas').forEach(c => {
@@ -5072,7 +5104,7 @@ function filterAndRender() {
   // 1) Date picker
   renderDatePicker(container, allDates);
 
-  // 2) KPI + Charts
+  // 2) KPI + Charts — 차트/KPI는 필터된 기간, 간트는 전체
   requestAnimationFrame(() => {
     const spendByDate = {};
     (campRawData?.campaigns || []).forEach(c => Object.entries(c.daily || {}).forEach(([d,v]) => { if (d >= startDate && d <= endDate) spendByDate[d] = (spendByDate[d] || 0) + (v.spend || 0); }));
@@ -5080,9 +5112,12 @@ function filterAndRender() {
     Object.entries(actionsRawData?.by_date || {}).forEach(([d,v]) => { if (d >= startDate && d <= endDate) actionsByDate[d] = v; });
     const funnelByDate = {};
     (funnelRawData?.daily || []).forEach(r => { if (r.date >= startDate && r.date <= endDate) funnelByDate[r.date] = r; });
-    renderDailyView({ daily: filteredRows, spendByDate, actionsByDate, funnelByDate, funnelNotes: funnelRawData?.notes || {} }, container);
+    renderDailyView({
+      daily: filteredRows,
+      spendByDate, actionsByDate, funnelByDate, funnelNotes: funnelRawData?.notes || {}
+    }, container);
     const dailyByDate = {}; filteredRows.forEach(r => dailyByDate[r.date] = r);
-    renderCampaignGantt(filteredDates, campRawData, dailyByDate, container);
+    renderCampaignGantt(filteredRows.map(r=>r.date), campRawData, dailyByDate, container);
     // 세부 차트는 간트 아래에 토글로 삽입 — DOM 끝에 추가
     const detailDiv = document.createElement('div');
     detailDiv.id = 'detail-charts-area';
@@ -5096,15 +5131,23 @@ function filterAndRender() {
           <div class="card" style="margin-bottom:10px;"><div class="card-title">참여율 + 페이지/세션 + 체류시간</div><div style="position:relative;width:100%;height:180px;"><canvas id="dailyChart-engagement"></canvas></div></div>
           <div class="card" style="margin-bottom:10px;"><div class="card-title">채널별 평균 체류시간</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-channelDuration"></canvas></div></div>
           <div class="card" style="margin-bottom:10px;"><div class="card-title">신규 vs 재방문 세션</div><div style="position:relative;width:100%;height:180px;"><canvas id="dailyChart-newReturn"></canvas></div></div>
+          <div class="card" style="margin-bottom:10px;"><div class="card-title">페이지별 방문자 수</div><div style="font-size:.72rem;color:var(--t2);margin:-4px 0 6px;">주요 페이지별 일별 방문자 수 추이</div><div style="position:relative;width:100%;height:280px;"><canvas id="dailyChart-pages"></canvas></div></div>
         </div>
       </details>`;
       // 토글 열릴 때 차트 렌더
       const det = placeholder.querySelector('details');
       let detailRendered = false;
       det.addEventListener('toggle', () => {
-        if (det.open && !detailRendered) {
+        if (det.open) {
+          // 기간 변경 시 차트 재렌더를 위해 기존 차트 파괴
+          if (detailRendered) {
+            ['dailyChart-durationDetail','dailyChart-engagement','dailyChart-channelDuration','dailyChart-newReturn','dailyChart-pages'].forEach(id => {
+              const c = document.getElementById(id);
+              if (c) { const ci = Chart.getChart(c); if (ci) ci.destroy(); }
+            });
+          }
           detailRendered = true;
-          renderDetailCharts(container);
+          renderDetailCharts(container, startDate, endDate);
         }
       });
     }
@@ -5153,7 +5196,7 @@ function renderDailyView(data, container) {
       <div class="kpi-card" style="padding:8px;"><div class="label" style="font-size:.65rem;">평균 체류시간</div><div class="value" style="font-size:1rem;">${Math.round(rows.reduce((acc,r)=>acc+(r.avg_session_duration||0),0)/Math.max(rows.length,1))}초</div></div>
     </div>`;
 
-  // Chart containers — 2 compact charts
+  // Chart containers
   const chartsHtml = `
     <div class="card" style="margin-bottom:10px;"><div class="card-title">트래픽 + 전환 + 광고비</div><div style="position:relative;width:100%;height:200px;"><canvas id="dailyChart-trafficConv"></canvas></div></div>
     <div class="card" style="margin-bottom:10px;"><div class="card-title">일자별 퍼널 전환</div><div style="font-size:.72rem;color:var(--t2);margin:-4px 0 8px;line-height:1.5;">체험신청부터 유효 판매전환까지, 날짜별 전환 흐름만 보이도록 정리한 차트입니다.</div><div style="position:relative;width:100%;height:220px;"><canvas id="dailyChart-funnel"></canvas></div></div>
@@ -5252,10 +5295,11 @@ function renderDailyView(data, container) {
     data:{
       labels,
       datasets:[
+        { label:'카카오문의', data:funnelRows.map(r=>r.kakao_inquiries), backgroundColor:'#f39c12aa', stack:'funnel', order:3 },
         { label:'체험신청', data:funnelRows.map(r=>r.feel_bookings), backgroundColor:'#2ecc71aa', stack:'funnel', order:3 },
-        { label:'결제시작', data:funnelRows.map(r=>r.begin_checkout), backgroundColor:acColor+'bb', stack:'funnel', order:3 },
-        { label:'결제정보입력', data:funnelRows.map(r=>r.add_payment_info), backgroundColor:'#74b9ffaa', stack:'funnel', order:3 },
-        { label:'유효 판매전환', data:funnelRows.map(r=>r.valid_sales_conversions), backgroundColor:'#fdcb6eaa', stack:'funnel', order:3 },
+        { label:'결제시작', data:funnelRows.map(r=>r.begin_checkout), backgroundColor:'#5252FF44', stack:'funnel', order:3 },
+        { label:'결제정보입력', data:funnelRows.map(r=>r.add_payment_info), backgroundColor:'#5252FF77', stack:'funnel', order:3 },
+        { label:'판매', data:funnelRows.map(r=>r.valid_sales_conversions), backgroundColor:'#5252FFcc', stack:'funnel', order:3 },
         { label:'본체판매', data:funnelRows.map(r=>r.body_units), type:'line', borderColor:gColor, backgroundColor:gColor+'22', tension:.25, fill:false, pointRadius:2, borderWidth:2, yAxisID:'y1', order:1 }
       ]
     },
@@ -5270,10 +5314,11 @@ function renderDailyView(data, container) {
               const idx = items[0].dataIndex;
               const r = funnelRows[idx];
               return [
+                `카카오문의: ${r.kakao_inquiries}건`,
                 `체험신청: ${r.feel_bookings}건`,
                 `결제시작: ${r.begin_checkout}명`,
                 `결제정보입력: ${r.add_payment_info}명`,
-                `유효 판매전환: ${r.valid_sales_conversions}건`,
+                `판매: ${r.valid_sales_conversions}건`,
                 `본체판매: ${r.body_units}대`
               ];
             },
@@ -5368,7 +5413,7 @@ function renderDailyView(data, container) {
 }
 
 // === 세부 분석 차트 (ga4_detail.json) ===
-async function renderDetailCharts(container) {
+async function renderDetailCharts(container, filterStart, filterEnd) {
   let detail;
   try { detail = await fetch('ga4_detail.json').then(r=>r.json()); } catch(e) { return; }
   const cs = getComputedStyle(document.documentElement);
@@ -5378,9 +5423,10 @@ async function renderDetailCharts(container) {
   const yColor = cs.getPropertyValue('--y').trim();
   const rColor = cs.getPropertyValue('--r').trim();
   const commonX = { ticks:{color:'#8b90a0',font:{size:9},maxRotation:0}, grid:{color:'rgba(255,255,255,.05)'} };
+  const inRange = d => { const dd = d.replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3'); return (!filterStart || dd >= filterStart) && (!filterEnd || dd <= filterEnd); };
 
   // 0. 체류시간 상세: 참여 세션 vs 이탈 세션 + 참여자 평균 체류시간
-  const eng = (detail.daily_engagement||[]).sort((a,b)=>a.date.localeCompare(b.date));
+  const eng = (detail.daily_engagement||[]).filter(r=>inRange(r.date)).sort((a,b)=>a.date.localeCompare(b.date));
   if (eng.length && document.getElementById('dailyChart-durationDetail')) {
     const labels = eng.map(r=>r.date.slice(4).replace(/(\d{2})(\d{2})/,'$1-$2'));
     new Chart(document.getElementById('dailyChart-durationDetail'), {
@@ -5441,7 +5487,7 @@ async function renderDetailCharts(container) {
   }
 
   // 2. Channel duration — top channels stacked area
-  const chRows = (detail.daily_channels||[]).sort((a,b)=>a.date.localeCompare(b.date));
+  const chRows = (detail.daily_channels||[]).filter(r=>inRange(r.date)).sort((a,b)=>a.date.localeCompare(b.date));
   if (chRows.length) {
     const chDates = [...new Set(chRows.map(r=>r.date))].sort();
     const chLabels = chDates.map(d=>d.slice(4).replace(/(\d{2})(\d{2})/,'$1-$2'));
@@ -5452,13 +5498,32 @@ async function renderDetailCharts(container) {
     const chColors = [acColor, blColor, gColor, yColor, rColor];
     const chByDateCh = {};
     chRows.forEach(r => { chByDateCh[r.date+'|'+r.channel] = r; });
-    const datasets = topCh.map((ch, i) => ({
-      label: ch,
-      data: chDates.map(d => Math.round((chByDateCh[d+'|'+ch]||{}).avg_duration||0)),
-      borderColor: chColors[i%5],
-      backgroundColor: chColors[i%5]+'33',
-      tension:.3, fill:true, pointRadius:0, borderWidth:1.5,
-    }));
+    // 전체 평균 체류시간 (날짜별 세션가중평균)
+    const totalByDate = {};
+    chRows.forEach(r => {
+      const t = totalByDate[r.date] || { dur: 0, sess: 0 };
+      t.dur += (r.avg_duration||0) * (r.sessions||0);
+      t.sess += (r.sessions||0);
+      totalByDate[r.date] = t;
+    });
+    const datasets = [
+      {
+        label: '전체 평균',
+        data: chDates.map(d => { const t = totalByDate[d]; return t && t.sess > 0 ? Math.round(t.dur / t.sess) : 0; }),
+        borderColor: '#fff',
+        backgroundColor: 'transparent',
+        tension:.3, fill:false, pointRadius:2, borderWidth:3,
+        order: 0,
+      },
+      ...topCh.map((ch, i) => ({
+        label: ch,
+        data: chDates.map(d => Math.round((chByDateCh[d+'|'+ch]||{}).avg_duration||0)),
+        borderColor: chColors[i%5],
+        backgroundColor: chColors[i%5]+'33',
+        tension:.3, fill:true, pointRadius:0, borderWidth:1.5,
+        order: i+1,
+      }))
+    ];
     new Chart(document.getElementById('dailyChart-channelDuration'), {
       type:'line',
       data:{ labels: chLabels, datasets },
@@ -5477,7 +5542,7 @@ async function renderDetailCharts(container) {
   }
 
   // 3. New vs Returning sessions
-  const nrRows = (detail.daily_new_returning||[]).sort((a,b)=>a.date.localeCompare(b.date));
+  const nrRows = (detail.daily_new_returning||[]).filter(r=>inRange(r.date)).sort((a,b)=>a.date.localeCompare(b.date));
   if (nrRows.length) {
     const nrDates = [...new Set(nrRows.map(r=>r.date))].sort();
     const nrLabels = nrDates.map(d=>d.slice(4).replace(/(\d{2})(\d{2})/,'$1-$2'));
@@ -5500,6 +5565,40 @@ async function renderDetailCharts(container) {
       }
     });
   }
+
+  // 4. Pages — top pages stacked bar
+  const pgRows = (detail.daily_pages||[]).filter(r=>inRange(r.date)).sort((a,b)=>a.date.localeCompare(b.date));
+  if (pgRows.length && document.getElementById('dailyChart-pages')) {
+    const pgDates = [...new Set(pgRows.map(r=>r.date))].sort();
+    const pgLabels = pgDates.map(d=>d.slice(4).replace(/(\d{2})(\d{2})/,'$1-$2'));
+    const pgTotals = {};
+    pgRows.forEach(r => { pgTotals[r.page] = (pgTotals[r.page]||0) + r.users; });
+    const topPg = Object.entries(pgTotals).sort((a,b)=>b[1]-a[1]).slice(0,7).map(x=>x[0]);
+    const pgColors = ['#6c5ce7','#74b9ff','#00b894','#fdcb6e','#e17055','#a29bfe','#ff9f40'];
+    const pgByDatePage = {};
+    pgRows.forEach(r => { pgByDatePage[r.date+'|'+r.page] = r; });
+    const pgNames = { '/':'메인', '/funding/':'펀딩', '/community/':'커뮤니티', '/community':'커뮤니티', '/feel':'체험신청', '/reviews/':'리뷰', '/reviews':'리뷰', '/links':'링크', '/login':'로그인', '/Business':'B2B', '/faq':'FAQ' };
+    const pgDatasets = topPg.map((pg, i) => ({
+      label: pgNames[pg] || pg,
+      data: pgDates.map(d => (pgByDatePage[d+'|'+pg]||{}).users||0),
+      backgroundColor: pgColors[i%7]+'bb',
+      stack:'pg',
+    }));
+    new Chart(document.getElementById('dailyChart-pages'), {
+      type:'bar',
+      data:{ labels: pgLabels, datasets: pgDatasets },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        interaction:{ mode:'index', intersect:false },
+        plugins:{ legend:{ labels:{ color:'#8b90a0', font:{size:9}, usePointStyle:true, pointStyle:'circle', padding:8 } } },
+        scales:{
+          x: commonX,
+          y:{ stacked:true, ticks:{color:'#8b90a0',font:{size:9}}, grid:{color:'rgba(255,255,255,.05)'}, title:{display:true,text:'방문자 수',color:'#8b90a0',font:{size:9}} },
+        }
+      }
+    });
+  }
+
 }
 
 const _adChartInstances = {};
@@ -5527,16 +5626,64 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
   Object.keys(_adChartInstances).forEach(k => { try { _adChartInstances[k].destroy(); } catch(e){} delete _adChartInstances[k]; });
   Object.keys(_campChartInstances).forEach(k => { try { _campChartInstances[k].destroy(); } catch(e){} delete _campChartInstances[k]; });
 
-  const campaigns = campData.campaigns || [];
-  if (!campaigns.length || !dailyDates.length) return;
+  const allCampaigns = campData.campaigns || [];
+  if (!allCampaigns.length || !dailyDates.length) return;
 
   const dates = [...dailyDates].sort();
   const dateSet = new Set(dates);
   const dateIdx = {};
   dates.forEach((d,i) => dateIdx[d] = i);
 
-  // Title
-  container.insertAdjacentHTML('beforeend', '<div class="card-title" style="margin:20px 0 8px;">캠페인 / 소재 상세 데이터 <span style="font-size:.72rem;color:var(--t2);font-weight:500;">· <span style="color:#ff6b6b">P</span> Purchase · <span style="color:#ffd43b">L</span> Lead · <span style="color:#51cf66">R</span> Registration · <span style="color:#74b9ff">IC</span> InitiateCheckout</span></div>');
+  // 기간 내 데이터가 있는 캠페인 + 기간 외 캠페인 분리
+  const inPeriod = allCampaigns
+    .filter(c => Object.keys(c.daily||{}).some(d => dateSet.has(d)))
+    .map(c => {
+      const activeDates = Object.keys(c.daily||{}).filter(d=>dateSet.has(d)).sort();
+      return { ...c, _lastActive: activeDates[activeDates.length-1]||'', _isLive: (c.status||'').toUpperCase()==='ACTIVE', _inPeriod: true };
+    });
+  const outPeriod = allCampaigns
+    .filter(c => !Object.keys(c.daily||{}).some(d => dateSet.has(d)))
+    .map(c => {
+      const allDates = Object.keys(c.daily||{}).sort();
+      return { ...c, _lastActive: allDates[allDates.length-1]||'', _isLive: (c.status||'').toUpperCase()==='ACTIVE', _inPeriod: false };
+    });
+  const campaigns = [...inPeriod, ...outPeriod].sort((a,b) => {
+    if (a._inPeriod !== b._inPeriod) return a._inPeriod ? -1 : 1;
+    if (a._isLive !== b._isLive) return a._isLive ? -1 : 1;
+    return b._lastActive.localeCompare(a._lastActive);
+  });
+
+  // 필터 상태
+  let campFilter = 'live';
+  const liveCamps = campaigns.filter(c => c._isLive && c._inPeriod);
+
+  // Title + Filter
+  const titleWrap = document.createElement('div');
+  titleWrap.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin:20px 0 8px;flex-wrap:wrap;gap:6px;';
+  titleWrap.innerHTML = `
+    <div class="card-title" style="margin:0;">캠페인 / 소재 상세 데이터 <span style="font-size:.72rem;color:var(--t2);font-weight:500;">· <span style="color:#ff6b6b">P</span> Purchase · <span style="color:#ffd43b">L</span> Lead · <span style="color:#51cf66">R</span> Registration · <span style="color:#74b9ff">IC</span> InitiateCheckout</span></div>
+    <div style="display:flex;gap:4px;">
+      <button class="btn camp-filter-btn active" data-cf="live" style="font-size:.7rem;padding:3px 10px;">🟢 Live (${liveCamps.length})</button>
+      <button class="btn camp-filter-btn" data-cf="period" style="font-size:.7rem;padding:3px 10px;">기간 내 (${inPeriod.length})</button>
+    </div>`;
+  container.appendChild(titleWrap);
+
+  function applyCampFilter(filter) {
+    campFilter = filter;
+    titleWrap.querySelectorAll('.camp-filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cf === filter));
+    // 더보기 버튼 표시/숨기기
+    const moreBtn = wrap.querySelector('.camp-more-btn');
+    campaigns.forEach((c, i) => {
+      const els = wrap.querySelectorAll(`[data-camp-idx="${i}"]`);
+      let show;
+      if (filter === 'live') show = c._isLive && c._inPeriod;
+      else if (filter === 'period') show = c._inPeriod;
+      else show = true; // 'all'
+      els.forEach(el => el.style.display = show ? '' : 'none');
+    });
+    if (moreBtn) moreBtn.style.display = (filter === 'all' || outPeriod.length === 0) ? 'none' : '';
+  }
+  titleWrap.querySelectorAll('.camp-filter-btn').forEach(b => b.addEventListener('click', () => applyCampFilter(b.dataset.cf)));
 
   // Build gantt
   const wrap = document.createElement('div');
@@ -5567,10 +5714,11 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
     const row = document.createElement('div');
     row.className = 'gantt-row';
     row.dataset.idx = ci;
+    row.dataset.campIdx = ci;
 
     const daily = camp.daily || {};
     let totalSpend=0, totalClicks=0, totalImpressions=0;
-    Object.values(daily).forEach(v => { totalSpend += v.spend||0; totalClicks += v.clicks||0; totalImpressions += v.impressions||0; });
+    Object.entries(daily).forEach(([d,v]) => { if(dateSet.has(d)){ totalSpend += v.spend||0; totalClicks += v.clicks||0; totalImpressions += v.impressions||0; } });
 
     // 일별 가동 셀: spend>0인 날만 색칠
     const barColor = camp.status==='ACTIVE' ? 'var(--ac)' : 'var(--t2)';
@@ -5617,19 +5765,23 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
     const adKeys = Object.keys(adsObj);
     const expandWrap = document.createElement('div');
     expandWrap.className = 'gantt-sub-rows';
+    expandWrap.dataset.campIdx = ci;
 
     // --- Campaign summary chart ---
     const campChartId = 'camp_' + ci + '_chart';
     const campChartWrap = document.createElement('div');
     campChartWrap.id = campChartId;
-    campChartWrap.style.cssText = 'background:rgba(0,0,0,0.1);border-radius:6px;margin:4px 8px 6px;padding:8px 10px 6px;';
+    campChartWrap.style.cssText = 'background:rgba(0,0,0,0.1);border-radius:6px;margin:4px 8px 6px;padding:8px 10px 6px;position:sticky;left:0;width:calc(100vw - 60px);max-width:1060px;z-index:2;';
 
     // Campaign summary line
     const campCtr = totalImpressions ? ((totalClicks/totalImpressions)*100).toFixed(2) : '0';
     const campCpc = totalClicks ? (totalSpend/totalClicks).toFixed(0) : '0';
     const campSumLine = document.createElement('div');
     campSumLine.style.cssText = 'font-size:.7rem;color:var(--t2);margin-bottom:4px;display:flex;gap:12px;flex-wrap:wrap;';
-    campSumLine.innerHTML = `<span>Spend: <b style="color:var(--ac)">${totalSpend.toLocaleString(undefined,{maximumFractionDigits:0})}원</b></span><span>Clicks: <b style="color:var(--bl)">${totalClicks.toLocaleString()}</b></span><span>Impr: <b>${totalImpressions.toLocaleString()}</b></span><span>CTR: <b style="color:var(--g)">${campCtr}%</b></span><span>CPC: <b>${campCpc}원</b></span>`;
+    const campEngData = adEngagementData?.campaign_totals?.[camp.name] || {};
+    const campDur = campEngData.avg_duration ? campEngData.avg_duration.toFixed(0) + '초' : '-';
+    const campEngRate = campEngData.engagement_rate ? (campEngData.engagement_rate * 100).toFixed(1) + '%' : '-';
+    campSumLine.innerHTML = `<span>Spend: <b style="color:var(--ac)">${totalSpend.toLocaleString(undefined,{maximumFractionDigits:0})}원</b></span><span>Clicks: <b style="color:var(--bl)">${totalClicks.toLocaleString()}</b></span><span>Impr: <b>${totalImpressions.toLocaleString()}</b></span><span>CTR: <b style="color:var(--g)">${campCtr}%</b></span><span>CPC: <b>${campCpc}원</b></span><span style="border-left:1px solid var(--b);padding-left:8px;">⏱ 체류: <b style="color:var(--y)">${campDur}</b></span><span>참여율: <b style="color:var(--g)">${campEngRate}</b></span>`;
     campChartWrap.appendChild(campSumLine);
 
     // Campaign chart canvas
@@ -5779,12 +5931,16 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
           // Build chart container
           const chartWrap = document.createElement('div');
           chartWrap.id = chartId;
-          chartWrap.style.cssText = 'background:rgba(0,0,0,0.1);border-radius:6px;margin:0 0 4px 0;padding:8px 10px 6px;';
+          chartWrap.style.cssText = 'background:rgba(0,0,0,0.1);border-radius:6px;margin:0 0 4px 0;padding:8px 10px 6px;position:sticky;left:0;width:calc(100vw - 60px);max-width:1060px;z-index:2;';
 
           // Summary line
           const sumLine = document.createElement('div');
           sumLine.style.cssText = 'font-size:.7rem;color:var(--t2);margin-bottom:4px;display:flex;gap:12px;flex-wrap:wrap;';
-          sumLine.innerHTML = `<span>Spend: <b style="color:var(--ac)">${adSpend.toLocaleString(undefined,{maximumFractionDigits:0})}원</b></span><span>Clicks: <b style="color:var(--bl)">${adClicks.toLocaleString()}</b></span><span>CTR: <b style="color:var(--g)">${adCtr}%</b></span><span>CPC: <b>${adCpc}원</b></span>`;
+          const adEngData = adEngagementData?.ad_totals?.[adKey] || {};
+          const adDur = adEngData.avg_duration ? adEngData.avg_duration.toFixed(0) + '초' : '-';
+          const adEngRate = adEngData.engagement_rate ? (adEngData.engagement_rate * 100).toFixed(1) + '%' : '-';
+          const adPPS = adEngData.pages_per_session ? adEngData.pages_per_session.toFixed(1) : '-';
+          sumLine.innerHTML = `<span>Spend: <b style="color:var(--ac)">${adSpend.toLocaleString(undefined,{maximumFractionDigits:0})}원</b></span><span>Clicks: <b style="color:var(--bl)">${adClicks.toLocaleString()}</b></span><span>CTR: <b style="color:var(--g)">${adCtr}%</b></span><span>CPC: <b>${adCpc}원</b></span><span style="border-left:1px solid var(--b);padding-left:8px;">⏱ 체류: <b style="color:var(--y)">${adDur}</b></span><span>참여율: <b style="color:var(--g)">${adEngRate}</b></span><span>페이지/세션: <b>${adPPS}</b></span>`;
           chartWrap.appendChild(sumLine);
 
           // Canvas wrapper
@@ -5798,12 +5954,16 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
           adRow.parentNode.insertBefore(chartWrap, adRow.nextSibling);
 
           // Prepare data arrays
-          const spendData = [], clicksData = [], ctrData = [];
+          const spendData = [], clicksData = [], ctrData = [], durData = [];
+          const adEngDaily = adEngagementData?.ad_daily?.[adKey] || {};
           dates.forEach(d => {
             const v = adDaily[d];
+            const dYmd = d.replace(/-/g, '');
+            const eng = adEngDaily[dYmd] || {};
             spendData.push(v ? (v.spend||0) : 0);
             clicksData.push(v ? (v.clicks||0) : 0);
             ctrData.push(v && v.impressions ? +((v.clicks/v.impressions)*100).toFixed(2) : 0);
+            durData.push(eng.avg_duration || 0);
           });
 
           // Resolve CSS variables
@@ -5819,7 +5979,8 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
               datasets: [
                 { label: 'Spend', data: spendData, borderColor: colAc, backgroundColor: colAc + '33', borderWidth: 1.5, pointRadius: 0, tension: 0.3, yAxisID: 'y', fill: false },
                 { label: 'Clicks', data: clicksData, borderColor: colBl, backgroundColor: colBl + '33', borderWidth: 1.5, pointRadius: 0, tension: 0.3, yAxisID: 'y', fill: false },
-                { label: 'CTR %', data: ctrData, borderColor: colG, backgroundColor: colG + '33', borderWidth: 1.5, pointRadius: 0, tension: 0.3, yAxisID: 'y1', fill: false }
+                { label: 'CTR %', data: ctrData, borderColor: colG, backgroundColor: colG + '33', borderWidth: 1.5, pointRadius: 0, tension: 0.3, yAxisID: 'y1', fill: false },
+                { label: '체류(초)', data: durData, borderColor: '#fdcb6e', backgroundColor: '#fdcb6e33', borderWidth: 2, pointRadius: 1, tension: 0.3, yAxisID: 'y2', fill: false }
               ]
             },
             options: {
@@ -5830,7 +5991,8 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
               scales: {
                 x: { display: true, ticks: { font: { size: 8 }, color: cs.getPropertyValue('--t2').trim() || '#999', maxRotation: 0, autoSkip: true, maxTicksLimit: 10 }, grid: { display: false } },
                 y: { position: 'left', display: true, ticks: { font: { size: 8 }, color: cs.getPropertyValue('--t2').trim() || '#999', callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                y1: { position: 'right', display: true, ticks: { font: { size: 8 }, color: colG, callback: v => v + '%' }, grid: { display: false } }
+                y1: { position: 'right', display: true, ticks: { font: { size: 8 }, color: colG, callback: v => v + '%' }, grid: { display: false } },
+                y2: { position: 'right', offset: true, display: true, ticks: { font: { size: 8 }, color: '#fdcb6e', callback: v => v + '초' }, grid: { display: false } }
               }
             }
           });
@@ -5850,7 +6012,20 @@ function renderCampaignGantt(dailyDates, campData, dailyByDate, container) {
     wrap.appendChild(expandWrap);
   });
 
+  // 더보기 버튼
+  if (outPeriod.length > 0) {
+    const moreBtn = document.createElement('div');
+    moreBtn.className = 'camp-more-btn';
+    moreBtn.style.cssText = 'text-align:center;padding:8px;cursor:pointer;color:var(--t2);font-size:.75rem;border-top:1px solid var(--b);';
+    moreBtn.textContent = `기간 외 캠페인 ${outPeriod.length}개 더보기 ▾`;
+    moreBtn.addEventListener('click', () => applyCampFilter('all'));
+    wrap.appendChild(moreBtn);
+  }
+
   container.appendChild(wrap);
+
+  // 초기 필터 적용 — 기간 내 전체가 디폴트
+  applyCampFilter(inPeriod.length > 0 ? 'period' : 'all');
 }
 
 // 일별 지표 가이드 모달

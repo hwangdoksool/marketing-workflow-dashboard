@@ -542,7 +542,7 @@ def collect_ga4():
 
 # ───────────────────────── 체험 신청 ─────────────────────────
 def collect_trials():
-    key = keychain('openclaw_supabase_anon_wspn')
+    key = keychain('openclaw_supabase_service_role_wspn')  # 2026-10-11: anon 키의 feel_bookings 조회 권한 제거
     since = (dt.datetime.fromisoformat(DATA_SINCE + 'T00:00:00+09:00')).astimezone(dt.timezone.utc).strftime('%Y-%m-%dT%H:%M:%S')
     url = ('https://ssidizurrvnfmqbvfsqr.supabase.co/rest/v1/feel_bookings?select=created_at,status,cancel_reason,'
            f'utm_source,utm_medium,utm_campaign,utm_content,utm_term&created_at=gte.{since}&order=created_at.asc&limit=5000')
